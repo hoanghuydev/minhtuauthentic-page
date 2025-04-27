@@ -1,0 +1,9 @@
+/* Toc */
+.box-readmore { padding: 8px 15px; border: 1px solid #dedede; margin: 2rem 0; border-radius: 5px; background-color: #eeeeee; }
+.box-readmore li ul>li { margin: 0; margin-bottom: 8px }
+.box-readmore li ul>li:before { content: counters(item, ".") " " }
+.box-readmore ul { list-style-type: none; counter-reset: item; margin-bottom: 0px; padding-left: 0px !important; margin-top: 8px; }
+.box-readmore ul li { display: table; counter-increment: item; margin-bottom: 5px }
+.box-readmore ul li:before { content: counters(item, ".") ". "; display: table-cell; padding-right: 5px }
+.box-readmore ul li a { color: #333333; cursor: pointer; font-weight: 600; }
+.box-readmore ul li a:hover { color: #767676; }
