@@ -1,0 +1,42 @@
+name: Deploy Next.js Client MinhtuAuthentic to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout mã nguồn
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Thiết lập Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+
+      # Cài đặt dependencies và build
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      # Triển khai lên VPS
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            export PATH=$PATH:/usr/local/bin
+            cd /var/www/minhtuauthentic-page
+            git pull origin main
+            npm ci
+            npm run build
+            pm2 restart minhtuauthentic-page || pm2 start npm --name "minhtuauthentic-page" -- start
