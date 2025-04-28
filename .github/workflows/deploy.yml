@@ -3,7 +3,7 @@ name: Deploy Next.js Client MinhtuAuthentic to VPS
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   deploy:
