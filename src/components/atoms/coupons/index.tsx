@@ -58,15 +58,15 @@ export default function ItemCoupon({
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between border-t border-dashed border-gray-200 pt-2">
-          <div className="flex items-center">
-            <span className="font-medium text-primary mr-2">{coupon.code}</span>
+          <div className="flex flex-col items-center">
+            <div className="font-medium text-primary mr-2">{coupon.code}</div>
             {!isForCopy && (
-              <span className="text-xs text-gray-500">
+              <div className="text-xs flex whitespace-nowrap text-gray-500">
                 HSD:{' '}
                 {new Date(
                   coupon?.promotion?.end_date || '',
                 ).toLocaleDateString()}
-              </span>
+              </div>
             )}
           </div>
 
