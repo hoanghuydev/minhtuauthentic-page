@@ -29,7 +29,7 @@ const ProductCardButtonGroup = ({
             appCtx?.setIsOpenPopupProduct(product?.slugs?.slug || null);
         }}
         className={
-          'bg-primary rounded-[8px] text-white p-[6px_5px] lg:p-[8px_10px] flex items-center justify-center h-full'
+          'bg-primary rounded-[8px] text-white p-[6px_5px] lg:p-[8px_10px] flex items-center justify-center min-h-full max-h-full'
         }
         type={'button'}
       >
