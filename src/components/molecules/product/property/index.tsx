@@ -44,13 +44,13 @@ const ProductProperty = ({
         const overviewRect = overviewRef.current.getBoundingClientRect();
         const buyButtonArea = overviewRect.bottom;
 
-        if (buyButtonArea < 130 && appContext?.setShowProductFooter) {
+        if (buyButtonArea < 150 && appContext?.setShowProductFooter) {
           appContext.setShowProductFooter(true);
 
           if (appContext.setCurrentVariant && productContext?.variantActive) {
             appContext.setCurrentVariant(productContext.variantActive);
           }
-        } else if (buyButtonArea >= 130 && appContext?.setShowProductFooter) {
+        } else if (buyButtonArea >= 150 && appContext?.setShowProductFooter) {
           appContext.setShowProductFooter(false);
         }
       };
