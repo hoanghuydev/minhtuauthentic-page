@@ -27,6 +27,7 @@ export default function LogoComponent({
       src={logo}
       height={image?.height}
       width={image?.width}
+      sizes="600px"
       className={twMerge(className)}
       alt={
         'Minh Tu Authentic, Nước hoa chính hãng Tphcm, Quận Tân Phú, Mỹ phẩm'

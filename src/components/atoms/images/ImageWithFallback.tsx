@@ -19,6 +19,7 @@ type Props = {
   product?: ProductDto;
   isUseNativeImage?: boolean;
   onMouseLeave?: (event: unknown) => void;
+  sizes?: string;
 };
 const ImageWithFallback = ({
   image,
@@ -34,6 +35,7 @@ const ImageWithFallback = ({
   quality,
   product,
   isUseNativeImage,
+  sizes = '(max-width: 768px) 100vw, 33vw',
 }: Props) => {
   const [imgActiveSrc, setImageActiveSrc] = useState<string | StaticImageData>(
     isMobile
@@ -63,12 +65,12 @@ const ImageWithFallback = ({
             src={imgActiveSrc}
             alt={alt || image?.alt || product?.title || product?.name || ''}
             fill={true}
-            sizes={'(max-width: 768px) 100vw, 33vw'}
             className={className}
             unoptimized={unoptimized == null ? true : unoptimized}
             onError={() => {
               setImageActiveSrc(noImage);
             }}
+            sizes={sizes}
             priority={priority}
             loading={loading}
             quality={quality || 70}
@@ -88,7 +90,6 @@ const ImageWithFallback = ({
             alt={alt || image?.alt || product?.title || product?.name || ''}
             width={image?.width || 0}
             height={image?.height || 0}
-            sizes={'(max-width: 768px) 100vw, 33vw'}
             unoptimized={unoptimized == null ? true : unoptimized}
             priority={priority}
             className={className}
@@ -96,6 +97,7 @@ const ImageWithFallback = ({
             onError={() => {
               setImageActiveSrc(noImage);
             }}
+            sizes={sizes}
             loading={loading}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7u2tBwAFdgImpqLKKAAAAABJRU5ErkJggg=="
           />

@@ -32,7 +32,10 @@ const ProductCardImage = ({
             'object-contain w-full h-full hover:scale-105 transition-transform duration-300'
           }
           product={product}
-          unoptimized={!isMobile}
+          sizes={
+            '(max-width: 500px) 100vw, (max-width: 768px) 60vw, (max-width: 1024px) 40vw, 30vw'
+          }
+          unoptimized={false}
         />
       </Link>
     </div>

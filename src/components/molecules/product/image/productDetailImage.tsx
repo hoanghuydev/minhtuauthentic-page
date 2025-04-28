@@ -43,12 +43,13 @@ const ProductDetailImage = ({
               className={
                 'w-full h-full object-contain hover:scale-105 transition-transform duration-300 cursor-pointer border-[3px] border-[#e4e4e4]'
               }
+              sizes="120px"
               onClick={() => handleClickImage(imageItem)}
               product={product}
               onMouseEnter={() => {
                 !isMobile && setImageActive(imageItem);
               }}
-              unoptimized={!isMobile}
+              unoptimized={false}
             />
           ) as any;
         }}

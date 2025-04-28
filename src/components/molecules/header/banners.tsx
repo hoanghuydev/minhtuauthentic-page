@@ -40,7 +40,8 @@ export const Banners = ({
         height={imageDetail?.image?.height || 0}
         className={classNameImage || 'object-contain w-full'}
         loading={'eager'}
-        unoptimized={!isMobile}
+        unoptimized={false}
+        sizes="max-width: 768px) 150vw, 100vw"
         blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7u2tBwAFdgImpqLKKAAAAABJRU5ErkJggg=="
       />
     );
