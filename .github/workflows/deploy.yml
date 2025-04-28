@@ -22,8 +22,8 @@ jobs:
       # Cài đặt dependencies và build
       - name: Install and Build
         run: |
-          npm ci
-          npm run build
+          yarn install
+          yarn run build
 
       # Triển khai lên VPS
       - name: Deploy to VPS
