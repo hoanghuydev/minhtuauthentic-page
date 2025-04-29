@@ -23,7 +23,6 @@ export const getServerSideProps = async (context: any) => {
     image = null,
     width = 0,
     height = 0;
-
   const res = await fetch(
     process.env.BE_URL +
       '/api/pages/slug/' +

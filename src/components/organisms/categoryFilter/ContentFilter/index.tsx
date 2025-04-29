@@ -15,6 +15,7 @@ import { CategoryDto } from '@/dtos/Category.dto';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import Link from 'next/link';
 import { generateSlugToHref } from '@/utils';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
   settings?: ProductFilterOptionDto;
@@ -159,19 +160,34 @@ export default function ContentFilter({
 
           {category?.children && category?.children?.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {category.children.map((child) => (
-                <Link
-                  key={child.id}
-                  href={generateSlugToHref(child.slugs?.slug)}
-                  className="px-3 py-1 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm transition-colors"
+              {category.children.map((child, index) => (
+                <button
+                  type={'button'}
+                  key={index}
+                  onClick={() => {
+                    ctx?.updateRouter && ctx.updateRouter("child", child.slugs?.slug || "my-pham")
+                  }}
+                  className={twMerge(
+                    'bg-[#f3f4f6] border border-[#e5e7eb] rounded-[10px] text-[12px] p-[5px_10px] transition-colors duration-300',
+                    child.slugs?.slug === ctx?.router?.query["child"]  && 'bg-primary text-white',
+                  )}
                 >
-                  {child.name}
-                </Link>
-              ))}
-            </div>
-          )}
+                  <span>{child.name}</span>
+                </button>
+            //     <Link
+            //     key={child.id}
+            //      href={generateSlugToHref(child.slugs?.slug)}
+            //      className="px-3 py-1 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm transition-colors"
+            // >
+            //   {child.name}
+            // </Link>
+          ))}
         </div>
-      );
+      )
+    }
+    </div>
+    )
+      ;
     }
     return null;
   };
