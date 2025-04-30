@@ -12,7 +12,6 @@ import { useRef, useState } from 'react';
 import type { SwiperClass } from 'swiper/react';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { twMerge } from 'tailwind-merge';
-import '@/styles/swiper-custom.css';
 
 export const Banners = ({
   banners,
