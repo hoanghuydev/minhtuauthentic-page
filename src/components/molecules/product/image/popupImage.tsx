@@ -5,7 +5,7 @@ import { useProductImageDetail } from '@/hooks/useProductImageDetail';
 import { ImageDto } from '@/dtos/Image.dto';
 import Close from '@/components/icons/close';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCreative, Pagination, Navigation } from 'swiper/modules';
+import { EffectFade, Pagination, Navigation } from 'swiper/modules';
 import { Swiper as SwiperClass } from 'swiper/types';
 import PopupImageItem from '@/components/molecules/product/image/popupImageItem';
 import LeftOutlined from '@ant-design/icons/lib/icons/LeftOutlined';
@@ -92,7 +92,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
     return (
       <Swiper
         className={'h-full'}
-        modules={[Pagination, EffectCreative, Navigation]}
+        modules={[Pagination, EffectFade, Navigation]}
         effect={'fade'}
         loop={true}
         slidesPerView={1}
