@@ -1,0 +1,48 @@
+/* Tùy chỉnh nút điều hướng */
+.banner-container .swiper-button-next,
+.banner-container .swiper-button-prev {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.banner-container .swiper-button-next:hover,
+.banner-container .swiper-button-prev:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.banner-container .swiper-button-next:after,
+.banner-container .swiper-button-prev:after {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Ẩn nút điều hướng ở slide đầu/cuối */
+.hide-next-button .swiper-button-next {
+  display: none;
+}
+
+.hide-prev-button .swiper-button-prev {
+  display: none;
+}
+
+/* Tùy chỉnh nút pagination */
+.banner-container .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.7);
+  opacity: 0.7;
+}
+
+.banner-container .swiper-pagination-bullet-active {
+  background-color: white;
+  opacity: 1;
+}

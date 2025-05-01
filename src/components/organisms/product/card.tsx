@@ -37,7 +37,7 @@ const ProductCard = ({
   return (
     <div
       className={twMerge(
-        'bg-white rounded-[10px] border-[2px] border-[#e4e4e4] py-2 transition-colors duration-300 hover:border-primary hover:shadow-md flex flex-col justify-between h-[478px]',
+        'bg-white rounded-[10px] border-[2px] border-[#e4e4e4] py-2 transition-colors duration-300 hover:border-primary hover:shadow-md flex flex-col gap-[20px]',
       )}
     >
       <div>
@@ -84,37 +84,42 @@ const ProductCard = ({
           {_variant && <ProductPrice className={'px-2'} variant={_variant} />}
         </div>
       </div>
-      <div className={'h-[50px] px-2 lg:px-[8px]'}>
-        {promotions?.map((promotion, index) => {
-          return (
-            <Fragment key={'Product-card-' + index}>
-              <p>
-                <span className={'font-semibold mr-1 lg:mr-3'}>
-                  {promotionName(promotion)}:
-                </span>
-                <span
-                  className={
-                    'text-red-600 text-[13px] font-[700] lg:font-bold text-right cursor-pointer'
-                  }
-                >
-                  {formatMoney(
-                    (variant?.regular_price || 0) -
+      {promotions && promotions.length > 0 && (
+        <div className={'h-[50px] px-2 lg:px-[8px]'}>
+          {promotions?.map((promotion, index) => {
+            return (
+              <Fragment key={'Product-card-' + index}>
+                <p>
+                  <span className={'font-semibold mr-1 lg:mr-3'}>
+                    {promotionName(promotion)}:
+                  </span>
+                  <span
+                    className={
+                      'text-red-600 text-[13px] font-[700] lg:font-bold text-right cursor-pointer'
+                    }
+                  >
+                    {formatMoney(
+                      (variant?.regular_price || 0) -
+                        calculatePriceMinus(
+                          variant?.regular_price || 0,
+                          coupon,
+                        ),
+                    )}
+                  </span>
+                </p>
+                <p className={'text-sm'}>
+                  <span className={'mr-1 lg:mr-3'}>Tiết kiệm thêm:</span>
+                  <span className={'text-[13px] font-[700] lg:font-bold'}>
+                    {formatMoney(
                       calculatePriceMinus(variant?.regular_price || 0, coupon),
-                  )}
-                </span>
-              </p>
-              <p className={'text-sm'}>
-                <span className={'mr-1 lg:mr-3'}>Tiết kiệm thêm:</span>
-                <span className={'text-[13px] font-[700] lg:font-bold'}>
-                  {formatMoney(
-                    calculatePriceMinus(variant?.regular_price || 0, coupon),
-                  )}
-                </span>
-              </p>
-            </Fragment>
-          );
-        })}
-      </div>
+                    )}
+                  </span>
+                </p>
+              </Fragment>
+            );
+          })}
+        </div>
+      )}
       <ProductCardButtonGroup
         className={'mt-[10px] px-2'}
         variant={_variant}

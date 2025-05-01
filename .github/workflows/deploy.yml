@@ -36,7 +36,8 @@ jobs:
           script: |
             export PATH=$PATH:/usr/local/bin
             cd /var/www/minhtuauthentic-page
-            git pull origin main
-            npm ci
-            npm run build
+            git pull origin develop
+            nvm use 23
+            yarn install
+            yarn run build
             pm2 restart minhtuauthentic-page || pm2 start npm --name "minhtuauthentic-page" -- start

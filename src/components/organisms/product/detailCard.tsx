@@ -1,7 +1,7 @@
 import { ProductDto } from '@/dtos/Product.dto';
 import ProductDetailImage from '@/components/molecules/product/image/productDetailImage';
 import ProductProperty from '@/components/molecules/product/property';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { ImageDto } from '@/dtos/Image.dto';
 import { ProductConfigurationsDto } from '@/dtos/productConfigurations.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
@@ -16,6 +16,7 @@ import { SETTING_KEY } from '@/config/enum';
 import { TProductSeen } from '@/config/type';
 import ProductOverview from '@/components/organisms/product/overview';
 import ProductDetailContext from '@/contexts/productDetailContext';
+
 const ProductRating = dynamic(
   () => import('@/components/molecules/product/productRating'),
   {
@@ -62,7 +63,6 @@ const ProductDetailCard = ({
     image: null,
   });
   const productContext = useContext(ProductDetailContext);
-
   useEffect(() => {
     if (productContext?.setVariantActive && !productContext.variantActive) {
       productContext.setVariantActive(
@@ -101,19 +101,21 @@ const ProductDetailCard = ({
         resetItem();
       }
     }
-  }, []);
+  }, [productContext?.variantActive]);
 
   return (
     <>
       {product && (
         <>
           {productContext?.variantActive && (
-            <ProductOverview
-              product={product}
-              productConfigurations={productConfigurations}
-              settings={settings}
-              setIsOpen={setIsOpen}
-            />
+            <div>
+              <ProductOverview
+                product={product}
+                productConfigurations={productConfigurations}
+                settings={settings}
+                setIsOpen={setIsOpen}
+              />
+            </div>
           )}
           <ProductDealSock
             setting={settings.find(

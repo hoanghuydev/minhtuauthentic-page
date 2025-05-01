@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import '@/styles/swiper-custom.css';
 import '@/styles/bk.css';
 import '@/styles/toc.css';
 import type { AppProps } from 'next/app';
@@ -24,7 +25,9 @@ export default function App({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <style>{`:root { --primary-color: ${settings?.commonSettings?.primaryColor || '#C44812'}; }`}</style>
+        <style>{`:root { --primary-color: ${
+          settings?.commonSettings?.primaryColor || '#C44812'
+        }; }`}</style>
       </Head>
       <AppProvider>
         <OrderProvider>

@@ -101,7 +101,7 @@ const GroupCategory = ({
         slidesPerView={5}
         slidePerViewMobile={2}
         spaceBetween={5}
-        heightItem={478}
+        heightItem={452}
         isUseHeightWrapper={true}
         renderItem={(item: unknown) => {
           const iProduct = item as IProductCategoryDto;
