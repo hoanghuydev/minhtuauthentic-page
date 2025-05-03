@@ -75,14 +75,14 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
           }
         }}
         className={twMerge(
-          'absolute z-[2] w-[32px] h-[32px] rounded-full border border-[#dad4d4] cursor-pointer top-[calc(50%-22px)] lg:top-[calc(50%-16px)] bg-white flex justify-center items-center',
+          'absolute z-[2] w-[32px] h-[32px] rounded-full border border-[#dad4d4] cursor-pointer top-[calc(50%-22px)] lg:top-[calc(50%-16px)] bg-white flex justify-center items-center select-none',
           variant === 'next' ? 'right-[20px]' : 'left-[20px]',
         )}
       >
         {variant === 'next' ? (
-          <RightOutlined className={'text-[#dad4d4] text-center '} />
+          <RightOutlined className={'text-[#dad4d4] text-center select-none'} />
         ) : (
-          <LeftOutlined className={'text-[#dad4d4] text-center '} />
+          <LeftOutlined className={'text-[#dad4d4] text-center select-none'} />
         )}
       </div>
     );
@@ -91,7 +91,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
   const renderSwiper = useMemo(() => {
     return (
       <Swiper
-        className={'h-full'}
+        className={'h-full select-none'}
         modules={[Pagination, EffectFade, Navigation]}
         effect={'fade'}
         loop={true}
@@ -113,7 +113,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
         {images.map((image, index) => (
           <SwiperSlide
             key={image.url + '_' + index}
-            className="relative flex justify-center items-center h-full w-full"
+            className="relative flex justify-center items-center h-full w-full select-none"
           >
             <PopupSlideContent
               image={image}
@@ -136,11 +136,15 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
           backgroundPosition: 'center',
         }}
         className={twMerge(
-          'fixed inset-0 transition-all duration-300 ',
+          'fixed inset-0 transition-all duration-300 select-none',
           open ? 'visible opacity-100 z-[100]' : 'invisible opacity-0 z-[-1]',
         )}
       >
-        <div className={'backdrop-blur-3xl bg-black/30 h-full relative'}>
+        <div
+          className={
+            'backdrop-blur-3xl bg-black/30 h-full relative select-none'
+          }
+        >
           <div
             className={
               'h-[calc(100%-220px)] lg:h-[calc(100%-140px)] pb-0 pt-[40px] w-full box-content'
@@ -156,7 +160,9 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
               )}
             </div>
           </div>
-          <div className={'h-[120px] w-full overflow-auto'}>{renderImage}</div>
+          <div className={'h-[120px] w-full overflow-auto select-none'}>
+            {renderImage}
+          </div>
           <button
             type="button"
             className={

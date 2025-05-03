@@ -49,7 +49,7 @@ export default function PopupImageItem({
   return (
     <div
       className={twMerge(
-        'w-[80px] h-[80px]',
+        'w-[80px] h-[80px] select-none',
         active && 'border-2 overflow-hidden rounded-[10px] border-primary',
       )}
     >
