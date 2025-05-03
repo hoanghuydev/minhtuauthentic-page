@@ -32,7 +32,7 @@ export async function getStaticProps() {
   });
   return {
     props: {
-      homePage: data?.data,
+      homePage: data?.data || {},
       settingsHome,
     },
     revalidate: 300,
@@ -49,7 +49,6 @@ export default function Home({
   homePage: ResponseHomePageDto;
   settingsHome: Record<string, SettingOptionDto | undefined>;
 } & PageSetting) {
-  
   return (
     <>
       <Header settings={settings} menu={menu} />
