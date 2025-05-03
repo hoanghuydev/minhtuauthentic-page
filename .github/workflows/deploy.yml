@@ -34,10 +34,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            export PATH=$PATH:/usr/local/bin
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
             cd /var/www/minhtuauthentic-page
+
+            git remote set-url origin git@github.com:hoanghuydev/minhtuauthentic-page.git
             git pull origin develop
-            nvm use 23
+
             yarn install
             yarn run build
+
             pm2 restart minhtuauthentic-page || pm2 start npm --name "minhtuauthentic-page" -- start
