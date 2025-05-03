@@ -24,6 +24,7 @@ const ProductCard = ({
   coupon,
   isShowConfiguration,
   isShowListVariant,
+  className,
 }: {
   product: ProductDto;
   variant: VariantDto;
@@ -32,12 +33,14 @@ const ProductCard = ({
   coupon?: CouponsDto;
   isShowConfiguration?: boolean;
   isShowListVariant?: boolean;
+  className?: string;
 }) => {
   const [_variant, setVariant] = useState<VariantDto>(variant);
   return (
     <div
       className={twMerge(
-        'bg-white rounded-[10px] border-[2px] border-[#e4e4e4] py-2 transition-colors duration-300 hover:border-primary hover:shadow-md flex flex-col gap-[20px]',
+        'bg-white rounded-[10px] border-[2px] border-[#e4e4e4] py-2 transition-colors duration-300 hover:border-primary hover:shadow-md flex flex-col',
+        className,
       )}
     >
       <div>
