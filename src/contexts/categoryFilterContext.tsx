@@ -9,7 +9,7 @@ import { CATEGORY_FILTER, Entity } from '@/config/enum';
 const CategoryFilterContext = createContext<TypeAppState | undefined>(
   undefined,
 );
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import { ProductDto } from '@/dtos/Product.dto';
 import { ResponseCategoryFilterPageDto } from '@/dtos/responseCategoryFilterPage.dto';
 import { SlugDto } from '@/dtos/Slug.dto';
@@ -46,6 +46,7 @@ export type TypeAppState = {
   isOpenFilter?: boolean;
   setIsOpenFilter?: Dispatch<SetStateAction<boolean>> | undefined;
   updateRouter?: (key: string, value: string | object) => void;
+  router?: NextRouter;
 };
 
 export const CategoryFilterProvider = ({
@@ -219,6 +220,7 @@ export const CategoryFilterProvider = ({
         page,
         setPage,
         updateRouter,
+        router,
       }}
     >
       {children}
