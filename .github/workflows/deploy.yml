@@ -46,4 +46,4 @@ jobs:
             yarn install
             yarn run build
 
-            pm2 restart minhtuauthentic-page || pm2 start npm --name "minhtuauthentic-page" -- start
+            pm2 restart minhtuauthentic-page
