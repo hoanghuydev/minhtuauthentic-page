@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { OrderProvider } from '@/contexts/orderContext';
 import Head from 'next/head';
 import { Nunito_Sans } from 'next/font/google';
-import { MobileProvider } from '@/contexts/mobileContext';
 const nunitoSans = Nunito_Sans({
   subsets: ['latin'],
 });
@@ -33,10 +32,8 @@ export default function App({ Component, pageProps }: AppProps) {
       <AppProvider>
         <OrderProvider>
           <SearchProvider>
-            <MobileProvider>
-              <Component className={nunitoSans.className} {..._pageProps} />
-              <ToastContainer />
-            </MobileProvider>
+            <Component className={nunitoSans.className} {..._pageProps} />
+            <ToastContainer />
           </SearchProvider>
         </OrderProvider>
       </AppProvider>
