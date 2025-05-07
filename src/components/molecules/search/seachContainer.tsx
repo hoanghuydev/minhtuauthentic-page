@@ -127,10 +127,7 @@ export default function SearchContainer({
             {(data?.products || []).map((item: ProductDto, index: number) => {
               const variant = item?.variants?.[0];
               return (
-                <li
-                  key={index}
-                  className={'shadow-[-1px_1px_#e1e1e1] p-[3px]'}
-                >
+                <li key={index} className={'shadow-[-1px_1px_#e1e1e1] p-[3px]'}>
                   <a
                     className={'flex flex-col gap-3'}
                     href={generateSlugToHref(item?.slugs?.slug)}
@@ -333,10 +330,7 @@ export default function SearchContainer({
                     'fixed bg-white inset-0 w-[100dvw] h-[100dvh] z-[10000] flex flex-col overflow-hidden'
                   }
                 >
-                  <div
-                    className={'overflow-auto flex flex-col h-full'}
-                    
-                  >
+                  <div className={'overflow-auto flex flex-col h-full'}>
                     <div className={'bg-primary'}>
                       <NavbarMenuListButton settings={settings} />
                       <div
@@ -350,6 +344,13 @@ export default function SearchContainer({
                           }}
                           onCloseClick={() => {
                             ctx?.setIsOpenSearch && ctx.setIsOpenSearch(false);
+                          }}
+                          onSearchClick={() => {
+                            ctx?.saveKeyword && ctx.saveKeyword();
+                            if (inputRef.current) {
+                              inputRef.current.blur();
+                            }
+                            window.location.href = `/san-pham?search=${ctx?.debounceValue}`;
                           }}
                           onKeyUp={(e: unknown) => {
                             if ((e as KeyboardEvent).key === KEYCODE.ENTER) {

@@ -1,4 +1,4 @@
-export const IconTruck = ({ classNameName }: { classNameName?: string }) => {
+export const IconTruck = ({ className }: { className?: string }) => {
   const strokeStyle = {
     stroke: '#fff',
     fill: 'none',
@@ -11,7 +11,7 @@ export const IconTruck = ({ classNameName }: { classNameName?: string }) => {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 44.22 25.85"
       height="24"
-      className={classNameName}
+      className={className}
     >
       <defs></defs>{' '}
       <g id="Layer_2" data-name="Layer 2">
