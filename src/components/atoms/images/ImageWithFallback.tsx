@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import noImage from '@/static/images/no-image.png';
 import { ProductDto } from '@/dtos/Product.dto';
 import { isMobile } from 'react-device-detect';
-
 type Props = {
   image: ImageDto | null | undefined;
   isFill?: boolean;

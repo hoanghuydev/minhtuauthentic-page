@@ -8,6 +8,8 @@ export enum SUBMIT_TYPE {
 export const enum KEYCODE {
   ENTER = 'Enter',
 }
+export const MOBILE_BREAKPOINT = 768;
+
 export enum FIELD_TYPE {
   SORT = 'sort',
   STRING = 'string',
