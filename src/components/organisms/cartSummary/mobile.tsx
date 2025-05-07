@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import OrderContext from '@/contexts/orderContext';
-import { isMobile } from 'react-device-detect';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
+import { useIsMobile } from '@/hooks/useDevice';
 import { formatMoney, generateSlugToHref } from '@/utils';
 import Link from 'next/link';
 import PriceWithLineThrough from '@/components/atoms/price/priceWithLineThrough';
@@ -12,6 +12,7 @@ import PriceInput from '@/components/atoms/price/priceInput';
 
 export default function CartSummaryMobile() {
   const orderCtx = useContext(OrderContext);
+  const isMobile = useIsMobile();
   return (
     <>
       {isMobile && (

@@ -1,4 +1,4 @@
-import { isDesktop, isMobile } from 'react-device-detect';
+import { useIsMobile } from '@/hooks/useDevice';
 import { CategoryNewsDto } from '@/dtos/CategoryNews.dto';
 import { generateSlugToHref } from '@/utils';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ type Props = {
 };
 
 export default function NewsCategoryMobile({ categoryNews }: Props) {
+  const isMobile = useIsMobile();
   return (
     <>
       {isMobile && (

@@ -7,10 +7,12 @@ import { Button, InputNumber } from 'antd/es';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useContext } from 'react';
 import OrderContext from '@/contexts/orderContext';
-import { isDesktop } from 'react-device-detect';
-import PriceInput from "@/components/atoms/price/priceInput";
+import { useIsDesktop } from '@/hooks/useDevice';
+import PriceInput from '@/components/atoms/price/priceInput';
+
 export default function CartSummaryDesktop() {
   const orderCtx = useContext(OrderContext);
+  const isDesktop = useIsDesktop();
   return (
     <>
       {isDesktop && (

@@ -6,11 +6,12 @@ const SectionSwiperItem = dynamic(
   () => import('@/components/organisms/sectionSwiper/item'),
   { ssr: false },
 );
-import { isDesktop, isMobile } from 'react-device-detect';
+import { useIsDesktop, useIsMobile } from '@/hooks/useDevice';
 import { SwiperProps } from '@/components/organisms/sectionSwiper/item';
-import { useState } from 'react';
 
 const SectionSwiper = (props: SwiperProps) => {
+  const isDesktop = useIsDesktop();
+  const isMobile = useIsMobile();
   return (
     <>
       {isMobile && (

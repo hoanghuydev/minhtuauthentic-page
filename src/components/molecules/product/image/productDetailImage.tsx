@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge';
 import { useProductImageDetail } from '@/hooks/useProductImageDetail';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { useMemo } from 'react';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@/hooks/useDevice';
 type Props = {
   product: ProductDto;
   containerClassName?: string;
@@ -19,7 +19,7 @@ const ProductDetailImage = ({
   setIsOpen,
 }: Props) => {
   const { images, imageActive, setImageActive } = useProductImageDetail({});
-
+  const isMobile = useIsMobile();
   const handleClickImage = (image: ImageDto) => {
     if (image) {
       setImageActive(image);

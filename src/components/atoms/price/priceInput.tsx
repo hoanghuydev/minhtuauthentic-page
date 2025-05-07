@@ -2,9 +2,8 @@ import { InputNumber } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import OrderContext from '@/contexts/orderContext';
 import { OrderItemsDto } from '@/dtos/OrderItems.dto';
-import { isMobile } from 'react-device-detect';
 import { twMerge } from 'tailwind-merge';
-
+import { useIsMobile } from '@/hooks/useDevice';
 type Props = {
   qty: number;
   item: OrderItemsDto;
@@ -12,6 +11,7 @@ type Props = {
 };
 
 export default function PriceInput({ qty, item, className }: Props) {
+  const isMobile = useIsMobile();
   const orderCtx = useContext(OrderContext);
   const index =
     (orderCtx?.cart?.items || []).findIndex(

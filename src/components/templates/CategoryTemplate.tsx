@@ -8,7 +8,7 @@ import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import { Entity } from '@/config/enum';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import dynamic from 'next/dynamic';
-import { isDesktop } from 'react-device-detect';
+import { useIsDesktop } from '@/hooks/useDevice';
 
 const NavFilterMobile = dynamic(
   () => import('@/components/organisms/MobileMenu/navFilterMobile'),
@@ -41,6 +41,7 @@ export default function CategoryTemplate({
   menu,
 }: Props) {
   const data = slug?.data as ResponseCategoryFilterPageDto;
+  const isDesktop = useIsDesktop();
   const renderLabelBreadcrumb: Record<string, string> = {
     [Entity.CATEGORIES]: data.title || 'Danh mục',
     [Entity.BRANDS]: data.title || 'Thương hiệu',
@@ -67,14 +68,12 @@ export default function CategoryTemplate({
               'grid grid-cols-1 lg:grid-cols-6 gap-3 w-full min-h-[50vh] rounded-[10px] border-gray-500 bg-white shadow-custom'
             }
           >
-            {
-              isDesktop && (
-                <SettingFilter
-                  settings={data?.settings}
-                  className={'lg:col-span-1'}
-                />
-              )
-            }
+            {isDesktop && (
+              <SettingFilter
+                settings={data?.settings}
+                className={'lg:col-span-1'}
+              />
+            )}
             <ContentFilter
               products={data?.products || []}
               settings={data?.settings}

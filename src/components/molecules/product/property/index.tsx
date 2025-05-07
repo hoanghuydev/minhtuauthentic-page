@@ -16,7 +16,7 @@ import { SettingsDto } from '@/dtos/Settings.dto';
 import { useRouter } from 'next/router';
 import ProductDetailContext from '@/contexts/productDetailContext';
 import AppContext from '@/contexts/appContext';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@/hooks/useDevice';
 type Props = {
   product: ProductDto;
   productConfigurations: ProductConfigurationsDto[];
@@ -27,6 +27,7 @@ const ProductProperty = ({
   productConfigurations,
   settings,
 }: Props) => {
+  const isMobile = useIsMobile();
   const productContext = useContext(ProductDetailContext);
   const variantMap = new Map<number, VariantDto>(
     (product?.variants || []).map((variant) => [variant.id || 0, variant]),

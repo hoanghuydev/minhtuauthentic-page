@@ -113,7 +113,6 @@ const GroupCategory = ({
               product={iProduct.product}
               variant={variant}
               isShowListVariant={true}
-              className="gap-[20px]"
             />
           )) as ReactNode;
         }}

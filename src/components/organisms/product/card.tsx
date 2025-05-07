@@ -51,14 +51,16 @@ const ProductCard = ({
           <Badge className={'bg-price'}>Trả góp 0%</Badge>
         </div>
         <ProductCardImage product={product} variant={_variant} />
-        <div className={'px-2 h-[110px] lg:h-[75px] xl:h-[63px]'}>
-          <h3 className={'font-[700] lg:font-bold'}>
-            <Link className={'block'} href={`/${product?.slugs?.slug}`}>
+        {/* <div className={'px-2 h-[110px] lg:h-[75px] xl:h-[63px]'}> */}
+        <div className="px-2 h-[72px] overflow-hidden">
+          <h3 className="font-bold line-clamp-3">
+            <Link className="block" href={`/${product?.slugs?.slug}`}>
               {product.title || product.name}
             </Link>
           </h3>
         </div>
-        <div className={'h-[50px] pt-2'}>
+        {/* <div className={'h-[50px] pt-2'}> */}
+        <div className={'pt-2'}>
           {isShowConfiguration &&
             _variant?.variant_product_configuration_values?.map(
               (item, index) => {

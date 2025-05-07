@@ -1,9 +1,8 @@
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import Banners from '@/components/molecules/header/banners';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@/hooks/useDevice';
 import MenuWrapper from '@/components/molecules/header/menu/menuWrapper';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
-import { SettingsDto } from '@/dtos/Settings.dto';
 import { SettingOptionDto } from '@/dtos/SettingOption.dto';
 
 type Props = {
@@ -12,6 +11,7 @@ type Props = {
   setting?: SettingOptionDto;
 };
 export default function HomeBanner({ banners, menu, setting }: Props) {
+  const isMobile = useIsMobile();
   return (
     <>
       {setting?.isBannerFull ? (

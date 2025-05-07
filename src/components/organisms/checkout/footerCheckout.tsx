@@ -1,13 +1,13 @@
 import { createPortal } from 'react-dom';
 import PaymentButton from '@/components/molecules/paymentButton';
-import { isMobile } from 'react-device-detect';
-
+import { useIsMobile } from '@/hooks/useDevice';
 type Props = {
   paymentType?: string;
   setValue?: any;
 };
 
 export default function FooterCheckout({ paymentType, setValue }: Props) {
+  const isMobile = useIsMobile();
   return (
     <>
       {isMobile &&

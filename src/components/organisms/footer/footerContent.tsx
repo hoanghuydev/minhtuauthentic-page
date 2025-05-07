@@ -1,4 +1,4 @@
-import { isDesktop } from 'react-device-detect';
+import { useIsDesktop } from '@/hooks/useDevice';
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import { JSX } from 'react';
 import { Collapse } from 'antd/es';
@@ -6,6 +6,7 @@ type Props = {
   items: StaticContentsDto[];
 };
 export default function FooterContent({ items }: Props) {
+  const isDesktop = useIsDesktop();
   const renderFooterDesktop = () => {
     const xhtml: JSX.Element[] = [];
     items.forEach((item, index) => {
@@ -55,7 +56,7 @@ export default function FooterContent({ items }: Props) {
           );
           break;
       }
-    })
+    });
 
     return <>{xhtml}</>;
   };
