@@ -11,32 +11,6 @@ import { statusOrder } from '@/utils';
 import { Steps } from 'antd';
 import { OrderStatus } from '../../config/enum';
 
-const orderSteps = [
-  { title: 'Đã đặt hàng' },
-  { title: 'Đang xử lý' },
-  { title: 'Đang giao hàng' },
-  { title: 'Hoàn thành' },
-  { title: 'Đã hủy' },
-];
-
-// Hàm map status sang index step
-function getStepIndex(status: string) {
-  switch (status) {
-    case OrderStatus.NEW:
-      return 0;
-    case OrderStatus.APPROVED:
-      return 1;
-    case OrderStatus.PROCESSING:
-      return 2;
-    case OrderStatus.DONE:
-      return 3;
-    case OrderStatus.CLOSE:
-      return 4;
-    default:
-      return 0;
-  }
-}
-
 export default function OrderSuccessTemplate() {
   const router = useRouter();
   const orderId = router?.query?.orderId;
@@ -72,7 +46,7 @@ export default function OrderSuccessTemplate() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-2">
-      <div className="container mx-auto bg-white rounded-2xl shadow-xl p-4 md:p-12">
+      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-4 md:p-12">
         {/* Success Icon & Message */}
         <div className="flex flex-col items-center mb-8">
           <CheckCircleFilled className="text-green text-6xl mb-2" />
@@ -117,15 +91,9 @@ export default function OrderSuccessTemplate() {
 
         {/* Order Status & Date */}
         <div className="flex flex-col  mb-6 border-b pb-4">
-          <div className="text-gray-700 overflow-x-auto">
+          <div className="text-gray-700 d-flex gap-2 overflow-x-auto">
             <span className="font-semibold">Trạng thái:</span>
-            <div className="min-w-[200px]">
-              <Steps
-                className="mt-2"
-                current={getStepIndex(order.status || '')}
-                items={orderSteps}
-              />
-            </div>
+            <div className="min-w-[200px]">{statusOrder(order.status)}</div>
           </div>
           <div className="text-gray-500 mt-3">
             <span className="font-semibold">Ngày đặt:</span>{' '}
