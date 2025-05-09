@@ -164,3 +164,23 @@ iframe {
   transform: rotate(45deg);
   width: 20px;
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Đẩy scrollbar sang trái cho custom-scrollbar */
+.custom-scrollbar {
+  direction: rtl;
+}
+.custom-scrollbar > * {
+  direction: ltr;
+}

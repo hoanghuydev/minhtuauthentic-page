@@ -7,6 +7,7 @@ import { BrandDto } from '@/dtos/Brand.dto';
 import MenuBrand from '@/components/molecules/header/menu/menuBrand';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import MenuPopupCategory from '@/components/molecules/header/menu/menuPopupCategory';
+import React from 'react';
 
 const MenuPopup = ({
   data,
@@ -21,7 +22,7 @@ const MenuPopup = ({
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }) => {
-  const wMenu = 220;
+  const wMenu = 185;
   const gapWMenuAnd = 8;
   const [widthContainer, setWidthContainer] = useState(0);
   const [bgWH, setBgWH] = useState<{ width: number; height: number }>({
@@ -75,6 +76,7 @@ const MenuPopup = ({
     <>
       {data?.display && (
         <div
+          className="absolute top-0 left-[200px] z-[20] flex"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           style={{
@@ -84,11 +86,15 @@ const MenuPopup = ({
             height: `${menuCategoryChildrenPosition.height}px`,
             maxWidth: widthContainer,
           }}
-          className={
-            'absolute max-lg:hidden h-full lg:w-[53vw] bg-white z-[20] top-0 left-[200px] ml-2 p-2 overflow-auto shadow-custom'
-          }
         >
-          {renderItem()}
+          <div className="w-[25px] h-full bg-transparent flex-shrink-0"></div>
+          <div
+            className={
+              ' max-lg:hidden h-full lg:w-[53vw] bg-white p-2 pl-4 overflow-auto shadow-custom flex'
+            }
+          >
+            <div className="flex-1 min-w-0">{renderItem()}</div>
+          </div>
         </div>
       )}
     </>

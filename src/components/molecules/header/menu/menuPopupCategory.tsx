@@ -31,7 +31,7 @@ export default function MenuPopupCategory({
     }
 
     if (filterSetting) {
-      Object.keys(filterSetting).forEach((setting) =>{
+      Object.keys(filterSetting).forEach((setting) => {
         switch (setting) {
           case 'brands':
             if (!listDisplay.brands) {
@@ -71,23 +71,22 @@ export default function MenuPopupCategory({
                 data: [],
               };
             }
-            listDisplay.price_range.data = (filterSetting?.price_range || []).map(
-              (price, index2) => {
-                return {
-                  slug:
-                    `/san-pham?filter[${setting}][${index2}]=` +
-                    price.min +
-                    '_' +
-                    price.max,
-                  name: price.label || '',
-                };
-              },
-            );
+            listDisplay.price_range.data = (
+              filterSetting?.price_range || []
+            ).map((price, index2) => {
+              return {
+                slug:
+                  `/san-pham?filter[${setting}][${index2}]=` +
+                  price.min +
+                  '_' +
+                  price.max,
+                name: price.label || '',
+              };
+            });
             break;
         }
-      })
+      });
     }
-
 
     return (
       <>
@@ -100,7 +99,12 @@ export default function MenuPopupCategory({
               <ul className={'flex flex-col gap-1'}>
                 {listDisplay[key].data.map((item, index) => (
                   <li key={index}>
-                    <Link href={item.slug}>{item.name}</Link>
+                    <Link
+                      href={item.slug}
+                      className="block w-full px-2 py-1 hover:bg-gray-100 rounded"
+                    >
+                      {item.name}
+                    </Link>
                   </li>
                 ))}
               </ul>

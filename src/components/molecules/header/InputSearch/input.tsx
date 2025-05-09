@@ -49,7 +49,7 @@ export default function InputSearch({
   return (
     <Input
       className={twMerge(
-        'h-[40px] text-black rounded-[20px] border-0 p-[5px_10px] focus-visible:outline-none focus-visible:border-0 w-full',
+        'h-[40px] text-black rounded-[10px] border-0 p-[5px_10px] focus-visible:outline-none focus-visible:border-0 w-full',
         className,
       )}
       ref={ref as RefObject<InputRef>}

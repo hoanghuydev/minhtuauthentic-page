@@ -81,8 +81,14 @@ export default function MenuFooter({ isFixed, className }: Props) {
         className={'flex flex-col gap-1 justify-center flex-1'}
         onClick={item.onClick}
       >
-        <div className={'mx-auto '}>{item.icon}</div>
-        <span className={'text-sm text-center'}>{item.label}</span>
+        <div className={'mx-auto'}>{item.icon}</div>
+        <span
+          className={
+            'text-sm text-center max-w-20 line-clamp-1 text-ellipsis overflow-hidden'
+          }
+        >
+          {item.label}
+        </span>
       </div>
     ) as ReactNode;
   };
