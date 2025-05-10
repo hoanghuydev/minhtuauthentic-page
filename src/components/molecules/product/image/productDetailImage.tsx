@@ -8,7 +8,6 @@ import { useProductImageDetail } from '@/hooks/useProductImageDetail';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { useMemo } from 'react';
 import { useIsMobile } from '@/hooks/useDevice';
-import { useSwiperSlide } from 'swiper/react';
 type Props = {
   product: ProductDto;
   containerClassName?: string;
@@ -37,15 +36,13 @@ const ProductDetailImage = ({
           'p-1 lg:hover:shadow-md transition-shadow duration-300 select-none lg:hover:border-primary border border-transparent'
         }
         renderItem={(item) => {
-          const swiper = useSwiperSlide();
           const imageItem = item as ImageDto;
           return (
             <ImageWithFallback
               image={imageItem}
-              className={twMerge(
-                'w-full h-full object-contain hover:scale-105 select-none transition-transform duration-300 cursor-pointer border-[3px] border-[#e4e4e4]',
-                swiper.isActive && 'border-primary',
-              )}
+              className={
+                'w-full h-full object-contain hover:scale-105 select-none transition-transform duration-300 cursor-pointer border-[3px] border-[#e4e4e4]'
+              }
               sizes="120px"
               onClick={() => handleClickImage(imageItem)}
               product={product}
