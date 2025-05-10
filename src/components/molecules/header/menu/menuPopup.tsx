@@ -26,7 +26,7 @@ const MenuPopup = ({
   onMouseLeave: () => void;
   isOpenMenu: boolean;
 }) => {
-  const wMenu = isOpenMenu ? 214 : 220;
+  const wMenu = isOpenMenu ? 209 : 215;
   const gapWMenuAnd = 8;
   const [widthContainer, setWidthContainer] = useState(0);
   const [bgWH, setBgWH] = useState<{ width: number; height: number }>({
@@ -107,7 +107,7 @@ const MenuPopup = ({
           ></div> */}
           <div
             className={
-              ' max-lg:hidden h-full lg:w-full bg-white p-2 pl-4 overflow-auto shadow-custom flex'
+              ' max-lg:hidden h-full lg:w-full bg-white p-4 pl-4 overflow-auto flex'
             }
           >
             <div className="flex-1 min-w-0">{renderItem()}</div>
