@@ -190,7 +190,9 @@ export default function SearchContainer({
 
   const renderOldKeyword = () => {
     const keyword: string | null = localStorage.getItem(SEARCH_KEYWORD);
-    const keywordList: string[] = keyword ? keyword.toString().split(',') : [];
+    let keywordList: string[] = keyword ? keyword.toString().split(',') : [];
+    keywordList = keywordList.filter((item) => item.length > 0);
+    keywordList = keywordList.slice(0, 10);
     return (
       <>
         {keywordList.length > 0 && (
@@ -200,7 +202,10 @@ export default function SearchContainer({
               <div className={'flex flex-wrap gap-2'}>
                 {keywordList.map((item, index) => {
                   return (
-                    <Tag key={index}>
+                    <Tag
+                      key={index}
+                      className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap"
+                    >
                       <a
                         className={'lg:text-[14px]'}
                         href={'/san-pham?search=' + item}
@@ -225,7 +230,11 @@ export default function SearchContainer({
         {isLoadingBrand ? (
           <Loading center />
         ) : (
-          <div className={'grid grid-cols-3 max-lg:gap-x1 lg:grid-cols-6'}>
+          <div
+            className={
+              'grid grid-cols-4 max-lg:gap-x1 lg:grid-cols-8 xl:grid-cols-10'
+            }
+          >
             {dataFeatureBrand?.data?.brands.map((item, index) => {
               return (
                 <a
@@ -374,7 +383,7 @@ export default function SearchContainer({
           ) : (
             <div
               className={twMerge(
-                'absolute text-black top-[50px] bg-white w-[65vw] max-w-[1140px] rounded-[10px] left-0 shadow-custom2 z-[100]',
+                'absolute text-black top-[60px] bg-white w-[65vw] max-w-[1140px] rounded-[10px] left-[50%] translate-x-[-50%] shadow-custom2 z-[100]',
                 classNameInput,
               )}
             >

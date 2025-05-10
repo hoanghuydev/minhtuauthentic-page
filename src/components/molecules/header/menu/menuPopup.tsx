@@ -99,16 +99,14 @@ const MenuPopup = ({
             maxWidth: widthContainer,
           }}
         >
-          {/* <div
-            className={twMerge(
-              ' h-full bg-transparent flex-shrink-0',
-              isOpenMenu ? 'w-[25px]' : 'w-[42px]',
-            )}
-          ></div> */}
+          {!isOpenMenu && (
+            <div className="h-full bg-transparent flex-shrink-0 w-[12px]"></div>
+          )}
           <div
-            className={
-              ' max-lg:hidden h-full lg:w-full bg-white p-4 pl-4 overflow-auto flex'
-            }
+            className={twMerge(
+              ' max-lg:hidden h-full lg:w-full bg-white p-4 pl-4 overflow-auto flex',
+              isOpenMenu ? '' : 'shadow-custom',
+            )}
           >
             <div className="flex-1 min-w-0">{renderItem()}</div>
           </div>
