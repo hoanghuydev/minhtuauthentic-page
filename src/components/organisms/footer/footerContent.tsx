@@ -7,25 +7,22 @@ type Props = {
 };
 export default function FooterContent({ items }: Props) {
   const isDesktop = useIsDesktop();
-  const containerClass = 'flex flex-col gap-2';
-  const panelClass = 'bg-white custom-rounded overflow-hidden';
-
   const renderFooterDesktop = () => {
     const xhtml: JSX.Element[] = [];
     items.forEach((item, index) => {
       switch (index) {
         case 0:
           xhtml.push(
-            <div key={item.id} className={panelClass}>
+            <div key={item.id}>
               <p
                 className={
-                  'uppercase font-[700] lg:font-bold lg:mb-[10px] text-[16px] px-4 pt-4'
+                  'uppercase font-[700] lg:font-bold lg:mb-[10px] text-[16px]'
                 }
               >
                 VỀ CHÚNG TÔI
               </p>
               <div
-                className={'lg:mt-[12px] px-4 pb-4'}
+                className={'lg:mt-[12px]'}
                 dangerouslySetInnerHTML={{ __html: item.content || '' }}
               />
             </div>,
@@ -33,14 +30,26 @@ export default function FooterContent({ items }: Props) {
           break;
         case 1:
         case 2:
-        case 3:
           xhtml.push(
-            <div key={item.id} className={panelClass}>
-              <p className={'uppercase font-semibold text-[16px] px-4 pt-4'}>
+            <div key={item.id}>
+              <p className={'uppercase font-semibold text-[16px]'}>
                 {item.title}
               </p>
               <div
-                className={'lg:mt-[12px] px-4 pb-4'}
+                className={'lg:mt-[12px]'}
+                dangerouslySetInnerHTML={{ __html: item.content || '' }}
+              />
+            </div>,
+          );
+          break;
+        case 3:
+          xhtml.push(
+            <div key={item.id}>
+              <p className={'uppercase font-semibold text-[16px]'}>
+                {item.title}
+              </p>
+              <div
+                className={'lg:mt-[12px]'}
                 dangerouslySetInnerHTML={{ __html: item.content || '' }}
               />
             </div>,
@@ -48,22 +57,19 @@ export default function FooterContent({ items }: Props) {
           break;
       }
     });
-    return <div className={containerClass}>{xhtml}</div>;
+
+    return <>{xhtml}</>;
   };
   const renderFooterMobile = () => {
     return (
-      <div className={containerClass}>
-        <Collapse
-          bordered={false}
-          className={containerClass}
-          expandIconPosition="end"
-        >
+      <div className="flex flex-col gap-2">
+        <Collapse className="footer-mobile-collapse gap-2" bordered={false}>
           {items.map((item, index) => {
             return (
               <Collapse.Panel
                 key={item?.id || 0}
                 header={item.title}
-                className={panelClass}
+                className="bg-white custom-rounded mb-2"
               >
                 <div
                   className={'lg:mt-[12px]'}
