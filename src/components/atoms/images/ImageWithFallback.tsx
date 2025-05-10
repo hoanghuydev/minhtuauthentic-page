@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import noImage from '@/static/images/no-image.png';
 import { ProductDto } from '@/dtos/Product.dto';
 import { isMobile } from 'react-device-detect';
+import { twMerge } from 'tailwind-merge';
 type Props = {
   image: ImageDto | null | undefined;
   isFill?: boolean;
@@ -64,7 +65,7 @@ const ImageWithFallback = ({
             src={imgActiveSrc}
             alt={alt || image?.alt || product?.title || product?.name || ''}
             fill={true}
-            className={className}
+            className={twMerge(className, 'select-none')}
             unoptimized={unoptimized == null ? true : unoptimized}
             onError={() => {
               setImageActiveSrc(noImage);
@@ -91,7 +92,7 @@ const ImageWithFallback = ({
             height={image?.height || 0}
             unoptimized={unoptimized == null ? true : unoptimized}
             priority={priority}
-            className={className}
+            className={twMerge(className, 'select-none')}
             quality={quality || 70}
             onError={() => {
               setImageActiveSrc(noImage);
@@ -119,6 +120,7 @@ const ImageWithFallback = ({
         alt={alt || image?.alt || product?.title || product?.name || ''}
         width={image?.width || 0}
         height={image?.height || 0}
+        className={'select-none'}
       />
     );
   };

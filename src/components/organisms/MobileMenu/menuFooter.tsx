@@ -99,7 +99,7 @@ export default function MenuFooter({ isFixed, className }: Props) {
       return (
         <div
           className={twMerge(
-            'lg:hidden bg-primary text-white w-full shadow-custom rounded-tr-2xl rounded-tl-2xl ',
+            'lg:hidden bg-white shadow-custom text-gray-900 w-full rounded-tr-2xl rounded-tl-2xl ',
             isFixed && 'fixed bottom-0 left-0 z-[1001]',
             className,
           )}

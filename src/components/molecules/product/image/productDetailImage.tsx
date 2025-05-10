@@ -8,6 +8,7 @@ import { useProductImageDetail } from '@/hooks/useProductImageDetail';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { useMemo } from 'react';
 import { useIsMobile } from '@/hooks/useDevice';
+import { useSwiperSlide } from 'swiper/react';
 type Props = {
   product: ProductDto;
   containerClassName?: string;
@@ -33,16 +34,18 @@ const ProductDetailImage = ({
         slidePerViewMobile={4}
         key={JSON.stringify(images)}
         classNameItems={
-          'p-1 lg:hover:shadow-md transition-shadow duration-300 lg:hover:border-primary border border-transparent'
+          'p-1 lg:hover:shadow-md transition-shadow duration-300 select-none lg:hover:border-primary border border-transparent'
         }
         renderItem={(item) => {
+          const swiper = useSwiperSlide();
           const imageItem = item as ImageDto;
           return (
             <ImageWithFallback
               image={imageItem}
-              className={
-                'w-full h-full object-contain hover:scale-105 transition-transform duration-300 cursor-pointer border-[3px] border-[#e4e4e4]'
-              }
+              className={twMerge(
+                'w-full h-full object-contain hover:scale-105 select-none transition-transform duration-300 cursor-pointer border-[3px] border-[#e4e4e4]',
+                swiper.isActive && 'border-primary',
+              )}
               sizes="120px"
               onClick={() => handleClickImage(imageItem)}
               product={product}
@@ -65,7 +68,7 @@ const ProductDetailImage = ({
       <ImageWithFallback
         image={imageActive}
         className={
-          'object-contain cursor-pointer bk-product-image lg:max-w-[568px] w-full m-auto'
+          'object-contain cursor-pointer bk-product-image select-none lg:max-w-[568px] w-full m-auto'
         }
         onClick={(image: ImageDto | null) => {
           setIsOpen && setIsOpen({ display: true, image });

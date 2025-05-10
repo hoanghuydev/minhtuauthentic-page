@@ -54,3 +54,7 @@
 .swiper-slide.swiper-slide-visible.swiper-slide-fully-visible.swiper-slide-active {
   z-index: 100;
 }
+
+.swiper-slide.swiper-slide-active {
+  border: 1px solid var(--primary-color) !important;
+}
