@@ -13,9 +13,11 @@ import useMenu from '@/hooks/useMenu';
 const Menu = ({
   menu,
   className,
+  isOpenMenu,
 }: {
   menu: ResponseMenuDto;
   className?: string;
+  isOpenMenu: boolean;
 }) => {
   const [dataDisplayPopup, setDataDisplayPopup] = useState<PopupDisplay>({
     display: false,
@@ -32,11 +34,29 @@ const Menu = ({
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    // Set initial height for main menu
     setMenuCategoryChildrenPosition({
       top: 0,
       left: 20,
       height: ref.current?.clientHeight || 0,
     });
+
+    // Add resize observer for dynamic updates
+    if (ref.current) {
+      const updateHeight = () => {
+        setMenuCategoryChildrenPosition((prev) => ({
+          ...prev,
+          height: ref.current?.clientHeight || 0,
+        }));
+      };
+
+      const resizeObserver = new ResizeObserver(updateHeight);
+      resizeObserver.observe(ref.current);
+
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }
   }, []);
 
   const renderMenuItem = (item: MenuDisplay) => {
@@ -139,7 +159,7 @@ const Menu = ({
       <div
         ref={ref}
         className={twMerge(
-          'hidden lg:!block w-full rounded-[10px] shadow-custom py-1 shrink-0 z-[1] bg-white overflow-auto custom-scrollbar relative h-[380px]',
+          'hidden min-w-[185px] lg:!block w-full rounded-[10px] shadow-custom py-1 shrink-0 z-[1] bg-white overflow-auto custom-scrollbar relative h-[380px]',
           className,
         )}
       >
@@ -188,6 +208,7 @@ const Menu = ({
               });
             }, 50);
           }}
+          isOpenMenu={isOpenMenu}
         />
       )}
     </>

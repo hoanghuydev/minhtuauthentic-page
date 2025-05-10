@@ -58,8 +58,8 @@ export default function LayoutMenu({ menu }: Props) {
             'absolute top-0 left-0 w-full h-full transition-all duration-500',
             // 'bg-[rgba(0,0,0,.53)]',
             appCtx?.isOpenMenu
-              ? 'opacity-100 visible z-50'
-              : 'opacity-0 invisible z-0',
+              ? 'opacity-100 visible z-50 flex'
+              : 'opacity-0 invisible z-0 hidden',
           )}
         >
           {/* Backdrop */}
@@ -74,8 +74,8 @@ export default function LayoutMenu({ menu }: Props) {
           {/* Menu Container */}
           <div
             ref={ref}
-            className={'fixed h-[380px] m-auto'}
-            style={{ width: position?.width || 0, left: position?.left }}
+            className={'fixed h-[380px] m-auto w-fit'}
+            style={{ left: position?.left }}
           >
             <div
               ref={refMenuContain}
@@ -91,9 +91,10 @@ export default function LayoutMenu({ menu }: Props) {
                 className={twMerge(
                   'transition-all duration-500',
                   appCtx?.isOpenMenu
-                    ? 'opacity-100 visible z-50'
-                    : 'opacity-0 invisible z-0',
+                    ? 'opacity-100 visible z-50 flex'
+                    : 'opacity-0 invisible z-0 hidden',
                 )}
+                isOpenMenu={appCtx?.isOpenMenu || false}
               />
             </div>
           </div>

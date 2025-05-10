@@ -1,13 +1,15 @@
 import Link from 'next/link';
 import { POPUP_TYPE, PopupDisplay } from '@/config/type';
 import { CategoryDto } from '@/dtos/Category.dto';
-import { Fragment, ReactNode, useEffect, useState } from 'react';
+import { Fragment, ReactNode, useContext, useEffect, useState } from 'react';
 import { chunk } from 'lodash';
 import { BrandDto } from '@/dtos/Brand.dto';
 import MenuBrand from '@/components/molecules/header/menu/menuBrand';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import MenuPopupCategory from '@/components/molecules/header/menu/menuPopupCategory';
 import React from 'react';
+import appContext from '@/contexts/appContext';
+import { twMerge } from 'tailwind-merge';
 
 const MenuPopup = ({
   data,
@@ -15,12 +17,14 @@ const MenuPopup = ({
   onMouseLeave,
   menuCategoryChildrenPosition,
   menu,
+  isOpenMenu,
 }: {
   data: PopupDisplay;
   menu: ResponseMenuDto;
   menuCategoryChildrenPosition: { top: number; left: number; height: number };
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  isOpenMenu: boolean;
 }) => {
   const wMenu = 185;
   const gapWMenuAnd = 8;
@@ -29,7 +33,6 @@ const MenuPopup = ({
     width: 0,
     height: 0,
   });
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (document && document.getElementById('main-body')) {
@@ -45,12 +48,21 @@ const MenuPopup = ({
       const homePage = document.getElementById('main-home-page');
       if (homePage) {
         setBgWH({
-          width: homePage.offsetWidth - wMenu - gapWMenuAnd,
+          width: homePage.offsetWidth - wMenu - (isOpenMenu ? gapWMenuAnd : 0),
           height: homePage.offsetHeight,
         });
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (isOpenMenu && document.getElementById('main-body')) {
+      const width =
+        document?.getElementById('main-body')?.getBoundingClientRect()?.width ||
+        0;
+      setWidthContainer(width - wMenu);
+    }
+  }, [isOpenMenu]);
 
   const renderItem = () => {
     const obj: Record<string, () => ReactNode> = {
@@ -87,10 +99,15 @@ const MenuPopup = ({
             maxWidth: widthContainer,
           }}
         >
-          <div className="w-[25px] h-full bg-transparent flex-shrink-0"></div>
+          <div
+            className={twMerge(
+              ' h-full bg-transparent flex-shrink-0',
+              isOpenMenu ? 'w-[25px]' : 'w-[42px]',
+            )}
+          ></div>
           <div
             className={
-              ' max-lg:hidden h-full lg:w-[53vw] bg-white p-2 pl-4 overflow-auto shadow-custom flex'
+              ' max-lg:hidden h-full lg:w-full bg-white p-2 pl-4 overflow-auto shadow-custom flex'
             }
           >
             <div className="flex-1 min-w-0">{renderItem()}</div>
