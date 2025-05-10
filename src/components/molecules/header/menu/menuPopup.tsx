@@ -26,7 +26,7 @@ const MenuPopup = ({
   onMouseLeave: () => void;
   isOpenMenu: boolean;
 }) => {
-  const wMenu = 185;
+  const wMenu = isOpenMenu ? 214 : 220;
   const gapWMenuAnd = 8;
   const [widthContainer, setWidthContainer] = useState(0);
   const [bgWH, setBgWH] = useState<{ width: number; height: number }>({
@@ -88,7 +88,7 @@ const MenuPopup = ({
     <>
       {data?.display && (
         <div
-          className="absolute top-0 left-[200px] z-[20] flex"
+          className="absolute top-0 left-[215px] z-[20] flex"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           style={{
@@ -99,12 +99,12 @@ const MenuPopup = ({
             maxWidth: widthContainer,
           }}
         >
-          <div
+          {/* <div
             className={twMerge(
               ' h-full bg-transparent flex-shrink-0',
               isOpenMenu ? 'w-[25px]' : 'w-[42px]',
             )}
-          ></div>
+          ></div> */}
           <div
             className={
               ' max-lg:hidden h-full lg:w-full bg-white p-2 pl-4 overflow-auto shadow-custom flex'

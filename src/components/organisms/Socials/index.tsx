@@ -63,7 +63,10 @@ export default function Socials() {
       )}
 
       {/* Main social media toggle button */}
-      <div className="fixed right-8 bottom-40 z-50 flex flex-col gap-3 items-end">
+      <div
+        className="fixed right-8 bottom-40 z-50 flex flex-col gap-3 items-end"
+        onClick={() => setIsOpen(!isOpen)}
+      >
         {/* Social media list */}
         {isOpen && (
           <div className="mb-3 flex flex-col gap-3">
@@ -93,8 +96,7 @@ export default function Socials() {
 
         {/* Toggle button */}
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-[42px] h-[42px] bg-transparent overflow-hidden rounded-full flex items-center justify-center text-white"
+          className="w-[42px] h-[42px] bg-transparent select-none overflow-hidden rounded-full flex items-center justify-center text-white"
           aria-label="Nút đóng mở menu hỗ trợ"
         >
           {/* Temporary icon (can be replaced later) */}

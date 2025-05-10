@@ -122,7 +122,7 @@ export default function SearchContainer({
   const renderItemList = useMemo(() => {
     return (
       <div className={'flex flex-col lg:col-span-2 gap-3'}>
-        {data?.products.length || loading ? (
+        {(data?.products || []).length || loading ? (
           <ul className={'grid grid-cols-3 lg:grid-cols-4'}>
             {(data?.products || []).map((item: ProductDto, index: number) => {
               const variant = item?.variants?.[0];
@@ -170,7 +170,7 @@ export default function SearchContainer({
       <div className={'flex flex-col'}>
         <p className={'font-bold text-xl border-b mb-3'}>Tin tức</p>
         <div className={'flex flex-col gap-3'}>
-          {data?.news.map((item: NewsDto, index: number) => {
+          {(data?.news || []).map((item: NewsDto, index: number) => {
             return (
               <a href={generateSlugToHref(item?.slugs?.slug)} key={index}>
                 <p>{item?.name}</p>

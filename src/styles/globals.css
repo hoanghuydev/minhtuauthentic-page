@@ -184,3 +184,7 @@ iframe {
 .custom-scrollbar > * {
   direction: ltr;
 }
+
+.custom-rounded {
+  border-radius: 8px !important;
+}
