@@ -62,6 +62,7 @@ export enum STATIC_CONTENT_TYPE {
   BANNER_BELOW = 'banner-below',
   BLOCK_UNDER_SLIDE = 'home-block-under-slide',
   BLOCK_UNDER_CATEGORY = 'banner-under-category',
+  BANNER_FULL_WIDTH = 'banner-full-width',
   FEATURE_CATEGORY = 'home-feature-category',
   FOOTER_PRIVACY_POLICY = 'footer-privacy-policy',
 }

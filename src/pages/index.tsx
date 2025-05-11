@@ -55,6 +55,7 @@ export default function Home({
       <HomeBanner
         setting={settingsHome[SETTING_KEY.BANNER_SECTION.KEY]}
         banners={homePage?.banners || []}
+        bannersFullWidth={homePage?.bannersFullWidth || []}
         menu={menu}
       />
       <Layout

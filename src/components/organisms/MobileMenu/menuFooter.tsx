@@ -84,7 +84,7 @@ export default function MenuFooter({ isFixed, className }: Props) {
         <div className={'mx-auto'}>{item.icon}</div>
         <span
           className={
-            'text-sm text-center max-w-20 line-clamp-1 text-ellipsis overflow-hidden'
+            'text-sm text-center max-w-20 mx-auto line-clamp-1 text-ellipsis overflow-hidden'
           }
         >
           {item.label}

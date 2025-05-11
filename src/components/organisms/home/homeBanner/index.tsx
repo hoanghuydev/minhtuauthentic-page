@@ -7,10 +7,16 @@ import { SettingOptionDto } from '@/dtos/SettingOption.dto';
 
 type Props = {
   banners: StaticContentsDto[];
+  bannersFullWidth: StaticContentsDto[];
   menu?: ResponseMenuDto;
   setting?: SettingOptionDto;
 };
-export default function HomeBanner({ banners, menu, setting }: Props) {
+export default function HomeBanner({
+  banners,
+  bannersFullWidth,
+  menu,
+  setting,
+}: Props) {
   const isMobile = useIsMobile();
   return (
     <>
@@ -28,7 +34,7 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
 
           <Banners
             className={'h-full'}
-            banners={banners || []}
+            banners={bannersFullWidth || []}
             classNameImage={'object-cover h-full object-center'}
             isMobile={isMobile}
             isFull={true}
