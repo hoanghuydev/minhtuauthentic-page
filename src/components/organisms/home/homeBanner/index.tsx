@@ -21,13 +21,11 @@ export default function HomeBanner({
   return (
     <>
       {setting?.isBannerFull ? (
-        <div id={'main-home-page'} className={'h-[400px] w-full'}>
+        <div id={'main-home-page'} className={'h-[450px] w-full'}>
           <div className={'container relative m-auto'}>
             <div className={'absolute top-3 z-[3] m-auto'}>
               <div className={'container m-auto relative'}>
-                {menu && (
-                  <MenuWrapper menu={menu} className={'w-[220px] h-[380px] '} />
-                )}
+                {menu && <MenuWrapper menu={menu} className={'w-[220px] '} />}
               </div>
             </div>
           </div>
@@ -47,20 +45,20 @@ export default function HomeBanner({
             'lg:mt-[10px] lg:flex w-full gap-2 relative container mx-auto'
           }
         >
-          {menu && (
-            <MenuWrapper menu={menu} className={'w-[220px] h-[380px]'} />
-          )}
-          <div
-            className={
-              'max-lg:mt-20 min-h-[140px] lg:h-[380px] w-full basis-[calc(100%-230px)] lg:w-[calc(100%-230px)] max-w-full'
-            }
-          >
-            <Banners
-              className={'flex-1 rounded-3xl lg:h-[380px]'}
-              banners={banners || []}
-              classNameImage={'object-contain lg:object-cover w-full  '}
-              isMobile={isMobile}
-            />
+          <div className="flex w-full gap-2 relative">
+            {menu && (
+              <MenuWrapper menu={menu} className={'w-[220px] flex-shrink-0'} />
+            )}
+            <div
+              className={'max-lg:mt-20 min-h-[140px] flex-grow overflow-hidden'}
+            >
+              <Banners
+                className={'w-full h-full rounded-3xl'}
+                banners={banners || []}
+                classNameImage={'object-contain lg:object-cover w-full h-full'}
+                isMobile={isMobile}
+              />
+            </div>
           </div>
         </div>
       )}

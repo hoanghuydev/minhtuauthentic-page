@@ -157,7 +157,6 @@ export default function ContentFilter({
               {title}
             </span>
           </h1>
-
           {category?.children && category?.children?.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
               {category.children.map((child, index) => (
@@ -165,31 +164,35 @@ export default function ContentFilter({
                   type={'button'}
                   key={index}
                   onClick={() => {
-                    ctx?.updateRouter && ctx.updateRouter("child", child.slugs?.slug || "my-pham")
+                    ctx?.updateRouter &&
+                      ctx.updateRouter('child', child.slugs?.slug || 'my-pham');
                   }}
                   className={twMerge(
                     'bg-[#f3f4f6] border border-[#e5e7eb] rounded-[10px] text-[12px] p-[5px_10px] transition-colors duration-300',
-                    child.slugs?.slug === ctx?.router?.query["child"]  && 'bg-primary text-white',
+                    child.slugs?.slug === ctx?.router?.query['child'] &&
+                      'bg-primary text-white',
                   )}
                 >
                   <span>{child.name}</span>
                 </button>
-            //     <Link
-            //     key={child.id}
-            //      href={generateSlugToHref(child.slugs?.slug)}
-            //      className="px-3 py-1 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm transition-colors"
-            // >
-            //   {child.name}
-            // </Link>
-          ))}
+                //     <Link
+                //     key={child.id}
+                //      href={generateSlugToHref(child.slugs?.slug)}
+                //      className="px-3 py-1 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm transition-colors"
+                // >
+                //   {child.name}
+                // </Link>
+              ))}
+            </div>
+          )}
         </div>
-      )
+      );
     }
-    </div>
-    )
-      ;
-    }
-    return null;
+    return (
+      <h1 className={'mb-3 lg:mb-6'}>
+        <span className={'text-3xl text-primary font-semibold'}>Sản phẩm</span>
+      </h1>
+    );
   };
   return (
     <div className={'p-3 w-full lg:col-span-5'}>

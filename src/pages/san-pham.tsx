@@ -43,8 +43,8 @@ export default function ProductPage({
         seo={{
           canonical:
             process.env.NEXT_PUBLIC_APP_URL +
-            '/san-pham/?search=' +
-            router.query.search,
+            '/san-pham' +
+            (router.query.search ? '?search=' + router.query.search : ''),
         }}
       >
         <CategoryTemplate

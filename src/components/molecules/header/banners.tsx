@@ -82,16 +82,23 @@ export const Banners = ({
             <ImageWithFallback
               image={imageDetail.image}
               alt={imageDetail.image?.alt || 'minhtuauthentic'}
-              className={twMerge('object-contain w-full', classNameImage)}
+              className={twMerge(
+                'object-contain w-full h-full',
+                classNameImage,
+              )}
               loading="eager"
               unoptimized={false}
-              sizes="(max-width: 768px) 100vw, 100vw"
+              sizes="100vw"
               quality={80}
             />
           );
 
           return (
-            <SwiperSlide key={`${index}-${isMobile}`}>
+            <SwiperSlide
+              key={`${index}-${isMobile}`}
+              className="w-full"
+              style={{ width: '100% !important' }}
+            >
               {isFull ? (
                 imageElement
               ) : (

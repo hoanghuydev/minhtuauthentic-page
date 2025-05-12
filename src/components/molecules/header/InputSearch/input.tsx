@@ -68,13 +68,11 @@ export default function InputSearch({
       }
       onKeyUp={onKeyUp}
       suffix={
-        value && (
-          <Button
-            icon={<CloseCircle className="w-6 h-6" />}
-            type="link"
-            onClick={handleClear}
-          />
-        )
+        <Button
+          icon={<CloseCircle className="w-6 h-6" />}
+          type="link"
+          onClick={handleClear}
+        />
       }
       onClick={onClick}
     />

@@ -71,6 +71,7 @@ const MenuPopup = ({
           <MenuPopupCategory
             title={data?.title}
             filterSetting={menu?.filterSetting}
+            brands={menu?.brands || []}
             categories={Array.isArray(data?.data) ? data?.data : [data?.data]}
           />
         );

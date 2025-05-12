@@ -9,6 +9,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { OrderProvider } from '@/contexts/orderContext';
 import Head from 'next/head';
 import { Nunito_Sans } from 'next/font/google';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import * as gtag from '@/utils/gtag';
+
 const nunitoSans = Nunito_Sans({
   subsets: ['latin'],
 });
@@ -17,7 +21,19 @@ import { SearchProvider } from '@/contexts/searchContext';
 
 export default function App({ Component, pageProps }: AppProps) {
   const settings = useSettings();
+  const router = useRouter();
   const _pageProps = { ...pageProps, ...settings };
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      gtag.pageview(url);
+    };
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
   return (
     <>
       <Head>

@@ -12,7 +12,7 @@ export default function NewsCategoryMobile({ categoryNews }: Props) {
   return (
     <>
       {isMobile && (
-        <div className={'w-full overflow-auto'}>
+        <div className={'w-full mt-14 overflow-auto'}>
           <ul className={'flex flex-nowrap gap-3 pb-2'}>
             {categoryNews.map((item: CategoryNewsDto, key: number) => {
               return (

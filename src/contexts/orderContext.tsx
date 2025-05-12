@@ -13,6 +13,16 @@ import { getPriceWithCoupon, variantName } from '@/utils';
 import { usePathname } from 'next/navigation';
 import CartDto from '@/dtos/Cart.dto';
 import CouponsDto from '@/dtos/Coupons.dto';
+
+// Toast configuration
+const TOAST_CONFIG = {
+  autoClose: 1000,
+  closeOnClick: true,
+  pauseOnHover: false,
+  draggable: true,
+  toastId: 'cart-toast',
+};
+
 const OrderContext = createContext<TypeAppState | undefined>(undefined);
 export type TypeAppState = {
   cart: CartDto | null;
@@ -92,7 +102,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       ? (cart?.items || []).find((item) => item.variant_id === variant.id)
       : null;
     if (!variant?.id) {
-      toast('Variant không tồn tại', { type: 'error' });
+      toast('Variant không tồn tại', { ...TOAST_CONFIG, type: 'error' });
       return;
     }
     const newCartResponse = await callAddUpdateCart(
@@ -101,11 +111,13 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     );
     if (!newCartResponse?.data) {
       toast(newCartResponse?.message || 'Không thể thêm vào giỏ hàng', {
+        ...TOAST_CONFIG,
         type: 'error',
       });
       return;
     }
     setCart(newCartResponse?.data || []);
+    toast('Đã thêm vào giỏ hàng', { ...TOAST_CONFIG, type: 'success' });
   };
 
   const updateCart = async (index: number, qty: number = 1) => {
@@ -114,12 +126,12 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     }
     const orderItem = cart?.items?.[index];
     if (!orderItem?.variant_id) {
-      toast('Variant không tồn tại', { type: 'error' });
+      toast('Variant không tồn tại', { ...TOAST_CONFIG, type: 'error' });
       return;
     }
     const newCartResponse = await callAddUpdateCart(orderItem.variant_id, qty);
     setCart(newCartResponse?.data || []);
-    toast('Đã cập nhật giỏ hàng', { type: 'success' });
+    toast('Đã cập nhật giỏ hàng', { ...TOAST_CONFIG, type: 'success' });
   };
 
   const applyCoupon = async (
@@ -145,7 +157,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
             return true;
           } else {
             if (data?.message) {
-              toast.error(data?.message);
+              toast.error(data?.message, TOAST_CONFIG);
             }
           }
 
@@ -178,7 +190,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
             return true;
           } else {
             if (data?.message) {
-              toast.error(data?.message);
+              toast.error(data?.message, TOAST_CONFIG);
             }
           }
 

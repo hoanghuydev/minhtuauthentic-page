@@ -159,7 +159,7 @@ const Menu = ({
       <div
         ref={ref}
         className={twMerge(
-          'hidden min-w-[214px] lg:!block w-full py-1 shrink-0 z-[1] rounded-[8px] bg-white overflow-auto custom-scrollbar relative h-[380px]',
+          'hidden min-w-[214px] lg:!block w-full py-1 shrink-0 z-[1] rounded-[8px] bg-white overflow-auto custom-scrollbar relative h-fit',
           isOpenMenu ? '' : 'shadow-custom',
           className,
         )}

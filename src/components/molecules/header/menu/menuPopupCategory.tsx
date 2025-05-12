@@ -1,13 +1,19 @@
 import { ProductFilterOptionDto } from '@/dtos/ProductFilterSettingOption/ProductFilterOption.dto';
 import { CategoryDto } from '@/dtos/Category.dto';
 import Link from 'next/link';
+import { BrandDto } from '@/dtos/Brand.dto';
+import { ImageDetailDto } from '@/dtos/ImageDetail.dto';
+import BrandWithImage from '@/components/atoms/brands/brandWithImage';
 
 type Props = {
   filterSetting?: ProductFilterOptionDto;
   categories: CategoryDto[];
   title?: string;
+  brands: BrandDto[];
 };
+
 export default function MenuPopupCategory({
+  brands,
   filterSetting,
   categories,
   title,
@@ -15,8 +21,16 @@ export default function MenuPopupCategory({
   const renderItem = () => {
     const listDisplay: Record<
       string,
-      { label: string; data: { slug: string; name: string }[] }
+      {
+        label: string;
+        data: {
+          slug: string;
+          name: string;
+          images?: ImageDetailDto[];
+        }[];
+      }
     > = {};
+
     if (categories?.length > 0) {
       listDisplay.categories_child = {
         label: 'Danh mục',
@@ -33,20 +47,6 @@ export default function MenuPopupCategory({
     if (filterSetting) {
       Object.keys(filterSetting).forEach((setting) => {
         switch (setting) {
-          case 'brands':
-            if (!listDisplay.brands) {
-              listDisplay.brands = {
-                label: 'Thương hiệu',
-                data: [],
-              };
-            }
-            listDisplay.brands.data = (filterSetting?.brands || []).map(
-              (brand) => ({
-                slug: `/san-pham?brands=` + brand.id,
-                name: brand.name || '',
-              }),
-            );
-            break;
           case 'concentration_gradients':
             if (!listDisplay.concentration_gradients) {
               listDisplay.concentration_gradients = {
@@ -90,6 +90,36 @@ export default function MenuPopupCategory({
 
     return (
       <>
+        {brands?.length > 0 && (
+          <div className="h-full overflow-hidden">
+            <h3 className={'text-xl font-semibold mb-3'}>Thương hiệu</h3>
+            <div className={'flex flex-wrap gap-2'}>
+              {brands.slice(0, 8).map((item, index) => (
+                <BrandWithImage
+                  className={'p-[5px_10px]'}
+                  classNameImage={'max-w-[50px] object-contain'}
+                  key={index}
+                  brand={
+                    new BrandDto({
+                      images: item.images,
+                      slugs: item.slugs,
+                    })
+                  }
+                />
+              ))}
+            </div>
+            {brands.length > 10 && (
+              <div className="text-center mt-3">
+                <Link
+                  href="/san-pham?view=brands"
+                  className="inline-block px-4 py-2 text-primary hover:text-primary-dark font-medium"
+                >
+                  Xem tất cả
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
         {Object.keys(listDisplay).map((key) => {
           return (
             <div key={key}>
@@ -120,7 +150,7 @@ export default function MenuPopupCategory({
       {title && (
         <p className={'mb-3 text-3xl font-[700] lg:font-bold'}>{title}</p>
       )}
-      <div className={'grid grid-cols-4'}>{renderItem()}</div>
+      <div className={'grid grid-cols-4 gap-4'}>{renderItem()}</div>
     </>
   );
 }

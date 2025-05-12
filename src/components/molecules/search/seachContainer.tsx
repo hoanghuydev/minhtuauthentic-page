@@ -383,7 +383,7 @@ export default function SearchContainer({
           ) : (
             <div
               className={twMerge(
-                'absolute text-black top-[60px] bg-white w-[65vw] max-w-[1140px] rounded-[10px] left-[50%] translate-x-[-50%] shadow-custom2 z-[100]',
+                'absolute text-black top-[60px] bg-white w-[65vw] max-w-[1140px] rounded-[10px] left-[50%] translate-x-[-25%] shadow-custom2 z-[100]',
                 classNameInput,
               )}
             >
