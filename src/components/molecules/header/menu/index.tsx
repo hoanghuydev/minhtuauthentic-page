@@ -19,7 +19,9 @@ const Menu = ({
   className?: string;
   isOpenMenu: boolean;
 }) => {
-  const [dataDisplayPopup, setDataDisplayPopup] = useState<PopupDisplay>({
+  const [dataDisplayPopup, setDataDisplayPopup] = useState<
+    PopupDisplay & { currentCategoryId?: number }
+  >({
     display: false,
     data: [],
   });
@@ -140,6 +142,7 @@ const Menu = ({
           display: true,
           data: _item?.category?.children || [],
           title: _item?.category?.name,
+          currentCategoryId: _item?.id,
         });
         break;
       case POPUP_TYPE.BRAND:
@@ -160,7 +163,7 @@ const Menu = ({
         ref={ref}
         className={twMerge(
           'hidden min-w-[214px] lg:!block w-full py-1 shrink-0 z-[1] rounded-[8px] bg-white overflow-auto custom-scrollbar relative h-fit',
-          isOpenMenu ? '' : 'shadow-custom',
+          isOpenMenu ? '' : 'shadow-custom rounded-lg',
           className,
         )}
       >

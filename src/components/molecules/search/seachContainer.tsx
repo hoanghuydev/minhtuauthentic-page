@@ -197,7 +197,7 @@ export default function SearchContainer({
       <>
         {keywordList.length > 0 && (
           <>
-            <p className={'font-bold text-md'}>Bạn đã tìm kiếm</p>
+            <p className={'font-bold text-md'}>BẠN ĐÃ TÌM KIẾM</p>
             {
               <div className={'flex flex-wrap gap-2'}>
                 {keywordList.map((item, index) => {
@@ -226,7 +226,7 @@ export default function SearchContainer({
   const renderFeatureBrand = () => {
     return (
       <>
-        <p className={'font-bold text-md'}>Thương hiệu nổi bật</p>
+        <p className={'font-bold text-md'}>THƯƠNG HIỆU NỔI BẬT</p>
         {isLoadingBrand ? (
           <Loading center />
         ) : (
@@ -259,7 +259,7 @@ export default function SearchContainer({
   const renderFeatureCategory = () => {
     return (
       <>
-        <p className={'font-bold text-md'}>Danh mục nổi bật</p>
+        <p className={'font-bold text-md'}>DANH MỤC NỔI BẬT</p>
         {isLoadingFeatureCategory ? (
           <Loading center />
         ) : (

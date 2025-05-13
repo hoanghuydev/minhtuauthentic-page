@@ -54,8 +54,13 @@ export default function ItemCoupon({
 
         <div className="mt-3 flex justify-between">
           {coupon?.promotion?.end_date && (
-            <div className="text-sm text-gray-500">
-              HSD: {new Date(coupon.promotion.end_date).toLocaleDateString()}
+            <div className="flex flex-col gap-2">
+              <div className="text-sm text-gray-500 font-bold">
+                {coupon.code}
+              </div>
+              <div className="text-sm text-gray-500">
+                HSD: {new Date(coupon.promotion.end_date).toLocaleDateString()}
+              </div>
             </div>
           )}
           <Button

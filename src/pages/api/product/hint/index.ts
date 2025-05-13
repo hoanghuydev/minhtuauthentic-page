@@ -1,12 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const urlSearch = new URLSearchParams(req.query as any);
-
-    const url = `${
-      process.env.BE_URL
-    }/api/pages/products/listWithId/?${urlSearch.toString()}`;
+    const url = `${process.env.BE_URL}/api/pages/products/hint?limit=${
+      req.query.limit ?? 5
+    }
+    ${req.query.categoryId ? `&categoryId=${req.query.categoryId}` : ''}`;
     return fetch(url, {
       method: 'GET',
       headers: {

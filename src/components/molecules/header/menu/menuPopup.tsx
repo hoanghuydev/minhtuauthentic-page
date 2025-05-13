@@ -19,7 +19,7 @@ const MenuPopup = ({
   menu,
   isOpenMenu,
 }: {
-  data: PopupDisplay;
+  data: PopupDisplay & { currentCategoryId?: number };
   menu: ResponseMenuDto;
   menuCategoryChildrenPosition: { top: number; left: number; height: number };
   onMouseEnter: () => void;
@@ -73,6 +73,7 @@ const MenuPopup = ({
             filterSetting={menu?.filterSetting}
             brands={menu?.brands || []}
             categories={Array.isArray(data?.data) ? data?.data : [data?.data]}
+            currentCategoryId={data?.currentCategoryId}
           />
         );
       },
