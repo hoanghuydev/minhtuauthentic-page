@@ -89,7 +89,7 @@ export const Banners = ({
               loading="eager"
               unoptimized={false}
               sizes="100vw"
-              quality={80}
+              quality={isMobile ? 80 : 100}
             />
           );
 
