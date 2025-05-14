@@ -4,7 +4,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
-import { EffectFade, Pagination, Autoplay, Navigation } from 'swiper/modules';
+import { Pagination, Autoplay, Navigation } from 'swiper/modules';
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import { ImageDetailDto } from '@/dtos/ImageDetail.dto';
 import { generateSlugToHref } from '@/utils';
@@ -49,7 +49,7 @@ export const Banners = ({
     slidesPerView: 1,
     pagination: true,
     navigation: true,
-    modules: [EffectFade, Pagination, Autoplay, Navigation],
+    modules: [Pagination, Autoplay, Navigation],
     autoplay: {
       delay: 3000,
       disableOnInteraction: false,
