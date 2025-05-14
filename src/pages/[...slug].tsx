@@ -150,6 +150,7 @@ export default function Page({
   keyword?: string;
 } & ServerSideProps &
   PageSetting) {
+  console.log(slug);
   const renderTemplate = () => {
     switch (slug?.model) {
       case Entity.VARIANTS:

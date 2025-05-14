@@ -106,8 +106,8 @@ const MenuPopup = ({
           )}
           <div
             className={twMerge(
-              ' max-lg:hidden h-full lg:w-full bg-white p-4 pl-4 overflow-auto flex',
-              isOpenMenu ? '' : 'shadow-custom',
+              ' max-lg:hidden h-full lg:w-full bg-white p-4 pl-4 overflow-hidden flex',
+              isOpenMenu ? 'rounded-r-[10px]' : 'shadow-custom rounded-[10px] ',
             )}
           >
             <div className="flex-1 min-w-0">{renderItem()}</div>

@@ -23,12 +23,25 @@ export default function CartSummaryMobile() {
                 key={index}
                 className={'p-3 border rounded-[10px] flex relative gap-1'}
               >
-                <ImageWithFallback
-                  className={'w-[100px] h-[100px] mx-auto bk-product-image'}
-                  image={item?.image}
-                  alt={item.variant_name}
-                />
-                <div className={'flex flex-col'}>
+                <div
+                  className={'flex flex-col justify-between items-center gap-2'}
+                >
+                  <ImageWithFallback
+                    className={'w-[100px] h-[100px] mx-auto bk-product-image'}
+                    image={item?.image}
+                    alt={item.variant_name}
+                  />
+                  <Button
+                    icon={<DeleteOutlined />}
+                    danger
+                    type={'link'}
+                    onClick={() =>
+                      orderCtx?.updateCart && orderCtx.updateCart(index, 0)
+                    }
+                    className="p-0"
+                  />
+                </div>
+                <div className={'flex flex-col flex-1'}>
                   <Link
                     href={generateSlugToHref(item.slug)}
                     className={'text-primary font-semibold bk-product-name'}
@@ -53,7 +66,13 @@ export default function CartSummaryMobile() {
                   <div
                     className={'flex gap-3 justify-between items-center mt-3'}
                   >
-                    <PriceInput qty={item.qty || 1} item={item} />
+                    <div className="flex items-center gap-2">
+                      <PriceInput
+                        qty={item.qty || 1}
+                        item={item}
+                        className="text-center"
+                      />
+                    </div>
                     <input
                       type={'hidden'}
                       className={'hidden bk-product-qty'}
@@ -62,17 +81,6 @@ export default function CartSummaryMobile() {
                     <span className={'text-primary font-[700] lg:font-bold'}>
                       {formatMoney(item.price || 0, 0, '.', '.')}
                     </span>
-                  </div>
-
-                  <div className={'absolute top-0 right-0'}>
-                    <Button
-                      icon={<DeleteOutlined />}
-                      danger
-                      type={'link'}
-                      onClick={() =>
-                        orderCtx?.updateCart && orderCtx.updateCart(index, 0)
-                      }
-                    ></Button>
                   </div>
                 </div>
               </div>

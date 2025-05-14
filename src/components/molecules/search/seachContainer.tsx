@@ -27,6 +27,7 @@ import { NewsDto } from '@/dtos/News.dto';
 import { ProductDto } from '@/dtos/Product.dto';
 import InputSearch from '@/components/molecules/header/InputSearch/input';
 import { type InputRef } from 'antd';
+import { useRouter } from 'next/router';
 
 type Props = {
   classNameInput?: string;
@@ -40,6 +41,7 @@ export default function SearchContainer({
   isMobile,
 }: Props) {
   const ctx = useContext(SearchContext);
+  const router = useRouter();
   const [data, setData] = useState<SearchData | undefined>(undefined);
   const [urlSearch, setUrlSearch] = useState<string>('');
   const [height, setHeight] = useState<number>(0);
@@ -77,8 +79,8 @@ export default function SearchContainer({
   useEffect(() => {
     if (ctx?.isOpenSearch && inputRef.current) {
       inputRef.current.focus();
-    } else if (!ctx?.isOpenSearch) {
-      setData(undefined);
+    } else if (!ctx?.isOpenSearch && data) {
+      // setData(undefined);
     }
   }, [ctx?.isOpenSearch]);
 
@@ -118,6 +120,20 @@ export default function SearchContainer({
       }
     };
   }, []);
+
+  // Add route change handler
+  useEffect(() => {
+    const handleRouteChange = () => {
+      if (ctx?.setIsOpenSearch) {
+        ctx.setIsOpenSearch(false);
+      }
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router.events, ctx]);
 
   const renderItemList = useMemo(() => {
     return (

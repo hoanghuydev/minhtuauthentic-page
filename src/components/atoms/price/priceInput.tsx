@@ -4,6 +4,7 @@ import OrderContext from '@/contexts/orderContext';
 import { OrderItemsDto } from '@/dtos/OrderItems.dto';
 import { twMerge } from 'tailwind-merge';
 import { useIsMobile } from '@/hooks/useDevice';
+
 type Props = {
   qty: number;
   item: OrderItemsDto;
@@ -27,8 +28,15 @@ export default function PriceInput({ qty, item, className }: Props) {
   }, [orderCtx?.cart?.items]);
 
   return (
-    <div className={`price-input-container flex items-center ${className}`}>
-      {isMobile && (
+    <>
+      <style jsx global>{`
+        .price-input-container .ant-input-number-input {
+          text-align: center !important;
+        }
+      `}</style>
+      <div
+        className={`price-input-container flex items-center justify-center ${className}`}
+      >
         <button
           className="border-[1px] border-[#d9d9d9] border-r-0 rounded-l grid place-items-center w-[31.6px] h-[31.6px]"
           onClick={() => {
@@ -40,21 +48,20 @@ export default function PriceInput({ qty, item, className }: Props) {
         >
           -
         </button>
-      )}
-      <InputNumber
-        min={1}
-        value={_qty}
-        onChange={(value) => {
-          if (value && value > 0) {
-            setQty(value);
-            orderCtx?.updateCart &&
-              orderCtx.updateCart(index, Number(value) || 1);
-          }
-        }}
-        className={twMerge(isMobile && 'rounded-none', 'flex-1', className)}
-        controls={!isMobile}
-      />
-      {isMobile && (
+        <InputNumber
+          min={1}
+          value={_qty}
+          onChange={(value) => {
+            if (value && value > 0) {
+              setQty(value);
+              orderCtx?.updateCart &&
+                orderCtx.updateCart(index, Number(value) || 1);
+            }
+          }}
+          className={twMerge('rounded-none', 'flex-1 max-w-[60px]', className)}
+          controls={false}
+        />
+
         <button
           className="border-[1px] border-[#d9d9d9] border-l-0 rounded-r grid place-items-center w-[31.6px] h-[31.6px]"
           onClick={() => {
@@ -64,7 +71,7 @@ export default function PriceInput({ qty, item, className }: Props) {
         >
           +
         </button>
-      )}
-    </div>
+      </div>
+    </>
   );
 }

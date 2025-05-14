@@ -27,6 +27,7 @@ const MenuPopupCategory = ({
 }: Props) => {
   const [hintProducts, setHintProducts] = useState<ProductDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [brandsRandom, setBrandsRandom] = useState<BrandDto[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -79,6 +80,10 @@ const MenuPopupCategory = ({
         abortControllerRef.current.abort();
       }
     };
+  }, [currentCategoryId]);
+
+  useEffect(() => {
+    setBrandsRandom(brands.sort(() => 0.5 - Math.random()).slice(0, 8));
   }, [currentCategoryId]);
 
   const renderItem = () => {
@@ -157,7 +162,7 @@ const MenuPopupCategory = ({
           <div className="h-full overflow-hidden">
             <h3 className={'text-xl font-semibold mb-3'}>Thương hiệu</h3>
             <div className={'flex flex-wrap gap-2'}>
-              {brands.slice(0, 8).map((item, index) => (
+              {brandsRandom.map((item, index) => (
                 <BrandWithImage
                   className={'p-[5px_10px]'}
                   classNameImage={'max-w-[50px] object-contain'}
