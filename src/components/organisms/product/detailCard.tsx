@@ -124,7 +124,7 @@ const ProductDetailCard = ({
           />
           <div
             className={
-              'flex flex-col-reverse lg:grid lg:grid-cols-3 gap-3 my-3'
+              'flex flex-col-reverse lg:grid lg:grid-cols-3 gap-3 my-3 relative'
             }
           >
             <div className={'col-span-2'}>

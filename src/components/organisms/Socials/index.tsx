@@ -10,6 +10,7 @@ import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import supportMenu from '@/static/images/support_menu_icon.png';
 import Image from 'next/image';
+import { useIsMobile } from '@/hooks/useDevice';
 
 const fetcher = () =>
   fetch('/api/static-contents/' + STATIC_COMPONENT_TYPE.SOCIALS, {
@@ -17,6 +18,7 @@ const fetcher = () =>
   }).then((res) => res.json());
 
 export default function Socials() {
+  const isMobile = useIsMobile();
   const { data, error } = useSWR(
     '/api/static-contents/' + STATIC_COMPONENT_TYPE.SOCIALS,
     fetcher,
@@ -64,7 +66,10 @@ export default function Socials() {
 
       {/* Main social media toggle button */}
       <div
-        className="fixed right-8 bottom-40 z-50 flex flex-col gap-3 items-end"
+        className={twMerge(
+          'fixed right-8 bottom-[155px] z-50 flex flex-col gap-3 items-end',
+          isMobile ? 'right-4' : 'right-8',
+        )}
         onClick={() => setIsOpen(!isOpen)}
       >
         {/* Social media list */}
@@ -96,23 +101,28 @@ export default function Socials() {
 
         {/* Toggle button */}
         <button
-          className="w-[42px] h-[42px] bg-transparent select-none overflow-hidden rounded-full flex items-center justify-center text-white"
+          className="w-[48px] h-[48px] bg-transparent select-none overflow-hidden rounded-full flex items-center justify-center text-white"
           aria-label="Nút đóng mở menu hỗ trợ"
         >
           {/* Temporary icon (can be replaced later) */}
           <Image
             src={supportMenu}
             alt="Hỗ trợ"
-            className="w-[42px] h-[42px] bg-white"
+            className="w-[48px] h-[48px] bg-white"
           />
         </button>
       </div>
-      <div className="fixed right-8 bottom-24 mb-2 z-50 flex flex-col gap-3 items-end">
+      <div
+        className={twMerge(
+          'fixed  bottom-24 mb-2 z-50 flex flex-col gap-3 items-end',
+          isMobile ? 'right-4' : 'right-8',
+        )}
+      >
         {/* Back to top button */}
         {showBackToTop && (
           <button
             onClick={scrollToTop}
-            className="w-[42px] h-[42px] bg-primary rounded-full flex items-center justify-center text-white mt-3 z-50"
+            className="w-[48px] h-[48px] bg-primary rounded-full flex items-center justify-center text-white mt-3 z-50"
             aria-label="Back to top"
           >
             <svg

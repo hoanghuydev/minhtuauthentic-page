@@ -20,7 +20,7 @@ export default function ProductRelation({ products }: Props) {
         Sản phẩm liên quan
       </h2>
       {products?.length > 0 && (
-        <div className={'flex flex-col gap-3 mt-3'}>
+        <div className={'flex flex-col gap-3 mt-3 sticky top-0'}>
           {products.map((product, index) => {
             return (
               <Link
@@ -43,7 +43,11 @@ export default function ProductRelation({ products }: Props) {
                         product?.feature_image_detail?.image ||
                         productContext?.variantActive?.images?.[0]?.image
                       }
-                      className={'w-[100px] h-[100px] object-contain'}
+                      className={
+                        'w-[70px] h-[70px] min-w-[70px] object-contain'
+                      }
+                      quality={80}
+                      sizes="70px"
                     />
                   </div>
                   <div>
