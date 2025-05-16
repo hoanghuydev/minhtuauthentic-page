@@ -5,7 +5,7 @@ import { OrderItemsDto } from '@/dtos/OrderItems.dto';
 import { useContext, useState } from 'react';
 import OrderContext from '@/contexts/orderContext';
 import { toast } from 'react-toastify';
-import PriceInput from "@/components/atoms/price/priceInput";
+import PriceInput from '@/components/atoms/price/priceInput';
 type Props = {
   item: OrderItemsDto;
   onChange: (value: null | number) => void;
@@ -51,7 +51,7 @@ export default function CheckItemCart({ item, onChange }: Props) {
                 </p>
               );
             })}
-            <PriceInput className={'mt-3'} qty={item.qty || 1} item={item} />
+            <PriceInput qty={item.qty || 1} item={item} />
           </div>
           <PriceOnCart item={item} isDisplayTotal={true} />
         </div>

@@ -28,11 +28,23 @@ const MenuPopupCategory = ({
   const [hintProducts, setHintProducts] = useState<ProductDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [brandsRandom, setBrandsRandom] = useState<BrandDto[]>([]);
+  const [isReversed, setIsReversed] = useState<boolean>(false);
+  const [filterOrder, setFilterOrder] = useState<string[]>([
+    'concentration_gradients',
+    'price_range',
+  ]);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     // Reset products when menu changes
     setHintProducts([]);
+    // Toggle position between left-right and right-left
+    setIsReversed((prev) => !prev);
+    setFilterOrder(
+      isReversed
+        ? ['concentration_gradients', 'price_range']
+        : ['price_range', 'concentration_gradients'],
+    );
 
     const fetchHintProducts = async () => {
       if (currentCategoryId) {
@@ -113,7 +125,7 @@ const MenuPopupCategory = ({
     }
 
     if (filterSetting) {
-      Object.keys(filterSetting).forEach((setting) => {
+      filterOrder.forEach((setting) => {
         switch (setting) {
           case 'concentration_gradients':
             if (!listDisplay.concentration_gradients) {
@@ -188,27 +200,31 @@ const MenuPopupCategory = ({
             )}
           </div>
         )}
-        {Object.keys(listDisplay).map((key) => {
-          return (
-            <div key={key}>
-              <h3 className={'text-xl font-semibold mb-3'}>
-                {listDisplay[key].label}
-              </h3>
-              <ul className={'flex flex-col gap-1'}>
-                {listDisplay[key].data.map((item, index) => (
-                  <li key={index}>
-                    <Link
-                      href={item.slug}
-                      className="block w-full px-2 py-1 hover:bg-gray-100 rounded"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })}
+        {Object.keys(listDisplay)
+          .filter(
+            (key) => key === 'categories_child' || filterOrder.includes(key),
+          )
+          .map((key) => {
+            return (
+              <div key={key}>
+                <h3 className={'text-xl font-semibold mb-3'}>
+                  {listDisplay[key].label}
+                </h3>
+                <ul className={'flex flex-col gap-1'}>
+                  {listDisplay[key].data.map((item, index) => (
+                    <li key={index}>
+                      <Link
+                        href={item.slug}
+                        className="block w-full px-2 py-1 hover:text-primary rounded"
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
       </>
     );
   };

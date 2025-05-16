@@ -36,7 +36,7 @@ export default function PromotionDescriptionCoupons({ variant_id }: Props) {
           <Loading />
         </div>
       )}
-      <div className={'w-full h-full flex flex-col gap-3 bg-white'}>
+      <div className={'w-full h-full grid grid-cols-2 gap-3 bg-white'}>
         {coupons?.map((coupon, index) => {
           return (
             <ItemCoupon

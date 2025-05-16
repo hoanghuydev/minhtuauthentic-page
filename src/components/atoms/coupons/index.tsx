@@ -17,7 +17,7 @@ export default function ItemCoupon({
   isForCopy,
 }: Props) {
   return (
-    <div className="relative flex overflow-hidden my-2 bg-[#eeeeeea1] rounded-lg ">
+    <div className="relative flex overflow-hidden my-2 bg-[#fcedee] rounded-lg ">
       {/* Left side - COUPON text vertical */}
       <div className="relative flex items-center justify-center w-[40px] text-[#dd3333]">
         <div className="rotate-[-90deg] tracking-wider font-bold">COUPON</div>
@@ -32,7 +32,7 @@ export default function ItemCoupon({
       </div>
 
       {/* Right side - coupon details */}
-      <div className="flex-1 p-4 pl-8">
+      <div className="flex-1 p-4 ps-2 pl-8">
         <div>
           <h3 className="font-bold text-lg text-gray-800 mb-1">
             {'MÃ GIẢM ' +
@@ -55,7 +55,7 @@ export default function ItemCoupon({
         <div className="mt-3 flex justify-between">
           {coupon?.promotion?.end_date && (
             <div className="flex flex-col gap-2">
-              <div className="text-sm text-gray-500 font-bold">
+              <div className="text-[16px] text-[#323232] font-bold">
                 {coupon.code}
               </div>
               <div className="text-sm text-gray-500">

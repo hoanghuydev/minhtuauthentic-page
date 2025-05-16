@@ -32,7 +32,7 @@ const ProductSmallCard = ({ product, className }: Props) => {
           />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium text-gray-900 truncate group-hover:text-primary max-w-[100px] text-ellipsis overflow-hidden">
+          <h3 className="text-sm font-medium text-gray-900 truncate group-hover:text-primary whitespace-pre-wrap text-ellipsis line-clamp-2 overflow-hidden">
             {product?.name || product?.title}
           </h3>
         </div>
