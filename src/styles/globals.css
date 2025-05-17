@@ -188,3 +188,9 @@ iframe {
 .custom-rounded {
   border-radius: 8px !important;
 }
+.ant-breadcrumb-link > a {
+  color: #323232 !important;
+}
+.ant-breadcrumb-link > a:hover {
+  color: var(--primary-color) !important;
+}

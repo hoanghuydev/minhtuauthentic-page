@@ -213,7 +213,7 @@ const ProductProperty = ({
             return (
               <Link
                 key={index}
-                className={'text-gray-400'}
+                className={'text-[#323232]'}
                 href={generateSlugToHref(item.category?.slugs?.slug)}
               >
                 {(item.category?.name || '') +

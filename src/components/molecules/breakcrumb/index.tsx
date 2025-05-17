@@ -17,17 +17,33 @@ export default function BreadcrumbComponent({
 }: Props) {
   const [items, setItems] = useState<{ title: ReactNode | string }[]>([
     {
-      title: <Link href={'/'}>Trang chủ</Link>,
+      title: (
+        <Link href={'/'} style={{ color: '#323232' }}>
+          Trang chủ
+        </Link>
+      ),
     },
     {
-      title: <Link href={link}>{label}</Link>,
+      title: (
+        <Link href={link} style={{ color: '#323232' }}>
+          {label}
+        </Link>
+      ),
     },
   ]);
   useEffect(() => {
     if (current) {
       const _items = [...items];
       _items.push({
-        title: <Link href={current?.link}>{current?.label}</Link>,
+        title: (
+          <Link
+            href={current?.link}
+            className="text-primary px-2 py-1 rounded"
+            style={{ color: 'var(--primary-color)' }}
+          >
+            {current?.label}
+          </Link>
+        ),
       });
       setItems(_items);
     }

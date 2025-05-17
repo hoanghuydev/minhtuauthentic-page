@@ -15,20 +15,34 @@ export default function ProductCartCheckout({ variant }: Props) {
   const orderCtx = useContext(OrderContext);
   const [qty, setQty] = useState(1);
   const [indexCart, setIndexCart] = useState<number | null>(null);
+
   useEffect(() => {
+    if (!variant?.id) return;
+
     const index = (orderCtx?.cart?.items || [])?.findIndex(
       (item) => item.variant_id === variant?.id,
     );
-    index && setIndexCart(index);
-  }, [orderCtx?.cart]);
+
+    if (index !== -1) {
+      setIndexCart(index);
+      // Nếu sản phẩm đã có trong giỏ hàng, hiển thị số lượng hiện tại
+      const currentQty = orderCtx?.cart?.items?.[index]?.qty || 1;
+      setQty(currentQty);
+    } else {
+      setIndexCart(null);
+    }
+  }, [orderCtx?.cart, variant?.id]);
+
   const handleAddToCart = () => {
-    if (!indexCart || !variant) return;
-    if (indexCart > -1) {
+    if (!variant) return;
+
+    if (indexCart !== null && indexCart > -1) {
       orderCtx?.updateCart && orderCtx.updateCart(indexCart, qty);
     } else {
-      orderCtx?.addCart && orderCtx.addCart(variant);
+      orderCtx?.addCart && orderCtx.addCart(variant, qty);
     }
   };
+
   return (
     <>
       <div className={'flex justify-between gap-3 mb-3'}>

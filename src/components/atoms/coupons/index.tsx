@@ -40,7 +40,7 @@ export default function ItemCoupon({
                 ? formatMoney(coupon.price_minus_value || 0)
                 : `${coupon.price_minus_value}%`)}
           </h3>
-          <p className="text-gray-600 mb-2">
+          <p className="text-[#323232] mb-2">
             {coupon?.promotion?.description && (
               <span
                 dangerouslySetInnerHTML={{
@@ -58,7 +58,7 @@ export default function ItemCoupon({
               <div className="text-[16px] text-[#323232] font-bold">
                 {coupon.code}
               </div>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-[#323232]">
                 HSD: {new Date(coupon.promotion.end_date).toLocaleDateString()}
               </div>
             </div>

@@ -122,7 +122,7 @@ export default function Socials() {
         {showBackToTop && (
           <button
             onClick={scrollToTop}
-            className="w-[48px] h-[48px] bg-primary rounded-full flex items-center justify-center text-white mt-3 z-50"
+            className="w-[48px] h-[48px] bg-primary rounded-full flex flex-col items-center justify-center text-white mt-3 z-50"
             aria-label="Back to top"
           >
             <svg
@@ -139,6 +139,7 @@ export default function Socials() {
                 d="M5 15l7-7 7 7"
               />
             </svg>
+            <span className="text-xs">Lên đầu</span>
           </button>
         )}
       </div>

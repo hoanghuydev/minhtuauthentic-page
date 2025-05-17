@@ -136,13 +136,16 @@ const MenuPopupCategory = ({
             }
             listDisplay.concentration_gradients.data = (
               filterSetting?.concentration_gradients || []
-            ).map((concentration, index2) => {
-              return {
-                slug:
-                  `/san-pham?filter[${setting}][${index2}]=` + concentration.id,
-                name: concentration.name || '',
-              };
-            });
+            )
+              .sort(() => 0.5 - Math.random())
+              .map((concentration, index2) => {
+                return {
+                  slug:
+                    `/san-pham?filter[${setting}][${index2}]=` +
+                    concentration.id,
+                  name: concentration.name || '',
+                };
+              });
             break;
           case 'price_range':
             if (!listDisplay.price_range) {
