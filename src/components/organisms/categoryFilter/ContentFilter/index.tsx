@@ -39,7 +39,6 @@ export default function ContentFilter({
   const ctx = useContext(CategoryFilterContext);
   const [_products, setProducts] = useState<ProductDto[]>(products);
   const [isReady, setIsReady] = useState(false);
-
   useEffect(() => {
     ctx?.setTotal && ctx.setTotal(total);
   }, []);
@@ -59,7 +58,6 @@ export default function ContentFilter({
           switch (setting) {
             case 'concentration_gradients':
             case 'fragrance_retention':
-            case 'brands':
             case 'categories':
               obj[setting] = value.reduce((acc, item) => {
                 acc[item.id] = item.name;
@@ -204,7 +202,7 @@ export default function ContentFilter({
       </div>
       <div className={'mb-3 lg:mb-6'}>
         <span className={'font-semibold text-[16px] shrink-0'}>Lọc theo:</span>
-        <FilterBy />
+        <FilterBy brands={menu?.brands} />
       </div>
       <div className={'flex items-center gap-2 flex-wrap mb-3 lg:hidden'}>
         <Button

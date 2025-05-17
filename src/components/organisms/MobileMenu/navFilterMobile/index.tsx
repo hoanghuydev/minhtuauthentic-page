@@ -7,11 +7,13 @@ import { ProductFilterOptionDto } from '@/dtos/ProductFilterSettingOption/Produc
 import Filter from '@/components/icons/filter';
 import CloseCircle from '@/components/icons/closeCircle';
 import { Button } from 'antd/es';
+import { BrandDto } from '@/dtos/Brand.dto';
 
 type Props = {
   settings?: ProductFilterOptionDto;
+  brands?: BrandDto[];
 };
-export default function NavFilterMobile({ settings }: Props) {
+export default function NavFilterMobile({ settings, brands }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const ctx = useContext(CategoryFilterContext);
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function NavFilterMobile({ settings }: Props) {
           </div>
           {settings && (
             <div className={'h-full overflow-auto'}>
-              <SettingFilter settings={settings} isNav={true} />
+              <SettingFilter settings={settings} isNav={true} brands={brands} />
             </div>
           )}
         </div>,
