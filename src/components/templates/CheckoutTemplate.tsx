@@ -226,17 +226,6 @@ export default function CheckoutTemplate({
         )}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className={'py-3 border-b border-gray-200 mb-6 bg-primary'}>
-          <Link href={'/'}>
-            <Image
-              src={Logo}
-              className={'ms-4 w-[200px]'}
-              alt={'minhtuauthentic'}
-              width={253}
-              height={60}
-            />
-          </Link>
-        </div>
         <div className={'flex flex-col-reverse lg:flex-row gap-3 p-3 '}>
           {user && (
             <FormCheckout

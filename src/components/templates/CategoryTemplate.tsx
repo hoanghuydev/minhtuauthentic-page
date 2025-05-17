@@ -72,6 +72,7 @@ export default function CategoryTemplate({
               <SettingFilter
                 settings={data?.settings}
                 className={'lg:col-span-1'}
+                brands={menu?.brands}
               />
             )}
             <ContentFilter
@@ -103,7 +104,11 @@ export default function CategoryTemplate({
         />
       )}
 
-      <NavFilterMobile key={'CategoryTemplate'} settings={data?.settings} />
+      <NavFilterMobile
+        key={'CategoryTemplate'}
+        settings={data?.settings}
+        brands={menu?.brands}
+      />
     </CategoryFilterProvider>
   );
 }

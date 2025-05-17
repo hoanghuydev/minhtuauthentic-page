@@ -1,9 +1,9 @@
 import { twMerge } from 'tailwind-merge';
 import { useContext } from 'react';
 import OrderContext from '@/contexts/orderContext';
-import { isMobile } from 'react-device-detect';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useIsMobile } from '@/hooks/useDevice';
 const HeaderCart = ({
   className,
   classNumber,
@@ -11,6 +11,7 @@ const HeaderCart = ({
   className?: string;
   classNumber?: string;
 }) => {
+  const isMobile = useIsMobile();
   const cart = useContext(OrderContext);
   const router = useRouter();
 

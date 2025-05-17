@@ -3,8 +3,8 @@ import Image, { StaticImageData } from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import noImage from '@/static/images/no-image.png';
 import { ProductDto } from '@/dtos/Product.dto';
-import { isMobile } from 'react-device-detect';
 import { twMerge } from 'tailwind-merge';
+import { useIsMobile } from '@/hooks/useDevice';
 type Props = {
   image: ImageDto | null | undefined;
   isFill?: boolean;
@@ -37,6 +37,7 @@ const ImageWithFallback = ({
   isUseNativeImage,
   sizes = '(max-width: 768px) 100vw, 33vw',
 }: Props) => {
+  const isMobile = useIsMobile();
   const [imgActiveSrc, setImageActiveSrc] = useState<string | StaticImageData>(
     isMobile
       ? image?.thumbnail_url || image?.url || noImage
