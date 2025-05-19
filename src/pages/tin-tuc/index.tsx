@@ -6,7 +6,7 @@ import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import Layout from '@/components/templates/Layout';
 import { PageSetting } from '@/config/type';
 import dynamic from 'next/dynamic';
-
+import { useIsMobile } from '@/hooks/useDevice';
 const NewsCategoryMobile = dynamic(
   () => import('@/components/organisms/news/categoryMobile'),
   {
@@ -37,11 +37,11 @@ export default function News({
 }: {
   news: ResponseNewsPageDto;
 } & PageSetting) {
+  const isMobile = useIsMobile();
   return (
     <>
       <Header settings={settings} menu={menu} />
       <Layout settings={settings} menu={menu}>
-        <NewsCategoryMobile categoryNews={news?.otherCategoryNews || []} />
         <BreadcrumbComponent label={'Tin tức'} link={'/tin-tuc'} />
         <NewsTemplate
           news={news?.news || []}

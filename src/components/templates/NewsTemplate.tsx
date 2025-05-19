@@ -6,6 +6,7 @@ import NewsSmallList from '@/components/organisms/news/smallList';
 import NewsRelation from '@/components/organisms/news/relation';
 import LayoutNews from '@/components/organisms/news/layout';
 import NewsDetail from '@/components/organisms/news/detail';
+import NewsCategoryMobile from '../organisms/news/categoryMobile';
 
 const NewsCategory = dynamic(
   () => import('@/components/organisms/news/category'),
@@ -38,6 +39,7 @@ export default function NewsTemplate({
       <>
         {!isDetail ? (
           <LayoutNews className={'col-span-4 '}>
+            <NewsCategoryMobile categoryNews={categoryNews} />
             <NewsList
               title={title}
               news={news as NewsDto[]}

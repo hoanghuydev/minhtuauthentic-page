@@ -127,7 +127,7 @@ export default function Socials() {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-[22px] w-[22px]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

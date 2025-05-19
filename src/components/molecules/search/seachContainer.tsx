@@ -293,7 +293,9 @@ export default function SearchContainer({
                     <ImageWithFallback
                       image={item?.images?.[0].image}
                       className={'w-[70px] h-[70px]'}
-                      unoptimized={true}
+                      sizes="100px"
+                      unoptimized={false}
+                      quality={80}
                     />
                     <p className={'text-center'}>{item?.title}</p>
                   </a>

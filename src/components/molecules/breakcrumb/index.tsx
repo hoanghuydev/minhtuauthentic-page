@@ -1,3 +1,4 @@
+import { useIsMobile } from '@/hooks/useDevice';
 import { Breadcrumb } from 'antd/es';
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
@@ -31,6 +32,7 @@ export default function BreadcrumbComponent({
       ),
     },
   ]);
+  const isMobile = useIsMobile();
   useEffect(() => {
     if (current) {
       const _items = [...items];
@@ -49,9 +51,12 @@ export default function BreadcrumbComponent({
     }
   }, []);
   return (
-    <Breadcrumb
-      className={twMerge('mb-3 overflow-auto', className)}
-      items={items}
-    />
+    <>
+      {isMobile && <div className={'mt-16'}></div>}
+      <Breadcrumb
+        className={twMerge('mb-3 overflow-auto', className)}
+        items={items}
+      />
+    </>
   );
 }

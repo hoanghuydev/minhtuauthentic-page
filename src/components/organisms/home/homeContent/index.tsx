@@ -18,7 +18,6 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
   const [blockContents, setBlockContents] = useState<
     Map<number | undefined, StaticComponentDto[]>
   >(new Map());
-
   const [listComponent, setListComponent] = useState<ReactNode[]>([]);
 
   useEffect(() => {
@@ -64,7 +63,7 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
         />,
       );
     }
-    if (homePage?.homeSupport) {
+    if (homePage?.homeSupport && homePage?.homeSupport.length > 0) {
       _listComponent.push(<HomeSupport contents={homePage?.homeSupport} />);
     }
     setListComponent(_listComponent);
