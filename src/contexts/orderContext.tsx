@@ -142,7 +142,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       0,
     );
     setCart(newCartResponse?.data || []);
-    toast('Đã cập nhật giỏ hàng', { ...TOAST_CONFIG, type: 'success' });
+    // toast('Đã cập nhật giỏ hàng', { ...TOAST_CONFIG, type: 'success' });
   };
 
   const applyCoupon = async (

@@ -42,7 +42,11 @@ export default function News({
     <>
       <Header settings={settings} menu={menu} />
       <Layout settings={settings} menu={menu}>
-        <BreadcrumbComponent label={'Tin tức'} link={'/tin-tuc'} />
+        <BreadcrumbComponent
+          label={'Tin tức'}
+          link={'/tin-tuc'}
+          className="overflow-auto"
+        />
         <NewsTemplate
           news={news?.news || []}
           categoryNews={news?.otherCategoryNews || []}

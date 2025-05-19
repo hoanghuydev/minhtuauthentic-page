@@ -54,7 +54,7 @@ export default function BreadcrumbComponent({
     <>
       {isMobile && <div className={'mt-16'}></div>}
       <Breadcrumb
-        className={twMerge('mb-3 overflow-auto', className)}
+        className={twMerge('mb-3 overflow-auto scrollbar-hide', className)}
         items={items}
       />
     </>

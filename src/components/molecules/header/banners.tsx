@@ -87,7 +87,7 @@ export const Banners = ({
                 classNameImage,
               )}
               loading="eager"
-              unoptimized={false}
+              unoptimized={isMobile ? false : true}
               sizes="100vw"
               quality={isMobile ? 80 : 100}
             />

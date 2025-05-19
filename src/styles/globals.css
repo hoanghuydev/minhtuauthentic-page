@@ -7,6 +7,24 @@
   --gap16: calc(var(--gap8) * 2);
 }
 
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fix for mobile modal height */
+.mobile-delete-modal .ant-modal-content {
+  max-height: fit-content !important;
+}
+
+.mobile-delete-modal .ant-modal-body {
+  height: fit-content !important;
+  overflow-y: auto !important;
+}
+
 html,
 body {
   padding: 0;
@@ -15,7 +33,6 @@ body {
   width: 100%;
   background-color: #f8f9fa;
   overscroll-behavior: contain;
-  /*font-family: "Nunito Sans", sans-serif;*/
   font-optical-sizing: auto;
   @apply font-[500] lg:font-[400] text-[15px] lg:text-[14px] text-[#212529];
 }

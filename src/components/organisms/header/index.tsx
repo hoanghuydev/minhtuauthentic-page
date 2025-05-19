@@ -133,10 +133,17 @@ export const Header = ({ menu, settings }: Props) => {
               className={'w-max text-left'}
               icon={<HeaderCart className={'w-[40px] h-[40px]'} />}
               isButton
-              onClick={() =>
-                orderCtx?.setIsOpenHeaderCart &&
-                orderCtx?.setIsOpenHeaderCart(!orderCtx?.isOpenHeaderCart)
-              }
+              onClick={() => {
+                if (
+                  !orderCtx?.cart?.items ||
+                  orderCtx.cart.items.length === 0
+                ) {
+                  router.push('/gio-hang/tom-tat');
+                } else {
+                  orderCtx?.setIsOpenHeaderCart &&
+                    orderCtx?.setIsOpenHeaderCart(!orderCtx?.isOpenHeaderCart);
+                }
+              }}
             >
               <p>Giỏ</p>
               <p>hàng</p>

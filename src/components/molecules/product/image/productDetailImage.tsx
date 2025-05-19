@@ -56,7 +56,6 @@ const ProductDetailImage = ({
                   !isMobile && setImageActive(imageItem);
                 }}
                 unoptimized={false}
-                onLoad={() => setIsThumbnailsLoaded(true)}
               />
             ) as any;
           }}
@@ -82,7 +81,6 @@ const ProductDetailImage = ({
           product={product}
           unoptimized={!isMobile}
           quality={100}
-          onLoad={() => setIsMainImageLoaded(true)}
         />
       </div>
       {renderSlideImage}

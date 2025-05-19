@@ -26,8 +26,6 @@ export default function BrandWithImage({
         <ImageWithFallback
           image={brand?.images?.[0]?.image}
           className={classNameImage}
-          duration={0}
-          isLazy={false}
         />
       </Link>
     </div>

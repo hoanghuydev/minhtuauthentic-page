@@ -11,14 +11,13 @@ type Props = {
 };
 
 export default function NewsCategoryMobile({ categoryNews }: Props) {
-  const isMobile = useIsMobile();
   const router = useRouter();
 
   // Add "MỚI" as default tab
   const allTabs = useMemo(() => {
     const defaultTab = {
-      id: 'new',
-      name: 'MỚI',
+      id: 'news',
+      name: 'TIN TỨC',
       slugs: { slug: '/tin-tuc' },
     };
 
@@ -36,7 +35,7 @@ export default function NewsCategoryMobile({ categoryNews }: Props) {
     if (matchingCategory) return matchingCategory.id;
 
     // Default to "MỚI" tab
-    return 'new';
+    return allTabs[0].id;
   }, [router.asPath, categoryNews]);
 
   return (
@@ -49,7 +48,7 @@ export default function NewsCategoryMobile({ categoryNews }: Props) {
               key={item.id || index}
               className={`px-4 py-2 font-medium text-sm inline-block ${
                 item.id === activeTabId ||
-                (activeTabId === 'new' && index === 0)
+                (activeTabId === allTabs[0].id && index === 0)
                   ? 'text-red-600 border-b-2 border-red-600 font-bold'
                   : 'text-gray-700'
               }`}
