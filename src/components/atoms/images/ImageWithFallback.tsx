@@ -53,11 +53,7 @@ const ImageWithFallback = ({
   );
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef<HTMLImageElement | null>(null);
-  const style = {
-    transitionDuration: `${duration}ms`,
-  };
 
-  // Pre-load the image to check if it's already in cache
   useEffect(() => {
     const src = isMobile
       ? image?.thumbnail_url || image?.url || noImage
@@ -66,60 +62,51 @@ const ImageWithFallback = ({
     setImageActiveSrc(src);
     setIsLoaded(false);
 
-    // Check if image is already cached
-    if (typeof src === 'string') {
-      const img = new window.Image();
-      img.src = src;
-
-      if (img.complete) {
-        setIsLoaded(true);
-        onLoad && onLoad();
-      }
+    // Kiểm tra nếu ảnh đã được tải từ cache
+    const img = new window.Image();
+    img.src = typeof src === 'string' ? src : src.src;
+    if (img.complete) {
+      setIsLoaded(true);
     }
-  }, [image, isMobile, onLoad]);
+  }, [image, isMobile]);
 
   const handleImageLoad = () => {
     setIsLoaded(true);
     onLoad && onLoad();
   };
 
+  const handleImageError = () => {
+    setImageActiveSrc(noImage);
+    setIsLoaded(true);
+  };
+
   const renderImage = () => {
     return (
-      <div className="relative">
-        {/* Gray placeholder */}
+      <div className="relative h-full w-full">
         {isLazy && !isLoaded && (
           <div
             className={twMerge(
-              'absolute inset-0 bg-gray-200 transition-opacity',
+              'absolute inset-0 bg-gray-200 transition-opacity duration-100',
               isLoaded ? 'opacity-0' : 'opacity-100',
             )}
-            style={style}
           />
         )}
 
         {isFill ? (
           <Image
             ref={ref}
-            onClick={() => {
-              onClick && image && onClick(image);
-            }}
-            onMouseEnter={(e) => onMouseEnter && onMouseEnter(e)}
-            onMouseLeave={(e) => onMouseLeave && onMouseLeave(e)}
+            onClick={() => image && onClick?.(image)}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
             src={imgActiveSrc}
             alt={alt || image?.alt || product?.title || product?.name || ''}
             fill={true}
             className={twMerge(
               className,
-              'select-none transition-opacity',
-              isLazy && !isLoaded ? 'opacity-0' : 'opacity-100',
+              'select-none transition-opacity duration-100',
             )}
-            style={{
-              transitionDuration: `${duration}ms`,
-            }}
-            unoptimized={unoptimized == null ? true : unoptimized}
-            onError={() => {
-              setImageActiveSrc(noImage);
-            }}
+            unoptimized={unoptimized ?? true}
+            onError={handleImageError}
             onLoad={handleImageLoad}
             sizes={sizes}
             priority={priority}
@@ -130,29 +117,21 @@ const ImageWithFallback = ({
         ) : (
           <Image
             ref={ref}
-            onClick={() => {
-              onClick && image && onClick(image);
-            }}
-            onMouseEnter={(e) => {
-              onMouseEnter && onMouseEnter(e);
-            }}
-            onMouseLeave={(e) => onMouseLeave && onMouseLeave(e)}
+            onClick={() => image && onClick?.(image)}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
             src={imgActiveSrc}
             alt={alt || image?.alt || product?.title || product?.name || ''}
             width={image?.width || 0}
             height={image?.height || 0}
-            unoptimized={unoptimized == null ? true : unoptimized}
+            unoptimized={unoptimized ?? true}
             priority={priority}
             className={twMerge(
               className,
-              'select-none transition-opacity',
-              isLazy && !isLoaded ? 'opacity-0' : 'opacity-100',
+              'select-none transition-opacity duration-100',
             )}
-            style={style}
             quality={quality || 70}
-            onError={() => {
-              setImageActiveSrc(noImage);
-            }}
+            onError={handleImageError}
             onLoad={handleImageLoad}
             sizes={sizes}
             loading={loading}
@@ -166,35 +145,26 @@ const ImageWithFallback = ({
   const renderNativeImage = () => {
     return (
       <div className="relative">
-        {/* Gray placeholder */}
         {isLazy && !isLoaded && (
           <div
             className={twMerge(
-              'absolute inset-0 bg-gray-200 transition-opacity',
-              isLoaded ? 'opacity-0' : 'opacity-100',
+              'absolute inset-0 bg-gray-200 transition-opacity duration-100',
+              isLoaded ? 'opacity-50' : 'opacity-100',
             )}
-            style={style}
           />
         )}
 
         <img
           src={imgActiveSrc.toString()}
-          onClick={() => {
-            onClick && image && onClick(image);
-          }}
-          onMouseEnter={(e) => {
-            onMouseEnter && onMouseEnter(e);
-          }}
-          onMouseLeave={(e) => onMouseLeave && onMouseLeave(e)}
+          onClick={() => image && onClick?.(image)}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
           alt={alt || image?.alt || product?.title || product?.name || ''}
           width={image?.width || 0}
           height={image?.height || 0}
-          className={twMerge(
-            'select-none transition-opacity',
-            isLazy && !isLoaded ? 'opacity-0' : 'opacity-100',
-          )}
-          style={style}
+          className={twMerge('select-none transition-opacity duration-100')}
           onLoad={handleImageLoad}
+          onError={handleImageError}
         />
       </div>
     );

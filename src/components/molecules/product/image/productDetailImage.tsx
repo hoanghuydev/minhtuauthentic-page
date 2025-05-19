@@ -34,14 +34,6 @@ const ProductDetailImage = ({
   const renderSlideImage = useMemo(() => {
     return (
       <div className="relative">
-        {/* Placeholder for thumbnails */}
-        <div
-          className={twMerge(
-            'absolute inset-0 bg-gray-100 transition-opacity duration-150',
-            isThumbnailsLoaded ? 'opacity-0' : 'opacity-100',
-          )}
-        />
-
         <SectionSwiper
           classNameContainer={'mt-3'}
           slidePerViewMobile={4}
@@ -79,14 +71,6 @@ const ProductDetailImage = ({
   return (
     <div className={twMerge(containerClassName)}>
       <div className="relative">
-        {/* Placeholder for main image */}
-        <div
-          className={twMerge(
-            'absolute inset-0 bg-gray-100 transition-opacity duration-150',
-            isMainImageLoaded ? 'opacity-0' : 'opacity-100',
-          )}
-        />
-
         <ImageWithFallback
           image={imageActive}
           className={

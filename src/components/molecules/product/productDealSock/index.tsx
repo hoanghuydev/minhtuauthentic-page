@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import { PROMOTION_TYPE } from '@/config/enum';
 import { SettingsDto } from '@/dtos/Settings.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
-import { twMerge } from 'tailwind-merge';
+import SkeletonProductCard from '@/components/organisms/product/skelecton';
 
 type Props = {
   setting?: SettingsDto;
@@ -43,6 +43,16 @@ export default function ProductDealSock({ setting }: Props) {
     return null;
   }
 
+  const renderSkeletonCards = () => {
+    return (
+      <div className="grid grid-cols-2 lg:grid-cols-4 w-full gap-2 lg:gap-4">
+        {[1, 2, 3, 4].map((item) => (
+          <SkeletonProductCard key={item} />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div
       style={{ backgroundColor: setting?.value?.backgroundColor }}
@@ -53,51 +63,45 @@ export default function ProductDealSock({ setting }: Props) {
       <p className={'text-2xl font-[700] lg:font-bold text-primary mb-3'}>
         MUA KÈM GIÁ SỐC
       </p>
-      <div className="relative min-h-[300px]">
-        {/* Loading placeholder */}
-        {isLoading && (
-          <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+      <div className="relative">
+        {isLoading ? (
+          renderSkeletonCards()
+        ) : (
+          <div className="transition-opacity duration-200 opacity-100">
+            <SectionSwiper
+              slidesPerView={5}
+              slidePerViewMobile={2}
+              spaceBetween={10}
+              auto={true}
+              loop={true}
+              renderItem={(item: unknown) => {
+                const iCoupon = item as CouponsDto;
+                const variant = iCoupon?.coupon_details?.[0]?.variant;
+
+                if (!variant?.product) {
+                  return null;
+                }
+
+                return (
+                  <ProductCard
+                    product={variant.product}
+                    variant={
+                      {
+                        ...variant,
+                        ...{ coupon: iCoupon },
+                      } as VariantDto
+                    }
+                    promotions={promotion && [promotion]}
+                    coupon={iCoupon}
+                    addText={'Chọn sản phẩm'}
+                    isShowConfiguration
+                  />
+                ) as ReactNode;
+              }}
+              data={validCoupons}
+            />
+          </div>
         )}
-
-        <div
-          className={twMerge(
-            'transition-opacity duration-200',
-            isLoading ? 'opacity-0' : 'opacity-100',
-          )}
-        >
-          <SectionSwiper
-            slidesPerView={5}
-            slidePerViewMobile={2}
-            spaceBetween={10}
-            auto={true}
-            loop={true}
-            renderItem={(item: unknown) => {
-              const iCoupon = item as CouponsDto;
-              const variant = iCoupon?.coupon_details?.[0]?.variant;
-
-              if (!variant?.product) {
-                return null;
-              }
-
-              return (
-                <ProductCard
-                  product={variant.product}
-                  variant={
-                    {
-                      ...variant,
-                      ...{ coupon: iCoupon },
-                    } as VariantDto
-                  }
-                  promotions={promotion && [promotion]}
-                  coupon={iCoupon}
-                  addText={'Chọn sản phẩm'}
-                  isShowConfiguration
-                />
-              ) as ReactNode;
-            }}
-            data={validCoupons}
-          />
-        </div>
       </div>
     </div>
   );
