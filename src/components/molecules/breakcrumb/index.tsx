@@ -33,6 +33,12 @@ export default function BreadcrumbComponent({
     },
   ]);
   const isMobile = useIsMobile();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   useEffect(() => {
     if (current) {
       const _items = [...items];
@@ -52,7 +58,7 @@ export default function BreadcrumbComponent({
   }, []);
   return (
     <>
-      {isMobile && <div className={'mt-16'}></div>}
+      {isMounted && isMobile && <div className={'mt-16'}></div>}
       <Breadcrumb
         className={twMerge('mb-3 overflow-auto scrollbar-hide', className)}
         items={items}
