@@ -25,8 +25,12 @@ export default function BreadcrumbComponent({
       ),
     },
     {
-      title: (
+      title: current ? (
         <Link href={link} style={{ color: '#323232' }}>
+          {label}
+        </Link>
+      ) : (
+        <Link href={link} style={{ color: '#323232', fontWeight: 'bold' }}>
           {label}
         </Link>
       ),
@@ -47,7 +51,7 @@ export default function BreadcrumbComponent({
           <Link
             href={current?.link}
             className="text-primary px-2 py-1 rounded"
-            style={{ color: 'var(--primary-color)' }}
+            style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}
           >
             {current?.label}
           </Link>
@@ -60,7 +64,10 @@ export default function BreadcrumbComponent({
     <>
       {isMounted && isMobile && <div className={'mt-16'}></div>}
       <Breadcrumb
-        className={twMerge('mb-3 overflow-auto scrollbar-hide', className)}
+        className={twMerge(
+          'mb-3 overflow-auto scrollbar-hide [&>ol]:whitespace-nowrap [&>ol]:flex [&>ol]:flex-nowrap',
+          className,
+        )}
         items={items}
       />
     </>

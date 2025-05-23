@@ -72,7 +72,9 @@ export const CategoryFilterProvider = ({
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [search, setSearch] = useState<string>(queryString.get('search') || '');
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(
+    Number(queryString.get('page')) || 1,
+  );
   const [total, setTotal] = useState<number>(0);
   const [objFilterByValue, setObjFilterByValue] = useState<
     Record<string, Record<string, string>>
@@ -93,6 +95,7 @@ export const CategoryFilterProvider = ({
     }
   }, [dataSlug]);
 
+  // Listen for route changes from browser navigation (back/forward)
   useEffect(() => {
     const handleRouteComplete = () => {
       const queryString = new URLSearchParams(
@@ -123,13 +126,37 @@ export const CategoryFilterProvider = ({
     };
     router.events.on('routeChangeComplete', handleRouteComplete);
     return () => {
-      router.events.on('routeChangeComplete', handleRouteComplete);
+      router.events.off('routeChangeComplete', handleRouteComplete);
       if (loading) setLoading(false);
     };
   }, [router.query]);
+
+  // Client-side update router without page reload
   const updateRouter = (key: string, value: string | object) => {
     const params = getQueryString(key, value);
-    window.location.href = `${window.location.origin}/${window.location.pathname}?${params.toString()}`;
+
+    // Update URL without reload
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+
+    // Update state and fetch new data
+    if (key === 'filter') {
+      setFilters(value as Record<string, (number | string)[]>);
+    } else if (key === 'sort') {
+      setSortBy(value as string);
+    } else if (key === 'limit') {
+      setLimit(Number(value));
+    } else if (key === 'page') {
+      setPage(Number(value));
+    } else if (key === 'child') {
+      // Handle child category navigation
+      router.push(`/${value}`, undefined, { shallow: true });
+      return;
+    }
+
+    // Fetch new data
+    setLoading(true);
+    refreshData();
   };
 
   const getQueryString = (key: string, value: string | object) => {
@@ -175,23 +202,24 @@ export const CategoryFilterProvider = ({
     const params = new URLSearchParams(window.location.search);
     const url = isSearch
       ? `/api/getProduct/filter/?`
-      : `/api/getProduct/${((router?.query?.slug as string[]) || []).join('/')}?`;
-    fetch(url + params.toString())
-      .then((res) => res.json())
-      .then((res: { data: { data: ResponseCategoryFilterPageDto } }) => {
-        setProducts(res?.data?.data?.products || []);
-        setLoading(false);
-        setTotal(res?.data?.data?.total || 0);
-      })
-      .catch((err) => {
-        setLoading(false);
-      })
-      .finally(() => {
-        setLoading(false);
-        if (refTimer.current) {
-          refTimer.current = null;
-        }
-      });
+      : `/api/getProduct/${((router?.query?.slug as string[]) || []).join(
+          '/',
+        )}?`;
+
+    try {
+      setLoading(true);
+      const res = await fetch(url + params.toString());
+      const data = await res.json();
+      setProducts(data?.data?.data?.products || []);
+      setTotal(data?.data?.data?.total || 0);
+    } catch (err) {
+      console.error('Error fetching products:', err);
+    } finally {
+      setLoading(false);
+      if (refTimer.current) {
+        refTimer.current = null;
+      }
+    }
   };
 
   return (

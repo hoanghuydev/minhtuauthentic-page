@@ -97,6 +97,10 @@ export default function ContentFilter({
     if (ctx?.setDataSlug) {
       ctx.setDataSlug(slugData);
     }
+    // Initialize products from SSR
+    if (ctx?.setProducts && products?.length > 0) {
+      ctx.setProducts(products);
+    }
   }, []);
   useEffect(() => {
     if (isReady) {
@@ -255,11 +259,7 @@ export default function ContentFilter({
               current={ctx?.page || 1}
               pageSize={ctx?.limit || 12}
               onChange={(page: number) => {
-                const params = new URLSearchParams(window.location.search);
-                params.set('page', page.toString());
-                window.location.href = `${window.location.origin}${
-                  window.location.pathname
-                }?${params.toString()}`;
+                ctx?.updateRouter && ctx.updateRouter('page', page.toString());
               }}
             />
           )}
