@@ -20,7 +20,7 @@ const nextConfig = withBundleAnalyzer({
       'be.minhtuauthentic.com',
       'be-new.mikiperfume.com',
     ],
-    formats: ['image/jpeg', 'image/png'],
+    unoptimized: true,
   },
   transpilePackages: [
     'antd',
