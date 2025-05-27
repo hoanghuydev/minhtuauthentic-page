@@ -91,6 +91,7 @@ export default function ProductDealSock({ setting }: Props) {
                         ...{ coupon: iCoupon },
                       } as VariantDto
                     }
+                    isDealSock={true}
                     promotions={promotion && [promotion]}
                     coupon={iCoupon}
                     addText={'Chọn sản phẩm'}

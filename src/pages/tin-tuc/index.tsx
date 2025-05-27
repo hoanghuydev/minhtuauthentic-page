@@ -17,7 +17,7 @@ const NewsCategoryMobile = dynamic(
 export const getServerSideProps = async (context: any) => {
   const page = context.query.page;
   const rsNews: { data: ResponseNewsPageDto } = await fetch(
-    process.env.BE_URL + `/api/pages/news?page=${page || 1}`,
+    process.env.BE_URL + `/api/pages/news?page=${page || 1}&limit=12`,
     {},
   )
     .then((res) => res.json())

@@ -35,10 +35,10 @@ export default function NewsTemplate({
   total,
 }: Props) {
   return (
-    <div className={'grid grid-cols-1 lg:grid-cols-6 gap-1 lg:gap-3'}>
+    <div className={'grid grid-cols-1 lg:grid-cols-6 gap-1 lg:gap-3 relative'}>
       <>
         {!isDetail ? (
-          <LayoutNews className={'col-span-4 '}>
+          <LayoutNews className={'col-span-4 h-fit sticky top-[100px]'}>
             <NewsCategoryMobile categoryNews={categoryNews} />
             <NewsList
               title={title}
@@ -62,7 +62,7 @@ export default function NewsTemplate({
         {newest && (
           <div
             className={
-              'w-full rounded-[10px] shadow-custom bg-white overflow-hidden relative mx-auto p-3'
+              'w-full rounded-[10px] overflow-hidden relative mx-auto p-3'
             }
           >
             <h3

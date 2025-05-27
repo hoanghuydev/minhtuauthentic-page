@@ -48,6 +48,7 @@ export default function ProductRelation({ products }: Props) {
                       }
                       quality={80}
                       sizes="70px"
+                      unoptimized={false}
                     />
                   </div>
                   <div>

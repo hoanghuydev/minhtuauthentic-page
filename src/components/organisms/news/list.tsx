@@ -31,7 +31,7 @@ export default function NewsList({ news, total, title }: Props) {
   useEffect(() => {
     if (count > 1) {
       const params = new URLSearchParams(window.location.search);
-      fetch('/api/news?' + params.toString())
+      fetch('/api/news?limit=12&' + params.toString())
         .then((res) => res.json())
         .then((data: { data: ResponseNewsPageDto }) => {
           setNewsList(data?.data?.news || []);

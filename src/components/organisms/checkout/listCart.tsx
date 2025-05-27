@@ -157,11 +157,12 @@ export default function ListCart({ paymentType, setValue }: Props) {
               <Tag
                 key={key}
                 closable
-                onClose={() =>
+                className="h-[35px] flex items-center justify-center"
+                onClick={() => {
                   order?.removeCoupon &&
-                  coupon.code &&
-                  order.removeCoupon(coupon.code)
-                }
+                    coupon.code &&
+                    order.removeCoupon(coupon.code);
+                }}
               >
                 {coupon?.code?.toUpperCase()}
               </Tag>

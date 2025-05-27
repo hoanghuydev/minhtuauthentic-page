@@ -41,6 +41,7 @@ export default function PopupImageItem({
         alt={imageItem.alt || ''}
         sizes="80px"
         quality={80}
+        unoptimized={false}
         className={
           'w-full h-full object-contain hover:scale-105 transition-transform duration-300 cursor-pointer'
         }

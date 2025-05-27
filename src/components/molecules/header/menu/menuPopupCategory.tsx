@@ -241,7 +241,7 @@ const MenuPopupCategory = ({
         <div className={'grid grid-cols-4 gap-4'}>
           {renderItem()}
           <div className="flex-1">
-            <h3 className={'text-xl font-semibold mb-3'}>Sản phẩm</h3>
+            <h3 className={'text-xl font-semibold mb-3'}>Sản phẩm gợi ý</h3>
 
             {isLoading ? (
               <div className="flex items-center justify-center h-32">
