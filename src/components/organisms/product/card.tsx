@@ -12,7 +12,7 @@ import {
   formatMoney,
   promotionName,
 } from '@/utils';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { PromotionsDto } from '@/dtos/Promotions.dto';
 import CouponsDto from '@/dtos/Coupons.dto';
 import SelectVariant from '@/components/organisms/product/selectVariant';
@@ -39,6 +39,14 @@ const ProductCard = ({
   isDealSock?: boolean;
 }) => {
   const [_variant, setVariant] = useState<VariantDto>(variant);
+
+  // Cập nhật variant khi prop thay đổi
+  useEffect(() => {
+    if (variant && variant !== _variant) {
+      setVariant(variant);
+    }
+  }, [variant]);
+
   return (
     <div
       className={twMerge(
@@ -86,8 +94,9 @@ const ProductCard = ({
             )}
           {isShowListVariant && (
             <SelectVariant
-              key={product.id}
+              key={`${product.id}-${_variant?.id || 'default'}`}
               product={product}
+              defaultVariant={_variant}
               onChange={(rs) => {
                 if (rs) {
                   setVariant(rs);
@@ -121,9 +130,9 @@ const ProductCard = ({
                     }
                   >
                     {formatMoney(
-                      (variant?.regular_price || 0) -
+                      (_variant?.regular_price || 0) -
                         calculatePriceMinus(
-                          variant?.regular_price || 0,
+                          _variant?.regular_price || 0,
                           coupon,
                         ),
                     )}
@@ -135,7 +144,7 @@ const ProductCard = ({
                     <span className={'text-[13px] font-[700] lg:font-bold'}>
                       {formatMoney(
                         calculatePriceMinus(
-                          variant?.regular_price || 0,
+                          _variant?.regular_price || 0,
                           coupon,
                         ),
                       )}

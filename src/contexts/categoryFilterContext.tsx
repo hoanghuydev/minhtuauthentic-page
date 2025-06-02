@@ -57,9 +57,11 @@ export const CategoryFilterProvider = ({
   isSearch?: boolean;
 }) => {
   const router = useRouter();
-  const queryString = new URLSearchParams(
-    router.query as Record<string, string>,
-  );
+  const queryString =
+    typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams(router.query as Record<string, string>);
+
   const [sortBy, setSortBy] = useState<string>(
     queryString.get('sort') || CATEGORY_FILTER.SORT_BY.DATE_DESC,
   );
@@ -98,10 +100,11 @@ export const CategoryFilterProvider = ({
   // Listen for route changes from browser navigation (back/forward)
   useEffect(() => {
     const handleRouteComplete = () => {
-      const queryString = new URLSearchParams(
-        router.query as Record<string, string>,
+      // Sử dụng window.location.search để đọc chính xác URL hiện tại
+      const currentQueryString = new URLSearchParams(window.location.search);
+      const filter = getFinalFilter(
+        getFilterFromQuery(currentQueryString.toString()),
       );
-      const filter = getFinalFilter(getFilterFromQuery(queryString.toString()));
 
       if (refTimer.current) {
         clearTimeout(refTimer.current as NodeJS.Timeout);
@@ -109,10 +112,12 @@ export const CategoryFilterProvider = ({
       }
       refTimer.current = setTimeout(() => {
         setLoading(true);
-        setPage(Number(queryString.get('page')) || 1);
-        setSortBy(queryString.get('sort') || CATEGORY_FILTER.SORT_BY.DATE_DESC);
-        setLimit(Number(queryString.get('limit')) || 12);
-        setSearch(queryString.get('search') || '');
+        setPage(Number(currentQueryString.get('page')) || 1);
+        setSortBy(
+          currentQueryString.get('sort') || CATEGORY_FILTER.SORT_BY.DATE_DESC,
+        );
+        setLimit(Number(currentQueryString.get('limit')) || 12);
+        setSearch(currentQueryString.get('search') || '');
         setFilters(filter);
         refreshData()
           .catch((err) => {})
@@ -124,6 +129,12 @@ export const CategoryFilterProvider = ({
           });
       }, 500);
     };
+
+    // Xử lý khi component mount để đảm bảo state đồng bộ với URL
+    if (typeof window !== 'undefined') {
+      handleRouteComplete();
+    }
+
     router.events.on('routeChangeComplete', handleRouteComplete);
     return () => {
       router.events.off('routeChangeComplete', handleRouteComplete);
@@ -138,6 +149,14 @@ export const CategoryFilterProvider = ({
     // Update URL without reload
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     window.history.pushState({ path: newUrl }, '', newUrl);
+
+    // Phát ra sự kiện để các component khác biết URL đã thay đổi
+    if (typeof window !== 'undefined') {
+      const popStateEvent = new PopStateEvent('popstate', {
+        state: { path: newUrl },
+      });
+      window.dispatchEvent(popStateEvent);
+    }
 
     // Update state and fetch new data
     if (key === 'filter') {
@@ -160,33 +179,47 @@ export const CategoryFilterProvider = ({
   };
 
   const getQueryString = (key: string, value: string | object) => {
+    // Tạo bản sao của queryString hiện tại để tránh mất các tham số khác
+    const currentQueryString = new URLSearchParams(window.location.search);
+
     if (key === 'filter') {
-      const keysArray = Array.from(queryString.keys());
-      keysArray.map((key) => {
-        if (key.search('filter') !== -1) {
-          queryString.delete(key);
+      // Xóa tất cả các filter cũ
+      const keysArray = Array.from(currentQueryString.keys());
+      keysArray.forEach((k) => {
+        if (k.search('filter') !== -1) {
+          currentQueryString.delete(k);
         }
       });
-      Object.keys(value).forEach((key) => {
-        (value as any)[key].forEach((item: string, index: number) => {
-          queryString.append(
-            `filter[${key}][${index}]`,
+
+      // Thêm các filter mới
+      Object.keys(value).forEach((filterKey) => {
+        (value as any)[filterKey].forEach((item: string, index: number) => {
+          currentQueryString.append(
+            `filter[${filterKey}][${index}]`,
             item.toString() as string,
           );
         });
       });
     } else {
-      if (queryString.has(key)) {
-        queryString.delete(key);
+      // Cập nhật các tham số không phải filter (page, limit, sort)
+      if (currentQueryString.has(key)) {
+        currentQueryString.delete(key);
       }
-      queryString.append(key, value as string);
+      currentQueryString.append(key, value as string);
     }
 
+    // Chỉ reset page về 1 khi thay đổi filter hoặc sort hoặc limit
     if (key !== 'page') {
-      queryString.delete('page');
-      queryString.append('page', '1');
+      currentQueryString.delete('page');
+      currentQueryString.append('page', '1');
     }
-    return queryString;
+
+    // Đảm bảo giữ lại tham số slug nếu có
+    if (currentQueryString.has('slug') === false && queryString.has('slug')) {
+      currentQueryString.append('slug', queryString.get('slug') || '');
+    }
+
+    return currentQueryString;
   };
 
   const getFinalFilter = (filter: Record<string, (string | number)[]>) => {
@@ -209,9 +242,24 @@ export const CategoryFilterProvider = ({
     try {
       setLoading(true);
       const res = await fetch(url + params.toString());
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
       const data = await res.json();
-      setProducts(data?.data?.data?.products || []);
-      setTotal(data?.data?.data?.total || 0);
+
+      // Cập nhật products và total từ API
+      if (data?.data?.data?.products) {
+        setProducts(data?.data?.data?.products || []);
+      }
+
+      if (data?.data?.data?.total !== undefined) {
+        setTotal(data?.data?.data?.total || 0);
+      }
+
+      // Log để debug
+      console.log('Refreshed data with params:', params.toString());
+      console.log('Products count:', data?.data?.data?.products?.length);
     } catch (err) {
       console.error('Error fetching products:', err);
     } finally {
@@ -221,6 +269,26 @@ export const CategoryFilterProvider = ({
       }
     }
   };
+
+  // Thêm useEffect để theo dõi khi URL thay đổi
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleURLChange = () => {
+        const currentParams = new URLSearchParams(window.location.search);
+        // Kiểm tra nếu có sự thay đổi về filter, limit, page, sort
+        if (currentParams.toString() !== queryString.toString()) {
+          refreshData();
+        }
+      };
+
+      // Theo dõi sự kiện popstate (khi người dùng nhấn nút back/forward của trình duyệt)
+      window.addEventListener('popstate', handleURLChange);
+
+      return () => {
+        window.removeEventListener('popstate', handleURLChange);
+      };
+    }
+  }, []);
 
   return (
     <CategoryFilterContext.Provider

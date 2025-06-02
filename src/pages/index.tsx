@@ -10,6 +10,7 @@ import { ReactNode } from 'react';
 import { PageSetting } from '@/config/type';
 import HomeContent from '@/components/organisms/home/homeContent';
 import HomeBanner from '@/components/organisms/home/homeBanner';
+import Head from 'next/head';
 
 export async function getStaticProps() {
   const res = await fetch(process.env.BE_URL + '/api/pages/home').catch(

@@ -18,6 +18,7 @@ const nunitoSans = Nunito_Sans({
 });
 import useSettings from '@/hooks/useSettings';
 import { SearchProvider } from '@/contexts/searchContext';
+import ScrollToTop from '@/components/atoms/ScrollToTop';
 
 export default function App({ Component, pageProps }: AppProps) {
   const settings = useSettings();
@@ -48,6 +49,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <AppProvider>
         <OrderProvider>
           <SearchProvider>
+            <ScrollToTop />
             <Component className={nunitoSans.className} {..._pageProps} />
             <ToastContainer />
           </SearchProvider>
