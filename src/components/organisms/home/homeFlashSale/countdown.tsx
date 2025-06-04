@@ -6,7 +6,7 @@ type Props = {
 };
 export default function Countdown({ end_date, className }: Props) {
   const digitClass =
-    'bg-white text-primary w-8 h-8 flex items-center justify-center mx-1 rounded-md font-bold';
+    'bg-white text-primary w-8 h-8 flex items-center justify-center mx-1 rounded-md text-[15px] font-bold';
   const labelClass = 'text-white text-xs font-medium';
   const containerClass = 'bg-primary p-1 rounded-md flex flex-col items-center';
 
@@ -66,7 +66,7 @@ export default function Countdown({ end_date, className }: Props) {
     refInterval.current = setInterval(timer, 1000);
   }
   return (
-    <div className="grid place-items-center pt-3 md:pt-0">
+    <div className="grid place-items-center pt-2">
       <div className={twMerge('flex gap-1', className)}>
         <div className={containerClass}>
           <span className={labelClass}>NGÀY</span>

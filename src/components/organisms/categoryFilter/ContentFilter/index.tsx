@@ -159,6 +159,7 @@ export default function ContentFilter({
                   product={product}
                   variant={variant}
                   isShowListVariant={true}
+                  preloadVariants={true}
                 />
               );
             })}

@@ -16,7 +16,6 @@ const ProductCardImage = ({
   const image: ImageDto | undefined =
     variant?.images?.sort((a, b) => (a.id || 0) - (b.id || 0))?.[0]?.image ||
     product?.feature_image_detail?.image;
-  console.log(image);
   return (
     <div className={'relative pt-[100%]'}>
       <Link

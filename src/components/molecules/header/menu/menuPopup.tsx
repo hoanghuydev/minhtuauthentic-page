@@ -1,15 +1,12 @@
-import Link from 'next/link';
 import { POPUP_TYPE, PopupDisplay } from '@/config/type';
-import { CategoryDto } from '@/dtos/Category.dto';
-import { Fragment, ReactNode, useContext, useEffect, useState } from 'react';
-import { chunk } from 'lodash';
+import { ReactNode, useEffect, useState } from 'react';
 import { BrandDto } from '@/dtos/Brand.dto';
 import MenuBrand from '@/components/molecules/header/menu/menuBrand';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import MenuPopupCategory from '@/components/molecules/header/menu/menuPopupCategory';
-import React from 'react';
-import appContext from '@/contexts/appContext';
 import { twMerge } from 'tailwind-merge';
+import MenuProduct from './menuProduct';
+import { ProductDto } from '@/dtos/Product.dto';
 
 const MenuPopup = ({
   data,
@@ -18,6 +15,7 @@ const MenuPopup = ({
   menuCategoryChildrenPosition,
   menu,
   isOpenMenu,
+  isLoadingProducts = false,
 }: {
   data: PopupDisplay & { currentCategoryId?: number };
   menu: ResponseMenuDto;
@@ -25,6 +23,7 @@ const MenuPopup = ({
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   isOpenMenu: boolean;
+  isLoadingProducts?: boolean;
 }) => {
   const wMenu = isOpenMenu ? 209 : 215;
   const gapWMenuAnd = 8;
@@ -78,7 +77,7 @@ const MenuPopup = ({
         );
       },
       [POPUP_TYPE.PRODUCT]: () => {
-        return <div className={'flex'}></div>;
+        return <MenuProduct isLoadingProducts={isLoadingProducts} />;
       },
       [POPUP_TYPE.BRAND]: () => {
         return <MenuBrand brands={(data?.data as BrandDto[]) || []} />;

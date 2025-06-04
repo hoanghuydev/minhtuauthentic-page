@@ -38,7 +38,9 @@ export default function NewsTemplate({
     <div className={'grid grid-cols-1 lg:grid-cols-6 gap-1 lg:gap-3 relative'}>
       <>
         {!isDetail ? (
-          <LayoutNews className={'col-span-4 h-fit sticky top-[100px]'}>
+          <LayoutNews
+            className={'col-span-4 h-fit relative lg:sticky lg:top-[100px]'}
+          >
             <NewsCategoryMobile categoryNews={categoryNews} />
             <NewsList
               title={title}

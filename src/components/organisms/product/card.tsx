@@ -27,6 +27,7 @@ const ProductCard = ({
   isShowListVariant,
   className,
   isDealSock,
+  preloadVariants,
 }: {
   product: ProductDto;
   variant: VariantDto;
@@ -37,6 +38,7 @@ const ProductCard = ({
   isShowListVariant?: boolean;
   className?: string;
   isDealSock?: boolean;
+  preloadVariants?: boolean;
 }) => {
   const [_variant, setVariant] = useState<VariantDto>(variant);
 
@@ -102,6 +104,7 @@ const ProductCard = ({
                   setVariant(rs);
                 }
               }}
+              preloadVariants={preloadVariants}
             />
           )}
           {_variant && (

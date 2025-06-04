@@ -71,7 +71,7 @@ export default function CartSummaryDesktop() {
                     <td className={'border-y border-gray-200 max-w-[200px]'}>
                       <Link
                         href={generateSlugToHref(item.slug)}
-                        className={'text-primary font-semibold bk-product-name'}
+                        className={'font-semibold bk-product-name'}
                       >
                         {item.variant_name}
                       </Link>

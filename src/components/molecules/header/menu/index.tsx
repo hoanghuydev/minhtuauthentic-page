@@ -3,12 +3,16 @@ import Link from 'next/link';
 import IconCheveronRight from '@/components/icons/cheveron-right';
 import Image from 'next/image';
 import MenuPopup from '@/components/molecules/header/menu/menuPopup';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { generateSlugToHref } from '@/utils';
 import { MenuDisplay, POPUP_TYPE, PopupDisplay } from '@/config/type';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import useMenu from '@/hooks/useMenu';
+import { ProductDto } from '@/dtos/Product.dto';
+import { ResponseSlugPageDto } from '@/dtos/responseSlugPage.dto';
+import { ResponseCategoryFilterPageDto } from '@/dtos/responseCategoryFilterPage.dto';
+import AppContext from '@/contexts/appContext';
 
 const Menu = ({
   menu,
@@ -19,6 +23,7 @@ const Menu = ({
   className?: string;
   isOpenMenu: boolean;
 }) => {
+  const appCtx = useContext(AppContext);
   const [dataDisplayPopup, setDataDisplayPopup] = useState<
     PopupDisplay & { currentCategoryId?: number }
   >({
@@ -34,6 +39,7 @@ const Menu = ({
   const { menuDisplay } = useMenu(menu);
   const refTimeout = useRef<any>(null);
   const ref = useRef<HTMLDivElement | null>(null);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
 
   useEffect(() => {
     // Set initial height for main menu
@@ -60,6 +66,35 @@ const Menu = ({
       };
     }
   }, []);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    const hasProducts = appCtx?.menuProduct && appCtx.menuProduct.length > 0;
+    if (hasProducts || isLoadingProducts) return;
+
+    setIsLoadingProducts(true);
+    try {
+      const response = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_BE_URL || process.env.BE_URL
+        }/api/pages/products/filter`,
+      );
+      const result = await response.json();
+      const productsList = result?.data?.products || [];
+
+      // Store products in context
+      if (appCtx?.setMenuProduct) {
+        appCtx.setMenuProduct(productsList);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setIsLoadingProducts(false);
+    }
+  };
 
   const renderMenuItem = (item: MenuDisplay) => {
     const obj: Record<string, () => ReactNode> = {
@@ -95,12 +130,15 @@ const Menu = ({
       },
       [POPUP_TYPE.PRODUCT]: () => {
         return (
-          <Link
-            className={'capitalize font-[700] lg:font-bold'}
-            href={'/san-pham'}
-          >
-            Sản phẩm
-          </Link>
+          <div className={'flex justify-between'}>
+            <Link
+              className={'capitalize font-[700] lg:font-bold'}
+              href={'/san-pham'}
+            >
+              Sản phẩm
+            </Link>
+            <IconCheveronRight className={'w-[15px] h-[15px]'} />
+          </div>
         ) as ReactNode;
       },
       [POPUP_TYPE.NEWS]: () => {
@@ -150,6 +188,14 @@ const Menu = ({
           type: item.type,
           display: true,
           data: item.data,
+        });
+        break;
+      case POPUP_TYPE.PRODUCT:
+        setDataDisplayPopup({
+          type: item.type,
+          display: true,
+          data: item.data,
+          title: 'Sản phẩm',
         });
         break;
       default:
@@ -213,6 +259,7 @@ const Menu = ({
             }, 50);
           }}
           isOpenMenu={isOpenMenu}
+          isLoadingProducts={isLoadingProducts}
         />
       )}
     </>

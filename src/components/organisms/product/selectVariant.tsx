@@ -11,12 +11,14 @@ type Props = {
   product: ProductDto;
   onChange: (variant_id: VariantDto) => void;
   defaultVariant?: VariantDto;
+  preloadVariants?: boolean; // Thêm prop để kiểm soát việc preload variants
 };
 
 export default function SelectVariant({
   product,
   onChange,
   defaultVariant,
+  preloadVariants = false, // Mặc định là false
 }: Props) {
   const [isFetch, setIsFetch] = useState(false);
   const [options, setOptions] = useState<SelectOption[]>([]);
@@ -57,12 +59,12 @@ export default function SelectVariant({
     }
   }, [defaultVariant]);
 
-  // Tự động tải options khi component mount
+  // Chỉ tải options khi component mount nếu preloadVariants là true
   useEffect(() => {
-    if (!isFetch) {
+    if (preloadVariants && !isFetch) {
       loadOptions();
     }
-  }, []);
+  }, [preloadVariants]);
 
   return (
     <div className={'px-1 lg:px-2'}>

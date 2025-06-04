@@ -10,6 +10,7 @@ import { MenuDisplay } from '@/config/type';
 import { useRouter } from 'next/router';
 import Loading from '@/components/atoms/loading';
 import { VariantDto } from '@/dtos/Variant.dto';
+import { ProductDto } from '@/dtos/Product.dto';
 
 export type TypeAppState = {
   isOpenMenu: boolean;
@@ -27,6 +28,12 @@ export type TypeAppState = {
   setShowProductFooter: Dispatch<SetStateAction<boolean>> | undefined;
   currentVariant?: VariantDto | null;
   setCurrentVariant: Dispatch<SetStateAction<VariantDto | null>> | undefined;
+  menuProduct?: ProductDto[];
+  setMenuProduct: Dispatch<SetStateAction<ProductDto[]>> | undefined;
+  hintProductCategoryMenu?: Record<number, ProductDto[]>;
+  setHintProductCategoryMenu:
+    | Dispatch<SetStateAction<Record<number, ProductDto[]>>>
+    | undefined;
 };
 
 const AppContext = createContext<TypeAppState | undefined>(undefined);
@@ -42,6 +49,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [settings, setSettings] = useState({});
   const [showProductFooter, setShowProductFooter] = useState(false);
   const [currentVariant, setCurrentVariant] = useState<VariantDto | null>(null);
+  const [menuProduct, setMenuProduct] = useState<ProductDto[]>([]);
+  const [hintProductCategoryMenu, setHintProductCategoryMenu] = useState<
+    Record<number, ProductDto[]>
+  >({});
 
   const router = useRouter();
   useEffect(() => {
@@ -75,6 +86,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowProductFooter,
         currentVariant,
         setCurrentVariant,
+        menuProduct,
+        setMenuProduct,
+        hintProductCategoryMenu,
+        setHintProductCategoryMenu,
       }}
     >
       {children}
