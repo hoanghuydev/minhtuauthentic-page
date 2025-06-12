@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { ProductDto } from '@/dtos/Product.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
 
@@ -10,11 +10,23 @@ type SelectOption = {
 type Props = {
   product: ProductDto;
   onChange: (variant_id: VariantDto) => void;
+  defaultVariant?: VariantDto;
+  preloadVariants?: boolean; // Thêm prop để kiểm soát việc preload variants
 };
-export default function SelectVariant({ product, onChange }: Props) {
+
+export default function SelectVariant({
+  product,
+  onChange,
+  defaultVariant,
+  preloadVariants = false, // Mặc định là false
+}: Props) {
   const [isFetch, setIsFetch] = useState(false);
   const [options, setOptions] = useState<SelectOption[]>([]);
   const [listVariant, setListVariant] = useState<VariantDto[]>([]);
+  const [selectedVariant, setSelectedVariant] = useState<number>(
+    defaultVariant?.id || 0,
+  );
+
   const loadOptions = () => {
     fetch('/api/product/variants/' + product.id)
       .then((res) => res.json())
@@ -40,14 +52,31 @@ export default function SelectVariant({ product, onChange }: Props) {
       });
   };
 
+  // Cập nhật selectedVariant khi defaultVariant thay đổi
+  useEffect(() => {
+    if (defaultVariant && defaultVariant.id !== selectedVariant) {
+      setSelectedVariant(defaultVariant.id || 0);
+    }
+  }, [defaultVariant]);
+
+  // Chỉ tải options khi component mount nếu preloadVariants là true
+  useEffect(() => {
+    if (preloadVariants && !isFetch) {
+      loadOptions();
+    }
+  }, [preloadVariants]);
+
   return (
     <div className={'px-1 lg:px-2'}>
       <select
         className={'p-2 rounded border w-full'}
+        value={selectedVariant}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-          if (e.target.value !== '0') {
+          const value = parseInt(e.target.value);
+          setSelectedVariant(value);
+          if (value !== 0) {
             const variant: VariantDto | undefined = listVariant.find(
-              (item) => item.id === parseInt(e.target.value),
+              (item) => item.id === value,
             );
             variant && onChange(variant);
           }

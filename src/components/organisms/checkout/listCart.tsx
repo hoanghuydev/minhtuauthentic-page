@@ -157,11 +157,12 @@ export default function ListCart({ paymentType, setValue }: Props) {
               <Tag
                 key={key}
                 closable
-                onClose={() =>
+                className="h-[35px] flex items-center justify-center"
+                onClick={() => {
                   order?.removeCoupon &&
-                  coupon.code &&
-                  order.removeCoupon(coupon.code)
-                }
+                    coupon.code &&
+                    order.removeCoupon(coupon.code);
+                }}
               >
                 {coupon?.code?.toUpperCase()}
               </Tag>
@@ -174,7 +175,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
         >
           <div className={'font-semibold flex justify-between items-center'}>
             <span>Tạm tính:</span>
-            <span className={'text-primary'}>
+            <span className={'text-red-600'}>
               {formatMoney(
                 order?.cart?.items?.reduce(
                   (total, item) => total + (item.price || 0),
@@ -186,7 +187,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
           {order?.cart?.coupons?.[0] && (
             <div className={'font-semibold flex justify-between items-center'}>
               <span>Mã giảm giá:</span>
-              <span className={'text-primary'}>
+              <span className={'text-red-600'}>
                 {order?.cart?.coupons?.[0]?.code}
               </span>
             </div>
@@ -194,7 +195,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
           {(order?.cart?.price_minus || 0) > 0 && (
             <div className={'font-semibold flex justify-between items-center'}>
               <span>Số tiền giảm:</span>
-              <span className={'text-primary'}>
+              <span className={'text-red-600'}>
                 {order?.cart?.price_minus &&
                   formatMoney(order?.cart?.price_minus || 0)}
               </span>
@@ -202,7 +203,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
           )}
           <div className={'font-semibold flex justify-between items-center'}>
             <span>Phí vận chuyển:</span>
-            <span className={'text-primary'}>0</span>
+            <span className={'text-red-600'}>0</span>
           </div>
           <div
             className={
@@ -210,7 +211,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
             }
           >
             <span>Tổng tiền:</span>
-            <span className={'text-primary'}>
+            <span className={'text-red-600'}>
               {formatMoney(order?.cart?.total_price || 0)}
             </span>
           </div>
@@ -218,6 +219,9 @@ export default function ListCart({ paymentType, setValue }: Props) {
         {coupons && coupons.length > 0 && (
           <div className={'w-full  my-3 grid grid-cols-1 lg:grid-cols-2 gap-3'}>
             {coupons?.map((coupon, index) => {
+              const isApplied = order?.cart?.coupons?.some(
+                (appliedCoupon) => appliedCoupon.code === coupon.code,
+              );
               return (
                 <div className={'bg-transparent'} key={index}>
                   <ItemCoupon
@@ -225,6 +229,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
                     onClick={() => {
                       coupon?.code && applyCoupon(coupon.code || '');
                     }}
+                    isClick={isApplied}
                   />
                 </div>
               );

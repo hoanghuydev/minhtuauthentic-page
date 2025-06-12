@@ -6,17 +6,11 @@ import Footer from '@/components/organisms/footer';
 import { SettingOptionDto } from '@/dtos/SettingOption.dto';
 import HomeFlashSale from '@/components/organisms/home/homeFlashSale';
 import Layout from '@/components/templates/Layout';
-import dynamic from 'next/dynamic';
 import { ReactNode } from 'react';
 import { PageSetting } from '@/config/type';
-import LazyLoadHome from '@/components/organisms/home/layzyLoadHome';
-
-const HomeBanner = dynamic(
-  () => import('@/components/organisms/home/homeBanner'),
-  {
-    ssr: false,
-  },
-);
+import HomeContent from '@/components/organisms/home/homeContent';
+import HomeBanner from '@/components/organisms/home/homeBanner';
+import Head from 'next/head';
 
 export async function getStaticProps() {
   const res = await fetch(process.env.BE_URL + '/api/pages/home').catch(
@@ -74,7 +68,7 @@ export default function Home({
             />
           ) as ReactNode)}
 
-        <LazyLoadHome homePage={homePage} settingsHome={settingsHome} />
+        <HomeContent homePage={homePage} settingsHome={settingsHome} />
       </Layout>
       <Footer settings={settings} footerContent={footerContent} />
     </>

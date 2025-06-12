@@ -1,8 +1,10 @@
-import { ReactNode, useContext } from 'react';
+import { ReactNode, useContext, useEffect, useState } from 'react';
 import CategoryFilterContext from '@/contexts/categoryFilterContext';
 import CloseCircle from '@/components/icons/closeCircle';
 import { twMerge } from 'tailwind-merge';
 import { BrandDto } from '@/dtos/Brand.dto';
+import { getFilterFromQuery } from '@/utils';
+
 type Props = {
   className?: string;
   brands?: BrandDto[];
@@ -10,9 +12,36 @@ type Props = {
 export default function FilterBy({ className, brands }: Props) {
   const ctx = useContext(CategoryFilterContext);
   const _settings = ctx?.objFilterByValue;
+  const [currentFilters, setCurrentFilters] = useState<
+    Record<string, (number | string)[]>
+  >(ctx?.filters || {});
+
+  // Đồng bộ với URL khi URL thay đổi
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleURLChange = () => {
+        const urlParams = window.location.search;
+        const filters = getFilterFromQuery(urlParams);
+        setCurrentFilters(filters);
+      };
+
+      window.addEventListener('popstate', handleURLChange);
+
+      return () => {
+        window.removeEventListener('popstate', handleURLChange);
+      };
+    }
+  }, []);
+
+  // Đồng bộ với context khi filters thay đổi
+  useEffect(() => {
+    if (ctx?.filters) {
+      setCurrentFilters(ctx.filters);
+    }
+  }, [ctx?.filters]);
 
   const handleClose = (key: string, id: string | number) => {
-    let _filter = { ...ctx?.filters };
+    let _filter = { ...currentFilters };
     const value = _filter[key] || [];
     const indexValue = value.findIndex(
       (item) => item.toString() === id.toString(),
@@ -21,6 +50,7 @@ export default function FilterBy({ className, brands }: Props) {
       value.splice(indexValue, 1);
     }
     _filter[key] = value;
+    setCurrentFilters(_filter);
     ctx?.setFilters && ctx.setFilters(_filter);
     ctx?.updateRouter && ctx.updateRouter('filter', _filter);
   };
@@ -60,8 +90,8 @@ export default function FilterBy({ className, brands }: Props) {
   const renderItem = () => {
     let xhtml: ReactNode[] = [];
     if (_settings) {
-      Object.keys(ctx?.filters || {}).map((filter) => {
-        const value = ctx?.filters?.[filter];
+      Object.keys(currentFilters || {}).map((filter) => {
+        const value = currentFilters?.[filter];
         (value || []).map((item) => {
           xhtml.push(renderFilterItem(filter, item));
         });

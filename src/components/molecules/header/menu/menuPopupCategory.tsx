@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { BrandDto } from '@/dtos/Brand.dto';
 import { ImageDetailDto } from '@/dtos/ImageDetail.dto';
 import BrandWithImage from '@/components/atoms/brands/brandWithImage';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { ProductDto } from '@/dtos/Product.dto';
 import ProductRelation from '@/components/molecules/product/productRelation';
 import ProductSmallCard from '../../product/productSmallCard';
 import { generateSlugToHref } from '@/utils';
+import AppContext from '@/contexts/appContext';
 
 type Props = {
   filterSetting?: ProductFilterOptionDto;
@@ -25,7 +26,7 @@ const MenuPopupCategory = ({
   filterSetting,
   currentCategoryId,
 }: Props) => {
-  const [hintProducts, setHintProducts] = useState<ProductDto[]>([]);
+  const appCtx = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
   const [brandsRandom, setBrandsRandom] = useState<BrandDto[]>([]);
   const [isReversed, setIsReversed] = useState<boolean>(false);
@@ -35,9 +36,13 @@ const MenuPopupCategory = ({
   ]);
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  // Get hint products from context or empty array if not available
+  const hintProducts =
+    currentCategoryId && appCtx?.hintProductCategoryMenu
+      ? appCtx.hintProductCategoryMenu[currentCategoryId] || []
+      : [];
+
   useEffect(() => {
-    // Reset products when menu changes
-    setHintProducts([]);
     // Toggle position between left-right and right-left
     setIsReversed((prev) => !prev);
     setFilterOrder(
@@ -48,6 +53,15 @@ const MenuPopupCategory = ({
 
     const fetchHintProducts = async () => {
       if (currentCategoryId) {
+        // Check if we already have hint products for this category in context
+        if (
+          appCtx?.hintProductCategoryMenu &&
+          appCtx.hintProductCategoryMenu[currentCategoryId]?.length > 0
+        ) {
+          // Products already in context, no need to fetch
+          return;
+        }
+
         // Cancel previous fetch if it exists
         if (abortControllerRef.current) {
           abortControllerRef.current.abort();
@@ -68,7 +82,15 @@ const MenuPopupCategory = ({
           const data = await response.json();
           // Only update state if this is the latest fetch
           if (!abortController.signal.aborted) {
-            setHintProducts(data.data.products || []);
+            const products = data.data.products || [];
+
+            // Store in context
+            if (appCtx?.setHintProductCategoryMenu && products.length > 0) {
+              appCtx.setHintProductCategoryMenu((prev) => ({
+                ...prev,
+                [currentCategoryId]: products,
+              }));
+            }
           }
         } catch (error: any) {
           // Only log error if it's not an abort error
@@ -92,7 +114,7 @@ const MenuPopupCategory = ({
         abortControllerRef.current.abort();
       }
     };
-  }, [currentCategoryId]);
+  }, [currentCategoryId, appCtx]);
 
   useEffect(() => {
     setBrandsRandom(brands.sort(() => 0.5 - Math.random()).slice(0, 8));
@@ -136,13 +158,16 @@ const MenuPopupCategory = ({
             }
             listDisplay.concentration_gradients.data = (
               filterSetting?.concentration_gradients || []
-            ).map((concentration, index2) => {
-              return {
-                slug:
-                  `/san-pham?filter[${setting}][${index2}]=` + concentration.id,
-                name: concentration.name || '',
-              };
-            });
+            )
+              .sort(() => 0.5 - Math.random())
+              .map((concentration, index2) => {
+                return {
+                  slug:
+                    `/san-pham?filter[${setting}][${index2}]=` +
+                    concentration.id,
+                  name: concentration.name || '',
+                };
+              });
             break;
           case 'price_range':
             if (!listDisplay.price_range) {
@@ -238,7 +263,7 @@ const MenuPopupCategory = ({
         <div className={'grid grid-cols-4 gap-4'}>
           {renderItem()}
           <div className="flex-1">
-            <h3 className={'text-xl font-semibold mb-3'}>Sản phẩm</h3>
+            <h3 className={'text-xl font-semibold mb-3'}>Sản phẩm gợi ý</h3>
 
             {isLoading ? (
               <div className="flex items-center justify-center h-32">

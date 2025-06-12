@@ -12,10 +12,11 @@ import {
   formatMoney,
   promotionName,
 } from '@/utils';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { PromotionsDto } from '@/dtos/Promotions.dto';
 import CouponsDto from '@/dtos/Coupons.dto';
 import SelectVariant from '@/components/organisms/product/selectVariant';
+import { PROMOTION_TYPE } from '@/config/enum';
 const ProductCard = ({
   product,
   variant,
@@ -25,6 +26,8 @@ const ProductCard = ({
   isShowConfiguration,
   isShowListVariant,
   className,
+  isDealSock,
+  preloadVariants,
 }: {
   product: ProductDto;
   variant: VariantDto;
@@ -34,8 +37,18 @@ const ProductCard = ({
   isShowConfiguration?: boolean;
   isShowListVariant?: boolean;
   className?: string;
+  isDealSock?: boolean;
+  preloadVariants?: boolean;
 }) => {
   const [_variant, setVariant] = useState<VariantDto>(variant);
+
+  // Cập nhật variant khi prop thay đổi
+  useEffect(() => {
+    if (variant && variant !== _variant) {
+      setVariant(variant);
+    }
+  }, [variant]);
+
   return (
     <div
       className={twMerge(
@@ -52,8 +65,14 @@ const ProductCard = ({
         </div>
         <ProductCardImage product={product} variant={_variant} />
         {/* <div className={'px-2 h-[110px] lg:h-[75px] xl:h-[63px]'}> */}
-        <div className="px-2 h-[72px] overflow-hidden">
-          <h3 className="font-bold line-clamp-3">
+        <div className="px-2  overflow-hidden">
+          <h3
+            className={twMerge(
+              'font-bold line-clamp-4 ',
+              !isDealSock && 'h-[90px] sm:h-[72px]',
+              isDealSock && 'h-[42px] line-clamp-2',
+            )}
+          >
             <Link className="block" href={`/${product?.slugs?.slug}`}>
               {product.title || product.name}
             </Link>
@@ -77,20 +96,30 @@ const ProductCard = ({
             )}
           {isShowListVariant && (
             <SelectVariant
-              key={product.id}
+              key={`${product.id}-${_variant?.id || 'default'}`}
               product={product}
+              defaultVariant={_variant}
               onChange={(rs) => {
                 if (rs) {
                   setVariant(rs);
                 }
               }}
+              preloadVariants={preloadVariants}
             />
           )}
-          {_variant && <ProductPrice className={'px-2'} variant={_variant} />}
+          {_variant && (
+            <ProductPrice
+              className={twMerge(
+                'px-2',
+                isDealSock && '[&>span:first-child]:text-[14px] ',
+              )}
+              variant={_variant}
+            />
+          )}
         </div>
       </div>
       {promotions && promotions.length > 0 && (
-        <div className={'h-[50px] px-2 lg:px-[8px]'}>
+        <div className={' px-2 lg:px-[8px]'}>
           {promotions?.map((promotion, index) => {
             return (
               <Fragment key={'Product-card-' + index}>
@@ -104,22 +133,27 @@ const ProductCard = ({
                     }
                   >
                     {formatMoney(
-                      (variant?.regular_price || 0) -
+                      (_variant?.regular_price || 0) -
                         calculatePriceMinus(
-                          variant?.regular_price || 0,
+                          _variant?.regular_price || 0,
                           coupon,
                         ),
                     )}
                   </span>
                 </p>
-                <p className={'text-sm'}>
-                  <span className={'mr-1 lg:mr-3'}>Tiết kiệm thêm:</span>
-                  <span className={'text-[13px] font-[700] lg:font-bold'}>
-                    {formatMoney(
-                      calculatePriceMinus(variant?.regular_price || 0, coupon),
-                    )}
-                  </span>
-                </p>
+                {promotion.type !== PROMOTION_TYPE.DEAL_SOCK && (
+                  <p className={'text-sm'}>
+                    <span className={'mr-1 lg:mr-3'}>Tiết kiệm thêm:</span>
+                    <span className={'text-[13px] font-[700] lg:font-bold'}>
+                      {formatMoney(
+                        calculatePriceMinus(
+                          _variant?.regular_price || 0,
+                          coupon,
+                        ),
+                      )}
+                    </span>
+                  </p>
+                )}
               </Fragment>
             );
           })}

@@ -15,6 +15,7 @@ import NewsTemplate from '@/components/templates/NewsTemplate';
 import { generateSlugToHref } from '@/utils';
 import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import { ResponseNewsPageDto } from '@/dtos/ResponseNewsPage.dto';
+import NotFoundTemplate from '@/components/templates/NotFoundTemplate';
 
 export const getServerSideProps = async (context: any) => {
   const { slug } = context.query;
@@ -150,7 +151,6 @@ export default function Page({
   keyword?: string;
 } & ServerSideProps &
   PageSetting) {
-  console.log(slug);
   const renderTemplate = () => {
     switch (slug?.model) {
       case Entity.VARIANTS:
@@ -214,7 +214,7 @@ export default function Page({
           </>
         );
       default:
-        return <div>Not Found</div>;
+        return <NotFoundTemplate />;
     }
   };
 

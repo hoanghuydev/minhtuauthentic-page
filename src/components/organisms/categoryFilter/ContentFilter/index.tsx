@@ -39,9 +39,35 @@ export default function ContentFilter({
   const ctx = useContext(CategoryFilterContext);
   const [_products, setProducts] = useState<ProductDto[]>(products);
   const [isReady, setIsReady] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState<string>(
+    typeof window !== 'undefined' ? window.location.search : '',
+  );
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleURLChange = () => {
+        setCurrentUrl(window.location.search);
+      };
+
+      window.addEventListener('popstate', handleURLChange);
+
+      return () => {
+        window.removeEventListener('popstate', handleURLChange);
+      };
+    }
+  }, []);
+
   useEffect(() => {
     ctx?.setTotal && ctx.setTotal(total);
-  }, []);
+  }, [total]);
+
+  // Cập nhật products khi props products thay đổi (SSR)
+  useEffect(() => {
+    if (products?.length > 0) {
+      setProducts(products);
+      ctx?.setProducts && ctx.setProducts(products);
+    }
+  }, [products]);
 
   const convertSettingToObject = () => {
     let obj: Record<string, Record<string, string>> = {
@@ -84,9 +110,11 @@ export default function ContentFilter({
     }
     return obj;
   };
+
   useEffect(() => {
     setIsReady(true);
   }, []);
+
   useEffect(() => {
     if (
       ctx?.setObjFilterByValue &&
@@ -97,12 +125,18 @@ export default function ContentFilter({
     if (ctx?.setDataSlug) {
       ctx.setDataSlug(slugData);
     }
-  }, []);
-  useEffect(() => {
-    if (isReady) {
-      setProducts((ctx?.products || []) as ProductDto[]);
+    // Initialize products from SSR
+    if (ctx?.setProducts && products?.length > 0) {
+      ctx.setProducts(products);
     }
-  }, [ctx?.products]);
+  }, []);
+
+  useEffect(() => {
+    if (isReady && ctx?.products) {
+      setProducts(ctx.products);
+    }
+  }, [ctx?.products, isReady]);
+
   const renderProduct = useMemo(() => {
     return (
       <>
@@ -117,14 +151,15 @@ export default function ContentFilter({
                 (item) => item.is_default || [],
               );
               if (!variant) {
-                return;
+                return null;
               }
               return (
                 <ProductCard
-                  key={product.id}
+                  key={`${product.id}-${variant.id}`}
                   product={product}
                   variant={variant}
                   isShowListVariant={true}
+                  preloadVariants={true}
                 />
               );
             })}
@@ -248,18 +283,21 @@ export default function ContentFilter({
         <div className={'flex justify-center mt-3'}>
           {ctx?.limit && ctx?.limit > -1 && ctx?.total > 0 && (
             <Pagination
+              key={currentUrl}
               defaultCurrent={1}
               total={ctx?.total}
               showQuickJumper={true}
               showSizeChanger={false}
-              current={ctx?.page || 1}
+              current={
+                Number(
+                  new URLSearchParams(window.location.search).get('page'),
+                ) ||
+                ctx?.page ||
+                1
+              }
               pageSize={ctx?.limit || 12}
               onChange={(page: number) => {
-                const params = new URLSearchParams(window.location.search);
-                params.set('page', page.toString());
-                window.location.href = `${window.location.origin}${
-                  window.location.pathname
-                }?${params.toString()}`;
+                ctx?.updateRouter && ctx.updateRouter('page', page.toString());
               }}
             />
           )}

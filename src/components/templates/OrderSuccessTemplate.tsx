@@ -139,7 +139,12 @@ export default function OrderSuccessTemplate() {
                       {item.qty}
                     </td>
                     <td className="text-right p-2 text-gray-900 font-semibold">
-                      {formatCurrency(item.variant_price || 0)}
+                      <span className="line-through">
+                        {formatCurrency(item.variant_price || 0)}
+                      </span>
+                      <span className="text-primary">
+                        {formatCurrency(item.variant_regular_price || 0)}
+                      </span>
                     </td>
                   </tr>
                 ))}
