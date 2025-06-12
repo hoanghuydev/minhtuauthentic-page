@@ -32,7 +32,7 @@ export default function ProductRelation({ products }: Props) {
               >
                 <div className={'flex items-center gap-2'}>
                   <Badge className={'bg-green'}>
-                    Giảm {calculatePricePercent(productContext?.variantActive)}%
+                    Giảm {calculatePricePercent(product.variants?.[0])}%
                   </Badge>
                   <Badge className={'bg-price'}>Trả góp 0%</Badge>
                 </div>
@@ -56,7 +56,7 @@ export default function ProductRelation({ products }: Props) {
                       {product.title || product.name}
                     </h3>
                     <ProductPrice
-                      variant={productContext?.variantActive}
+                      variant={product.variants?.[0]}
                       classNameRegularPrice={'font-semibold'}
                       classNamePrice={'font-[500] text-[10px]'}
                     />
