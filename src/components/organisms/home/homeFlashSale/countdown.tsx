@@ -66,7 +66,7 @@ export default function Countdown({ end_date, className }: Props) {
     refInterval.current = setInterval(timer, 1000);
   }
   return (
-    <div className="grid place-items-center pt-2">
+    <div className="grid place-items-center">
       <div className={twMerge('flex gap-1', className)}>
         <div className={containerClass}>
           <span className={labelClass}>NGÀY</span>

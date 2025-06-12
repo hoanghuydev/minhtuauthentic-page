@@ -297,7 +297,22 @@ export default function ContentFilter({
               }
               pageSize={ctx?.limit || 12}
               onChange={(page: number) => {
-                ctx?.updateRouter && ctx.updateRouter('page', page.toString());
+                const params = new URLSearchParams(window.location.search);
+                params.set('page', page.toString());
+
+                // Use router.push with shallow: false to ensure full page reload
+                // which is better for pagination navigation
+                if (ctx?.router) {
+                  const newUrl = `${
+                    window.location.pathname
+                  }?${params.toString()}`;
+                  ctx.router.push(newUrl);
+                } else {
+                  // Fallback to direct URL change if router is not available
+                  window.location.href = `${window.location.origin}${
+                    window.location.pathname
+                  }?${params.toString()}`;
+                }
               }}
             />
           )}

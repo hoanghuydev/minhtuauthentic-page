@@ -32,9 +32,6 @@ function generateSiteMap(items: SlugDto[]) {
        <loc>${process.env.NEXT_PUBLIC_APP_URL}/tai-khoan/dang-nhap</loc>
      </url>
      <url>
-       <loc>${process.env.NEXT_PUBLIC_APP_URL}/gio-hang/thanh-cong</loc>
-     </url>
-     <url>
        <loc>${process.env.NEXT_PUBLIC_APP_URL}/gio-hang/thanh-toan</loc>
      </url>
      <url>

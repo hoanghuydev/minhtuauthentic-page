@@ -7,6 +7,7 @@ import NewsRelation from '@/components/organisms/news/relation';
 import LayoutNews from '@/components/organisms/news/layout';
 import NewsDetail from '@/components/organisms/news/detail';
 import NewsCategoryMobile from '../organisms/news/categoryMobile';
+import { useIsMobile } from '@/hooks/useDevice';
 
 const NewsCategory = dynamic(
   () => import('@/components/organisms/news/category'),
@@ -34,6 +35,7 @@ export default function NewsTemplate({
   isDetail,
   total,
 }: Props) {
+  const isMobile = useIsMobile();
   return (
     <div className={'grid grid-cols-1 lg:grid-cols-6 gap-1 lg:gap-3 relative'}>
       <>
@@ -41,7 +43,7 @@ export default function NewsTemplate({
           <LayoutNews
             className={'col-span-4 h-fit relative lg:sticky lg:top-[100px]'}
           >
-            <NewsCategoryMobile categoryNews={categoryNews} />
+            {isMobile && <NewsCategoryMobile categoryNews={categoryNews} />}
             <NewsList
               title={title}
               news={news as NewsDto[]}

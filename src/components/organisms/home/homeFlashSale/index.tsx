@@ -43,7 +43,10 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
               />
             )}
             {isDesktop && (
-              <CountdownContainer className={'relative'} endDate={endDate} />
+              <CountdownContainer
+                className={'relative pt-12'}
+                endDate={endDate}
+              />
             )}
           </div>
           {isMobile && (
