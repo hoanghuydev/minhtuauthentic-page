@@ -1,4 +1,4 @@
-import { isDesktop } from 'react-device-detect';
+import { useIsDesktop } from '@/hooks/useDevice';
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import { JSX } from 'react';
 import { Collapse } from 'antd/es';
@@ -6,6 +6,7 @@ type Props = {
   items: StaticContentsDto[];
 };
 export default function FooterContent({ items }: Props) {
+  const isDesktop = useIsDesktop();
   const renderFooterDesktop = () => {
     const xhtml: JSX.Element[] = [];
     items.forEach((item, index) => {
@@ -55,24 +56,30 @@ export default function FooterContent({ items }: Props) {
           );
           break;
       }
-    })
+    });
 
     return <>{xhtml}</>;
   };
   const renderFooterMobile = () => {
     return (
-      <Collapse>
-        {items.map((item, index) => {
-          return (
-            <Collapse.Panel key={item?.id || 0} header={item.title}>
-              <div
-                className={'lg:mt-[12px]'}
-                dangerouslySetInnerHTML={{ __html: item.content || '' }}
-              />
-            </Collapse.Panel>
-          );
-        })}
-      </Collapse>
+      <div className="flex flex-col gap-2">
+        <Collapse className="footer-mobile-collapse gap-2" bordered={false}>
+          {items.map((item, index) => {
+            return (
+              <Collapse.Panel
+                key={item?.id || 0}
+                header={item.title}
+                className="bg-white custom-rounded mb-2"
+              >
+                <div
+                  className={'lg:mt-[12px]'}
+                  dangerouslySetInnerHTML={{ __html: item.content || '' }}
+                />
+              </Collapse.Panel>
+            );
+          })}
+        </Collapse>
+      </div>
     );
   };
   return <>{isDesktop ? renderFooterDesktop() : renderFooterMobile()}</>;

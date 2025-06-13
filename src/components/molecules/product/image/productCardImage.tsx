@@ -3,7 +3,6 @@ import { twMerge } from 'tailwind-merge';
 import { ImageDto } from '@/dtos/Image.dto';
 import Link from 'next/link';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
-import { isMobile } from 'react-device-detect';
 import { VariantDto } from '@/dtos/Variant.dto';
 const ProductCardImage = ({
   variant,
@@ -15,7 +14,8 @@ const ProductCardImage = ({
   className?: string;
 }) => {
   const image: ImageDto | undefined =
-    variant?.images?.[0]?.image || product?.feature_image_detail?.image;
+    variant?.images?.sort((a, b) => (a.id || 0) - (b.id || 0))?.[0]?.image ||
+    product?.feature_image_detail?.image;
   return (
     <div className={'relative pt-[100%]'}>
       <Link
@@ -32,7 +32,10 @@ const ProductCardImage = ({
             'object-contain w-full h-full hover:scale-105 transition-transform duration-300'
           }
           product={product}
-          unoptimized={!isMobile}
+          sizes={
+            '(max-width: 500px) 100vw, (max-width: 768px) 60vw, (max-width: 1024px) 40vw, 30vw'
+          }
+          unoptimized={false}
         />
       </Link>
     </div>

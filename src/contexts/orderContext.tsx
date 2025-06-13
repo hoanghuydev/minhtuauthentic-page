@@ -13,10 +13,20 @@ import { getPriceWithCoupon, variantName } from '@/utils';
 import { usePathname } from 'next/navigation';
 import CartDto from '@/dtos/Cart.dto';
 import CouponsDto from '@/dtos/Coupons.dto';
+
+// Toast configuration
+const TOAST_CONFIG = {
+  autoClose: 1000,
+  closeOnClick: true,
+  pauseOnHover: false,
+  draggable: true,
+  toastId: 'cart-toast',
+};
+
 const OrderContext = createContext<TypeAppState | undefined>(undefined);
 export type TypeAppState = {
   cart: CartDto | null;
-  addCart: (variantDto: VariantDto) => void;
+  addCart: (variantDto: VariantDto, qty?: number) => void;
   updateCart: (index: number, qty?: number) => void;
   clearCart: () => void;
   applyCoupon: (couponCode: string, variant_id?: number) => Promise<boolean>;
@@ -79,7 +89,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
-  const addCart = async (variant: VariantDto) => {
+  const addCart = async (variant: VariantDto, qty: number = 1) => {
     const timeExpire = localStorage.getItem('cart_expired');
     const time = new Date().getTime();
     if (!timeExpire) {
@@ -88,24 +98,33 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
         (time + 1000 * 60 * 60 * 24).toString(),
       );
     }
+
+    if (!variant?.id) {
+      toast('Variant không tồn tại', { ...TOAST_CONFIG, type: 'error' });
+      return;
+    }
+
+    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const currentVariantOnCart = cart?.items
       ? (cart?.items || []).find((item) => item.variant_id === variant.id)
       : null;
-    if (!variant?.id) {
-      toast('Variant không tồn tại', { type: 'error' });
-      return;
-    }
+
+    // Gọi API để thêm hoặc cập nhật sản phẩm trong giỏ hàng với số lượng chính xác
     const newCartResponse = await callAddUpdateCart(
       variant.id,
-      currentVariantOnCart?.qty ? currentVariantOnCart?.qty + 1 : 1,
+      currentVariantOnCart ? qty : qty, // Nếu đã có trong giỏ hàng, cập nhật số lượng, nếu chưa có thì thêm mới
     );
+
     if (!newCartResponse?.data) {
       toast(newCartResponse?.message || 'Không thể thêm vào giỏ hàng', {
+        ...TOAST_CONFIG,
         type: 'error',
       });
       return;
     }
+
     setCart(newCartResponse?.data || []);
+    toast('Đã thêm vào giỏ hàng', { ...TOAST_CONFIG, type: 'success' });
   };
 
   const updateCart = async (index: number, qty: number = 1) => {
@@ -114,12 +133,16 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     }
     const orderItem = cart?.items?.[index];
     if (!orderItem?.variant_id) {
-      toast('Variant không tồn tại', { type: 'error' });
+      toast('Variant không tồn tại', { ...TOAST_CONFIG, type: 'error' });
       return;
     }
     const newCartResponse = await callAddUpdateCart(orderItem.variant_id, qty);
+    newCartResponse.data.total_price = newCartResponse.data.items.reduce(
+      (acc: number, item: any) => acc + item.variant_total_price * item.qty,
+      0,
+    );
     setCart(newCartResponse?.data || []);
-    toast('Đã cập nhật giỏ hàng', { type: 'success' });
+    // toast('Đã cập nhật giỏ hàng', { ...TOAST_CONFIG, type: 'success' });
   };
 
   const applyCoupon = async (
@@ -145,7 +168,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
             return true;
           } else {
             if (data?.message) {
-              toast.error(data?.message);
+              toast.error(data?.message, TOAST_CONFIG);
             }
           }
 
@@ -178,7 +201,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
             return true;
           } else {
             if (data?.message) {
-              toast.error(data?.message);
+              toast.error(data?.message, TOAST_CONFIG);
             }
           }
 

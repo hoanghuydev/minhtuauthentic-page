@@ -8,7 +8,7 @@ import { CategoryDto } from '@/dtos/Category.dto';
 
 export class ProductFilterOptionDto {
   categories?: CategoryDto[];
-  brands?: BrandDto[];
+  // brands?: BrandDto[];
   concentration_gradients?: ConcentrationGradientDto[];
   fragrance_retention?: FragranceRetentionDto[];
   product_configurations?: {

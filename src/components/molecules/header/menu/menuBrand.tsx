@@ -47,7 +47,7 @@ export default function MenuBrand({ brands }: Props) {
             <div
               key={index}
               className={twMerge(
-                'p-3 border-gray-200 border bg-white cursor-pointer rounded-[5px] w-[25px] h-[25px] flex items-center justify-center',
+                'p-3 border-gray-200 border bg-white cursor-pointer rounded-[5px] w-[25px] h-[25px] flex items-center justify-center hover:border-primary hover:text-primary',
                 letterActive === item ? 'bg-primary text-white' : 'text-black',
               )}
               onClick={() => {
@@ -69,7 +69,7 @@ export default function MenuBrand({ brands }: Props) {
             <ul className={'flex flex-col gap-3'}>
               {chunkBrand.map((brand, index) => {
                 return (
-                  <li key={'chunkBrand' + index}>
+                  <li key={'chunkBrand' + index} className="hover:text-primary">
                     <Link href={generateSlugToHref(brand?.slugs?.slug || '')}>
                       {brand.name}
                     </Link>

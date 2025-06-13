@@ -1,7 +1,7 @@
 import withBundleAnalyzer from '@next/bundle-analyzer';
-import  withLess from 'next-with-less';
+import withLess from 'next-with-less';
 const nextConfig = withBundleAnalyzer({
-    enabled: process.env.ANALYZE === 'true',
+  enabled: process.env.ANALYZE === 'true',
 })({
   reactStrictMode: true,
   logging: {
@@ -18,17 +18,22 @@ const nextConfig = withBundleAnalyzer({
       'minhtuauthentic-be.hak-app.com',
       'be.mikiperfume.com',
       'be.minhtuauthentic.com',
-      'be-new.mikiperfume.com'
+      'be-new.mikiperfume.com',
     ],
+    formats: [],
   },
-  transpilePackages: ['antd', '@ant-design',  "rc-util",
-    "@ant-design/icons",
-    "@ant-design/icons-svg",
-    "rc-pagination",
-    "rc-picker",
-    "rc-tree",
-      "rc-input",
-    "rc-table",]
+  transpilePackages: [
+    'antd',
+    '@ant-design',
+    'rc-util',
+    '@ant-design/icons',
+    '@ant-design/icons-svg',
+    'rc-pagination',
+    'rc-picker',
+    'rc-tree',
+    'rc-input',
+    'rc-table',
+  ],
 });
 
 export default nextConfig;

@@ -1,7 +1,7 @@
 import { ProductDto } from '@/dtos/Product.dto';
 import ProductDetailImage from '@/components/molecules/product/image/productDetailImage';
 import ProductProperty from '@/components/molecules/product/property';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { ImageDto } from '@/dtos/Image.dto';
 import { ProductConfigurationsDto } from '@/dtos/productConfigurations.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
@@ -110,7 +110,7 @@ const ProductDetailCard = ({
       }
     }
   }
-
+  
   useEffect(() => {
     if (productContext?.setVariantActive && !productContext.variantActive) {
       productContext.setVariantActive(
@@ -149,7 +149,7 @@ const ProductDetailCard = ({
         resetItem();
       }
     }
-  }, []);
+  }, [productContext?.variantActive]);
 
   return (
     <>
@@ -161,12 +161,14 @@ const ProductDetailCard = ({
       {product && (
         <>
           {productContext?.variantActive && (
-            <ProductOverview
-              product={product}
-              productConfigurations={productConfigurations}
-              settings={settings}
-              setIsOpen={setIsOpen}
-            />
+            <div>
+              <ProductOverview
+                product={product}
+                productConfigurations={productConfigurations}
+                settings={settings}
+                setIsOpen={setIsOpen}
+              />
+            </div>
           )}
           <ProductDealSock
             setting={settings.find(
@@ -175,7 +177,7 @@ const ProductDetailCard = ({
           />
           <div
             className={
-              'flex flex-col-reverse lg:grid lg:grid-cols-3 gap-3 my-3'
+              'flex flex-col-reverse lg:grid lg:grid-cols-3 gap-3 my-3 relative'
             }
           >
             <div className={'col-span-2'}>

@@ -1,4 +1,4 @@
-import { isDesktop } from 'react-device-detect';
+import { useIsDesktop } from '@/hooks/useDevice';
 import { CategoryNewsDto } from '@/dtos/CategoryNews.dto';
 import { generateSlugToHref } from '@/utils';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ type Props = {
 };
 
 export default function NewsCategory({ categoryNews }: Props) {
+  const isDesktop = useIsDesktop();
   return (
     <>
       {isDesktop && (

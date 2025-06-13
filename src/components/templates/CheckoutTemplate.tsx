@@ -222,22 +222,11 @@ export default function CheckoutTemplate({
       <form
         id={'checkout-form'}
         className={twMerge(
-          'w-full rounded-[10px] shadow-custom bg-white overflow-hidden relative mx-auto p-3 ',
+          'w-full rounded-[10px] shadow-custom bg-white overflow-hidden relative mx-auto ',
         )}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className={'py-6 border-b border-gray-200 mb-6'}>
-          <Link href={'/'}>
-            <Image
-              src={Logo}
-              className={'w-[200px]'}
-              alt={'minhtuauthentic'}
-              width={253}
-              height={60}
-            />
-          </Link>
-        </div>
-        <div className={'flex flex-col-reverse lg:flex-row gap-3'}>
+        <div className={'flex flex-col-reverse lg:flex-row gap-3 p-3 '}>
           {user && (
             <FormCheckout
               watch={watch}

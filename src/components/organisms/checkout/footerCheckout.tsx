@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom';
 import PaymentButton from '@/components/molecules/paymentButton';
-import { isMobile } from 'react-device-detect';
+import { useIsMobile } from '@/hooks/useDevice';
+import { useEffect, useState } from 'react';
 
 type Props = {
   paymentType?: string;
@@ -8,9 +9,25 @@ type Props = {
 };
 
 export default function FooterCheckout({ paymentType, setValue }: Props) {
+  const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  // Only render the portal on the client side when the DOM is available
+  const checkoutElement =
+    typeof document !== 'undefined'
+      ? document.getElementById('checkout-form')
+      : null;
+
   return (
     <>
       {isMobile &&
+        checkoutElement &&
         createPortal(
           <div
             className={
@@ -26,7 +43,7 @@ export default function FooterCheckout({ paymentType, setValue }: Props) {
               className={'w-full'}
             />
           </div>,
-          document.getElementById('checkout-form') as HTMLElement,
+          checkoutElement,
         )}
     </>
   );

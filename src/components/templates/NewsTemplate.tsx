@@ -6,6 +6,7 @@ import NewsSmallList from '@/components/organisms/news/smallList';
 import NewsRelation from '@/components/organisms/news/relation';
 import LayoutNews from '@/components/organisms/news/layout';
 import NewsDetail from '@/components/organisms/news/detail';
+import NewsCategoryMobile from '../organisms/news/categoryMobile';
 
 const NewsCategory = dynamic(
   () => import('@/components/organisms/news/category'),
@@ -34,10 +35,13 @@ export default function NewsTemplate({
   total,
 }: Props) {
   return (
-    <div className={'grid grid-cols-1 lg:grid-cols-6 gap-1 lg:gap-3'}>
+    <div className={'grid grid-cols-1 lg:grid-cols-6 gap-1 lg:gap-3 relative'}>
       <>
         {!isDetail ? (
-          <LayoutNews className={'col-span-4 '}>
+          <LayoutNews
+            className={'col-span-4 h-fit relative lg:sticky lg:top-[100px]'}
+          >
+            <NewsCategoryMobile categoryNews={categoryNews} />
             <NewsList
               title={title}
               news={news as NewsDto[]}
@@ -60,7 +64,7 @@ export default function NewsTemplate({
         {newest && (
           <div
             className={
-              'w-full rounded-[10px] shadow-custom bg-white overflow-hidden relative mx-auto p-3'
+              'w-full rounded-[10px] overflow-hidden relative mx-auto p-3'
             }
           >
             <h3

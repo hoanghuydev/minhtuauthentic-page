@@ -6,18 +6,11 @@ import Footer from '@/components/organisms/footer';
 import { SettingOptionDto } from '@/dtos/SettingOption.dto';
 import HomeFlashSale from '@/components/organisms/home/homeFlashSale';
 import Layout from '@/components/templates/Layout';
-import dynamic from 'next/dynamic';
 import { ReactNode } from 'react';
 import { PageSetting } from '@/config/type';
-import LazyLoadHome from '@/components/organisms/home/layzyLoadHome';
+import HomeContent from '@/components/organisms/home/homeContent';
+import HomeBanner from '@/components/organisms/home/homeBanner';
 import Head from 'next/head';
-
-const HomeBanner = dynamic(
-  () => import('@/components/organisms/home/homeBanner'),
-  {
-    ssr: false,
-  },
-);
 
 export async function getStaticProps() {
   const res = await fetch(process.env.BE_URL + '/api/pages/home').catch(
@@ -33,7 +26,7 @@ export async function getStaticProps() {
   });
   return {
     props: {
-      homePage: data?.data,
+      homePage: data?.data || {},
       settingsHome,
     },
     revalidate: 300,
@@ -126,7 +119,7 @@ export default function Home({
       "https://www.linkedin.com/in/minh-tu-authentic-b56732364/"
     ]
   }
-  
+
   return (
     <>
       <Head>
@@ -138,6 +131,7 @@ export default function Home({
       <HomeBanner
         setting={settingsHome[SETTING_KEY.BANNER_SECTION.KEY]}
         banners={homePage?.banners || []}
+        bannersFullWidth={homePage?.bannersFullWidth || []}
         menu={menu}
       />
       <Layout
@@ -156,7 +150,7 @@ export default function Home({
             />
           ) as ReactNode)}
 
-        <LazyLoadHome homePage={homePage} settingsHome={settingsHome} />
+        <HomeContent homePage={homePage} settingsHome={settingsHome} />
       </Layout>
       <Footer settings={settings} footerContent={footerContent} />
     </>

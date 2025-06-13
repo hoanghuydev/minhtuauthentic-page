@@ -9,6 +9,9 @@ import { UserDto } from '@/dtos/User.dto';
 import { MenuDisplay } from '@/config/type';
 import { useRouter } from 'next/router';
 import Loading from '@/components/atoms/loading';
+import { VariantDto } from '@/dtos/Variant.dto';
+import { ProductDto } from '@/dtos/Product.dto';
+
 export type TypeAppState = {
   isOpenMenu: boolean;
   setIsOpenMenu: Dispatch<SetStateAction<boolean>> | undefined;
@@ -21,6 +24,16 @@ export type TypeAppState = {
   setSettings?: Dispatch<SetStateAction<Record<string, string>>> | undefined;
   user?: UserDto;
   setUser?: Dispatch<SetStateAction<UserDto | undefined>> | undefined;
+  showProductFooter: boolean;
+  setShowProductFooter: Dispatch<SetStateAction<boolean>> | undefined;
+  currentVariant?: VariantDto | null;
+  setCurrentVariant: Dispatch<SetStateAction<VariantDto | null>> | undefined;
+  menuProduct?: ProductDto[];
+  setMenuProduct: Dispatch<SetStateAction<ProductDto[]>> | undefined;
+  hintProductCategoryMenu?: Record<number, ProductDto[]>;
+  setHintProductCategoryMenu:
+    | Dispatch<SetStateAction<Record<number, ProductDto[]>>>
+    | undefined;
 };
 
 const AppContext = createContext<TypeAppState | undefined>(undefined);
@@ -34,16 +47,25 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserDto | undefined>();
   const [isOpenNavMenu, setIsOpenNavMenu] = useState(false);
   const [settings, setSettings] = useState({});
+  const [showProductFooter, setShowProductFooter] = useState(false);
+  const [currentVariant, setCurrentVariant] = useState<VariantDto | null>(null);
+  const [menuProduct, setMenuProduct] = useState<ProductDto[]>([]);
+  const [hintProductCategoryMenu, setHintProductCategoryMenu] = useState<
+    Record<number, ProductDto[]>
+  >({});
+
   const router = useRouter();
   useEffect(() => {
     const handleRouteComplete = () => {
       setIsOpenNavMenu(false);
       setIsOpenMenu(false);
       setIsOpenPopupProduct(null);
+      setShowProductFooter(false);
+      setCurrentVariant(null);
     };
     router.events.on('routeChangeComplete', handleRouteComplete);
     return () => {
-      router.events.on('routeChangeComplete', handleRouteComplete);
+      router.events.off('routeChangeComplete', handleRouteComplete);
     };
   }, [router]);
 
@@ -60,6 +82,14 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsOpenMenu,
         settings,
         setSettings,
+        showProductFooter,
+        setShowProductFooter,
+        currentVariant,
+        setCurrentVariant,
+        menuProduct,
+        setMenuProduct,
+        hintProductCategoryMenu,
+        setHintProductCategoryMenu,
       }}
     >
       {children}

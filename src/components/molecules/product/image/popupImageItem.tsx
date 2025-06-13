@@ -39,6 +39,9 @@ export default function PopupImageItem({
           }
         }}
         alt={imageItem.alt || ''}
+        sizes="80px"
+        quality={80}
+        unoptimized={false}
         className={
           'w-full h-full object-contain hover:scale-105 transition-transform duration-300 cursor-pointer'
         }
@@ -49,7 +52,7 @@ export default function PopupImageItem({
   return (
     <div
       className={twMerge(
-        'w-[80px] h-[80px]',
+        'w-[80px] h-[80px] select-none',
         active && 'border-2 overflow-hidden rounded-[10px] border-primary',
       )}
     >

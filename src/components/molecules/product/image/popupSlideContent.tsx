@@ -24,12 +24,15 @@ export default function PopupSlideContent({
 
   return (
     <div
-      className="w-full h-full flex justify-center items-center"
+      className="w-full h-full flex justify-center relative items-center select-none"
       onClick={handleBackgroundClick}
     >
-      <div ref={imageRef} className="relative h-full">
+      <div
+        ref={imageRef}
+        className="relative h-full select-none isolate pointer-events-auto"
+      >
         <ImageWithFallback
-          className={'object-contain h-full w-auto m-auto'}
+          className={'object-contain h-full w-auto m-auto select-none'}
           image={image}
           alt={product.title || product.name}
           unoptimized={true}

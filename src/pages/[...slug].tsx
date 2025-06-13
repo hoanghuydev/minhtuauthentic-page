@@ -15,6 +15,7 @@ import NewsTemplate from '@/components/templates/NewsTemplate';
 import { generateSlugToHref } from '@/utils';
 import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import { ResponseNewsPageDto } from '@/dtos/ResponseNewsPage.dto';
+import NotFoundTemplate from '@/components/templates/NotFoundTemplate';
 
 export const getServerSideProps = async (context: any) => {
   const { slug } = context.query;
@@ -23,7 +24,6 @@ export const getServerSideProps = async (context: any) => {
     image = null,
     width = 0,
     height = 0;
-
   const res = await fetch(
     process.env.BE_URL +
       '/api/pages/slug/' +
@@ -214,7 +214,7 @@ export default function Page({
           </>
         );
       default:
-        return <div>Not Found</div>;
+        return <NotFoundTemplate />;
     }
   };
 
