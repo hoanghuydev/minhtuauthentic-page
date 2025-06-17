@@ -31,7 +31,7 @@ export default function NewsList({ news, total, title }: Props) {
   useEffect(() => {
     if (count > 1) {
       const params = new URLSearchParams(window.location.search);
-      fetch('/api/news?' + params.toString())
+      fetch('/api/news?limit=12&' + params.toString())
         .then((res) => res.json())
         .then((data: { data: ResponseNewsPageDto }) => {
           setNewsList(data?.data?.news || []);
@@ -58,7 +58,7 @@ export default function NewsList({ news, total, title }: Props) {
       </h1>
       {newsList.length > 0 ? (
         <>
-          <div className={'grid grid-cols-1 lg:grid-cols-3 gap-3'}>
+          <div className={'grid grid-cols-2 lg:grid-cols-3 gap-3'}>
             {newsList.map((item: NewsDto, key: number) => {
               return <NewsItem news={item} key={key} />;
             })}

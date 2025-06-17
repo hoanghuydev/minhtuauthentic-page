@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { generateSlugToHref, getTitleNews, truncateString } from '@/utils';
 import Image from 'next/image';
 import NewsClock from '@/components/atoms/news/clock';
+import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 type Props = {
   news: NewsDto[];
 };
@@ -14,19 +15,17 @@ export default function NewsSmallList({ news }: Props) {
       {news.map((item: NewsDto, key: number) => {
         const imageDetail = item?.images?.[0];
         const image = imageDetail?.image || null;
-        const url = image?.url || noImage;
         return (
           <div key={key} className={'flex gap-3 mb-3 last:mb-0  '}>
             <div className={'w-[100px] overflow-hidden basis-[100px] shrink-0'}>
               <Link key={key} href={generateSlugToHref(item.slugs?.slug)}>
-                <Image
-                  src={url}
+                <ImageWithFallback
+                  image={image}
                   alt={imageDetail?.alt || item.name || ''}
                   className={
                     'object-contain rounded-[10px] w-[100px] h-[100px]'
                   }
-                  width={image?.width || 0}
-                  height={image?.height || 0}
+                  unoptimized={false}
                 />
               </Link>
             </div>

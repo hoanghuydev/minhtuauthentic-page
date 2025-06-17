@@ -1,5 +1,5 @@
 import { ProductFilterOptionDto } from '@/dtos/ProductFilterSettingOption/ProductFilterOption.dto';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import SettingFilterItem from '@/components/organisms/categoryFilter/settingFilter/item';
 import { ConcentrationGradientDto } from '@/dtos/ConcentrationGradient.dto';
 import { FragranceRetentionDto } from '@/dtos/FragranceRetention.dto';
@@ -17,8 +17,31 @@ type Props = {
   settings?: ProductFilterOptionDto;
   className?: string;
   isNav?: boolean;
+  brands?: BrandDto[];
 };
-export default function SettingFilter({ settings, className, isNav }: Props) {
+export default function SettingFilter({
+  settings,
+  className,
+  isNav,
+  brands,
+}: Props) {
+  const renderBrands = () => {
+    if (!brands?.length) return null;
+    return (
+      <SettingFilterItem
+        key="brands"
+        filterKey="brands"
+        title={'Nhãn hiệu'}
+        entity={Entity.BRANDS}
+        value={brands.map((item: BrandDto) => ({
+          id: item.id,
+          name: item.name,
+        }))}
+        isNav={isNav}
+      />
+    );
+  };
+
   const renderTree = (): ReactNode[] => {
     let xhtml: { sort: number; data: ReactNode }[] = [];
     Object.keys(settings || {}).forEach((key) => {
@@ -139,30 +162,20 @@ export default function SettingFilter({ settings, className, isNav }: Props) {
               },
             );
           break;
-        case 'brands':
-          (settings?.[key] as BrandDto[]).length > 0 &&
-            xhtml.push({
-              sort: 6,
-              data: (
-                <SettingFilterItem
-                  key={key}
-                  filterKey={key}
-                  title={'Nhãn hiệu'}
-                  entity={Entity.BRANDS}
-                  value={(settings?.[key] || []).map((item: BrandDto) => {
-                    return {
-                      id: item.id,
-                      name: item.name,
-                    };
-                  })}
-                  isNav={isNav}
-                />
-              ),
-            });
-          break;
       }
-    })
-    return orderBy(xhtml, ['sort'], ['asc']).map((item: {sort: number, data: ReactNode}) => item?.data);
+    });
+
+    // Add brands to the tree with sort order 6
+    if (brands?.length) {
+      xhtml.push({
+        sort: 6,
+        data: renderBrands(),
+      });
+    }
+
+    return orderBy(xhtml, ['sort'], ['asc']).map(
+      (item: { sort: number; data: ReactNode }) => item?.data,
+    );
   };
   return <div className={twMerge('p-3', className)}>{renderTree()}</div>;
 }

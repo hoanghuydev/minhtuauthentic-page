@@ -4,18 +4,22 @@ import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { OrderItemsDto } from '@/dtos/OrderItems.dto';
 import { InputNumber } from 'antd/es';
 import { Button } from 'antd/es';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { formatMoney, generateSlugToHref } from '@/utils';
 import Link from 'next/link';
 import PriceOnCart from '@/components/atoms/price/priceOnCart';
-import PriceInput from "@/components/atoms/price/priceInput";
+import PriceInput from '@/components/atoms/price/priceInput';
+import { useRouter } from 'next/router';
 
 export default function CartPreview() {
   const order = useContext(OrderContext);
   const ref = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
   const onChange = (value: null | number, index: number) => {
     order?.updateCart && order.updateCart(index, value || 0);
   };
+
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (ref.current && !ref.current.contains(event.target)) {
@@ -27,11 +31,23 @@ export default function CartPreview() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref]);
+
   return (
     <div className={'flex flex-col gap-3'} ref={ref}>
-      {order?.cart?.items?.length && order?.cart?.items?.length === 0 ? (
-        <div className={'text-center text-lg font-semibold'}>
-          Giỏ hàng trống
+      {order?.cart?.items && order?.cart?.items?.length === 0 ? (
+        <div className={'flex flex-col items-center text-center gap-3'}>
+          <div className={'text-center text-lg font-semibold'}>
+            Giỏ hàng trống
+          </div>
+          <Link href="/">
+            <Button
+              type="primary"
+              icon={<ShoppingOutlined />}
+              className="font-semibold"
+            >
+              Tiếp tục mua sắm
+            </Button>
+          </Link>
         </div>
       ) : (
         <>

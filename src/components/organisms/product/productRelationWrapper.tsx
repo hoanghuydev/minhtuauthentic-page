@@ -1,10 +1,11 @@
 import dynamic from 'next/dynamic';
 import { ProductDto } from '@/dtos/Product.dto';
-import { isMobile, isDesktop } from 'react-device-detect';
 import { ReactNode } from 'react';
 import ProductCard from '@/components/organisms/product/card';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
 import ProductList from '@/components/molecules/product/list';
+import { useIsDesktop } from '@/hooks/useDevice';
+import { useIsMobile } from '@/hooks/useDevice';
 
 const ProductRelation = dynamic(
   () => import('@/components/molecules/product/productRelation'),
@@ -17,6 +18,8 @@ type Props = {
   products: ProductDto[];
 };
 export default function ProductRelationWrapper({ display, products }: Props) {
+  const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
   return (
     <>
       {display === 'mobile' && (

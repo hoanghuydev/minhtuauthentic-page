@@ -1,18 +1,81 @@
 export const IconTruck = ({ className }: { className?: string }) => {
+  const strokeStyle = {
+    stroke: '#fff',
+    fill: 'none',
+    strokeWidth: 1.66,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+  };
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
+      viewBox="0 0 44.22 25.85"
+      height="24"
       className={className}
     >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
-      />
+      <defs></defs>{' '}
+      <g id="Layer_2" data-name="Layer 2">
+        <g id="Layer_1-2" data-name="Layer 1">
+          <circle
+            cx="7.66"
+            cy="22.02"
+            r="3"
+            className="cls-1"
+            style={strokeStyle}
+          ></circle>{' '}
+          <circle
+            cx="24.79"
+            cy="22.02"
+            r="3"
+            className="cls-1"
+            style={strokeStyle}
+          ></circle>{' '}
+          <path
+            d="M28.61,22h4.13a1.44,1.44,0,0,0,1.44-1.44v-6"
+            className=""
+            style={strokeStyle}
+          ></path>{' '}
+          <path
+            d="M27.12.9H14.82a1.44,1.44,0,0,0-1.44,1.44V20.58A1.44,1.44,0,0,0,14.82,22h6.29"
+            className=""
+            style={strokeStyle}
+          ></path>{' '}
+          <path
+            d="M10.27,5.92H6.75A2.65,2.65,0,0,0,4.54,7.11L1.33,12A2.64,2.64,0,0,0,.9,13.47v6.46A2.1,2.1,0,0,0,3,22h.75"
+            className=""
+            style={strokeStyle}
+          ></path>{' '}
+          <path
+            d="M34.18,3.47V2.34A1.44,1.44,0,0,0,32.74.9H25.08"
+            className=""
+            style={strokeStyle}
+          ></path>{' '}
+          <line
+            x1="43.32"
+            y1="6.97"
+            x2="32.57"
+            y2="6.97"
+            className=""
+            style={strokeStyle}
+          ></line>{' '}
+          <line
+            x1="40.5"
+            y1="11.05"
+            x2="32.57"
+            y2="11.05"
+            className=""
+            style={strokeStyle}
+          ></line>{' '}
+          <line
+            x1="42.09"
+            y1="16.33"
+            x2="38.07"
+            y2="16.33"
+            className=""
+            style={strokeStyle}
+          ></line>
+        </g>
+      </g>
     </svg>
   );
 };

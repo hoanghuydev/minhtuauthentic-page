@@ -22,7 +22,7 @@ import dynamic from 'next/dynamic';
 import NavMenuHeader from '@/components/organisms/MobileMenu/navMenu/header';
 import LogoComponent from '@/components/atoms/logo';
 import { LogoProps } from '@/config/type';
-import { isDesktop } from 'react-device-detect';
+import { useIsDesktop } from '@/hooks/useDevice';
 const InputSearchDesktop = dynamic(
   () => import('@/components/molecules/header/InputSearch/desktop'),
   {
@@ -41,6 +41,7 @@ export const Header = ({ menu, settings }: Props) => {
   const router = useRouter();
   const { user, logout } = useUser();
   const orderCtx = useContext(OrderContext);
+  const isDesktop = useIsDesktop();
   const pageHeader = (settings || []).find(
     (item) => item?.key && item?.key === SETTING_KEY.GENERAL.PAGE_HEADER.KEY,
   );
@@ -76,7 +77,7 @@ export const Header = ({ menu, settings }: Props) => {
       </div>
       <header
         id={'header'}
-        className={'bg-primary lg:py-[10px] sticky top-0 left-0 z-[100]'}
+        className={'bg-primary lg:py-[10px] sticky top-0 left-0 z-[20]'}
       >
         <NavMenuHeader
           className={'lg:hidden'}
@@ -132,10 +133,17 @@ export const Header = ({ menu, settings }: Props) => {
               className={'w-max text-left'}
               icon={<HeaderCart className={'w-[40px] h-[40px]'} />}
               isButton
-              onClick={() =>
-                orderCtx?.setIsOpenHeaderCart &&
-                orderCtx?.setIsOpenHeaderCart(!orderCtx?.isOpenHeaderCart)
-              }
+              onClick={() => {
+                if (
+                  !orderCtx?.cart?.items ||
+                  orderCtx.cart.items.length === 0
+                ) {
+                  router.push('/gio-hang/tom-tat');
+                } else {
+                  orderCtx?.setIsOpenHeaderCart &&
+                    orderCtx?.setIsOpenHeaderCart(!orderCtx?.isOpenHeaderCart);
+                }
+              }}
             >
               <p>Giỏ</p>
               <p>hàng</p>

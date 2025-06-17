@@ -85,15 +85,22 @@ export default function BrandsTemplate({ brands }: Props) {
                 key={index}
               >
                 <h4
-                  className={
-                    'flex items-center justify-center font-[700] lg:font-bold text-primary w-[25px] lg:w-[50px] px-[2rem] lg:px-[3rem]'
-                  }
+                  className={twMerge(
+                    'flex items-center justify-center font-[700] lg:font-bold w-[25px] lg:w-[50px] px-[2rem] lg:px-[3rem]',
+                    letterActive === item.keyword
+                      ? 'text-primary'
+                      : 'text-gray-700',
+                  )}
                 >
                   <span className={'text-[1.3rem] lg:text-[2.5rem]'}>
                     {item.keyword}
                   </span>
                 </h4>
-                <div className={'grid grid-cols-4 LG:grid-cols-5 gap-3'}>
+                <div
+                  className={
+                    'grid grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3'
+                  }
+                >
                   {item.data.map((brand, index) => {
                     return <BrandWithImage brand={brand} key={index} />;
                   })}

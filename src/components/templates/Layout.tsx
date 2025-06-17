@@ -6,7 +6,7 @@ import { SettingsDto } from '@/dtos/Settings.dto';
 import DefaultSeo from '@/components/molecules/seo';
 import { SEOProps } from '@/config/type';
 import dynamic from 'next/dynamic';
-import { isDesktop, isMobile } from 'react-device-detect';
+import { useIsDesktop, useIsMobile } from '@/hooks/useDevice';
 type Props = {
   className?: string;
   children: ReactNode;
@@ -61,6 +61,8 @@ export default function Layout({
   settings,
   seo,
 }: Props) {
+  const isDesktop = useIsDesktop();
+  const isMobile = useIsMobile();
   return (
     <>
       <DefaultSeo settings={settings} seo={seo} />

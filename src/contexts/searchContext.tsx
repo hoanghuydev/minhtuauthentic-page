@@ -41,7 +41,11 @@ export const SearchProvider = ({ children }: { children: React.ReactNode }) => {
   const saveKeyword = useCallback(() => {
     const keyword: string | null = localStorage.getItem(SEARCH_KEYWORD);
     const keywordList: string[] = keyword ? keyword.toString().split(',') : [];
-    if (!keywordList.includes(debounceValue)) {
+    const listOfDebounceValue: string[] = debounceValue.toString().split(' ');
+    if (
+      !keywordList.includes(debounceValue) &&
+      listOfDebounceValue.length < 20
+    ) {
       if (keywordList.length >= 10) {
         keywordList.pop();
       }

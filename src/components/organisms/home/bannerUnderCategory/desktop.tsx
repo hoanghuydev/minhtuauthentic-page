@@ -21,47 +21,43 @@ export default function BannerUnderCategoryDesktop({
   contents: StaticContentsDto[];
   className?: string;
 }) {
-  // Divide contents into chunks of 2 for displaying 2 images per slide
-  const groupedContents = [];
-  for (let i = 0; i < contents.length; i += 2) {
-    groupedContents.push(contents.slice(i, i + 2));
-  }
-
   return (
     <div className={'mt-3'}>
       <Swiper
         className={className || 'rounded-[10px] overflow-hidden'}
-        spaceBetween={50}
-        slidesPerView={1}
+        spaceBetween={20}
+        slidesPerView={2}
+        slidesPerGroup={1}
         pagination={true}
         modules={[Pagination, Autoplay]}
         autoplay={{
           delay: 6000,
         }}
         loop={true}
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+          },
+          768: {
+            slidesPerView: 2,
+          },
+        }}
       >
-        {groupedContents.map((group, groupIndex) => (
-          <SwiperSlide key={`group-${groupIndex}`}>
-            <div className={'grid grid-cols-1 md:grid-cols-2 gap-3'}>
-              {group.map((content, index) => {
-                const image = content?.images?.[0];
-                if (!image || !image.image) return null;
+        {contents.map((content, index) => {
+          const image = content?.images?.[0];
+          if (!image || !image.image) return null;
 
-                return (
-                  <div
-                    key={`${groupIndex}-${index}`}
-                    className="rounded-[10px] overflow-hidden"
-                  >
-                    <ImageWithRatio
-                      image={image.image}
-                      href={generateSlugToHref(content?.properties?.slug)}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </SwiperSlide>
-        ))}
+          return (
+            <SwiperSlide key={`content-${index}`}>
+              <div className="rounded-[10px] overflow-hidden">
+                <ImageWithRatio
+                  image={image.image}
+                  href={generateSlugToHref(content?.properties?.slug)}
+                />
+              </div>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </div>
   );

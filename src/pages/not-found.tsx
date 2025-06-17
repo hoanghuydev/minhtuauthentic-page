@@ -3,6 +3,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { ServerSideProps } from '@/config/type';
 import Header from '@/components/organisms/header';
 import Layout from '@/components/templates/Layout';
+import NotFoundTemplate from '@/components/templates/NotFoundTemplate';
 
 export const getServerSideProps = (async () => {
   const resDefault = await getDefaultSeverSide();
@@ -10,6 +11,7 @@ export const getServerSideProps = (async () => {
     props: resDefault,
   };
 }) satisfies GetServerSideProps<ServerSideProps>;
+
 export default function NotFoundPage({
   menu,
   settings,
@@ -18,7 +20,7 @@ export default function NotFoundPage({
     <>
       <Header settings={settings} menu={menu} />
       <Layout settings={settings} menu={menu}>
-        <h3>Not Found</h3>
+        <NotFoundTemplate />
       </Layout>
     </>
   );

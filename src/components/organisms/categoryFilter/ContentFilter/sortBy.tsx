@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { generateSlugToHref } from '@/utils';
 import { twMerge } from 'tailwind-merge';
 import { CATEGORY_FILTER } from '@/config/enum';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CategoryFilterContext from '@/contexts/categoryFilterContext';
 
 type SortBy = {
@@ -14,6 +14,36 @@ type Props = {
 };
 export default function SortBy({ isNeedWrapper }: Props) {
   const ctx = useContext(CategoryFilterContext);
+  const [currentSort, setCurrentSort] = useState<string>(
+    ctx?.sortBy || CATEGORY_FILTER.SORT_BY.DATE_DESC,
+  );
+
+  // Đồng bộ với URL khi URL thay đổi
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleURLChange = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sortParam = urlParams.get('sort');
+        if (sortParam) {
+          setCurrentSort(sortParam);
+        }
+      };
+
+      window.addEventListener('popstate', handleURLChange);
+
+      return () => {
+        window.removeEventListener('popstate', handleURLChange);
+      };
+    }
+  }, []);
+
+  // Đồng bộ với context khi sortBy thay đổi
+  useEffect(() => {
+    if (ctx?.sortBy && ctx.sortBy !== currentSort) {
+      setCurrentSort(ctx.sortBy);
+    }
+  }, [ctx?.sortBy]);
+
   const sortBy: SortBy[] = [
     {
       name: 'Cũ nhất',
@@ -57,7 +87,7 @@ export default function SortBy({ isNeedWrapper }: Props) {
               }
               className={twMerge(
                 'bg-[#f3f4f6] border border-[#e5e7eb] rounded-[10px] text-[12px] p-[5px_10px] transition-colors duration-300',
-                ctx?.sortBy === sort.value && 'bg-primary text-white',
+                currentSort === sort.value && 'bg-primary text-white',
               )}
             >
               <span>{sort.name}</span>

@@ -13,7 +13,7 @@ import { KEYCODE, SEARCH_KEYWORD } from '@/config/enum';
 import { SearchData } from '@/config/type';
 import appContext from '@/contexts/appContext';
 import dynamic from 'next/dynamic';
-import { isDesktop, isMobile } from 'react-device-detect';
+import { useIsDesktop, useIsMobile } from '@/hooks/useDevice';
 import { SettingsDto } from '@/dtos/Settings.dto';
 import InputSearch from '@/components/molecules/header/InputSearch/input';
 import searchContext from '@/contexts/searchContext';
@@ -28,6 +28,8 @@ export const InputSearchDesktop = ({ classname, isForMobile }: Props) => {
   const ctx = useContext(searchContext);
   const ref = useRef<HTMLDivElement | null>(null);
   const [ready, setReady] = useState<boolean>(false);
+  const isDesktop = useIsDesktop();
+  const isMobile = useIsMobile();
   useEffect(() => {
     setReady(true);
   }, []);

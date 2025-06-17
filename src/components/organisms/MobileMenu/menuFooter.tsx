@@ -9,6 +9,8 @@ import MapIconFooter from '@/components/icons/menuFooter/Map';
 import AppContext from '@/contexts/appContext';
 import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
+import ProductFooterActions from '@/components/molecules/product/productFooterActions';
+
 type Props = {
   isFixed?: boolean;
   className?: string;
@@ -17,6 +19,7 @@ export default function MenuFooter({ isFixed, className }: Props) {
   const user = useUser();
   const appCtx = useContext(AppContext);
   const router = useRouter();
+
   const elementFooter: {
     icon: ReactNode;
     label: string;
@@ -78,13 +81,36 @@ export default function MenuFooter({ isFixed, className }: Props) {
         className={'flex flex-col gap-1 justify-center flex-1'}
         onClick={item.onClick}
       >
-        <div className={'mx-auto '}>{item.icon}</div>
-        <span className={'text-sm text-center'}>{item.label}</span>
+        <div className={'mx-auto'}>{item.icon}</div>
+        <span
+          className={
+            'text-sm text-center max-w-20 mx-auto line-clamp-1 text-ellipsis overflow-hidden'
+          }
+        >
+          {item.label}
+        </span>
       </div>
     ) as ReactNode;
   };
 
   const renderFooter = () => {
+    // Conditionally render product footer or default footer
+    if (appCtx?.showProductFooter) {
+      return (
+        <div
+          className={twMerge(
+            'lg:hidden bg-white shadow-custom text-gray-900 w-full rounded-tr-2xl rounded-tl-2xl ',
+            isFixed && 'fixed bottom-0 left-0 z-[1001]',
+            className,
+          )}
+        >
+          <div className={'p-3 flex items-center justify-center'}>
+            <ProductFooterActions />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div
         className={twMerge(
@@ -106,11 +132,9 @@ export default function MenuFooter({ isFixed, className }: Props) {
 
   return (
     <>
-      {
-      isFixed
+      {isFixed
         ? createPortal(renderFooter() as ReactNode, document.body)
-        : renderFooter()
-        }
+        : renderFooter()}
     </>
   );
 }

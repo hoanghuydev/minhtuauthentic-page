@@ -16,7 +16,7 @@ export default function CustomScript({ isHaveFudiin }: Props) {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = 'https://pc.baokim.vn/js/bk_plus_v2.popup.js';
+    script.src = 'https://pc.baokim.vn/js/bk_plus_v2.popup.js?t=34';
     script.async = true;
     if (isHaveFudiin) {
       const script2 = document.createElement('script');

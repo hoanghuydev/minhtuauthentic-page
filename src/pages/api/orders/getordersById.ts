@@ -1,31 +1,29 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { handleDataFetch } from '@/utils/api';
-
+import { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'GET') {
-    const query = req.query;
-    const url = `${process.env.BE_URL}/api/pages/orders/getById/` + query.id;
-    const rs = await fetch(url, {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
+
+  try {
+    const { id } = req.query;
+    const url = `${process.env.BE_URL}/api/orders/${id}`;
+    const order = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + req.cookies['token'] || '',
       },
-      body: req.body,
     })
       .then((response) => response.json())
       .then((data) => {
-        const _data = handleDataFetch(data, res);
-        res.status(200).json(_data);
-      })
-      .catch((error) => {
-        res
-          .status(error?.response?.statusCode || error?.status || 500)
-          .json(error);
+        return data;
       });
-    res.status(200).json(rs);
+    return res.status(200).json(order);
+  } catch (error) {
+    console.error('Error fetching order:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }

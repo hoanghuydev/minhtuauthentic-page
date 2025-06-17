@@ -2,7 +2,7 @@ import { ProductDto } from '@/dtos/Product.dto';
 import { twMerge } from 'tailwind-merge';
 import ProductPrice from '@/components/molecules/product/price';
 import { Star } from '@/components/icons/star';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { ProductConfigurationsDto } from '@/dtos/productConfigurations.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
 import ProductConfiguration from '@/components/molecules/product/configuration';
@@ -15,6 +15,8 @@ import { Rate } from 'antd/es';
 import { SettingsDto } from '@/dtos/Settings.dto';
 import { useRouter } from 'next/router';
 import ProductDetailContext from '@/contexts/productDetailContext';
+import AppContext from '@/contexts/appContext';
+import { useIsMobile } from '@/hooks/useDevice';
 type Props = {
   product: ProductDto;
   productConfigurations: ProductConfigurationsDto[];
@@ -25,12 +27,45 @@ const ProductProperty = ({
   productConfigurations,
   settings,
 }: Props) => {
+  const isMobile = useIsMobile();
   const productContext = useContext(ProductDetailContext);
   const variantMap = new Map<number, VariantDto>(
     (product?.variants || []).map((variant) => [variant.id || 0, variant]),
   );
+  const appContext = useContext(AppContext);
+  const overviewRef = useRef<HTMLDivElement>(null);
   const [variantConfigurationValueMap, setVariantConfigurationValueMap] =
     useState<Map<number, VariantDto> | null>(null);
+
+  useEffect(() => {
+    if (isMobile) {
+      const handleScroll = () => {
+        if (!overviewRef.current) return;
+
+        const overviewRect = overviewRef.current.getBoundingClientRect();
+        const buyButtonArea = overviewRect.bottom;
+
+        if (buyButtonArea < 150 && appContext?.setShowProductFooter) {
+          appContext.setShowProductFooter(true);
+
+          if (appContext.setCurrentVariant && productContext?.variantActive) {
+            appContext.setCurrentVariant(productContext.variantActive);
+          }
+        } else if (buyButtonArea >= 150 && appContext?.setShowProductFooter) {
+          appContext.setShowProductFooter(false);
+        }
+      };
+
+      window.addEventListener('scroll', handleScroll);
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+
+        appContext?.setShowProductFooter &&
+          appContext.setShowProductFooter(false);
+        appContext?.setCurrentVariant && appContext.setCurrentVariant(null);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const _variantConfigurationValueMap = new Map<number, VariantDto>();
@@ -161,7 +196,9 @@ const ProductProperty = ({
       </div>
       <div className={'mt-3'}>
         {productContext?.variantActive && (
-          <ProductCartCheckout variant={productContext?.variantActive} />
+          <div ref={overviewRef}>
+            <ProductCartCheckout variant={productContext?.variantActive} />
+          </div>
         )}
       </div>
       <PromotionDescription
@@ -176,7 +213,7 @@ const ProductProperty = ({
             return (
               <Link
                 key={index}
-                className={'text-gray-400'}
+                className={'text-[#323232] hover:text-primary'}
                 href={generateSlugToHref(item.category?.slugs?.slug)}
               >
                 {(item.category?.name || '') +

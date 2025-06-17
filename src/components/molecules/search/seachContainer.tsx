@@ -27,6 +27,7 @@ import { NewsDto } from '@/dtos/News.dto';
 import { ProductDto } from '@/dtos/Product.dto';
 import InputSearch from '@/components/molecules/header/InputSearch/input';
 import { type InputRef } from 'antd';
+import { useRouter } from 'next/router';
 
 type Props = {
   classNameInput?: string;
@@ -40,6 +41,7 @@ export default function SearchContainer({
   isMobile,
 }: Props) {
   const ctx = useContext(SearchContext);
+  const router = useRouter();
   const [data, setData] = useState<SearchData | undefined>(undefined);
   const [urlSearch, setUrlSearch] = useState<string>('');
   const [height, setHeight] = useState<number>(0);
@@ -77,8 +79,8 @@ export default function SearchContainer({
   useEffect(() => {
     if (ctx?.isOpenSearch && inputRef.current) {
       inputRef.current.focus();
-    } else if (!ctx?.isOpenSearch) {
-      setData(undefined);
+    } else if (!ctx?.isOpenSearch && data) {
+      // setData(undefined);
     }
   }, [ctx?.isOpenSearch]);
 
@@ -119,18 +121,29 @@ export default function SearchContainer({
     };
   }, []);
 
+  // Add route change handler
+  useEffect(() => {
+    const handleRouteChange = () => {
+      if (ctx?.setIsOpenSearch) {
+        ctx.setIsOpenSearch(false);
+      }
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router.events, ctx]);
+
   const renderItemList = useMemo(() => {
     return (
       <div className={'flex flex-col lg:col-span-2 gap-3'}>
-        {data?.products.length || loading ? (
+        {(data?.products || []).length || loading ? (
           <ul className={'grid grid-cols-3 lg:grid-cols-4'}>
             {(data?.products || []).map((item: ProductDto, index: number) => {
               const variant = item?.variants?.[0];
               return (
-                <li
-                  key={index}
-                  className={'shadow-[-1px_1px_#e1e1e1] p-[3px]'}
-                >
+                <li key={index} className={'shadow-[-1px_1px_#e1e1e1] p-[3px]'}>
                   <a
                     className={'flex flex-col gap-3'}
                     href={generateSlugToHref(item?.slugs?.slug)}
@@ -173,7 +186,7 @@ export default function SearchContainer({
       <div className={'flex flex-col'}>
         <p className={'font-bold text-xl border-b mb-3'}>Tin tức</p>
         <div className={'flex flex-col gap-3'}>
-          {data?.news.map((item: NewsDto, index: number) => {
+          {(data?.news || []).map((item: NewsDto, index: number) => {
             return (
               <a href={generateSlugToHref(item?.slugs?.slug)} key={index}>
                 <p>{item?.name}</p>
@@ -193,17 +206,22 @@ export default function SearchContainer({
 
   const renderOldKeyword = () => {
     const keyword: string | null = localStorage.getItem(SEARCH_KEYWORD);
-    const keywordList: string[] = keyword ? keyword.toString().split(',') : [];
+    let keywordList: string[] = keyword ? keyword.toString().split(',') : [];
+    keywordList = keywordList.filter((item) => item.length > 0);
+    keywordList = keywordList.slice(0, 10);
     return (
       <>
         {keywordList.length > 0 && (
           <>
-            <p className={'font-bold text-md'}>Bạn đã tìm kiếm</p>
+            <p className={'font-bold text-md'}>BẠN ĐÃ TÌM KIẾM</p>
             {
               <div className={'flex flex-wrap gap-2'}>
                 {keywordList.map((item, index) => {
                   return (
-                    <Tag key={index}>
+                    <Tag
+                      key={index}
+                      className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap"
+                    >
                       <a
                         className={'lg:text-[14px]'}
                         href={'/san-pham?search=' + item}
@@ -224,11 +242,15 @@ export default function SearchContainer({
   const renderFeatureBrand = () => {
     return (
       <>
-        <p className={'font-bold text-md'}>Thương hiệu nổi bật</p>
+        <p className={'font-bold text-md'}>THƯƠNG HIỆU NỔI BẬT</p>
         {isLoadingBrand ? (
           <Loading center />
         ) : (
-          <div className={'grid grid-cols-3 max-lg:gap-x1 lg:grid-cols-6'}>
+          <div
+            className={
+              'grid grid-cols-4 max-lg:gap-x1 lg:grid-cols-8 xl:grid-cols-10'
+            }
+          >
             {dataFeatureBrand?.data?.brands.map((item, index) => {
               return (
                 <a
@@ -253,7 +275,7 @@ export default function SearchContainer({
   const renderFeatureCategory = () => {
     return (
       <>
-        <p className={'font-bold text-md'}>Danh mục nổi bật</p>
+        <p className={'font-bold text-md'}>DANH MỤC NỔI BẬT</p>
         {isLoadingFeatureCategory ? (
           <Loading center />
         ) : (
@@ -271,7 +293,9 @@ export default function SearchContainer({
                     <ImageWithFallback
                       image={item?.images?.[0].image}
                       className={'w-[70px] h-[70px]'}
-                      unoptimized={true}
+                      sizes="100px"
+                      unoptimized={false}
+                      quality={80}
                     />
                     <p className={'text-center'}>{item?.title}</p>
                   </a>
@@ -333,10 +357,7 @@ export default function SearchContainer({
                     'fixed bg-white inset-0 w-[100dvw] h-[100dvh] z-[10000] flex flex-col overflow-hidden'
                   }
                 >
-                  <div
-                    className={'overflow-auto flex flex-col h-full'}
-                    
-                  >
+                  <div className={'overflow-auto flex flex-col h-full'}>
                     <div className={'bg-primary'}>
                       <NavbarMenuListButton settings={settings} />
                       <div
@@ -350,6 +371,13 @@ export default function SearchContainer({
                           }}
                           onCloseClick={() => {
                             ctx?.setIsOpenSearch && ctx.setIsOpenSearch(false);
+                          }}
+                          onSearchClick={() => {
+                            ctx?.saveKeyword && ctx.saveKeyword();
+                            if (inputRef.current) {
+                              inputRef.current.blur();
+                            }
+                            window.location.href = `/san-pham?search=${ctx?.debounceValue}`;
                           }}
                           onKeyUp={(e: unknown) => {
                             if ((e as KeyboardEvent).key === KEYCODE.ENTER) {
@@ -373,7 +401,7 @@ export default function SearchContainer({
           ) : (
             <div
               className={twMerge(
-                'absolute text-black top-[50px] bg-white w-[65vw] max-w-[1140px] rounded-[10px] left-0 shadow-custom2 z-[100]',
+                'absolute text-black top-[60px] bg-white w-[65vw] max-w-[1140px] rounded-[10px] left-[50%] translate-x-[-25%] shadow-custom2 z-[100]',
                 classNameInput,
               )}
             >

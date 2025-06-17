@@ -2,7 +2,7 @@ import { OrdersDto } from '@/dtos/Orders.dto';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import { formatMoney, statusOrder } from '@/utils';
-import { isDesktop, isMobile, MobileView } from 'react-device-detect';
+import { useIsDesktop, useIsMobile } from '@/hooks/useDevice';
 import dynamic from 'next/dynamic';
 import { DatePicker } from 'antd';
 import { useEffect, useState } from 'react';
@@ -27,6 +27,8 @@ export default function HistoryList() {
     dayjs().add(1, 'd').format('YYYY-MM-DD'),
   ]);
   const [loading, setLoading] = useState<boolean>(false);
+  const isDesktop = useIsDesktop();
+  const isMobile = useIsMobile();
   const column = [
     {
       title: 'Mã số',

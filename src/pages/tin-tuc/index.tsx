@@ -6,7 +6,7 @@ import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import Layout from '@/components/templates/Layout';
 import { PageSetting } from '@/config/type';
 import dynamic from 'next/dynamic';
-
+import { useIsMobile } from '@/hooks/useDevice';
 const NewsCategoryMobile = dynamic(
   () => import('@/components/organisms/news/categoryMobile'),
   {
@@ -17,7 +17,7 @@ const NewsCategoryMobile = dynamic(
 export const getServerSideProps = async (context: any) => {
   const page = context.query.page;
   const rsNews: { data: ResponseNewsPageDto } = await fetch(
-    process.env.BE_URL + `/api/pages/news?page=${page || 1}`,
+    process.env.BE_URL + `/api/pages/news?page=${page || 1}&limit=12`,
     {},
   )
     .then((res) => res.json())
@@ -37,12 +37,16 @@ export default function News({
 }: {
   news: ResponseNewsPageDto;
 } & PageSetting) {
+  const isMobile = useIsMobile();
   return (
     <>
       <Header settings={settings} menu={menu} />
       <Layout settings={settings} menu={menu}>
-        <NewsCategoryMobile categoryNews={news?.otherCategoryNews || []} />
-        <BreadcrumbComponent label={'Tin tức'} link={'/tin-tuc'} />
+        <BreadcrumbComponent
+          label={'Tin tức'}
+          link={'/tin-tuc'}
+          className="overflow-auto"
+        />
         <NewsTemplate
           news={news?.news || []}
           categoryNews={news?.otherCategoryNews || []}

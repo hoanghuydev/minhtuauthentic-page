@@ -5,19 +5,22 @@ type Props = {
   className?: string;
 };
 export default function Countdown({ end_date, className }: Props) {
-  const commonClass =
-    'bg-white p-1 lg:p-2 rounded-[10px] border border-gray-200 max-lg:text-sm';
+  const digitClass =
+    'bg-white text-primary w-8 h-8 flex items-center justify-center mx-1 rounded-md text-[15px] font-bold';
+  const labelClass = 'text-white text-xs font-medium';
+  const containerClass = 'bg-primary p-1 rounded-md flex flex-col items-center';
+
   const refInterval = useRef<NodeJS.Timeout | null>(null);
   const [countdown, setCountdown] = useState<{
-    hours: string;
-    minutes: string;
-    seconds: string;
-    day: string;
+    hours: string[];
+    minutes: string[];
+    seconds: string[];
+    day: string[];
   }>({
-    hours: '00',
-    minutes: '00',
-    seconds: '00',
-    day: '00',
+    hours: ['0', '0'],
+    minutes: ['0', '0'],
+    seconds: ['0', '0'],
+    day: ['0', '0'],
   });
   useEffect(() => {
     startTimer();
@@ -53,25 +56,62 @@ export default function Countdown({ end_date, className }: Props) {
       seconds = seconds < 10 ? '0' + seconds : seconds.toString();
 
       setCountdown({
-        day,
-        hours,
-        minutes,
-        seconds,
+        day: day.split(''),
+        hours: hours.split(''),
+        minutes: minutes.split(''),
+        seconds: seconds.split(''),
       });
     }
     timer();
     refInterval.current = setInterval(timer, 1000);
   }
   return (
-    <div className={className}>
-      <p className={'text-white text-2xl'}>Kết thúc sau: </p>
-      <div className={twMerge('flex gap-3')}>
-        <span className={commonClass}>{countdown.day}</span>
-        <span className={commonClass}>{countdown.hours}</span>
-        <span className={commonClass}>{countdown.minutes}</span>
-        <span className={commonClass}>{countdown.seconds}</span>
+    <div className="grid place-items-center pt-2">
+      <div className={twMerge('flex gap-1', className)}>
+        <div className={containerClass}>
+          <span className={labelClass}>NGÀY</span>
+          <div className="flex">
+            {countdown.day.map((digit, index) => (
+              <div key={`day-${index}`} className={digitClass}>
+                {digit}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={containerClass}>
+          <span className={labelClass}>GIỜ</span>
+          <div className="flex">
+            {countdown.hours.map((digit, index) => (
+              <div key={`hour-${index}`} className={digitClass}>
+                {digit}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={containerClass}>
+          <span className={labelClass}>PHÚT</span>
+          <div className="flex">
+            {countdown.minutes.map((digit, index) => (
+              <div key={`minute-${index}`} className={digitClass}>
+                {digit}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={containerClass}>
+          <span className={labelClass}>GIÂY</span>
+          <div className="flex">
+            {countdown.seconds.map((digit, index) => (
+              <div key={`second-${index}`} className={digitClass}>
+                {digit}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
-
   );
 }

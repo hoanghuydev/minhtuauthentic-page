@@ -4,7 +4,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     const urlSearch = new URLSearchParams(req.query as any);
 
-    const url = `${process.env.BE_URL}/api/pages/products/listWithId/?${urlSearch.toString()}`;
+    const url = `${
+      process.env.BE_URL
+    }/api/pages/products/listWithId/?${urlSearch.toString()}`;
     return fetch(url, {
       method: 'GET',
       headers: {

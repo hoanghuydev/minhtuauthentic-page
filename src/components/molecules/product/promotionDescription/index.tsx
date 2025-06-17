@@ -42,7 +42,14 @@ export default function PromotionDescription({
         )}
         onClick={() => onChange(index)}
       >
-        <span className={'font-[700] lg:font-bold'}>{text}</span>
+        <span
+          className={twMerge(
+            'font-[700] lg:font-bold',
+            active && 'text-primary',
+          )}
+        >
+          {text}
+        </span>
       </button>
     );
   };

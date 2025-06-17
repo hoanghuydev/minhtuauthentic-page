@@ -4,7 +4,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const url = `${process.env.BE_URL}/api/pages/feature-brand?limit=12`;
+  const url = `${process.env.BE_URL}/api/pages/feature-brand?limit=20`;
 
   if (req.method === 'GET') {
     const config: Record<string, unknown> = {

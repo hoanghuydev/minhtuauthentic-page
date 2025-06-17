@@ -8,81 +8,141 @@ import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
+import supportMenu from '@/static/images/support_menu_icon.png';
+import Image from 'next/image';
+import { useIsMobile } from '@/hooks/useDevice';
+
 const fetcher = () =>
   fetch('/api/static-contents/' + STATIC_COMPONENT_TYPE.SOCIALS, {
     method: 'GET',
   }).then((res) => res.json());
+
 export default function Socials() {
+  const isMobile = useIsMobile();
   const { data, error } = useSWR(
     '/api/static-contents/' + STATIC_COMPONENT_TYPE.SOCIALS,
     fetcher,
   );
-  const [display, setDisplay] = useState<StaticContentsDto[][]>([]);
+  const [display, setDisplay] = useState<StaticContentsDto[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
     if (data) {
       const socials = data?.data as StaticContentsDto[];
-      const left = (socials || []).filter(
-        (social) =>
-          social.properties?.direction === BLOCK_UNDER_CATEGORY_POSITION.LEFT,
-      );
-      const right = (socials || []).filter(
-        (social) =>
-          social.properties?.direction === BLOCK_UNDER_CATEGORY_POSITION.RIGHT,
-      );
-      setDisplay([left, right]);
+      setDisplay(socials || []);
     }
   }, [data]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <>
-      {display.map((socials, index) => {
-        return (
-          <div
-            key={index + 'socials-position'}
-            className={twMerge(
-              'fixed bottom-20 z-50 transition-all duration-500  flex flex-col gap-3',
-              index === 0 ? 'left-3' : 'right-3',
-            )}
-          >
-            {socials.map((social, index2) => {
-              return (
-                <div
-                  className={twMerge(
-                    'flex items-center group',
-                    index === 0
-                      ? 'flex-row-reverse justify-end'
-                      : 'flex-row justify-end',
-                  )}
-                  key={index2 + '-social'}
+      {/* Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Main social media toggle button */}
+      <div
+        className={twMerge(
+          'fixed right-8 bottom-[155px] z-50 flex flex-col gap-3 items-end',
+          isMobile ? 'right-4' : 'right-8',
+        )}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {/* Social media list */}
+        {isOpen && (
+          <div className="mb-3 flex flex-col gap-3">
+            {display.map((social, index) => (
+              <div
+                key={index + '-social'}
+                className="flex items-center group bg-primary text-white rounded-full justify-between"
+              >
+                <Link
+                  href={social?.properties?.url?.trim() || '/'}
+                  className="py-2 pr-[10px] pl-3  flex items-center"
                 >
-                  <Link
-                    href={social?.properties?.url?.trim() || '/'}
-                    className={twMerge(
-                      'py-2 bg-primary text-white relative transition-all duration-300 invisible hidden opacity-0 group-hover:visible group-hover:opacity-100 group-hover:block ',
-                      index === 0
-                        ? 'pl-[25px] pr-3  -translate-x-5 group-hover:-translate-x-6 rounded-tr-full rounded-br-full'
-                        : 'pr-[25px] pl-3  translate-x-5 group-hover:translate-x-6 rounded-tl-full rounded-bl-full',
-                    )}
-                  >
-                    {social?.title || 'Follow us'}
+                  {social?.title || 'Follow us'}
+                </Link>
+                <div className="z-[2]">
+                  <Link href={social?.properties?.url?.trim() || '/'}>
+                    <ImageWithFallback
+                      className="w-[42px] h-[42px] object-contain rounded-full"
+                      image={social?.images?.[0]?.image}
+                    />
                   </Link>
-                  <div className={'z-[2] '}>
-                    <Link href={social?.properties?.url?.trim() || '/'}>
-                      <ImageWithFallback
-                        className={
-                          'w-[42px] h-[42px] object-contain rounded-full'
-                        }
-                        image={social?.images?.[0]?.image}
-                      />
-                    </Link>
-                  </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
-        );
-      })}
+        )}
+
+        {/* Toggle button */}
+        <button
+          className="w-[48px] h-[48px] bg-transparent select-none overflow-hidden rounded-full flex items-center justify-center text-white"
+          aria-label="Nút đóng mở menu hỗ trợ"
+        >
+          {/* Temporary icon (can be replaced later) */}
+          <Image
+            src={supportMenu}
+            alt="Hỗ trợ"
+            className="w-[48px] h-[48px] bg-white"
+          />
+        </button>
+      </div>
+      <div
+        className={twMerge(
+          'fixed  bottom-24 mb-2 z-50 flex flex-col gap-3 items-end',
+          isMobile ? 'right-4' : 'right-8',
+        )}
+      >
+        {/* Back to top button */}
+        {showBackToTop && (
+          <button
+            onClick={scrollToTop}
+            className="w-[48px] h-[48px] bg-primary rounded-full flex flex-col items-center justify-center text-white mt-3 z-50"
+            aria-label="Back to top"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[14px] w-[22px]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+            <span className="text-xs">Lên đầu</span>
+          </button>
+        )}
+      </div>
     </>
   );
 }

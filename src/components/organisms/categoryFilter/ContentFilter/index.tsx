@@ -15,6 +15,7 @@ import { CategoryDto } from '@/dtos/Category.dto';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import Link from 'next/link';
 import { generateSlugToHref } from '@/utils';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
   settings?: ProductFilterOptionDto;
@@ -38,10 +39,35 @@ export default function ContentFilter({
   const ctx = useContext(CategoryFilterContext);
   const [_products, setProducts] = useState<ProductDto[]>(products);
   const [isReady, setIsReady] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState<string>(
+    typeof window !== 'undefined' ? window.location.search : '',
+  );
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleURLChange = () => {
+        setCurrentUrl(window.location.search);
+      };
+
+      window.addEventListener('popstate', handleURLChange);
+
+      return () => {
+        window.removeEventListener('popstate', handleURLChange);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     ctx?.setTotal && ctx.setTotal(total);
-  }, []);
+  }, [total]);
+
+  // Cập nhật products khi props products thay đổi (SSR)
+  useEffect(() => {
+    if (products?.length > 0) {
+      setProducts(products);
+      ctx?.setProducts && ctx.setProducts(products);
+    }
+  }, [products]);
 
   const convertSettingToObject = () => {
     let obj: Record<string, Record<string, string>> = {
@@ -58,7 +84,6 @@ export default function ContentFilter({
           switch (setting) {
             case 'concentration_gradients':
             case 'fragrance_retention':
-            case 'brands':
             case 'categories':
               obj[setting] = value.reduce((acc, item) => {
                 acc[item.id] = item.name;
@@ -85,9 +110,11 @@ export default function ContentFilter({
     }
     return obj;
   };
+
   useEffect(() => {
     setIsReady(true);
   }, []);
+
   useEffect(() => {
     if (
       ctx?.setObjFilterByValue &&
@@ -98,12 +125,18 @@ export default function ContentFilter({
     if (ctx?.setDataSlug) {
       ctx.setDataSlug(slugData);
     }
-  }, []);
-  useEffect(() => {
-    if (isReady) {
-      setProducts((ctx?.products || []) as ProductDto[]);
+    // Initialize products from SSR
+    if (ctx?.setProducts && products?.length > 0) {
+      ctx.setProducts(products);
     }
-  }, [ctx?.products]);
+  }, []);
+
+  useEffect(() => {
+    if (isReady && ctx?.products) {
+      setProducts(ctx.products);
+    }
+  }, [ctx?.products, isReady]);
+
   const renderProduct = useMemo(() => {
     return (
       <>
@@ -118,14 +151,15 @@ export default function ContentFilter({
                 (item) => item.is_default || [],
               );
               if (!variant) {
-                return;
+                return null;
               }
               return (
                 <ProductCard
-                  key={product.id}
+                  key={`${product.id}-${variant.id}`}
                   product={product}
                   variant={variant}
                   isShowListVariant={true}
+                  preloadVariants={true}
                 />
               );
             })}
@@ -156,24 +190,42 @@ export default function ContentFilter({
               {title}
             </span>
           </h1>
-
           {category?.children && category?.children?.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {category.children.map((child) => (
-                <Link
-                  key={child.id}
-                  href={generateSlugToHref(child.slugs?.slug)}
-                  className="px-3 py-1 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm transition-colors"
+              {category.children.map((child, index) => (
+                <button
+                  type={'button'}
+                  key={index}
+                  onClick={() => {
+                    ctx?.updateRouter &&
+                      ctx.updateRouter('child', child.slugs?.slug || 'my-pham');
+                  }}
+                  className={twMerge(
+                    'bg-[#f3f4f6] border border-[#e5e7eb] rounded-[10px] text-[12px] p-[5px_10px] transition-colors duration-300',
+                    child.slugs?.slug === ctx?.router?.query['child'] &&
+                      'bg-primary text-white',
+                  )}
                 >
-                  {child.name}
-                </Link>
+                  <span>{child.name}</span>
+                </button>
+                //     <Link
+                //     key={child.id}
+                //      href={generateSlugToHref(child.slugs?.slug)}
+                //      className="px-3 py-1 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm transition-colors"
+                // >
+                //   {child.name}
+                // </Link>
               ))}
             </div>
           )}
         </div>
       );
     }
-    return null;
+    return (
+      <h1 className={'mb-3 lg:mb-6'}>
+        <span className={'text-3xl text-primary font-semibold'}>Sản phẩm</span>
+      </h1>
+    );
   };
   return (
     <div className={'p-3 w-full lg:col-span-5'}>
@@ -185,7 +237,7 @@ export default function ContentFilter({
       </div>
       <div className={'mb-3 lg:mb-6'}>
         <span className={'font-semibold text-[16px] shrink-0'}>Lọc theo:</span>
-        <FilterBy />
+        <FilterBy brands={menu?.brands} />
       </div>
       <div className={'flex items-center gap-2 flex-wrap mb-3 lg:hidden'}>
         <Button
@@ -231,18 +283,21 @@ export default function ContentFilter({
         <div className={'flex justify-center mt-3'}>
           {ctx?.limit && ctx?.limit > -1 && ctx?.total > 0 && (
             <Pagination
+              key={currentUrl}
               defaultCurrent={1}
               total={ctx?.total}
               showQuickJumper={true}
               showSizeChanger={false}
-              current={ctx?.page || 1}
+              current={
+                Number(
+                  new URLSearchParams(window.location.search).get('page'),
+                ) ||
+                ctx?.page ||
+                1
+              }
               pageSize={ctx?.limit || 12}
               onChange={(page: number) => {
-                const params = new URLSearchParams(window.location.search);
-                params.set('page', page.toString());
-                window.location.href = `${window.location.origin}${
-                  window.location.pathname
-                }?${params.toString()}`;
+                ctx?.updateRouter && ctx.updateRouter('page', page.toString());
               }}
             />
           )}

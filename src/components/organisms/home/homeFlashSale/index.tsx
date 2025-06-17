@@ -4,7 +4,7 @@ import ProductCard from '@/components/organisms/product/card';
 import CouponsDto from '@/dtos/Coupons.dto';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { isDesktop, isMobile } from 'react-device-detect';
+import { useIsDesktop, useIsMobile } from '@/hooks/useDevice';
 import { ReactNode } from 'react';
 import SectionSwiperItem from '@/components/organisms/sectionSwiper/item';
 const CountdownContainer = dynamic(
@@ -19,7 +19,8 @@ type Props = {
 };
 export default function HomeFlashSale({ promotion, setting }: Props) {
   const endDate: Date = new Date(promotion?.end_date || '');
-
+  const isDesktop = useIsDesktop();
+  const isMobile = useIsMobile();
   return (
     <>
       {endDate?.getTime() > new Date().getTime() && (
