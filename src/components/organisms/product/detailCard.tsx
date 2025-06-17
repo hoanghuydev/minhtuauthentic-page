@@ -63,16 +63,19 @@ const ProductDetailCard = ({
     display: false,
     image: null,
   });
-  const productContext = useContext(ProductDetailContext);
   const defaultVariant = product?.variants?.find(v => v.is_default);
+  const prices: number[] = [];
+  product?.variants?.forEach((v => {
+    if (typeof v.regular_price === 'number') {
+      prices.push(v.regular_price);
+    }
+  }));
   const productSchema = {
     "@context": "http://schema.org",
     "@type": "Product",
     "name": product?.name ?? '',
     "image": defaultVariant?.images?.map(image => image?.image?.url) || [],
     "description": product?.seo?.description || '',
-    "sku": "Mã sku sp",
-    "mpn": "Mã do nhà sản xuất cung cấp nếu có",
     "brand": product?.brands?.map(brand => ({
       "@type": "Brand",
       "name": brand?.brand?.name || '',
@@ -99,8 +102,8 @@ const ProductDetailCard = ({
       "url": "URL sản phẩm",
       "priceCurrency": "VND",
       "offerCount": 1,
-      "lowPrice": defaultVariant?.regular_price || 0,
-      "highPrice": defaultVariant?.price || 0,
+      "lowPrice": Math.min(...prices),
+      "highPrice": Math.max(...prices),
       "priceValidUntil": "2026-05-27",
       "itemCondition": "http://schema.org/NewCondition",
       "availability": "http://schema.org/InStock",
@@ -112,6 +115,7 @@ const ProductDetailCard = ({
     }
   }
 
+  const productContext = useContext(ProductDetailContext);
   useEffect(() => {
     if (productContext?.setVariantActive && !productContext.variantActive) {
       productContext.setVariantActive(

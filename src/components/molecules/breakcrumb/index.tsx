@@ -1,7 +1,7 @@
 import { useIsMobile } from '@/hooks/useDevice';
 import { Breadcrumb } from 'antd/es';
 import Link from 'next/link';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Head from 'next/head';
 
@@ -37,11 +37,6 @@ export default function BreadcrumbComponent({
       ),
     },
   ]);
-  const [breadcrumbSchema, setBreadcrumbSchema] = useState<object>({
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [],
-  });
   const isMobile = useIsMobile();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -50,22 +45,6 @@ export default function BreadcrumbComponent({
   }, []);
 
   useEffect(() => {
-    const baseUrl = 'https://minhtuauthentic.com';
-    const elementList = [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Trang chủ",
-        item: `${baseUrl}/`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: label || '',
-        item: `${baseUrl}${link}`,
-      },
-    ];
-
     if (current) {
       const _items = [...items];
       _items.push({
@@ -80,20 +59,42 @@ export default function BreadcrumbComponent({
         ),
       });
       setItems(_items);
+    }
+  }, []);
 
+  const breadcrumbSchema = useMemo(() => {
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : '';
+    const elementList = [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Trang chủ",
+        item: `${baseUrl}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: label,
+        item: `${baseUrl}/${link}`,
+      },
+    ];
+
+    if (current) {
       elementList.push({
         "@type": "ListItem",
         position: 3,
-        name: current.label || '',
+        name: current.label,
         item: `${baseUrl}${current.link}`,
       });
     }
-    setBreadcrumbSchema({
-      "@context": 'https://schema.org',
-      "@type": 'BreadcrumbList',
+
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
       itemListElement: elementList,
-    });
-  }, []);
+    };
+  }, [label, link, current]);
+
   return (
     <>
       <Head>
