@@ -63,7 +63,6 @@ const ProductDetailCard = ({
     display: false,
     image: null,
   });
-  console.log(product);
   const productSchema = useMemo(() => {
     const baseUrl = typeof window !== "undefined" ? window.location.origin : process.env.APP_URL;
     const defaultVariant = product?.variants?.find(v => v.is_default);
