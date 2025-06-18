@@ -3,16 +3,31 @@ import { SettingsDto } from '@/dtos/Settings.dto';
 import { SETTING_KEY } from '@/config/enum';
 import { SEOProps } from '@/config/type';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { shouldNoIndexRoute, shouldUseBaseCanonical } from '@/config/seo';
+
 type Props = {
   settings: SettingsDto[];
   seo?: SEOProps;
 };
+
 export default function DefaultSeo({ settings, seo }: Props) {
   const router = useRouter();
   const setting = (settings || []).find(
     (item) => item.key === SETTING_KEY.GENERAL.PAGE_INFORMATION.KEY,
   );
+
+  // Check if current route should be noindexed
+  const shouldNoIndex = seo?.noIndex || shouldNoIndexRoute(router.pathname);
+
+  // Check if current route should use base canonical URL
+  const useBaseCanonical = shouldUseBaseCanonical(router.pathname);
+
+  // Determine canonical URL
+  const canonicalUrl =
+    seo?.canonical ||
+    (useBaseCanonical
+      ? process.env.NEXT_PUBLIC_APP_URL
+      : process.env.NEXT_PUBLIC_APP_URL + router.asPath);
 
   return (
     <NextSeo
@@ -22,6 +37,7 @@ export default function DefaultSeo({ settings, seo }: Props) {
         setting?.value?.page_description ||
         'Minh Tu Authentic, Shop nước hoa chính hãng uy tín Tphcm, Quận tân phú, Tân bình, Bình tân, sản phẩm khuyến mãi, Nước hoa trả góp, nước hoa chiết nam, chiết nữ, nuớc hoa Niche, Dubai, cao cấp, mỹ phẩm chính hãng'
       }
+      noindex={shouldNoIndex}
       additionalMetaTags={[
         {
           property: 'keywords',
@@ -52,9 +68,7 @@ export default function DefaultSeo({ settings, seo }: Props) {
         ],
         url: process.env.NEXT_PUBLIC_APP_URL + router.asPath,
       }}
-      canonical={
-        seo?.canonical || process.env.NEXT_PUBLIC_APP_URL + router.asPath
-      }
+      canonical={canonicalUrl}
     />
   );
 }

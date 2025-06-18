@@ -43,7 +43,10 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
               />
             )}
             {isDesktop && (
-              <CountdownContainer className={'relative'} endDate={endDate} />
+              <CountdownContainer
+                className={'relative pt-12'}
+                endDate={endDate}
+              />
             )}
           </div>
           {isMobile && (
@@ -53,6 +56,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
             />
           )}
           <SectionSwiperItem
+            classNameContainer="pt-2"
             slidesPerView={5}
             slidePerViewMobile={2}
             spaceBetween={10}
