@@ -4,6 +4,7 @@ import { CategoryNewsDto } from '@/dtos/CategoryNews.dto';
 import dynamic from 'next/dynamic';
 import NewsSmallList from '@/components/organisms/news/smallList';
 import NewsRelation from '@/components/organisms/news/relation';
+import NewsRelationMobile from '@/components/organisms/news/relationMobile';
 import LayoutNews from '@/components/organisms/news/layout';
 import NewsDetail from '@/components/organisms/news/detail';
 import NewsCategoryMobile from '../organisms/news/categoryMobile';
@@ -56,7 +57,11 @@ export default function NewsTemplate({
               <NewsDetail news={news as NewsDto} />
             </LayoutNews>
             <LayoutNews>
-              <NewsRelation news={relationNews || []} />
+              {isMobile ? (
+                <NewsRelationMobile news={relationNews || []} />
+              ) : (
+                <NewsRelation news={relationNews || []} />
+              )}
             </LayoutNews>
           </div>
         )}

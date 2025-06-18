@@ -54,10 +54,11 @@ export default function NavFilterMobile({ settings, brands }: Props) {
                 <span>Bộ Lọc</span>
               </span>
               <Button
-                icon={<CloseCircle className={'w-6 h-6 text-white'} />}
+                icon={<CloseCircle className="w-8 h-8 !text-white" />}
                 onClick={() => {
                   ctx?.setIsOpenFilter && ctx.setIsOpenFilter(false);
                 }}
+                className="text-white"
                 type={'link'}
               ></Button>
             </div>

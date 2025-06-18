@@ -56,6 +56,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
             />
           )}
           <SectionSwiperItem
+            classNameContainer="pt-2"
             slidesPerView={5}
             slidePerViewMobile={2}
             spaceBetween={10}

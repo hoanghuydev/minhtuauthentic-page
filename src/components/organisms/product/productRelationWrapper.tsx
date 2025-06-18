@@ -20,7 +20,6 @@ type Props = {
 export default function ProductRelationWrapper({ display, products }: Props) {
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
-  console.log('products', products);
   return (
     <>
       {display === 'mobile' && (

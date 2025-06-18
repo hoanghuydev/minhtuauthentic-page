@@ -122,9 +122,9 @@ export default function ListCart({ paymentType, setValue }: Props) {
   return (
     <>
       <div className={'border-l border-gray-200 px-3 flex-1'}>
-        <h3 className={'text-3xl font-[700] lg:font-bold'}>
+        <h2 className={'text-3xl font-[700] lg:font-bold'}>
           Thông tin giỏ hàng
-        </h3>
+        </h2>
         <div className={'flex flex-col gap-3 border-b border-gray-200 p-6'}>
           {order?.cart?.items?.map((item, key) => (
             <CheckItemCart

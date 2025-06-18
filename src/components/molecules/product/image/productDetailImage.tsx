@@ -6,7 +6,7 @@ import SectionSwiper from '@/components/organisms/sectionSwiper';
 import { twMerge } from 'tailwind-merge';
 import { useProductImageDetail } from '@/hooks/useProductImageDetail';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useIsMobile } from '@/hooks/useDevice';
 
 type Props = {
@@ -23,11 +23,12 @@ const ProductDetailImage = ({
   const { images, imageActive, setImageActive } = useProductImageDetail({});
   const isMobile = useIsMobile();
   const [isMainImageLoaded, setIsMainImageLoaded] = useState(false);
-  const [isThumbnailsLoaded, setIsThumbnailsLoaded] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const handleClickImage = (image: ImageDto) => {
     if (image) {
       setImageActive(image);
+      setIsInitialLoad(false);
     }
   };
 
@@ -53,7 +54,10 @@ const ProductDetailImage = ({
                 onClick={() => handleClickImage(imageItem)}
                 product={product}
                 onMouseEnter={() => {
-                  !isMobile && setImageActive(imageItem);
+                  if (!isMobile) {
+                    setImageActive(imageItem);
+                    setIsInitialLoad(false);
+                  }
                 }}
                 unoptimized={false}
               />
@@ -67,21 +71,39 @@ const ProductDetailImage = ({
     );
   }, [imageActive, images]);
 
+  // Custom onLoad handler for the main product image
+  const handleMainImageLoad = () => {
+    setIsMainImageLoaded(true);
+  };
+
   return (
     <div className={twMerge(containerClassName)}>
       <div className="relative">
-        <ImageWithFallback
-          image={imageActive}
-          className={
-            'object-contain cursor-pointer bk-product-image select-none lg:max-w-[568px] w-full m-auto transition-opacity duration-150'
-          }
-          onClick={(image: ImageDto | null) => {
-            setIsOpen && setIsOpen({ display: true, image });
+        <div
+          className="product-detail-main-image-wrapper"
+          style={{
+            backgroundColor: 'white',
+            position: 'relative',
           }}
-          product={product}
-          unoptimized={!isMobile}
-          quality={100}
-        />
+        >
+          <ImageWithFallback
+            image={imageActive}
+            className={twMerge(
+              'object-contain cursor-pointer bk-product-image select-none lg:max-w-[568px] w-full m-auto',
+              isInitialLoad
+                ? 'transition-opacity duration-300 ' +
+                    (isMainImageLoaded ? 'opacity-100' : 'opacity-0')
+                : '',
+            )}
+            onClick={(image: ImageDto | null) => {
+              setIsOpen && setIsOpen({ display: true, image });
+            }}
+            product={product}
+            unoptimized={!isMobile}
+            quality={100}
+            onLoadingComplete={handleMainImageLoad}
+          />
+        </div>
       </div>
       {renderSlideImage}
     </div>
