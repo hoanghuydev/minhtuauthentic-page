@@ -41,6 +41,7 @@ export default function CategoryTemplate({
   menu,
 }: Props) {
   const data = slug?.data as ResponseCategoryFilterPageDto;
+  console.log(data);
   const isDesktop = useIsDesktop();
   const renderLabelBreadcrumb: Record<string, string> = {
     [Entity.CATEGORIES]: data.title || 'Danh mục',
