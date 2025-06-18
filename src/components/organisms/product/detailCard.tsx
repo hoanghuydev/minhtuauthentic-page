@@ -1,7 +1,7 @@
 import { ProductDto } from '@/dtos/Product.dto';
 import ProductDetailImage from '@/components/molecules/product/image/productDetailImage';
 import ProductProperty from '@/components/molecules/product/property';
-import { useContext, useEffect, useState, useRef } from 'react';
+import { useContext, useEffect, useState, useRef, useMemo } from 'react';
 import { ImageDto } from '@/dtos/Image.dto';
 import { ProductConfigurationsDto } from '@/dtos/productConfigurations.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
@@ -63,57 +63,59 @@ const ProductDetailCard = ({
     display: false,
     image: null,
   });
-  const defaultVariant = product?.variants?.find(v => v.is_default);
-  const prices: number[] = [];
-  product?.variants?.forEach((v => {
-    if (typeof v.regular_price === 'number') {
-      prices.push(v.regular_price);
-    }
-  }));
-  const productSchema = {
-    "@context": "http://schema.org",
-    "@type": "Product",
-    "name": product?.name ?? '',
-    "image": defaultVariant?.images?.map(image => image?.image?.url) || [],
-    "description": product?.seo?.description || '',
-    "brand": product?.brands?.map(brand => ({
-      "@type": "Brand",
-      "name": brand?.brand?.name || '',
-    })),
-    "review": {
-      "@type": "Review",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "4",
-        "bestRating": "5"
+  const productSchema = useMemo(() => {
+    const defaultVariant = product?.variants?.find(v => v.is_default);
+    const prices: number[] = [];
+    product?.variants?.forEach((v => {
+      if (typeof v.regular_price === 'number') {
+        prices.push(v.regular_price);
+      }
+    }));
+    return {
+      "@context": "http://schema.org",
+      "@type": "Product",
+      "name": product?.name ?? '',
+      "image": defaultVariant?.images?.map(image => image?.image?.url) || [],
+      "description": product?.seo?.description || '',
+      "brand": product?.brands?.map(brand => ({
+        "@type": "Brand",
+        "name": brand?.brand?.name || '',
+      })),
+      "review": {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4",
+          "bestRating": "5"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Minh Tú Authentic"
+        }
       },
-      "author": {
-        "@type": "Person",
-        "name": "Minh Tú Authentic"
-      }
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4,7",
-      "reviewCount": "9"
-    },
-    "offers": {
-      "@type": "AggregateOffer",
-      "url": "URL sản phẩm",
-      "priceCurrency": "VND",
-      "offerCount": 1,
-      "lowPrice": Math.min(...prices),
-      "highPrice": Math.max(...prices),
-      "priceValidUntil": "2026-05-27",
-      "itemCondition": "http://schema.org/NewCondition",
-      "availability": "http://schema.org/InStock",
-      "seller": {
-        "@type": "Organization",
-        "name": " Minh Tu Authentic",
-        "url": "https://minhtuauthentic.com"
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4,7",
+        "reviewCount": "9"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "url": "URL sản phẩm",
+        "priceCurrency": "VND",
+        "offerCount": 1,
+        "lowPrice": Math.min(...prices),
+        "highPrice": Math.max(...prices),
+        "priceValidUntil": "2026-05-27",
+        "itemCondition": "http://schema.org/NewCondition",
+        "availability": "http://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": " Minh Tu Authentic",
+          "url": "https://minhtuauthentic.com"
+        }
       }
     }
-  }
+  }, [product]);
 
   const productContext = useContext(ProductDetailContext);
   useEffect(() => {
