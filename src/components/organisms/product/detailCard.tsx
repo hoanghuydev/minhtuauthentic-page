@@ -63,7 +63,9 @@ const ProductDetailCard = ({
     display: false,
     image: null,
   });
+  console.log(product);
   const productSchema = useMemo(() => {
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : process.env.APP_URL;
     const defaultVariant = product?.variants?.find(v => v.is_default);
     const prices: number[] = [];
     product?.variants?.forEach((v => {
@@ -100,7 +102,7 @@ const ProductDetailCard = ({
       },
       "offers": {
         "@type": "AggregateOffer",
-        "url": "URL sản phẩm",
+        "url": `${baseUrl}/${product?.slugs?.slug}`,
         "priceCurrency": "VND",
         "offerCount": 1,
         "lowPrice": Math.min(...prices),
