@@ -9,6 +9,8 @@ import { Entity } from '@/config/enum';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import dynamic from 'next/dynamic';
 import { useIsDesktop } from '@/hooks/useDevice';
+import { useMemo } from 'react';
+import Head from 'next/head';
 
 const NavFilterMobile = dynamic(
   () => import('@/components/organisms/MobileMenu/navFilterMobile'),
@@ -51,64 +53,104 @@ export default function CategoryTemplate({
     data?.category?.static_components?.[0]?.description ||
     data?.brand?.static_components?.[0]?.description ||
     '';
-  return (
-    <CategoryFilterProvider isSearch={isSearch}>
-      <BreadcrumbComponent
-        label={
-          breadcrumb
-            ? breadcrumb?.label || ''
-            : renderLabelBreadcrumb[slug?.model || ''] || ('' as string)
+
+  const categorySchema = useMemo(() => {
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : process.env.APP_URL;
+    const itemListElement = data?.products?.map((product, index) => {
+      const defaultVariant = product?.variants?.find(v => v.is_default);
+      return {
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": {
+          "@type": "Product",
+          "name": product?.title,
+          "image": product?.feature_image_detail?.image?.url,
+          "url": `${baseUrl}/${product?.slugs?.slug}`,
+          "offers": {
+            "@type": "Offer",
+            "priceCurrency": "VND",
+            "price": defaultVariant?.regular_price,
+            "availability": "http://schema.org/InStock",
+            "itemCondition": "http://schema.org/NewCondition"
+          }
         }
-        link={generateSlugToHref(breadcrumb?.link || slug?.slug)}
-      />
-      <div className={'flex flex-col gap-3'}>
-        <div className={'container mx-auto'}>
-          <div
-            className={
-              'grid grid-cols-1 lg:grid-cols-6 gap-3 w-full min-h-[50vh] rounded-[10px] border-gray-500 bg-white shadow-custom'
-            }
-          >
-            {isDesktop && (
-              <SettingFilter
-                settings={data?.settings}
-                className={'lg:col-span-1'}
-                brands={menu?.brands}
-              />
-            )}
-            <ContentFilter
-              products={data?.products || []}
-              settings={data?.settings}
-              slugData={
-                new SlugDto({
-                  model: slug?.model,
-                  model_id: slug?.model_id,
-                  slug: slug?.slug,
-                })
+      }
+    });
+
+    return {
+      "@context": "http://schema.org",
+      "@type": "ItemList",
+      "url": `${baseUrl}/${slug?.slug}`,
+      "numberOfItems": data?.products?.length || 0,
+      "itemListOrder": "http://schema.org/ItemListOrderAscending",
+      "itemListElement": itemListElement
+    }
+  }, [data?.products, slug?.slug]);
+  return (
+    <>
+      <Head>
+        <script type="application/ld+json">
+          {JSON.stringify(categorySchema)}
+        </script>
+      </Head>
+      <CategoryFilterProvider isSearch={isSearch}>
+        <BreadcrumbComponent
+          label={
+            breadcrumb
+              ? breadcrumb?.label || ''
+              : renderLabelBreadcrumb[slug?.model || ''] || ('' as string)
+          }
+          link={generateSlugToHref(breadcrumb?.link || slug?.slug)}
+        />
+        <div className={'flex flex-col gap-3'}>
+          <div className={'container mx-auto'}>
+            <div
+              className={
+                'grid grid-cols-1 lg:grid-cols-6 gap-3 w-full min-h-[50vh] rounded-[10px] border-gray-500 bg-white shadow-custom'
               }
-              total={data?.total || 0}
-              title={data?.title}
-              category={data?.category}
-              menu={menu}
-            />
+            >
+              {isDesktop && (
+                <SettingFilter
+                  settings={data?.settings}
+                  className={'lg:col-span-1'}
+                  brands={menu?.brands}
+                />
+              )}
+              <ContentFilter
+                products={data?.products || []}
+                settings={data?.settings}
+                slugData={
+                  new SlugDto({
+                    model: slug?.model,
+                    model_id: slug?.model_id,
+                    slug: slug?.slug,
+                  })
+                }
+                total={data?.total || 0}
+                title={data?.title}
+                category={data?.category}
+                menu={menu}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      {description && (
-        <div
-          className={
-            'w-full shadow-custom p-3 rounded-[10px] mt-3 bg-white container-html'
-          }
-          dangerouslySetInnerHTML={{
-            __html: description || '',
-          }}
-        />
-      )}
+        {description && (
+          <div
+            className={
+              'w-full shadow-custom p-3 rounded-[10px] mt-3 bg-white container-html'
+            }
+            dangerouslySetInnerHTML={{
+              __html: description || '',
+            }}
+          />
+        )}
 
-      <NavFilterMobile
-        key={'CategoryTemplate'}
-        settings={data?.settings}
-        brands={menu?.brands}
-      />
-    </CategoryFilterProvider>
+        <NavFilterMobile
+          key={'CategoryTemplate'}
+          settings={data?.settings}
+          brands={menu?.brands}
+        />
+      </CategoryFilterProvider>
+    </>
   );
 }
