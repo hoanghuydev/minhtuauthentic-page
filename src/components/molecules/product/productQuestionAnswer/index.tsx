@@ -25,9 +25,7 @@ export default function ProductQuestionAnswer({ questions }: Props) {
   return (
     <>
       <Head>
-        <script type="application/ld+json">
-          {JSON.stringify(faqSchema)}
-        </script>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       </Head>
       <div
         className={'rounded-[10px] border-gray-500 bg-white shadow-custom mt-3'}
