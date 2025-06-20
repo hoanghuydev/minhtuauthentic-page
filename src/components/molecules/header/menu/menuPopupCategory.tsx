@@ -227,7 +227,7 @@ const MenuPopupCategory = ({
         {title && (
           <p className={'mb-3 text-3xl font-[700] lg:font-bold'}>{title}</p>
         )}
-        <div className={twMerge('grid gap-1 grid-cols-4')}>
+        <div className={twMerge('grid gap-4 grid-cols-4')}>
           {renderMenuItems()}
           {renderSuggestedProducts()}
         </div>
