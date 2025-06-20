@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 type Props = {
   paymentType?: string;
   setValue?: any;
+  loading?: boolean;
 };
 
-export default function FooterCheckout({ paymentType, setValue }: Props) {
+export default function FooterCheckout({ paymentType, setValue, loading }: Props) {
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
 
@@ -31,7 +32,7 @@ export default function FooterCheckout({ paymentType, setValue }: Props) {
         createPortal(
           <div
             className={
-              'fixed left-0 bottom-0 w-full z-[1002] rounded-t-[10px] shadow-custom2 bg-transparent'
+              'fixed left-0 bottom-0 w-full z-[1002] rounded-t-[10px] shadow-custom2 bg-white'
             }
           >
             <PaymentButton
@@ -41,6 +42,7 @@ export default function FooterCheckout({ paymentType, setValue }: Props) {
               type={paymentType}
               htmlType={'submit'}
               className={'w-full'}
+              loading={loading}
             />
           </div>,
           checkoutElement,

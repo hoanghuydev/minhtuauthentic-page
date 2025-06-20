@@ -21,8 +21,9 @@ const FooterCheckout = dynamic(
 type Props = {
   paymentType?: string;
   setValue?: any;
+  loading?: boolean;
 };
-export default function ListCart({ paymentType, setValue }: Props) {
+export default function ListCart({ paymentType, setValue, loading }: Props) {
   const order = useContext(OrderContext);
   const [couponInput, setCouponInput] = useState<string>('');
   const [coupons, setCoupons] = useState<CouponsDto[]>([]);
@@ -243,6 +244,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
             }}
             type={paymentType}
             htmlType={'submit'}
+            loading={loading}
           />
         </div>
         <div className={'flex justify-between items-center mt-6'}>
@@ -258,7 +260,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
           </div>
         </div>
       </div>
-      <FooterCheckout setValue={setValue} paymentType={paymentType} />
+      <FooterCheckout setValue={setValue} paymentType={paymentType} loading={loading} />
     </>
   );
 }
