@@ -7,6 +7,7 @@ import MenuPopupCategory from '@/components/molecules/header/menu/menuPopupCateg
 import { twMerge } from 'tailwind-merge';
 import MenuProduct from './menuProduct';
 import { ProductDto } from '@/dtos/Product.dto';
+import { CategoryDto } from '@/dtos/Category.dto';
 
 const MenuPopup = ({
   data,
@@ -17,7 +18,7 @@ const MenuPopup = ({
   isOpenMenu,
   isLoadingProducts = false,
 }: {
-  data: PopupDisplay & { currentCategoryId?: number };
+  data: PopupDisplay;
   menu: ResponseMenuDto;
   menuCategoryChildrenPosition: { top: number; left: number; height: number };
   onMouseEnter: () => void;
@@ -71,7 +72,7 @@ const MenuPopup = ({
             title={data?.title}
             filterSetting={menu?.filterSetting}
             brands={menu?.brands || []}
-            categories={Array.isArray(data?.data) ? data?.data : [data?.data]}
+            data={data?.data as CategoryDto}
             currentCategoryId={data?.currentCategoryId}
           />
         );
@@ -89,7 +90,7 @@ const MenuPopup = ({
     <>
       {data?.display && (
         <div
-          className="absolute top-0 left-[215px] z-[20] flex"
+          className="absolute top-0 left-[215px] z-[10] flex"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           style={{
