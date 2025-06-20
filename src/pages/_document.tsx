@@ -48,7 +48,7 @@ export default function Document() {
                 "@context": "https://schema.org",
                 "@type": "LocalBusiness",
                 "name": "Minh Tu Authentic",
-                "gmail": "nguyenminh20131659@gmail.com",
+                "gmail": "minhtu@minhtuauthentic.com",
                 "image":"https://minhtuauthentic.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo.fc400164.png&w=640&q=75 ",
                 "@id": "",
                 "url": " https://minhtuauthentic.com/",

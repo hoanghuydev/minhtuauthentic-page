@@ -33,7 +33,7 @@ const MenuProduct = ({ isLoadingProducts }: MenuProductProps) => {
           <div className="mt-4 text-center">
             <Link
               href="/san-pham"
-              className="inline-block px-4 py-2 text-sm font-medium text-primary hover:text-primary-dark"
+              className="inline-block px-4 py-2 text-primary hover:text-primary-dark font-medium"
             >
               Xem tất cả
             </Link>

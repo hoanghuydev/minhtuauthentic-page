@@ -24,9 +24,7 @@ const Menu = ({
   isOpenMenu: boolean;
 }) => {
   const appCtx = useContext(AppContext);
-  const [dataDisplayPopup, setDataDisplayPopup] = useState<
-    PopupDisplay & { currentCategoryId?: number }
-  >({
+  const [dataDisplayPopup, setDataDisplayPopup] = useState<PopupDisplay>({
     display: false,
     data: [],
   });
@@ -178,7 +176,7 @@ const Menu = ({
         setDataDisplayPopup({
           type: item.type,
           display: true,
-          data: _item?.category?.children || [],
+          data: _item?.category,
           title: _item?.category?.name,
           currentCategoryId: _item?.id,
         });

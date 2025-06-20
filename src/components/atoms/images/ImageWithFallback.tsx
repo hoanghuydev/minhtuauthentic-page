@@ -78,7 +78,7 @@ const ImageWithFallback = ({
             loading={loading}
             quality={quality || 70}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7u2tBwAFdgImpqLKKAAAAABJRU5ErkJggg=="
-            onLoadingComplete={() => onLoadingComplete && onLoadingComplete()}
+            onLoad={() => onLoadingComplete && onLoadingComplete()}
           />
         ) : (
           <Image
@@ -104,7 +104,7 @@ const ImageWithFallback = ({
             sizes={sizes}
             loading={loading}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7u2tBwAFdgImpqLKKAAAAABJRU5ErkJggg=="
-            onLoadingComplete={() => onLoadingComplete && onLoadingComplete()}
+            onLoad={() => onLoadingComplete && onLoadingComplete()}
           />
         )}
       </>
