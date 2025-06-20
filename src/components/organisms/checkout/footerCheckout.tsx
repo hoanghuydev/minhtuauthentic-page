@@ -31,7 +31,7 @@ export default function FooterCheckout({ paymentType, setValue }: Props) {
         createPortal(
           <div
             className={
-              'fixed left-0 bottom-0 w-[100dvw] z-10 shadow-custom2 bg-transparent'
+              'fixed left-0 bottom-0 w-full z-[1002] rounded-t-[10px] shadow-custom2 bg-transparent'
             }
           >
             <PaymentButton
