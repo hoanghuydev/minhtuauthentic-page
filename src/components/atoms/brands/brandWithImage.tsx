@@ -25,7 +25,7 @@ export default function BrandWithImage({
       <Link href={generateSlugToHref(brand?.slugs?.slug || '')}>
         <ImageWithFallback
           image={brand?.images?.[0]?.image}
-          className={classNameImage}
+          className={twMerge(classNameImage, 'w-full h-full object-cover')}
         />
       </Link>
     </div>

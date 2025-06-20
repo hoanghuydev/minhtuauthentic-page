@@ -12,6 +12,7 @@ export type PopupDisplay = {
   data: unknown;
   display: boolean;
   isHaveChildren?: boolean;
+  currentCategoryId?: number;
 };
 export type MenuDisplay = {
   type?: string;
