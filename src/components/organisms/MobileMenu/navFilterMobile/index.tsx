@@ -54,13 +54,15 @@ export default function NavFilterMobile({ settings, brands }: Props) {
                 <span>Bộ Lọc</span>
               </span>
               <Button
-                icon={<CloseCircle className="w-8 h-8 !text-white" />}
+                icon={<CloseCircle className="w-6 h-6" />}
                 onClick={() => {
                   ctx?.setIsOpenFilter && ctx.setIsOpenFilter(false);
                 }}
-                className="text-white"
+                className="!text-white !gap-1 flex justify-center items-center"
                 type={'link'}
-              ></Button>
+              >
+                <p className="my-auto">Đóng</p>
+              </Button>
             </div>
             {settings && (
               <div className={'h-full overflow-auto'}>

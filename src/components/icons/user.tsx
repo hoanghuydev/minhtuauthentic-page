@@ -13,7 +13,6 @@ export const IconUser = ({ className }: { className?: string }) => {
       width="20"
       className={className}
     >
-      <title>Smember</title>
       <g id="Layer_2" data-name="Layer 2">
         <g id="Layer_1-2" data-name="Layer 1">
           <circle cx="280" cy="280" r="265" style={strokeStyle}></circle>
