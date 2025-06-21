@@ -6,8 +6,10 @@ import SectionSwiper from '@/components/organisms/sectionSwiper';
 import { twMerge } from 'tailwind-merge';
 import { useProductImageDetail } from '@/hooks/useProductImageDetail';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useIsMobile } from '@/hooks/useDevice';
+import SectionSwiperItem from '@/components/organisms/sectionSwiper/item';
+import { SwiperClass } from 'swiper/react';
 
 type Props = {
   product: ProductDto;
@@ -24,9 +26,15 @@ const ProductDetailImage = ({
   const isMobile = useIsMobile();
   const [isMainImageLoaded, setIsMainImageLoaded] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const mainSwiper = useRef<SwiperClass|null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleClickImage = (image: ImageDto) => {
     if (image) {
+      const idx = images.findIndex(img => img.id === image.id)
+      if (mainSwiper.current) {
+        mainSwiper.current.slideTo(idx);
+      }
       setImageActive(image);
       setIsInitialLoad(false);
     }
@@ -55,8 +63,7 @@ const ProductDetailImage = ({
                 product={product}
                 onMouseEnter={() => {
                   if (!isMobile) {
-                    setImageActive(imageItem);
-                    setIsInitialLoad(false);
+                    handleClickImage(imageItem)
                   }
                 }}
                 unoptimized={false}
@@ -78,31 +85,53 @@ const ProductDetailImage = ({
 
   return (
     <div className={twMerge(containerClassName)}>
-      <div className="relative">
-        <div
-          className="product-detail-main-image-wrapper"
-          style={{
-            backgroundColor: 'white',
-            position: 'relative',
+      <div className={`relative ${
+        isInitialLoad
+          ? `transition-opacity duration-300 ${isMainImageLoaded ? 'opacity-100' : 'opacity-0'}`
+          : ''
+      }`}>
+        <SectionSwiperItem
+          renderItem={(item) => {
+            const imageItem = item as ImageDto;
+            return (
+              <div
+                className="product-detail-main-image-wrapper"
+                style={{
+                  backgroundColor: 'white',
+                  position: 'relative',
+                }}
+              >
+                <ImageWithFallback
+                  image={imageItem}
+                  className={twMerge(
+                    'object-contain cursor-pointer bk-product-image select-none lg:max-w-[568px] w-full m-auto',
+                  )}
+                  onClick={(image: ImageDto | null) => {
+                    setIsOpen && setIsOpen({ display: true, image });
+                  }}
+                  product={product}
+                  unoptimized={!isMobile}
+                  quality={100}
+                  onLoadingComplete={handleMainImageLoad}
+                />
+              </div>
+            )
           }}
-        >
-          <ImageWithFallback
-            image={imageActive}
-            className={twMerge(
-              'object-contain cursor-pointer bk-product-image select-none lg:max-w-[568px] w-full m-auto',
-              isInitialLoad
-                ? 'transition-opacity duration-300 ' +
-                    (isMainImageLoaded ? 'opacity-100' : 'opacity-0')
-                : '',
-            )}
-            onClick={(image: ImageDto | null) => {
-              setIsOpen && setIsOpen({ display: true, image });
-            }}
-            product={product}
-            unoptimized={!isMobile}
-            quality={100}
-            onLoadingComplete={handleMainImageLoad}
-          />
+          data={images}
+          slidesPerView={1}
+          spaceBetween={5}
+          onSwiper={(swiperInstance: SwiperClass) => {
+            mainSwiper.current = swiperInstance
+          }}
+          classNameLeft={'lg:left-[0px]'}
+          classNameRight={'lg:right-[0px]'}
+          onSlideChange={(idx) => {
+            setCurrentIndex(idx)
+            setImageActive(images[idx])
+          }}
+        />
+        <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white text-lg tracking-[0.2em] px-3 py-1 rounded-[15px] z-[2]">
+          {currentIndex + 1}/{images.length}
         </div>
       </div>
       {renderSlideImage}
