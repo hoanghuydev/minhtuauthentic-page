@@ -120,6 +120,8 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
               image={image}
               product={product}
               setIsOpen={setIsOpen}
+              imageIndex={index + 1}
+              totalImages={images.length}
             />
           </SwiperSlide>
         ))}

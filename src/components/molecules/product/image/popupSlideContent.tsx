@@ -7,12 +7,16 @@ interface PopupSlideContentProps {
   image: ImageDto;
   product: ProductDto;
   setIsOpen?: (item: { display: boolean; image: ImageDto | null }) => void;
+  imageIndex?: number;
+  totalImages?: number;
 }
 
 export default function PopupSlideContent({
   image,
   product,
   setIsOpen,
+  imageIndex,
+  totalImages,
 }: PopupSlideContentProps) {
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +42,11 @@ export default function PopupSlideContent({
           unoptimized={true}
           quality={100}
         />
+        {imageIndex && totalImages && (
+          <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white text-lg font-semibold tracking-[0.2em] px-3 py-1 rounded-[15px] z-[2]">
+            {imageIndex}/{totalImages}
+          </div>
+        )}
       </div>
     </div>
   );
