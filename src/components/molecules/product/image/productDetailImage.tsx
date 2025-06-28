@@ -32,14 +32,17 @@ const ProductDetailImage = ({
 
   const handleClickImage = (image: ImageDto) => {
     if (image) {
-      const idx = images.findIndex(img => img.id === image.id)
-      if (mainSwiper.current) {
-        mainSwiper.current.slideTo(idx);
-      }
       setImageActive(image);
       setIsInitialLoad(false);
     }
   };
+
+  useEffect(() => {
+    if (mainSwiper.current && imageActive) {
+      const idx = images.findIndex(img => img.id === imageActive.id);
+      if (idx >= 0) mainSwiper.current.slideTo(idx);
+    }
+  }, [imageActive, images]);
 
   const renderSlideImage = useMemo(() => {
     return (

@@ -94,7 +94,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
         className={'h-full select-none'}
         modules={[Pagination, EffectFade, Navigation]}
         effect={'fade'}
-        loop={true}
+        loop={false}
         slidesPerView={1}
         fadeEffect={{
           crossFade: true,
