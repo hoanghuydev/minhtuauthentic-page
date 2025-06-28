@@ -43,7 +43,7 @@ export default function PopupSlideContent({
           quality={100}
         />
         {imageIndex && totalImages && (
-          <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white text-lg font-semibold tracking-[0.2em] px-3 py-1 rounded-[15px] z-[2]">
+          <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white text-lg font-semibold tracking-[0.2em] px-3 py-1 rounded-[15px] z-[2] select-none">
             {imageIndex}/{totalImages}
           </div>
         )}

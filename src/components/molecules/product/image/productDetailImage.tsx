@@ -134,7 +134,7 @@ const ProductDetailImage = ({
             setImageActive(images[idx])
           }}
         />
-        <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-black bg-opacity-50 text-white text-lg font-semibold tracking-[0.2em] px-3 py-1 rounded-[15px] z-[2]">
+        <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-black bg-opacity-50 text-white text-lg font-semibold tracking-[0.2em] px-3 py-1 rounded-[15px] z-[2] select-none">
           <DoubleLeftOutlined onClick={() => mainSwiper.current?.slidePrev()} />
           <div className="tracking-[0.2em] select-none">{currentIndex + 1}/{images.length}</div>
           <DoubleRightOutlined onClick={() => mainSwiper.current?.slideNext()} />
