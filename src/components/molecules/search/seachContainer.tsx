@@ -146,6 +146,9 @@ export default function SearchContainer({
                 <li key={index} className={'shadow-[-1px_1px_#e1e1e1] p-[3px]'}>
                   <a
                     className={'flex flex-col gap-3'}
+                    onClick={() => {
+                      ctx?.saveKeyword && ctx.saveKeyword();
+                    }}
                     href={generateSlugToHref(item?.slugs?.slug)}
                   >
                     <ImageWithFallback
@@ -173,6 +176,9 @@ export default function SearchContainer({
         )}
         <a
           className={'w-full text-center text-primary font-bold p-1 block'}
+          onClick={() => {
+            ctx?.saveKeyword && ctx.saveKeyword();
+          }}
           href={generateSlugToHref(urlSearch)}
         >
           Xem toàn bộ sản phẩm
@@ -188,7 +194,13 @@ export default function SearchContainer({
         <div className={'flex flex-col gap-3'}>
           {(data?.news || []).map((item: NewsDto, index: number) => {
             return (
-              <a href={generateSlugToHref(item?.slugs?.slug)} key={index}>
+              <a
+                onClick={() => {
+                  ctx?.saveKeyword && ctx.saveKeyword();
+                }}
+                href={generateSlugToHref(item?.slugs?.slug)}
+                key={index}
+              >
                 <p>{item?.name}</p>
               </a>
             );
@@ -197,6 +209,9 @@ export default function SearchContainer({
         <a
           className={'w-full text-center text-primary font-bold p-1'}
           href={generateSlugToHref('/tin-tuc')}
+          onClick={() => {
+            ctx?.saveKeyword && ctx.saveKeyword();
+          }}
         >
           Xem toàn bộ tin tức
         </a>
@@ -401,7 +416,7 @@ export default function SearchContainer({
           ) : (
             <div
               className={twMerge(
-                'absolute text-black top-[60px] bg-white w-[65vw] max-w-[1140px] rounded-[10px] left-[50%] translate-x-[-25%] shadow-custom2 z-[100]',
+                'absolute text-black top-[60px] bg-white w-[83vw] xl:w-[68vw] max-w-[1140px] rounded-[10px] left-[50%] translate-x-[-30%] shadow-custom2 z-[100]',
                 classNameInput,
               )}
             >
