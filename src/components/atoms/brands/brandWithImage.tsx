@@ -18,7 +18,7 @@ export default function BrandWithImage({
   return (
     <div
       className={twMerge(
-        'p-1 lg:p-[10px_20px] overflow-hidden rounded-[10px] border border-gray-200',
+        'p-1 lg:p-[10px_20px] overflow-hidden rounded-[10px] border border-gray-200 flex items-center justify-center',
         className,
       )}
     >
