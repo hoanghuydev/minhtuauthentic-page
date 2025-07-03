@@ -16,31 +16,29 @@ export default function HomeSupport({ contents }: Props) {
     <>
       <SectionSwiper
         classNameContainer={
-          'mt-3 border border-primary p-3 lg:p-10 rounded-[10px] bg-white'
+          'mt-3 border border-primary p-3 lg:px-10 lg:py-8 rounded-[10px] bg-white'
         }
         classNameLeft={'lg:left-[-11px]'}
         classNameRight={'lg:right-[-11px]'}
         classNameItems={'flex items-center justify-center'}
-        slidesPerView={4}
+        slidesPerView={5}
         slidePerViewMobile={2}
-        spaceBetween={20}
+        spaceBetween={30}
         data={contents || []}
         renderItem={(item) => {
           const _item = item as StaticContentsDto;
           const image = _item?.images?.[0]?.image?.url || support;
           return (
-            <div className="h-[160px] flex items-center gap-1 lg:gap-3">
+            <div className="h-[60px] flex items-center gap-1 lg:gap-3">
               <Image
                 src={image || ''}
-                className={'object-contain w-[60px] h-auto'}
-                width={128}
-                height={128}
+                className={'object-cover object-center w-[30px] h-auto'}
                 alt={
                   'Minh Tu Authentic, Nước hoa chính hãng Tphcm, Quận Tân Phú, Mỹ phẩm'
                 }
               />
               <div
-                className={'container-html'}
+                className={'container-html line-clamp-2'}
                 dangerouslySetInnerHTML={{
                   __html: _item?.description || '',
                 }}
