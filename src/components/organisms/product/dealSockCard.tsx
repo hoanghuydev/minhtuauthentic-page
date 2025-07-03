@@ -4,11 +4,7 @@ import ProductCardImage from '@/components/molecules/product/image/productCardIm
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 import { VariantDto } from '@/dtos/Variant.dto';
-import {
-  calculatePriceMinus,
-  formatMoney,
-  promotionName,
-} from '@/utils';
+import { calculatePriceMinus, formatMoney, promotionName } from '@/utils';
 import { Fragment, useEffect, useState } from 'react';
 import { PromotionsDto } from '@/dtos/Promotions.dto';
 import CouponsDto from '@/dtos/Coupons.dto';
@@ -33,6 +29,8 @@ const DealSockCard = ({
   onToggleChecked?: (variant: VariantDto, coupon: CouponsDto) => void;
 }) => {
   const [_variant, setVariant] = useState<VariantDto>(variant);
+  // Thêm local state để theo dõi trạng thái checked
+  const [isChecked, setIsChecked] = useState<boolean>(checked);
 
   // Cập nhật variant khi prop thay đổi
   useEffect(() => {
@@ -41,23 +39,43 @@ const DealSockCard = ({
     }
   }, [variant]);
 
+  // Đồng bộ state checked từ props
+  useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
+
+  // Xử lý click checkbox
+  const handleCheckboxClick = () => {
+    const newCheckedState = !isChecked;
+    setIsChecked(newCheckedState);
+    onToggleChecked && onToggleChecked(variant, coupon);
+  };
+
   return (
     <div
       className={twMerge(
         'relative bg-white rounded-[20px] py-4 my-2 transition-colors duration-300 flex flex-col border-[2px]',
-        checked ? 'border-primary' : 'border-white hover:border-primary',
+        isChecked ? 'border-primary' : 'border-white hover:border-primary',
         className,
       )}
     >
       <div
         className={`absolute top-4 right-4 transition-colors duration-300 w-[28px] h-[28px] border-[2px] rounded-[12px] flex items-center justify-center z-10 cursor-pointer
-        ${checked ? 'bg-primary border-primary' : 'bg-white border-gray-200 hover:border-primary'}`}
-        onClick={() => {onToggleChecked && onToggleChecked(variant, coupon)}}
+        ${
+          isChecked
+            ? 'bg-primary border-primary'
+            : 'bg-white border-gray-200 hover:border-primary'
+        }`}
+        onClick={handleCheckboxClick}
       >
         <CheckOutlined className="text-white" />
       </div>
       <div>
-        <ProductCardImage product={product} variant={_variant} className={'px-4'} />
+        <ProductCardImage
+          product={product}
+          variant={_variant}
+          className={'px-4'}
+        />
         {/* <div className={'px-2 h-[110px] lg:h-[75px] xl:h-[63px]'}> */}
         <div className="px-4 overflow-hidden">
           <h3

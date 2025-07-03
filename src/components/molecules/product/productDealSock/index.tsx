@@ -14,6 +14,7 @@ import { calculatePriceMinus, formatMoney } from '@/utils';
 
 type Props = {
   setting?: SettingsDto;
+  mainVariant: VariantDto;
 };
 
 const fetcher = () =>
@@ -21,7 +22,7 @@ const fetcher = () =>
     method: 'GET',
   }).then((res) => res.json());
 
-export default function ProductDealSock({ setting }: Props) {
+export default function ProductDealSock({ setting, mainVariant }: Props) {
   const { data, error, isLoading } = useSWR(
     '/api/promotions/' + PROMOTION_TYPE.DEAL_SOCK,
     fetcher,
@@ -82,9 +83,11 @@ export default function ProductDealSock({ setting }: Props) {
 
   const handleAddDealSockToCart = () => {
     if (dealSockVariants.length > 0 && order?.addMultipleCart) {
-      order.addMultipleCart(dealSockVariants);
-      setDealSockVariants([]);
-      setTotalSavings(0);
+      const updatedVariants = [mainVariant, ...dealSockVariants];
+      console.log('Adding deal sock variants to cart:', updatedVariants);
+      order.addMultipleCart(updatedVariants);
+      // setDealSockVariants([]);
+      // setTotalSavings(0);
     }
   }
 

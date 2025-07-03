@@ -182,6 +182,7 @@ const ProductDetailCard = ({
             setting={settings.find(
               (item) => item.key === SETTING_KEY.DEAL_SOCK_SECTION.KEY,
             )}
+            mainVariant={productContext?.variantActive || product?.variants?.[0] || {}}
           />
           <div
             className={
