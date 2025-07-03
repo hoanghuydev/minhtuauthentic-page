@@ -10,7 +10,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useIsMobile } from '@/hooks/useDevice';
 import SectionSwiperItem from '@/components/organisms/sectionSwiper/item';
 import { SwiperClass } from 'swiper/react';
-import { DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons';
+import ImageCount from '@/components/atoms/imageCount';
 
 type Props = {
   product: ProductDto;
@@ -134,11 +134,12 @@ const ProductDetailImage = ({
             setImageActive(images[idx])
           }}
         />
-        <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-black bg-opacity-50 text-white text-lg font-semibold tracking-[0.2em] px-3 py-1 rounded-[15px] z-[2] select-none">
-          <DoubleLeftOutlined onClick={() => mainSwiper.current?.slidePrev()} />
-          <div className="tracking-[0.2em] select-none">{currentIndex + 1}/{images.length}</div>
-          <DoubleRightOutlined onClick={() => mainSwiper.current?.slideNext()} />
-        </div>
+        <ImageCount
+          currentIndex={currentIndex}
+          total={images.length}
+          onPrev={() => mainSwiper.current?.slidePrev()}
+          onNext={() => mainSwiper.current?.slideNext()}
+        />
       </div>
       {renderSlideImage}
     </div>

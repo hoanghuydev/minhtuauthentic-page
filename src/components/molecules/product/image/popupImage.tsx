@@ -60,20 +60,22 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
     );
   }, [images, imageActive]);
 
+  const handleClickNavigatorButton = (variant: string) => {
+    if (swiper) {
+      const currentSlide = swiper.activeIndex;
+      const indexMax = images.length - 1;
+      if (variant === 'next') {
+        swiper.slideTo(currentSlide === indexMax ? 0 : currentSlide + 1);
+      } else {
+        swiper.slideTo(currentSlide === 0 ? indexMax : currentSlide - 1);
+      }
+    }
+  }
+
   const renderNavigatorButton = (variant: string) => {
     return (
       <div
-        onClick={() => {
-          if (swiper) {
-            const currentSlide = swiper.activeIndex;
-            const indexMax = images?.length - 1;
-            if (variant === 'next') {
-              swiper.slideTo(currentSlide === indexMax ? 0 : currentSlide + 1);
-            } else {
-              swiper.slideTo(currentSlide === 0 ? indexMax : currentSlide - 1);
-            }
-          }
-        }}
+        onClick={() => handleClickNavigatorButton(variant)}
         className={twMerge(
           'absolute z-[2] w-[32px] h-[32px] rounded-full border border-[#dad4d4] cursor-pointer top-[calc(50%-22px)] lg:top-[calc(50%-16px)] bg-white flex justify-center items-center select-none',
           variant === 'next' ? 'right-[20px]' : 'left-[20px]',
@@ -120,8 +122,10 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
               image={image}
               product={product}
               setIsOpen={setIsOpen}
-              imageIndex={index + 1}
+              imageIndex={index}
               totalImages={images.length}
+              onPrev={() => handleClickNavigatorButton('prev')}
+              onNext={() => handleClickNavigatorButton('next')}
             />
           </SwiperSlide>
         ))}
