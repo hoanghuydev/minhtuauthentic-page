@@ -84,7 +84,6 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
   const handleAddDealSockToCart = () => {
     if (dealSockVariants.length > 0 && order?.addMultipleCart) {
       const updatedVariants = [mainVariant, ...dealSockVariants];
-      console.log('Adding deal sock variants to cart:', updatedVariants);
       order.addMultipleCart(updatedVariants);
       // setDealSockVariants([]);
       // setTotalSavings(0);
@@ -94,7 +93,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
   return (
     <div
       className={
-        'w-full shadow-custom bg-[#FFF2F6] my-1 lg:my-3 px-4 py-6 lg:px-[20px] lg:py-[30px] max-lg:overflow-hidden'
+        'w-full shadow-custom bg-[#FFF2F6] my-1 lg:my-3 px-4 py-5 lg:px-[20px] lg:py-[25px] max-lg:overflow-hidden'
       }
     >
       <p className={'text-2xl font-[700] lg:font-bold text-primary mb-[10px]'}>
@@ -133,6 +132,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
                     coupon={iCoupon}
                     checked={isVariantChecked(variant)}
                     onToggleChecked={() => toggleVariant(variant, iCoupon)}
+                    isShowConfiguration
                   />
                 ) as ReactNode;
               }}

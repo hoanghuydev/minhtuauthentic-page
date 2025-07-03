@@ -163,7 +163,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
       const newCartResponse = await callAddUpdateCart(
         variant.id,
-        (currentVariantOnCart?.qty ?? 0) + 1,
+        currentVariantOnCart?.qty ? 1 : 1,
         tempCart
       );
 

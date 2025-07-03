@@ -18,6 +18,7 @@ const DealSockCard = ({
   isDealSock,
   checked = false,
   onToggleChecked,
+  isShowConfiguration,
 }: {
   product: ProductDto;
   variant: VariantDto;
@@ -27,6 +28,7 @@ const DealSockCard = ({
   isDealSock?: boolean;
   checked?: boolean;
   onToggleChecked?: (variant: VariantDto, coupon: CouponsDto) => void;
+  isShowConfiguration?: boolean;
 }) => {
   const [_variant, setVariant] = useState<VariantDto>(variant);
   // Thêm local state để theo dõi trạng thái checked
@@ -92,6 +94,20 @@ const DealSockCard = ({
         </div>
         {/* <div className={'h-[50px] pt-2'}> */}
         <div className={'pt-2'}>
+          {isShowConfiguration &&
+            _variant?.variant_product_configuration_values?.map(
+              (item, index) => {
+                return (
+                  <p key={index} className={'text-sm px-4'}>
+                    {
+                      item.product_configuration_value?.product_configuration
+                        ?.name
+                    }
+                    : {item.product_configuration_value?.value}
+                  </p>
+                );
+              },
+            )}
           {_variant && (
             <ProductPrice
               className={twMerge(
