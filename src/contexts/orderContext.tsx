@@ -27,6 +27,7 @@ const OrderContext = createContext<TypeAppState | undefined>(undefined);
 export type TypeAppState = {
   cart: CartDto | null;
   addCart: (variantDto: VariantDto, qty?: number) => void;
+  addMultipleCart: (items: VariantDto[]) => void;
   updateCart: (index: number, qty?: number) => void;
   clearCart: () => void;
   applyCoupon: (couponCode: string, variant_id?: number) => Promise<boolean>;
@@ -71,7 +72,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     ref.current = pathname;
   }, [pathname]);
 
-  const callAddUpdateCart = async (variant_id: number, qty: number) => {
+  const callAddUpdateCart = async (variant_id: number, qty: number, currentCart?: CartDto) => {
     return await fetch(`/api/orders/addToCart`, {
       method: 'POST',
       headers: {
@@ -79,7 +80,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       },
       body: JSON.stringify({
         variant_id: variant_id,
-        current_cart: cart,
+        current_cart: currentCart || cart,
         qty,
       }),
     })
@@ -126,6 +127,62 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     setCart(newCartResponse?.data || []);
     toast('Đã thêm vào giỏ hàng', { ...TOAST_CONFIG, type: 'success' });
   };
+
+  const addMultipleCart = async (variants: VariantDto[]) => {
+    if (!Array.isArray(variants) || variants.length === 0) {
+      toast('Chưa có sản phẩm nào để thêm', {
+        ...TOAST_CONFIG,
+        type: 'info'
+      })
+      return
+    }
+
+    const timeExpire = localStorage.getItem('cart_expired');
+    const time = new Date().getTime();
+    if (!timeExpire) {
+      localStorage.setItem(
+        'cart_expired',
+        (time + 1000 * 60 * 60 * 24).toString(),
+      );
+    }
+
+    let tempCart = cart || { items: [] }
+
+    for (const variant of variants) {
+      if (!variant?.id) {
+        toast('Một trong các sản phẩm không tồn tại', {
+          ...TOAST_CONFIG,
+          type: 'error'
+        });
+        continue;
+      }
+
+      const currentVariantOnCart = tempCart?.items?.find(
+        (item) => item.variant_id === variant.id
+      );
+
+      const newCartResponse = await callAddUpdateCart(
+        variant.id,
+        (currentVariantOnCart?.qty ?? 0) + 1,
+        tempCart
+      );
+
+      if (!newCartResponse?.data) {
+        toast(
+          newCartResponse?.message || `Không thể thêm vào giỏ hàng`,
+          {
+            ...TOAST_CONFIG,
+            type: 'error'
+          }
+        );
+        return;
+      }
+
+      tempCart = newCartResponse.data;
+    }
+    setCart(tempCart);
+    toast('Đã thêm vào giỏ hàng', { ...TOAST_CONFIG, type: 'success' });
+  }
 
   const updateCart = async (index: number, qty: number = 1) => {
     if (!cart?.items?.length) {
@@ -222,6 +279,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         cart,
         addCart,
+        addMultipleCart,
         updateCart,
         isOpenHeaderCart,
         setIsOpenHeaderCart,
