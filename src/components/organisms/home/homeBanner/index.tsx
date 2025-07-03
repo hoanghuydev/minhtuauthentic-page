@@ -45,7 +45,7 @@ export default function HomeBanner({
             'lg:mt-[10px] lg:flex w-full gap-2 relative container mx-auto'
           }
         >
-          <div className="flex w-full gap-2 relative px-[0.25rem] lg:px-3">
+          <div className="flex w-full gap-2 relative">
             {menu && (
               <MenuWrapper menu={menu} className={'w-[220px] flex-shrink-0'} />
             )}
