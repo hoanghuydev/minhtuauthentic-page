@@ -20,14 +20,16 @@ export default function HomeSupport({ contents }: Props) {
         }
         classNameLeft={'lg:left-[-11px]'}
         classNameRight={'lg:right-[-11px]'}
-        classNameItems={'flex items-center gap-1 lg:gap-3 justify-center'}
+        classNameItems={'flex items-center justify-center'}
+        slidesPerView={4}
         slidePerViewMobile={2}
+        spaceBetween={20}
         data={contents || []}
         renderItem={(item) => {
           const _item = item as StaticContentsDto;
           const image = _item?.images?.[0]?.image?.url || support;
           return (
-            <>
+            <div className="h-[160px] flex items-center gap-1 lg:gap-3">
               <Image
                 src={image || ''}
                 className={'object-contain w-[60px] h-auto'}
@@ -43,7 +45,7 @@ export default function HomeSupport({ contents }: Props) {
                   __html: _item?.description || '',
                 }}
               />
-            </>
+            </div>
           );
         }}
       />
