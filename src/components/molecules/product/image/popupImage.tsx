@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { ProductDto } from '@/dtos/Product.dto';
 import { useProductImageDetail } from '@/hooks/useProductImageDetail';
@@ -21,7 +21,7 @@ type Props = {
 };
 export default function PopupImage({ open, product, image, setIsOpen }: Props) {
   const { images, imageActive, setImageActive } = useProductImageDetail({});
-  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
+  const swiperRef = useRef<SwiperClass | null>(null);
   useEffect(() => {
     if (image) {
       setImageActive(image);
@@ -29,6 +29,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
   }, [image]);
 
   useEffect(() => {
+    const swiper = swiperRef.current;
     if (swiper) {
       swiper.slideTo(images.findIndex((item) => item.url === imageActive?.url));
     }
@@ -61,6 +62,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
   }, [images, imageActive]);
 
   const handleClickNavigatorButton = (variant: string) => {
+    const swiper = swiperRef.current;
     if (swiper) {
       const currentSlide = swiper.activeIndex;
       const indexMax = images.length - 1;
@@ -104,7 +106,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
         speed={400}
         key={'popup-image'}
         onSwiper={(swiper) => {
-          setSwiper(swiper);
+          swiperRef.current = swiper;
         }}
         onSlideChange={(swiper) => {
           const activeIndex = swiper.activeIndex;
