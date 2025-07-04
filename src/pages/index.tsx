@@ -11,6 +11,7 @@ import { PageSetting } from '@/config/type';
 import HomeContent from '@/components/organisms/home/homeContent';
 import HomeBanner from '@/components/organisms/home/homeBanner';
 import Head from 'next/head';
+import HomeSupport from '@/components/organisms/home/homeSupport';
 
 export async function getStaticProps() {
   const res = await fetch(process.env.BE_URL + '/api/pages/home').catch(
@@ -151,6 +152,9 @@ export default function Home({
 
         <HomeContent homePage={homePage} settingsHome={settingsHome} />
       </Layout>
+      {homePage?.homeSupport && homePage?.homeSupport.length > 0 &&
+        <HomeSupport contents={homePage?.homeSupport} />
+      }
       <Footer settings={settings} footerContent={footerContent} />
     </>
   );

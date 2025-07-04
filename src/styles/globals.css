@@ -101,6 +101,12 @@ iframe {
     @apply text-[#0782C1] underline cursor-pointer;
   }
 }
+.support-html {
+    p {
+        margin-block-end: 0;
+        margin-block-start: 0;
+    }
+}
 .html-description {
   img {
     @apply w-auto inline !important;

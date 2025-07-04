@@ -63,9 +63,9 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
         />,
       );
     }
-    if (homePage?.homeSupport && homePage?.homeSupport.length > 0) {
-      _listComponent.push(<HomeSupport contents={homePage?.homeSupport} />);
-    }
+    // if (homePage?.homeSupport && homePage?.homeSupport.length > 0) {
+    //   _listComponent.push(<HomeSupport contents={homePage?.homeSupport} />);
+    // }
     setListComponent(_listComponent);
   }, [blockContents]);
 
