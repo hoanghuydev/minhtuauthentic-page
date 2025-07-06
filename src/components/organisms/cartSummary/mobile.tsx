@@ -61,12 +61,13 @@ export default function CartSummaryMobile() {
                       alt={item.variant_name}
                     />
                     <Button
-                      icon={<DeleteOutlined />}
                       danger
                       type={'link'}
                       onClick={() => handleDeleteClick(item, index)}
                       className="p-0"
-                    />
+                    >
+                      <DeleteOutlined className="text-[24px]" />
+                    </Button>
                   </div>
                   <div className={'flex flex-col flex-1'}>
                     <Link

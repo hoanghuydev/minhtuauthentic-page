@@ -6,8 +6,9 @@ type Props = {
   type?: string;
   htmlType?: 'submit' | 'button';
   className?: string;
+  loading?: boolean;
 };
-export default function PaymentButton({ onClick, type, htmlType, className }: Props) {
+export default function PaymentButton({ onClick, type, htmlType, className, loading }: Props) {
   const classSubText = 'font-extrabold uppercase text-2xl text-center mx-auto';
   const classText =
     'flex-1 flex flex-col gap-1 text-center p-3 text-center rounded-[10px] '+className;
@@ -20,8 +21,9 @@ export default function PaymentButton({ onClick, type, htmlType, className }: Pr
             style={{
               backgroundImage: `linear-gradient(#08D2CD, #6A61EE)`,
             }}
-            className={twMerge(classText, 'text-white')}
+            className={twMerge(classText, 'text-white', loading && 'opacity-70')}
             onClick={onClick}
+            disabled={loading}
           >
             <span className={classSubText}>Thanh toán qua Fudiin</span>
             <span className={'flex items-center justify-center m-auto'}>
@@ -36,8 +38,9 @@ export default function PaymentButton({ onClick, type, htmlType, className }: Pr
             style={{
               backgroundImage: `linear-gradient(#005BA9, #ED1C24)`,
             }}
-            className={twMerge(classText, 'text-white')}
+            className={twMerge(classText, 'text-white', loading && 'opacity-70')}
             onClick={onClick}
+            disabled={loading}
           >
             <span className={classSubText}>Thanh toán qua VNPAY</span>
             <span className={'flex items-center justify-center m-auto'}>
@@ -52,8 +55,9 @@ export default function PaymentButton({ onClick, type, htmlType, className }: Pr
             style={{
               background: `#AF126A`,
             }}
-            className={twMerge(classText, 'text-white')}
+            className={twMerge(classText, 'text-white', loading && 'opacity-70')}
             onClick={onClick}
+            disabled={loading}
           >
             <span className={classSubText}>Ví trả sau momo</span>
             <span className={'flex items-center justify-center m-auto'}>
@@ -65,8 +69,9 @@ export default function PaymentButton({ onClick, type, htmlType, className }: Pr
         return (
           <button
             type={htmlType}
-            className={twMerge(classText, 'bg-primary text-white')}
+            className={twMerge(classText, 'bg-primary text-white', loading && 'opacity-70')}
             onClick={onClick}
+            disabled={loading}
           >
             <span className={twMerge(classSubText)}>Thanh toán </span>
             <span className={'mx-auto'}>Thanh toán COD, chuyển khoản</span>
@@ -76,8 +81,9 @@ export default function PaymentButton({ onClick, type, htmlType, className }: Pr
         return (
           <button
             type={htmlType}
-            className={twMerge(classText, 'bg-primary text-white')}
+            className={twMerge(classText, 'bg-primary text-white', loading && 'opacity-70')}
             onClick={onClick}
+            disabled={loading}
           >
             <span className={twMerge(classSubText)}>Thanh toán</span>
             <span className={'mx-auto'}>Chuyển khoản qua ngân hàng</span>

@@ -66,7 +66,7 @@ export const Banners = ({
   return (
     <div
       className={twMerge(
-        'relative banner-container h-full',
+        'relative banner-container h-full max-sm:px-[0.25rem]',
         isLastSlide && 'hide-next-button',
         isFirstSlide && 'hide-prev-button',
       )}

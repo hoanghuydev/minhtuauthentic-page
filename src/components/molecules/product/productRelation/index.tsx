@@ -13,6 +13,7 @@ type Props = {
   products: ProductDto[];
 };
 export default function ProductRelation({ products }: Props) {
+  console.log(products);
   const productContext = useContext(ProductDetailContext);
   return (
     <>
@@ -22,6 +23,10 @@ export default function ProductRelation({ products }: Props) {
       {products?.length > 0 && (
         <div className={'flex flex-col gap-3 mt-3 sticky top-0'}>
           {products.map((product, index) => {
+            const variant = (product?.variants || [])?.find(
+              (item) => item.is_default,
+            );
+
             return (
               <Link
                 href={generateSlugToHref(product?.slugs?.slug)}
@@ -32,7 +37,7 @@ export default function ProductRelation({ products }: Props) {
               >
                 <div className={'flex items-center gap-2'}>
                   <Badge className={'bg-green'}>
-                    Giảm {calculatePricePercent(product.variants?.[0])}%
+                    Giảm {calculatePricePercent(variant)}%
                   </Badge>
                   <Badge className={'bg-price'}>Trả góp 0%</Badge>
                 </div>
@@ -56,7 +61,7 @@ export default function ProductRelation({ products }: Props) {
                       {product.title || product.name}
                     </h3>
                     <ProductPrice
-                      variant={product.variants?.[0]}
+                      variant={variant}
                       classNameRegularPrice={'font-semibold'}
                       classNamePrice={'font-[500] text-[10px]'}
                     />

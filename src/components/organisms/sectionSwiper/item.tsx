@@ -29,6 +29,7 @@ export type SwiperProps = {
   spaceBetweenMobile?: number;
   classNameLeft?: string;
   classNameRight?: string;
+  onSwiper?: (swiper: SwiperClass) => void;
 };
 export default function SectionSwiperItem({
   classNameContainer,
@@ -50,6 +51,7 @@ export default function SectionSwiperItem({
   spaceBetweenMobile,
   classNameLeft,
   classNameRight,
+  onSwiper,
 }: SwiperProps) {
   const rows = 2;
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -107,7 +109,10 @@ export default function SectionSwiperItem({
           loop={loop}
           className={twMerge('mx-auto w-full')}
           wrapperClass={'mx-auto'}
-          onSwiper={(swiper) => setSwiper(swiper)}
+          onSwiper={(swiper) => {
+            setSwiper(swiper);
+            onSwiper && onSwiper(swiper);
+          }}
           centeredSlides={isCenter}
           breakpoints={{
             320: {

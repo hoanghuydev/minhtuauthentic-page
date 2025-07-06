@@ -2,17 +2,26 @@ import { useRef } from 'react';
 import { ImageDto } from '@/dtos/Image.dto';
 import { ProductDto } from '@/dtos/Product.dto';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
+import ImageCount from '@/components/atoms/imageCount';
 
 interface PopupSlideContentProps {
   image: ImageDto;
   product: ProductDto;
   setIsOpen?: (item: { display: boolean; image: ImageDto | null }) => void;
+  imageIndex: number;
+  totalImages: number;
+  onPrev: () => void;
+  onNext: () => void;
 }
 
 export default function PopupSlideContent({
   image,
   product,
   setIsOpen,
+  imageIndex,
+  totalImages,
+  onPrev,
+  onNext,
 }: PopupSlideContentProps) {
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -37,6 +46,12 @@ export default function PopupSlideContent({
           alt={product.title || product.name}
           unoptimized={true}
           quality={100}
+        />
+        <ImageCount
+          currentIndex={imageIndex}
+          total={totalImages}
+          onPrev={onPrev}
+          onNext={onNext}
         />
       </div>
     </div>
