@@ -98,6 +98,9 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
         'w-full relative shadow-custom mb-3 px-4 py-5 lg:px-[10px] mt-5 lg:py-[15px]',
         `bg-[${setting?.value?.backgroundColor ?? '#FFF2F6'}]`,
       )}
+      style={{
+        backgroundColor: setting?.value?.backgroundColor,
+      }}
     >
       <div className="absolute top-[-18px] z-10 left-[5%] w-[285px] h-[55px]">
         <Image
