@@ -95,7 +95,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
   return (
     <div
       className={twMerge(
-        'w-full relative shadow-custom mb-3 px-4 py-5 lg:px-[10px] mt-5 lg:py-[15px]',
+        'w-full relative shadow-custom mb-3 px-4 py-5 lg:px-[10px] mt-5 rounded-[8px] lg:py-[15px]',
         `bg-[${setting?.value?.backgroundColor ?? '#FFF2F6'}]`,
       )}
       style={{

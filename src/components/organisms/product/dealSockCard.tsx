@@ -102,10 +102,12 @@ const DealSockCard = ({
                     key={index}
                     className={'text-sm h-[37.5px] line-clamp-2 px-4'}
                   >
-                    {
-                      item.product_configuration_value?.product_configuration
-                        ?.name
-                    }
+                    <strong>
+                      {
+                        item.product_configuration_value?.product_configuration
+                          ?.name
+                      }
+                    </strong>
                     : {item.product_configuration_value?.value}
                   </p>
                 );
