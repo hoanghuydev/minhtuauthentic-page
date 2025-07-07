@@ -11,7 +11,8 @@ import DealSockCard from '@/components/organisms/product/dealSockCard';
 import ShoppingCartOutlined from '@ant-design/icons/lib/icons/ShoppingCartOutlined';
 import OrderContext from '@/contexts/orderContext';
 import { calculatePriceMinus, formatMoney } from '@/utils';
-
+import { twMerge } from 'tailwind-merge';
+import Image from 'next/image';
 type Props = {
   setting?: SettingsDto;
   mainVariant: VariantDto;
@@ -27,6 +28,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
     '/api/promotions/' + PROMOTION_TYPE.DEAL_SOCK,
     fetcher,
   );
+  console.log(setting);
   const order = useContext(OrderContext);
   const [dealSockVariants, setDealSockVariants] = useState<VariantDto[]>([]);
   const [totalSavings, setTotalSavings] = useState<number>(0);
@@ -74,7 +76,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
     });
 
     setTotalSavings((prevSavings) =>
-      isRemoving ? prevSavings - savings : prevSavings + savings
+      isRemoving ? prevSavings - savings : prevSavings + savings,
     );
   };
 
@@ -88,18 +90,32 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
       // setDealSockVariants([]);
       // setTotalSavings(0);
     }
-  }
+  };
 
   return (
     <div
-      className={
-        'w-full shadow-custom bg-[#FFF2F6] my-1 lg:my-3 px-4 py-5 lg:px-[20px] lg:py-[25px] max-lg:overflow-hidden'
-      }
+      className={twMerge(
+        'w-full relative shadow-custom mb-3 px-4 py-5 lg:px-[10px] mt-5 lg:py-[15px]',
+        `bg-[${setting?.value?.backgroundColor ?? '#FFF2F6'}]`,
+      )}
     >
-      <p className={'text-2xl font-[700] lg:font-bold text-primary mb-[10px]'}>
-        MUA KÈM GIÁ SỐC
-      </p>
-      <div className="relative">
+      <div className="absolute top-[-18px] z-10 left-[5%] w-[320px] h-[55px]">
+        <Image
+          src="/sale_frame.webp"
+          alt="Minh Tu Authentic, Nước hoa chính hãng Tphcm, Quận Tân Phú, Mỹ phẩm"
+          className="object-contain object-center"
+          fill
+          unoptimized
+          priority
+        />
+        <div className="relative w-full h-full">
+          <p className="absolute text-[18px] z-10 left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] max-w-[320px] line-clamp-1 text-center text-white font-semibold">
+            MUA KÈM GIÁ SỐC
+          </p>
+        </div>
+      </div>
+
+      <div className="relative mt-4">
         {isLoading ? (
           renderSkeletonCards()
         ) : (
@@ -141,19 +157,23 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
             <div className="flex items-center justify-between mt-4">
               <div>
                 <p className="text-gray-700 text-lg">
-                  Đã chọn: <span className="text-primary">{dealSockVariants.length} sản phẩm</span>
+                  Đã chọn:{' '}
+                  <span className="text-red-600">
+                    {dealSockVariants.length} sản phẩm
+                  </span>
                 </p>
                 <p className="text-gray-700 text-lg">
-                  Tiết kiệm được: <span className="text-primary">{formatMoney(totalSavings)}</span>
+                  Tiết kiệm được:{' '}
+                  <span className="text-red-600">
+                    {formatMoney(totalSavings)}
+                  </span>
                 </p>
               </div>
               <div>
                 <button
                   type={'button'}
-                  className={
-                    `block grow bg-primary text-white rounded-[8px] p-[7px_6px] lg:p-[10px_12px] max-lg:text-sm
-                    ${dealSockVariants.length === 0 ? 'opacity-50' : ''}`
-                  }
+                  className={`block grow bg-primary text-white rounded-[8px] p-[7px_6px] lg:p-[10px_12px] max-lg:text-sm
+                    ${dealSockVariants.length === 0 ? 'opacity-50' : ''}`}
                   onClick={handleAddDealSockToCart}
                   disabled={dealSockVariants.length === 0}
                 >

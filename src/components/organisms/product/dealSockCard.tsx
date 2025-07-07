@@ -98,7 +98,10 @@ const DealSockCard = ({
             _variant?.variant_product_configuration_values?.map(
               (item, index) => {
                 return (
-                  <p key={index} className={'text-sm px-4'}>
+                  <p
+                    key={index}
+                    className={'text-sm h-[37.5px] line-clamp-2 px-4'}
+                  >
                     {
                       item.product_configuration_value?.product_configuration
                         ?.name
@@ -114,7 +117,7 @@ const DealSockCard = ({
                 'px-4',
                 isDealSock && '[&>span:first-child]:text-[14px] ',
               )}
-              classNameRegularPrice={'text-primary'}
+              classNameRegularPrice={'text-red-600'}
               variant={_variant}
             />
           )}
@@ -126,20 +129,20 @@ const DealSockCard = ({
             return (
               <Fragment key={'Product-card-' + index}>
                 <p>
-                  <span className={'font-semibold mr-1 lg:mr-3'}>
+                  <span className={'font-semibold text-[12px] mr-1 lg:mr-3'}>
                     {promotionName(promotion)}:
                   </span>
                   <span
                     className={
-                      'text-primary text-[13px] font-[700] lg:font-bold text-right cursor-pointer'
+                      'text-red-600 text-[13px] font-[700] lg:font-bold text-right cursor-pointer'
                     }
                   >
                     {formatMoney(
                       (_variant?.regular_price || 0) -
-                      calculatePriceMinus(
-                        _variant?.regular_price || 0,
-                        coupon,
-                      ),
+                        calculatePriceMinus(
+                          _variant?.regular_price || 0,
+                          coupon,
+                        ),
                     )}
                   </span>
                 </p>

@@ -6,6 +6,7 @@ import support from '@/static/images/support.png';
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import { ImageDto } from '@/dtos/Image.dto';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
+import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 
 type Props = {
   contents?: StaticContentsDto[];
@@ -13,11 +14,22 @@ type Props = {
 
 export default function HomeSupport({ contents }: Props) {
   return (
-    <>
+    <div className="relative my-3">
+      <div className="absolute top-[-18px] z-10 left-[50%] w-[320px] h-[55px] translate-x-[-50%]">
+        <Image
+          src="/sale_frame.webp"
+          alt="Minh Tu Authentic, Nước hoa chính hãng Tphcm, Quận Tân Phú, Mỹ phẩm"
+          className="object-contain object-center"
+          fill
+          unoptimized
+          priority
+        />
+      </div>
+      <p className="absolute top-[-4px] text-[18px] z-10 left-[50%] max-w-[320px] line-clamp-1 translate-x-[-50%] text-center text-white font-semibold">
+        Thương Hiệu Của Sự An Tâm
+      </p>
       <SectionSwiper
-        classNameContainer={
-          'mb-[0.25rem] lg:mb-3 py-5 lg:py-7 border-t border-b'
-        }
+        classNameContainer={'mb-[0.25rem] lg:mb-3 pb-4 pt-6 border-t border-b'}
         classNameLeft={'d-none'}
         classNameRight={'d-none'}
         classNameItems={'flex items-center justify-center'}
@@ -29,18 +41,22 @@ export default function HomeSupport({ contents }: Props) {
         data={contents || []}
         renderItem={(item) => {
           const _item = item as StaticContentsDto;
-          const image = _item?.images?.[0]?.image?.url || support;
+          const image = _item?.images?.[0]?.image;
           return (
             <div className="max-h-[120px] sm:max-h-[60px] flex flex-col sm:flex-row items-center gap-2 lg:gap-3">
-              <Image
-                src={image || ''}
-                className={'object-cover object-center w-[40px] sm:w-[50px] h-auto'}
+              <ImageWithFallback
+                image={image}
+                className={
+                  'object-cover object-center w-[40px] sm:w-[50px] h-auto'
+                }
                 alt={
                   'Minh Tu Authentic, Nước hoa chính hãng Tphcm, Quận Tân Phú, Mỹ phẩm'
                 }
               />
               <div
-                className={'container-html support-html line-clamp-3 max-sm:text-center'}
+                className={
+                  'container-html support-html line-clamp-3 max-sm:text-center'
+                }
                 dangerouslySetInnerHTML={{
                   __html: _item?.description || '',
                 }}
@@ -49,6 +65,6 @@ export default function HomeSupport({ contents }: Props) {
           );
         }}
       />
-    </>
+    </div>
   );
 }
