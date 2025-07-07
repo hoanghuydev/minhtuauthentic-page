@@ -108,8 +108,6 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
               slidesPerView={5}
               slidePerViewMobile={2}
               spaceBetween={10}
-              // auto={true}
-              loop={true}
               renderItem={(item: unknown) => {
                 const iCoupon = item as CouponsDto;
                 const variant = iCoupon?.coupon_details?.[0]?.variant;
@@ -141,19 +139,20 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
             <div className="flex items-center justify-between mt-4">
               <div>
                 <p className="text-gray-700 text-lg">
-                  Đã chọn: <span className="text-primary">{dealSockVariants.length} sản phẩm</span>
+                  Đã chọn: <span className="text-red-500">{dealSockVariants.length} sản phẩm</span>
                 </p>
                 <p className="text-gray-700 text-lg">
-                  Tiết kiệm được: <span className="text-primary">{formatMoney(totalSavings)}</span>
+                  Tiết kiệm được: <span className="text-red-500">{formatMoney(totalSavings)}</span>
                 </p>
               </div>
               <div>
                 <button
                   type={'button'}
-                  className={
-                    `block grow bg-primary text-white rounded-[8px] p-[7px_6px] lg:p-[10px_12px] max-lg:text-sm
-                    ${dealSockVariants.length === 0 ? 'opacity-50' : ''}`
-                  }
+                  className={`
+                    block grow bg-primary text-white rounded-[8px] p-[7px_6px] lg:p-[10px_12px] max-lg:text-sm
+                    ${dealSockVariants.length === 0 ? 'opacity-50' : 'opacity-100'}
+                    transition-opacity duration-300 ease-in-out
+                  `}
                   onClick={handleAddDealSockToCart}
                   disabled={dealSockVariants.length === 0}
                 >

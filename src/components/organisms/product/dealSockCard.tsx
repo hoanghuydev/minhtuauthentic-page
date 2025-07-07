@@ -98,7 +98,7 @@ const DealSockCard = ({
             _variant?.variant_product_configuration_values?.map(
               (item, index) => {
                 return (
-                  <p key={index} className={'text-sm px-4'}>
+                  <p key={index} className={'text-xs sm:text-sm px-4 line-clamp-1'}>
                     {
                       item.product_configuration_value?.product_configuration
                         ?.name
@@ -112,9 +112,9 @@ const DealSockCard = ({
             <ProductPrice
               className={twMerge(
                 'px-4',
-                isDealSock && '[&>span:first-child]:text-[14px] ',
+                isDealSock && 'sm:[&>span:first-child]:text-[14px] [&>span:first-child]:text-[12px]',
               )}
-              classNameRegularPrice={'text-primary'}
+              classNamePrice={'max-sm:text-[11px]'}
               variant={_variant}
             />
           )}
@@ -125,13 +125,13 @@ const DealSockCard = ({
           {promotions?.map((promotion, index) => {
             return (
               <Fragment key={'Product-card-' + index}>
-                <p>
-                  <span className={'font-semibold mr-1 lg:mr-3'}>
+                <p className="max-sm:text-[12px]">
+                  <span className={'font-semibold mr-1'}>
                     {promotionName(promotion)}:
                   </span>
                   <span
                     className={
-                      'text-primary text-[13px] font-[700] lg:font-bold text-right cursor-pointer'
+                      'text-primary lg:font-bold text-right cursor-pointer'
                     }
                   >
                     {formatMoney(
