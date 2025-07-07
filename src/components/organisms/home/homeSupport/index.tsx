@@ -15,19 +15,6 @@ type Props = {
 export default function HomeSupport({ contents }: Props) {
   return (
     <div className="relative my-3">
-      <div className="absolute top-[-18px] z-10 left-[50%] w-[320px] h-[55px] translate-x-[-50%]">
-        <Image
-          src="/sale_frame.webp"
-          alt="Minh Tu Authentic, Nước hoa chính hãng Tphcm, Quận Tân Phú, Mỹ phẩm"
-          className="object-contain object-center"
-          fill
-          unoptimized
-          priority
-        />
-      </div>
-      <p className="absolute top-[-4px] text-[18px] z-10 left-[50%] max-w-[320px] line-clamp-1 translate-x-[-50%] text-center text-white font-semibold">
-        Thương Hiệu Của Sự An Tâm
-      </p>
       <SectionSwiper
         classNameContainer={'mb-[0.25rem] lg:mb-3 pb-4 pt-6 border-t border-b'}
         classNameLeft={'d-none'}

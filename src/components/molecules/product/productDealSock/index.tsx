@@ -99,7 +99,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
         `bg-[${setting?.value?.backgroundColor ?? '#FFF2F6'}]`,
       )}
     >
-      <div className="absolute top-[-18px] z-10 left-[5%] w-[320px] h-[55px]">
+      <div className="absolute top-[-18px] z-10 left-[5%] w-[285px] h-[55px]">
         <Image
           src="/sale_frame.webp"
           alt="Minh Tu Authentic, Nước hoa chính hãng Tphcm, Quận Tân Phú, Mỹ phẩm"
@@ -109,7 +109,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
           priority
         />
         <div className="relative w-full h-full">
-          <p className="absolute text-[18px] z-10 left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] max-w-[320px] line-clamp-1 text-center text-white font-semibold">
+          <p className="absolute text-[18px] w-full z-10 left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] line-clamp-1 text-center text-white font-semibold">
             MUA KÈM GIÁ SỐC
           </p>
         </div>
