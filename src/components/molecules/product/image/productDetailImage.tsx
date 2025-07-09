@@ -121,6 +121,7 @@ const ProductDetailImage = ({
               </div>
             )
           }}
+          key={JSON.stringify(images)}
           data={images}
           slidesPerView={1}
           spaceBetween={5}
