@@ -17,6 +17,7 @@ import { TProductSeen } from '@/config/type';
 import ProductOverview from '@/components/organisms/product/overview';
 import ProductDetailContext from '@/contexts/productDetailContext';
 import Head from 'next/head';
+import dayjs from 'dayjs';
 
 const ProductRating = dynamic(
   () => import('@/components/molecules/product/productRating'),
@@ -106,7 +107,7 @@ const ProductDetailCard = ({
         "offerCount": 1,
         "lowPrice": Math.min(...prices),
         "highPrice": Math.max(...prices),
-        "priceValidUntil": "2026-05-27",
+        "priceValidUntil": dayjs(product?.created_at).add(1, 'year').format('YYYY-MM-DD'),
         "itemCondition": "http://schema.org/NewCondition",
         "availability": "http://schema.org/InStock",
         "seller": {
