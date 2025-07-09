@@ -44,6 +44,10 @@ const ProductDetailImage = ({
     }
   }, [imageActive, images]);
 
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [images]);
+
   const renderSlideImage = useMemo(() => {
     return (
       <div className="relative">
