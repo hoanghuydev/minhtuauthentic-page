@@ -36,10 +36,10 @@ export default function ProductRelation({ products }: Props) {
                 )}
               >
                 <div className={'flex items-center gap-2'}>
-                  <Badge className={'bg-green'}>
+                  <Badge className={'bg-price'}>
                     Giảm {calculatePricePercent(variant)}%
                   </Badge>
-                  <Badge className={'bg-price'}>Trả góp 0%</Badge>
+                  <Badge className={'bg-green'}>Trả góp 0%</Badge>
                 </div>
                 <div className={twMerge('flex gap-3 mt-3')} key={index}>
                   <div>

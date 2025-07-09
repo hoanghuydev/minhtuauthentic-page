@@ -28,7 +28,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
     '/api/promotions/' + PROMOTION_TYPE.DEAL_SOCK,
     fetcher,
   );
-  console.log(setting);
+
   const order = useContext(OrderContext);
   const [dealSockVariants, setDealSockVariants] = useState<VariantDto[]>([]);
   const [totalSavings, setTotalSavings] = useState<number>(0);
@@ -127,8 +127,6 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
               slidesPerView={5}
               slidePerViewMobile={2}
               spaceBetween={10}
-              // auto={true}
-              loop={true}
               renderItem={(item: unknown) => {
                 const iCoupon = item as CouponsDto;
                 const variant = iCoupon?.coupon_details?.[0]?.variant;
@@ -175,8 +173,11 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
               <div>
                 <button
                   type={'button'}
-                  className={`block grow bg-primary text-white rounded-[8px] p-[7px_6px] lg:p-[10px_12px] max-lg:text-sm
-                    ${dealSockVariants.length === 0 ? 'opacity-50' : ''}`}
+                  className={`
+                    block grow bg-primary text-white rounded-[8px] p-[7px_6px] lg:p-[10px_12px] max-lg:text-sm
+                    ${dealSockVariants.length === 0 ? 'opacity-50' : 'opacity-100'}
+                    transition-opacity duration-300 ease-in-out
+                  `}
                   onClick={handleAddDealSockToCart}
                   disabled={dealSockVariants.length === 0}
                 >
