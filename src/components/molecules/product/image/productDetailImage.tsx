@@ -44,6 +44,10 @@ const ProductDetailImage = ({
     }
   }, [imageActive, images]);
 
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [images]);
+
   const renderSlideImage = useMemo(() => {
     return (
       <div className="relative">
@@ -121,6 +125,7 @@ const ProductDetailImage = ({
               </div>
             )
           }}
+          key={JSON.stringify(images)}
           data={images}
           slidesPerView={1}
           spaceBetween={5}

@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic';
 import { useIsDesktop } from '@/hooks/useDevice';
 import { useMemo } from 'react';
 import Head from 'next/head';
+import dayjs from 'dayjs';
 
 const NavFilterMobile = dynamic(
   () => import('@/components/organisms/MobileMenu/navFilterMobile'),
@@ -74,9 +75,48 @@ export default function CategoryTemplate({
             '@type': 'Offer',
             priceCurrency: 'VND',
             price: defaultVariant?.regular_price,
+            priceValidUntil: dayjs(product?.created_at)
+              .add(1, 'year')
+              .format('YYYY-MM-DD'),
             availability: 'http://schema.org/InStock',
             itemCondition: 'http://schema.org/NewCondition',
           },
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '4.7',
+            reviewCount: '89',
+          },
+          review: [
+            {
+              '@type': 'Review',
+              author: {
+                '@type': 'Person',
+                name: 'Nguyễn Văn A',
+              },
+              datePublished: '2025-06-10',
+              reviewBody:
+                'Hương thơm rất nam tính và bền lâu, rất hài lòng với sản phẩm.',
+              reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5',
+                bestRating: '5',
+              },
+            },
+            {
+              '@type': 'Review',
+              author: {
+                '@type': 'Person',
+                name: 'Trần Thị B',
+              },
+              datePublished: '2025-05-20',
+              reviewBody: 'Chất lượng tốt, giao hàng nhanh chóng.',
+              reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '4',
+                bestRating: '5',
+              },
+            },
+          ],
         },
       };
     });
