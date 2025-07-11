@@ -52,39 +52,43 @@ export default function CategoryTemplate({
   const description =
     data?.category?.static_components?.[0]?.description ||
     data?.brand?.static_components?.[0]?.description ||
+    data?.keyword?.static_components?.[0]?.description ||
     '';
 
   const categorySchema = useMemo(() => {
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : process.env.APP_URL;
+    const baseUrl =
+      typeof window !== 'undefined'
+        ? window.location.origin
+        : process.env.APP_URL;
     const itemListElement = data?.products?.map((product, index) => {
-      const defaultVariant = product?.variants?.find(v => v.is_default);
+      const defaultVariant = product?.variants?.find((v) => v.is_default);
       return {
-        "@type": "ListItem",
-        "position": index + 1,
-        "item": {
-          "@type": "Product",
-          "name": product?.title,
-          "image": product?.feature_image_detail?.image?.url,
-          "url": `${baseUrl}/${product?.slugs?.slug}`,
-          "offers": {
-            "@type": "Offer",
-            "priceCurrency": "VND",
-            "price": defaultVariant?.regular_price,
-            "availability": "http://schema.org/InStock",
-            "itemCondition": "http://schema.org/NewCondition"
-          }
-        }
-      }
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'Product',
+          name: product?.title,
+          image: product?.feature_image_detail?.image?.url,
+          url: `${baseUrl}/${product?.slugs?.slug}`,
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'VND',
+            price: defaultVariant?.regular_price,
+            availability: 'http://schema.org/InStock',
+            itemCondition: 'http://schema.org/NewCondition',
+          },
+        },
+      };
     });
 
     return {
-      "@context": "http://schema.org",
-      "@type": "ItemList",
-      "url": `${baseUrl}/${slug?.slug}`,
-      "numberOfItems": data?.products?.length || 0,
-      "itemListOrder": "http://schema.org/ItemListOrderAscending",
-      "itemListElement": itemListElement
-    }
+      '@context': 'http://schema.org',
+      '@type': 'ItemList',
+      url: `${baseUrl}/${slug?.slug}`,
+      numberOfItems: data?.products?.length || 0,
+      itemListOrder: 'http://schema.org/ItemListOrderAscending',
+      itemListElement: itemListElement,
+    };
   }, [data?.products, slug?.slug]);
   return (
     <>
