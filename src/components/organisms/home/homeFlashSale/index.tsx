@@ -30,31 +30,52 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
         >
           <div
             className={
-              'flex justify-end mb-3 items-center h-[36px] lg:h-[120px] w-full relative px-3 lg:mb-3'
+              'flex justify-end mb-3 items-center w-full relative lg:h-[120px] lg:px-3 lg:mb-3'
             }
           >
+            {/* Desktop Image */}
             {promotion?.images?.[0]?.image?.url && (
               <Image
                 src={promotion?.images?.[0]?.image?.url || ''}
-                className={'object-cover w-full !h-auto'}
+                className={'object-cover w-full !h-auto hidden lg:block'}
                 alt={'Khuyến mãi flash sale'}
                 unoptimized
                 fill
               />
             )}
-            {isDesktop && (
-              <CountdownContainer
-                className={'relative pt-12'}
-                endDate={endDate}
+            {/* Mobile Image */}
+            {promotion?.images_mobile?.[0]?.image?.url && (
+              <Image
+                src={promotion?.images_mobile?.[0]?.image?.url || ''}
+                className={'object-cover w-full !h-auto lg:hidden'}
+                alt={'Khuyến mãi flash sale'}
+                unoptimized
+                width={562}
+                height={180}
               />
             )}
-          </div>
-          {isMobile && (
+            {/* Fallback: Show desktop image on mobile if mobile image is not available */}
+            {!promotion?.images_mobile?.[0]?.image?.url &&
+              promotion?.images?.[0]?.image?.url && (
+                <Image
+                  src={promotion?.images?.[0]?.image?.url || ''}
+                  className={'object-cover w-full !h-auto'}
+                  alt={'Khuyến mãi flash sale'}
+                  unoptimized
+                  width={1219}
+                  height={120}
+                />
+              )}
             <CountdownContainer
-              className={'flex gap-3 mb-3 items-center justify-center'}
+              className={'relative pt-12 hidden lg:flex'}
               endDate={endDate}
             />
-          )}
+          </div>
+
+          <CountdownContainer
+            className={'flex gap-3 mb-3 items-center justify-center lg:hidden'}
+            endDate={endDate}
+          />
           <SectionSwiperItem
             classNameContainer="pt-2"
             slidesPerView={5}
