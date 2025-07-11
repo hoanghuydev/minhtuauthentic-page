@@ -7,6 +7,7 @@ import React, {
   useState,
 } from 'react';
 import { SEARCH_KEYWORD } from '@/config/enum';
+import { useIsMobile } from '@/hooks/useDevice';
 
 export type TypeSearchState = {
   isOpenSearch: boolean;
@@ -20,6 +21,7 @@ export const SearchProvider = ({ children }: { children: React.ReactNode }) => {
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [debounceValue, setDebounceValue] = useState('');
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -31,12 +33,12 @@ export const SearchProvider = ({ children }: { children: React.ReactNode }) => {
   }, [searchValue]);
 
   useEffect(() => {
-    if (isOpenSearch) {
+    if (isOpenSearch && isMobile) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
     }
-  }, [isOpenSearch]);
+  }, [isOpenSearch, isMobile]);
 
   const saveKeyword = useCallback(() => {
     const keyword: string | null = localStorage.getItem(SEARCH_KEYWORD);

@@ -193,7 +193,9 @@ export default function ContentFilter({
           {category?.children && category?.children?.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
               {category.children.map((child, index) => {
-                const currentSlugPath = Array.isArray(ctx?.router?.query['slug'])
+                const currentSlugPath = Array.isArray(
+                  ctx?.router?.query['slug'],
+                )
                   ? ctx?.router?.query['slug'].join('/')
                   : ctx?.router?.query['slug'];
                 return (
@@ -202,7 +204,10 @@ export default function ContentFilter({
                     key={index}
                     onClick={() => {
                       ctx?.updateRouter &&
-                        ctx.updateRouter('child', child.slugs?.slug || 'my-pham');
+                        ctx.updateRouter(
+                          'child',
+                          child.slugs?.slug || 'my-pham',
+                        );
                     }}
                     className={twMerge(
                       'bg-[#f3f4f6] border border-[#e5e7eb] rounded-[10px] text-[12px] p-[5px_10px] transition-colors duration-300',
@@ -219,7 +224,7 @@ export default function ContentFilter({
                   // >
                   //   {child.name}
                   // </Link>
-                )
+                );
               })}
             </div>
           )}
@@ -275,7 +280,7 @@ export default function ContentFilter({
         </div>
       </div>
       <div className={'relative'}>
-        {ctx?.loading && (
+        {/* {ctx?.loading && (
           <div
             className={
               'absolute h-full w-full flex top-0 left-0 p-1 justify-center items-center z-[1] bg-[rgb(255_255_255_/_70%)]'
@@ -283,7 +288,7 @@ export default function ContentFilter({
           >
             <Loading />
           </div>
-        )}
+        )} */}
         {renderProduct}
         <div className={'flex justify-center mt-3'}>
           {ctx?.limit && ctx?.limit > -1 && ctx?.total > 0 && (

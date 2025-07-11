@@ -52,21 +52,12 @@ export const InputSearchDesktop = ({ classname, isForMobile }: Props) => {
   }, [ref]);
 
   useEffect(() => {
-    if (isMobile) {
-      if (ctx?.isOpenSearch) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = 'auto';
-      }
-    } else if (isDesktop) {
-      if (ctx?.isOpenSearch) {
-        const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-        document.body.style.paddingRight = `${scrollBarWidth}px`;
-      } else {
-        document.body.style.paddingRight = '';
-      }
+    if (ctx?.isOpenSearch && isMobile) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
     }
-  }, [ctx?.isOpenSearch]);
+  }, [ctx?.isOpenSearch, isMobile]);
 
   useEffect(() => {
     const handleKeyUp = (e: KeyboardEvent) => {
