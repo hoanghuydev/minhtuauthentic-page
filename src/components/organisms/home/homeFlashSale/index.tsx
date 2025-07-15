@@ -59,7 +59,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
               promotion?.images?.[0]?.image?.url && (
                 <Image
                   src={promotion?.images?.[0]?.image?.url || ''}
-                  className={'object-cover w-full !h-auto'}
+                  className={'object-cover w-full !h-auto lg:hidden'}
                   alt={'Khuyến mãi flash sale'}
                   unoptimized
                   width={1219}
