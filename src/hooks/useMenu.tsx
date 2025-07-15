@@ -27,7 +27,7 @@ export default function useMenu(menu: ResponseMenuDto) {
       ...[
         {
           type: POPUP_TYPE.NEWS,
-          data: [],
+          data: menu?.newsData || [],
         },
       ],
     ]);

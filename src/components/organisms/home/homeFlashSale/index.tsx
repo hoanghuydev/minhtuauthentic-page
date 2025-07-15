@@ -35,13 +35,15 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
           >
             {/* Desktop Image */}
             {promotion?.images?.[0]?.image?.url && (
-              <Image
-                src={promotion?.images?.[0]?.image?.url || ''}
-                className={'object-cover w-full !h-auto hidden lg:block'}
-                alt={'Khuyến mãi flash sale'}
-                unoptimized
-                fill
-              />
+              <div className="hidden lg:block">
+                <Image
+                  src={promotion?.images?.[0]?.image?.url || ''}
+                  className={'object-cover w-full !h-auto'}
+                  alt={'Khuyến mãi flash sale'}
+                  unoptimized
+                  fill
+                />
+              </div>
             )}
             {/* Mobile Image */}
             {promotion?.images_mobile?.[0]?.image?.url && (
@@ -66,10 +68,13 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                   height={120}
                 />
               )}
-            <CountdownContainer
-              className={'relative pt-12 hidden lg:flex'}
-              endDate={endDate}
-            />
+
+            <div className="hidden lg:block">
+              <CountdownContainer
+                className={'relative pt-12 hidden lg:flex'}
+                endDate={endDate}
+              />
+            </div>
           </div>
 
           <CountdownContainer

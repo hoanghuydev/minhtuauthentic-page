@@ -128,7 +128,7 @@ const Menu = ({
       },
       [POPUP_TYPE.PRODUCT]: () => {
         return (
-          <div className={'flex justify-between'}>
+          <div className={'flex justify-between items-center'}>
             <Link
               className={'capitalize font-[700] lg:font-bold'}
               href={'/san-pham'}
@@ -141,17 +141,20 @@ const Menu = ({
       },
       [POPUP_TYPE.NEWS]: () => {
         return (
-          <Link
-            className={'capitalize font-[700] lg:font-bold'}
-            href={'/tin-tuc'}
-          >
-            Tin tức
-          </Link>
+          <div className={'flex justify-between items-center'}>
+            <Link
+              className={'capitalize font-[700] lg:font-bold'}
+              href={'/tin-tuc'}
+            >
+              Tin tức
+            </Link>
+            <IconCheveronRight className={'w-[15px] h-[15px]'} />
+          </div>
         ) as ReactNode;
       },
       [POPUP_TYPE.BRAND]: () => {
         return (
-          <div className={'flex justify-between'}>
+          <div className={'flex justify-between items-center'}>
             <Link
               className={'capitalize font-[700] lg:font-bold'}
               href={'/thuong-hieu'}
@@ -194,6 +197,13 @@ const Menu = ({
           display: true,
           data: item.data,
           title: 'Sản phẩm',
+        });
+        break;
+      case POPUP_TYPE.NEWS:
+        setDataDisplayPopup({
+          type: item.type,
+          display: true,
+          data: item.data,
         });
         break;
       default:

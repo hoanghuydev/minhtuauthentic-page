@@ -8,6 +8,8 @@ import { twMerge } from 'tailwind-merge';
 import MenuProduct from './menuProduct';
 import { ProductDto } from '@/dtos/Product.dto';
 import { CategoryDto } from '@/dtos/Category.dto';
+import MenuNews from '@/components/molecules/header/menu/menuNews';
+import { NewsDto } from '@/dtos/News.dto';
 
 const MenuPopup = ({
   data,
@@ -83,6 +85,9 @@ const MenuPopup = ({
       [POPUP_TYPE.BRAND]: () => {
         return <MenuBrand brands={(data?.data as BrandDto[]) || []} />;
       },
+      [POPUP_TYPE.NEWS]: () => {
+        return <MenuNews newsData={data?.data as { news: NewsDto[]; categoryNews: CategoryDto[] }} />;
+      }
     };
     return obj[data.type || '']();
   };
