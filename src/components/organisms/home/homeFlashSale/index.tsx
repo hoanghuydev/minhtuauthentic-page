@@ -4,23 +4,29 @@ import ProductCard from '@/components/organisms/product/card';
 import CouponsDto from '@/dtos/Coupons.dto';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { useIsDesktop, useIsMobile } from '@/hooks/useDevice';
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import SectionSwiperItem from '@/components/organisms/sectionSwiper/item';
+
 const CountdownContainer = dynamic(
   () => import('@/components/organisms/home/homeFlashSale/countdownContainer'),
   {
     ssr: false,
   },
 );
+
 type Props = {
   promotion?: PromotionsDto;
   setting?: SettingOptionDto;
 };
+
 export default function HomeFlashSale({ promotion, setting }: Props) {
   const endDate: Date = new Date(promotion?.end_date || '');
-  const isDesktop = useIsDesktop();
-  const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <>
       {endDate?.getTime() > new Date().getTime() && (
@@ -33,9 +39,13 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
               'flex justify-end mb-3 items-center w-full relative lg:h-[120px] lg:px-3 lg:mb-3'
             }
           >
-            {/* Desktop Image */}
-            {promotion?.images?.[0]?.image?.url && (
-              <div className="hidden lg:block">
+            {/* Desktop Image - Thêm key để force re-render */}
+            {mounted && promotion?.images?.[0]?.image?.url && (
+              <div
+                key="desktop-banner"
+                className="hidden lg:block"
+                style={{ display: mounted ? undefined : 'none' }}
+              >
                 <Image
                   src={promotion?.images?.[0]?.image?.url || ''}
                   className={'object-cover w-full !h-auto'}
@@ -45,6 +55,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                 />
               </div>
             )}
+
             {/* Mobile Image */}
             {promotion?.images_mobile?.[0]?.image?.url && (
               <Image
@@ -56,6 +67,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                 height={180}
               />
             )}
+
             {/* Fallback: Show desktop image on mobile if mobile image is not available */}
             {!promotion?.images_mobile?.[0]?.image?.url &&
               promotion?.images?.[0]?.image?.url && (
@@ -69,18 +81,21 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                 />
               )}
 
-            <div className="hidden lg:block">
-              <CountdownContainer
-                className={'relative pt-12 hidden lg:flex'}
-                endDate={endDate}
-              />
-            </div>
+            {mounted && (
+              <div className="hidden lg:block">
+                <CountdownContainer
+                  className={'relative pt-12 hidden lg:flex'}
+                  endDate={endDate}
+                />
+              </div>
+            )}
           </div>
 
           <CountdownContainer
             className={'flex gap-3 mb-3 items-center justify-center lg:hidden'}
             endDate={endDate}
           />
+
           <SectionSwiperItem
             classNameContainer="pt-2"
             slidesPerView={5}
