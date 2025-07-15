@@ -91,10 +91,14 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
             )}
           </div>
 
-          <CountdownContainer
-            className={'flex gap-3 mb-3 items-center justify-center lg:hidden'}
-            endDate={endDate}
-          />
+          {mounted && (
+            <CountdownContainer
+              className={
+                'flex gap-3 mb-3 items-center justify-center lg:hidden'
+              }
+              endDate={endDate}
+            />
+          )}
 
           <SectionSwiperItem
             classNameContainer="pt-2"
