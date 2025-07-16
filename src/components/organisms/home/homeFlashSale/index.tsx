@@ -21,10 +21,10 @@ type Props = {
 
 export default function HomeFlashSale({ promotion, setting }: Props) {
   const endDate: Date = new Date(promotion?.end_date || '');
-  const [mounted, setMounted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    setIsClient(true);
   }, []);
 
   return (
@@ -39,13 +39,9 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
               'flex justify-end mb-3 items-center w-full relative lg:h-[120px] lg:px-3 lg:mb-3'
             }
           >
-            {/* Desktop Image - Thêm key để force re-render */}
-            {mounted && promotion?.images?.[0]?.image?.url && (
-              <div
-                key="desktop-banner"
-                className="hidden lg:block"
-                style={{ display: mounted ? undefined : 'none' }}
-              >
+            {/* Desktop Image */}
+            {promotion?.images?.[0]?.image?.url && (
+              <div className="hidden-on-mobile show-on-pc w-full h-full">
                 <Image
                   src={promotion?.images?.[0]?.image?.url || ''}
                   className={'object-cover w-full !h-auto'}
@@ -60,7 +56,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
             {promotion?.images_mobile?.[0]?.image?.url && (
               <Image
                 src={promotion?.images_mobile?.[0]?.image?.url || ''}
-                className={'object-cover w-full !h-auto lg:hidden'}
+                className={'object-cover w-full !h-auto hidden-on-pc'}
                 alt={'Khuyến mãi flash sale'}
                 unoptimized
                 width={562}
@@ -73,7 +69,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
               promotion?.images?.[0]?.image?.url && (
                 <Image
                   src={promotion?.images?.[0]?.image?.url || ''}
-                  className={'object-cover w-full !h-auto lg:hidden'}
+                  className={'object-cover w-full !h-auto hidden-on-pc'}
                   alt={'Khuyến mãi flash sale'}
                   unoptimized
                   width={1219}
@@ -81,24 +77,19 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                 />
               )}
 
-            {mounted && (
-              <div className="hidden lg:block">
-                <CountdownContainer
-                  className={'relative pt-12 hidden lg:flex'}
-                  endDate={endDate}
-                />
-              </div>
-            )}
+            <div className="hidden-on-mobile show-on-pc absolute top-0 right-0">
+              <CountdownContainer
+                className={'relative pt-12 flex'}
+                endDate={endDate}
+              />
+            </div>
           </div>
-
-          {mounted && (
+          <div className="show-on-mobile hidden-on-pc">
             <CountdownContainer
-              className={
-                'flex gap-3 mb-3 items-center justify-center lg:hidden'
-              }
+              className={'flex gap-3 mb-3 items-center justify-center'}
               endDate={endDate}
             />
-          )}
+          </div>
 
           <SectionSwiperItem
             classNameContainer="pt-2"
