@@ -10,7 +10,7 @@ import NewsDetail from '@/components/organisms/news/detail';
 import NewsCategoryMobile from '../organisms/news/categoryMobile';
 import { useIsMobile } from '@/hooks/useDevice';
 import { useRouter } from 'next/router';
-import HomeNews from '@/components/organisms/home/homeNews';
+import HighlightedNews from '@/components/organisms/news/highlight';
 
 const NewsCategory = dynamic(
   () => import('@/components/organisms/news/category'),
@@ -50,7 +50,7 @@ export default function NewsTemplate({
       <NewsCategory categoryNews={categoryNews} />
       {router.pathname === '/tin-tuc' && highlightedNews && (
         <div className="mb-4 shadow-custom rounded-[10px]">
-          <HomeNews content={highlightedNews} headingClassName={'text-primary'} />
+          <HighlightedNews content={highlightedNews} />
         </div>
       )}
       <div className={'grid grid-cols-1 lg:grid-cols-6 gap-1 lg:gap-3 relative'}>
