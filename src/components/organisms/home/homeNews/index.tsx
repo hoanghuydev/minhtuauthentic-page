@@ -16,14 +16,15 @@ type Props = {
     news: NewsDto[];
   };
   setting?: SettingOptionDto;
+  headingClassName?: string;
 };
-export default function HomeNews({ content, setting }: Props) {
+export default function HomeNews({ content, setting, headingClassName }: Props) {
   return (
     <div
       className={'p-3 mt-3 rounded-[10px]'}
       style={{ backgroundColor: setting?.backgroundColor || '#fff' }}
     >
-      <h2 className={'text-[24px] font-[700] lg:font-bold'}>
+      <h2 className={`text-[24px] font-[700] lg:font-bold ${headingClassName}`}>
         <Link href={'/tin-tuc'}>Tin tức nổi bật </Link>
       </h2>
       <div className={'mt-3 grid gap-3 grid-col-1 lg:grid-cols-3'}>
