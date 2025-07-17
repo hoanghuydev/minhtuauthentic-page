@@ -125,6 +125,10 @@ export const SETTING_KEY = {
     KEY: 'flash_sale',
     LABEL: 'Vùng Flash Sale',
   },
+  SUPPORT_SECTION: {
+    KEY: 'support_section',
+    LABEL: 'Vùng hỗ trợ',
+  },
   FEATURE_CATEGORY: {
     KEY: 'feature_category',
     LABEL: 'Danh mục nổi bật',

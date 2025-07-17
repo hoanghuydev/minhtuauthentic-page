@@ -7,14 +7,17 @@ import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import { ImageDto } from '@/dtos/Image.dto';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
+import { SettingOptionDto } from '@/dtos/SettingOption.dto';
 
 type Props = {
   contents?: StaticContentsDto[];
+  setting?: SettingOptionDto;
 };
 
-export default function HomeSupport({ contents }: Props) {
+export default function HomeSupport({ contents, setting }: Props) {
+  console.log('HomeSupport contents', contents);
   return (
-    <div className="relative my-3">
+    <div className="relative my-3" style={{ backgroundColor: setting?.backgroundColor || '#fff' }}>
       <SectionSwiper
         classNameContainer={'mb-[0.25rem] lg:mb-3 pb-4 pt-6 border-t border-b'}
         classNameLeft={'d-none'}
