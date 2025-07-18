@@ -47,11 +47,16 @@ export default function NewsTemplate({
   const router = useRouter();
   return (
     <>
-      <NewsCategory categoryNews={categoryNews} />
-      {router.pathname === '/tin-tuc' && highlightedNews && (
-        <div className="mb-4 shadow-custom rounded-[10px]">
-          <HighlightedNews content={highlightedNews} />
-        </div>
+      {!isDetail && (
+        <>
+          <NewsCategory categoryNews={categoryNews} />
+          {router.pathname === '/tin-tuc' && highlightedNews && (
+            <LayoutNews className="mb-4">
+              {isMobile && <NewsCategoryMobile categoryNews={categoryNews} />}
+              <HighlightedNews content={highlightedNews} />
+            </LayoutNews>
+          )}
+        </>
       )}
       <div className={'grid grid-cols-1 lg:grid-cols-6 gap-1 lg:gap-3 relative'}>
         <>
@@ -59,7 +64,7 @@ export default function NewsTemplate({
             <LayoutNews
               className={'col-span-4 h-fit relative lg:sticky lg:top-[100px]'}
             >
-              {isMobile && <NewsCategoryMobile categoryNews={categoryNews} />}
+              {isMobile && router.pathname !== '/tin-tuc' && <NewsCategoryMobile categoryNews={categoryNews} />}
               <NewsList
                 title={title}
                 news={news as NewsDto[]}

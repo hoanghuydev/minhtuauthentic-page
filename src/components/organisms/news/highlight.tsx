@@ -36,7 +36,7 @@ export default function HighlightedNews({ content }: Props) {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-60" />
           <div className="absolute bottom-0 p-4 text-white">
             <div
-              className="text-2xl font-semibold mb-2 line-clamp-2"
+              className="lg:text-2xl font-semibold mb-2 line-clamp-2"
               dangerouslySetInnerHTML={{
                 __html: content.featured[0]?.content || '',
               }}
@@ -61,7 +61,7 @@ export default function HighlightedNews({ content }: Props) {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-60" />
               <div className="absolute bottom-0 p-3 text-white">
                 <div
-                  className="text-xl font-semibold mb-2 line-clamp-2"
+                  className="lg:text-xl font-semibold mb-2 line-clamp-2"
                   dangerouslySetInnerHTML={{
                     __html: post.content || '',
                   }}

@@ -16,7 +16,7 @@ export default function NewsCategory({ categoryNews }: Props) {
   const allTabs = useMemo(() => {
     const defaultTab = {
       id: 'news',
-      name: 'TIN TỨC',
+      name: 'Tin tức',
       slugs: { slug: '/tin-tuc' },
     };
 
@@ -39,7 +39,7 @@ export default function NewsCategory({ categoryNews }: Props) {
     <div className="mb-6">
       {isDesktop && (
         <ul className={'flex items-center justify-center gap-3'}>
-          {categoryNews.map((item: CategoryNewsDto, key: number) => {
+          {allTabs.map((item, key: number) => {
             const active = item.id === activeTabId || (activeTabId === allTabs[0].id && key === 0);
             return (
               <li
