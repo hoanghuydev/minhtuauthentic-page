@@ -2,9 +2,9 @@ import ClockCircleOutlined from '@ant-design/icons/lib/icons/ClockCircleOutlined
 import dayjs from 'dayjs';
 import { NewsDto } from '@/dtos/News.dto';
 
-const NewsClock = ({ item }: { item: NewsDto }) => {
+const NewsClock = ({ item, className }: { item: NewsDto, className?: string }) => {
   return (
-    <p className={'text-[#777] text-[12px] flex items-center gap-2'}>
+    <p className={`text-[#777] text-[12px] flex items-center gap-2 ${className}`}>
       <ClockCircleOutlined />
       <span>{dayjs(item.created_at).format('DD/MM/YYYY')}</span>
     </p>

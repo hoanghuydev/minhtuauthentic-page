@@ -49,6 +49,7 @@ export default function News({
         />
         <NewsTemplate
           news={news?.news || []}
+          highlightedNews={news?.highlightedNews}
           categoryNews={news?.otherCategoryNews || []}
           newest={news.newest || []}
           total={news.total}

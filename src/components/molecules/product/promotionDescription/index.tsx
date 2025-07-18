@@ -4,6 +4,9 @@ import AppContext from '@/contexts/appContext';
 import { SETTING_KEY } from '@/config/enum';
 import PromotionDescriptionCoupons from '@/components/molecules/product/promotionDescription/coupons';
 import { SettingsDto } from '@/dtos/Settings.dto';
+import giftBox from '@/static/images/gift-box.png';
+import saleTag from '@/static/images/sale-tag.png';
+import Image from 'next/image';
 
 type Props = {
   className?: string;
@@ -15,14 +18,23 @@ export default function PromotionDescription({
   variant_id,
   settings,
 }: Props) {
-  const contents = ['Ưu đãi thêm', 'Mã giảm giá'];
+  const contents = [
+    {
+      title: 'Ưu đãi thêm',
+      image: giftBox,
+    },
+    {
+      title: 'Mã giảm giá',
+      image: saleTag,
+    },
+  ]
   const [indexDisplay, setIndexDisplay] = useState(0);
 
   const onChange = (index: number) => {
     setIndexDisplay(index);
   };
 
-  const renderButtonHeader = (index: number, text: string) => {
+  const renderButtonHeader = (index: number, content: any) => {
     const active = indexDisplay === index;
     let classBorderLeftRight = '';
     if (active) {
@@ -42,14 +54,17 @@ export default function PromotionDescription({
         )}
         onClick={() => onChange(index)}
       >
-        <span
-          className={twMerge(
-            'font-[700] lg:font-bold',
-            active && 'text-primary',
-          )}
-        >
-          {text}
-        </span>
+        <div className={'flex items-center justify-center gap-1'}>
+          <Image src={content.image} alt={content.title} className="w-8 h-8"/>
+          <span
+            className={twMerge(
+              'font-[700] lg:font-bold',
+              active && 'text-primary',
+            )}
+          >
+            {content.title}
+          </span>
+        </div>
       </button>
     );
   };

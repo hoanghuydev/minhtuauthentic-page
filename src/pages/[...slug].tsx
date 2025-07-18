@@ -2,7 +2,7 @@ import Header from '@/components/organisms/header';
 import Footer from '@/components/organisms/footer';
 import ProductTemplate from '@/components/templates/ProductTemplate';
 import { ResponseSlugPageDto } from '@/dtos/responseSlugPage.dto';
-import { Entity } from '@/config/enum';
+import { Entity, SETTING_KEY } from '@/config/enum';
 import { ResponseProductDetailPageDto } from '@/dtos/responseProductDetailPage.dto';
 import CategoryTemplate from '@/components/templates/CategoryTemplate';
 import { ResponseCategoryFilterPageDto } from '@/dtos/responseCategoryFilterPage.dto';
@@ -10,12 +10,14 @@ import { ResponseNewsDetailPageDto } from '@/dtos/ResponseNewsDetailPage.dto';
 import Layout from '@/components/templates/Layout';
 import { PageSetting, ServerSideProps } from '@/config/type';
 import { redirect } from 'next/navigation';
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import NewsTemplate from '@/components/templates/NewsTemplate';
 import { generateSlugToHref } from '@/utils';
 import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import { ResponseNewsPageDto } from '@/dtos/ResponseNewsPage.dto';
 import NotFoundTemplate from '@/components/templates/NotFoundTemplate';
+import HomeSupport from '@/components/organisms/home/homeSupport';
+import { SettingOptionDto } from '@/dtos/SettingOption.dto';
 
 export const getServerSideProps = async (context: any) => {
   const { slug } = context.query;
@@ -218,6 +220,30 @@ export default function Page({
     }
   };
 
+  const renderHomeSupport = useMemo(() => {
+    if (slug?.model === Entity.PRODUCTS) {
+      const product = slug?.data as ResponseProductDetailPageDto;
+      const settingsHome: Record<string, SettingOptionDto | undefined> = {};
+
+      (product?.settingsHome || []).forEach((item) => {
+        if (item?.key) {
+          settingsHome[item.key] = item.value;
+        }
+      });
+
+      if (product?.homeSupport) {
+        return (
+          <HomeSupport
+            contents={product.homeSupport}
+            setting={settingsHome[SETTING_KEY.SUPPORT_SECTION.KEY]}
+          />
+        );
+      }
+    }
+
+    return null;
+  }, [slug]);
+
   return (
     <Fragment key={'Slug_' + slug?.slug}>
       <Header settings={settings} menu={menu} />
@@ -236,6 +262,7 @@ export default function Page({
       >
         {renderTemplate()}
       </Layout>
+      {renderHomeSupport}
       <Footer settings={settings} footerContent={footerContent} />
     </Fragment>
   );

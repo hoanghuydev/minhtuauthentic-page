@@ -47,7 +47,6 @@ export default function ProductList({
           const variant = (product?.variants || [])?.find(
             (item) => item.is_default,
           );
-          console.log('variant', variant);
           if (!variant || !variant.regular_price) {
             return (<></>) as ReactNode;
           }
