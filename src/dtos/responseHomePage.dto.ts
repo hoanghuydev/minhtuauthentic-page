@@ -8,7 +8,6 @@ import { SeoDto } from '@/dtos/Seo.dto';
 
 export class ResponseHomePageDto {
   banners?: StaticContentsDto[];
-  bannersFullWidth?: StaticContentsDto[];
   homeCategory?: StaticComponentDto[];
   homeBlockUnderSlide?: StaticContentsDto[];
   homeBlockFeaturedCategory?: StaticContentsDto[];

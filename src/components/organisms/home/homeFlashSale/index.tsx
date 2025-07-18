@@ -77,7 +77,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                 />
               )}
 
-            <div className="hidden-on-mobile show-on-pc absolute top-0 right-0">
+            <div className="hidden-on-mobile show-on-pc absolute top-0 right-[20px]">
               <CountdownContainer
                 className={'relative pt-12 flex'}
                 endDate={endDate}

@@ -58,11 +58,13 @@ export enum STATIC_CONTENT_TYPE {
   FOOTER_LOGO_PAYMENT = 'footer-logo-payment',
   FOOTER_LOGO_SOCIAL = 'footer-logo-social',
   BANNER = 'banner',
+  BANNER_MOBILE = 'banner-mobile',
   BANNER_ABOVE = 'banner-above',
   BANNER_BELOW = 'banner-below',
   BLOCK_UNDER_SLIDE = 'home-block-under-slide',
   BLOCK_UNDER_CATEGORY = 'banner-under-category',
   BANNER_FULL_WIDTH = 'banner-full-width',
+  BANNER_FULL_WIDTH_MOBILE = 'banner-full-width-mobile',
   FEATURE_CATEGORY = 'home-feature-category',
   FOOTER_PRIVACY_POLICY = 'footer-privacy-policy',
 }
