@@ -9,6 +9,6 @@ export class StaticContentsDto extends BaseDto {
   content?: string;
   description?: string;
   images?: ImageDetailDto[];
+  images_mobile?: ImageDetailDto[];
   properties?: StaticComponentPropertyDto;
-
 }

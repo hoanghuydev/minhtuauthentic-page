@@ -7,22 +7,19 @@ import { SettingOptionDto } from '@/dtos/SettingOption.dto';
 
 type Props = {
   banners: StaticContentsDto[];
-  bannersFullWidth: StaticContentsDto[];
   menu?: ResponseMenuDto;
   setting?: SettingOptionDto;
 };
-export default function HomeBanner({
-  banners,
-  bannersFullWidth,
-  menu,
-  setting,
-}: Props) {
+export default function HomeBanner({ banners, menu, setting }: Props) {
   const isMobile = useIsMobile();
+  const isFullWidth = setting?.isBannerFull || false;
+
   return (
     <>
-      {setting?.isBannerFull ? (
-        <div id={'main-home-page'} className={'h-[450px] w-full'}>
-          <div className={'container relative m-auto'}>
+      {isFullWidth ? (
+        <div id={'main-home-page'} className={'h-[450px] w-full max-lg:h-auto'}>
+          {/* Desktop: Menu overlay + Full banner */}
+          <div className={'container relative m-auto hidden lg:block'}>
             <div className={'absolute top-3 z-[3] m-auto'}>
               <div className={'container m-auto relative'}>
                 {menu && <MenuWrapper menu={menu} className={'w-[220px] '} />}
@@ -31,10 +28,9 @@ export default function HomeBanner({
           </div>
 
           <Banners
-            className={'h-full'}
-            banners={bannersFullWidth || []}
+            className={'h-full lg:h-[450px]'}
+            banners={banners || []}
             classNameImage={'object-cover h-full object-center'}
-            isMobile={isMobile}
             isFull={true}
           />
         </div>
@@ -45,20 +41,27 @@ export default function HomeBanner({
             'lg:mt-[10px] lg:flex w-full gap-2 relative container mx-auto'
           }
         >
-          <div className="flex w-full gap-2 relative">
+          {/* Desktop Layout */}
+          <div className="hidden lg:flex w-full gap-2 relative">
             {menu && (
               <MenuWrapper menu={menu} className={'w-[220px] flex-shrink-0'} />
             )}
-            <div
-              className={'max-lg:mt-20 min-h-[140px] flex-grow overflow-hidden'}
-            >
+            <div className={'min-h-[140px] flex-grow overflow-hidden'}>
               <Banners
                 className={'w-full h-full rounded-3xl'}
                 banners={banners || []}
                 classNameImage={'object-contain lg:object-cover w-full h-full'}
-                isMobile={isMobile}
               />
             </div>
+          </div>
+
+          {/* Mobile Layout */}
+          <div className="lg:hidden w-full">
+            <Banners
+              className={'w-full'}
+              banners={banners || []}
+              classNameImage={'object-cover w-full h-full'}
+            />
           </div>
         </div>
       )}
