@@ -15,7 +15,6 @@ type Props = {
 };
 
 export default function HomeSupport({ contents, setting }: Props) {
-  console.log('HomeSupport contents', contents);
   return (
     <div className="relative my-3" style={{ backgroundColor: setting?.backgroundColor || '#fff' }}>
       <SectionSwiper

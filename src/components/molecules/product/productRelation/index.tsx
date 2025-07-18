@@ -13,7 +13,6 @@ type Props = {
   products: ProductDto[];
 };
 export default function ProductRelation({ products }: Props) {
-  console.log(products);
   const productContext = useContext(ProductDetailContext);
   return (
     <>
