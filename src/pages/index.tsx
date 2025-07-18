@@ -149,9 +149,9 @@ export default function Home({
 
         <HomeContent homePage={homePage} settingsHome={settingsHome} />
       </Layout>
-      {homePage?.homeSupport && homePage?.homeSupport.length > 0 && (
-        <HomeSupport contents={homePage?.homeSupport} />
-      )}
+      {homePage?.homeSupport && homePage?.homeSupport.length > 0 &&
+        <HomeSupport contents={homePage?.homeSupport} setting={settingsHome[SETTING_KEY.SUPPORT_SECTION.KEY]} />
+      }
       <Footer settings={settings} footerContent={footerContent} />
     </>
   );

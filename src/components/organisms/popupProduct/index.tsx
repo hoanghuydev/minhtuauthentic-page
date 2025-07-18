@@ -6,6 +6,7 @@ import { ResponseProductDetailPageDto } from '@/dtos/responseProductDetailPage.d
 import ProductOverview from '@/components/organisms/product/overview';
 import Loading from '@/components/atoms/loading';
 import { ProductDetailProvider } from '@/contexts/productDetailContext';
+import ProductQuickView from '@/components/organisms/product/quickView';
 
 export default function PopupProduct() {
   const appCtx = useContext(AppContext);
@@ -56,10 +57,6 @@ export default function PopupProduct() {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -67,9 +64,9 @@ export default function PopupProduct() {
     <>
       <Modal
         open={isModalOpen}
-        onOk={handleOk}
         onCancel={handleCancel}
-        className={'!w-[98%] lg:!w-[90%] max-lg:top-0'}
+        footer={null}
+        className={'!w-[98%] sm:!w-[80%] lg:!w-[65%] xl:!w-[50%] sm:!h-auto !max-h-[80%] lg:!top-[150px]'}
         destroyOnClose={true}
       >
         <div className={'py-3'}>
@@ -79,11 +76,11 @@ export default function PopupProduct() {
             data?.product &&
             ((
               <ProductDetailProvider>
-                <ProductOverview
+                <ProductQuickView
                   product={data.product}
                   productConfigurations={data.productConfigurations}
-                  settings={data?.settings || []}
                   isShouldSetProductActive={true}
+                  setQuickViewModal={setIsModalOpen}
                 />
               </ProductDetailProvider>
             ) as ReactNode)}

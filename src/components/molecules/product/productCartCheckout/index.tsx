@@ -9,8 +9,10 @@ import PaymentButton from '@/components/molecules/paymentButton';
 import { toast } from 'react-toastify';
 type Props = {
   variant?: VariantDto;
+  isQuickView?: boolean;
+  setQuickViewModal?: (isOpen: boolean) => void;
 };
-export default function ProductCartCheckout({ variant }: Props) {
+export default function ProductCartCheckout({ variant, isQuickView, setQuickViewModal }: Props) {
   const router = useRouter();
   const orderCtx = useContext(OrderContext);
   const [qty, setQty] = useState(1);
@@ -41,51 +43,54 @@ export default function ProductCartCheckout({ variant }: Props) {
     } else {
       orderCtx?.addCart && orderCtx.addCart(variant, qty);
     }
+    setQuickViewModal && setQuickViewModal(false);
   };
 
   return (
     <>
-      <div className={'flex justify-between gap-3 mb-3'}>
+      <div className={`flex justify-between gap-3 mb-3 ${isQuickView ? 'flex-col' : ''}`}>
         <CartInput
-          className={'w-[100px]'}
+          className={'w-[100px] min-h-[40px]'}
           value={qty}
           onChange={(value) => {
             setQty(value);
           }}
         />
-        <button
-          className={
-            'flex flex-col bg-primary items-center justify-center p-[4px_10px] rounded-[10px] grow text-[12px]'
-          }
-          type={'button'}
-          onClick={() => {
-            handleAddToCart();
-            router.push('/gio-hang/tom-tat');
-          }}
-        >
-          <span
-            className={'text-white text-xl font-[700] lg:font-bold uppercase'}
+        <div className="flex-1 flex justify-between gap-3">
+          <button
+            className={
+              'flex flex-col bg-primary items-center justify-center p-[4px_10px] rounded-[10px] grow text-[12px]'
+            }
+            type={'button'}
+            onClick={() => {
+              handleAddToCart();
+              router.push('/gio-hang/tom-tat');
+            }}
           >
-            Mua ngay
-          </span>
-          <span className={'text-white'}>
-            Giao Tận Nơi hoặc Nhận Tại Cửa Hàng
-          </span>
-        </button>
-        <button
-          className={
-            'flex flex-col border border-primary items-center justify-center  p-[4px_10px] rounded-[10px] w-[100px] text-[12px]'
-          }
-          type={'button'}
-          onClick={() => {
-            handleAddToCart();
-          }}
-        >
-          <span>
-            <CartPlus className={'w-6 h-6 text-primary'} />
-          </span>
-          <span className={'text-primary '}>Thêm vào giỏ</span>
-        </button>
+            <span
+              className={'text-white text-xl font-[700] lg:font-bold uppercase'}
+            >
+              Mua ngay
+            </span>
+            <span className={'text-white'}>
+              Giao Tận Nơi hoặc Nhận Tại Cửa Hàng
+            </span>
+          </button>
+          <button
+            className={
+              'flex flex-col border border-primary items-center justify-center  p-[4px_10px] rounded-[10px] w-[100px] text-[12px]'
+            }
+            type={'button'}
+            onClick={() => {
+              handleAddToCart();
+            }}
+          >
+            <span>
+              <CartPlus className={'w-6 h-6 text-primary'} />
+            </span>
+            <span className={'text-primary '}>Thêm vào giỏ</span>
+          </button>
+        </div>
       </div>
       <div id="script-general-container"></div>
       <div className="bk-btn"></div>
