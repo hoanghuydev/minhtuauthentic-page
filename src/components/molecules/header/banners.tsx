@@ -80,7 +80,7 @@ export const Banners = ({
   const renderDesktopBanners = () => (
     <div
       className={twMerge(
-        'relative banner-container h-full hidden lg:block',
+        'relative banner-container h-full hidden-on-mobile show-on-pc',
         isLastSlide && 'hide-next-button',
         isFirstSlide && 'hide-prev-button',
       )}
@@ -129,7 +129,7 @@ export const Banners = ({
 
   // Render mobile banners
   const renderMobileBanners = () => (
-    <div className="w-full lg:hidden">
+    <div className="w-full show-on-mobile hidden-on-pc">
       <Swiper className="w-full" {...mobileSwiperConfig}>
         {banners.map((banner, index) => {
           // Ưu tiên sử dụng ảnh mobile, fallback về ảnh desktop nếu không có
