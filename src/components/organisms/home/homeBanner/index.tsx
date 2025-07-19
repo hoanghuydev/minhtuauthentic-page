@@ -13,6 +13,7 @@ type Props = {
 };
 export default function HomeBanner({ banners, menu, setting }: Props) {
   const isFullWidth = setting?.isBannerFull || false;
+  const isSquareBannerMobile = setting?.isSquareBannerMobile || false;
 
   return (
     <>
@@ -41,6 +42,7 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
             banners={banners || []}
             classNameImage={'object-cover h-full object-center'}
             isFull={true}
+            isSquareBannerMobile={isSquareBannerMobile}
           />
         </div>
       ) : (
@@ -70,6 +72,7 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
               className={'w-full'}
               banners={banners || []}
               classNameImage={'object-cover w-full h-full'}
+              isSquareBannerMobile={isSquareBannerMobile}
             />
           </div>
         </div>

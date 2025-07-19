@@ -18,11 +18,13 @@ export const Banners = ({
   className,
   classNameImage,
   isFull = false,
+  isSquareBannerMobile = false,
 }: {
   banners: StaticContentsDto[];
   className?: string;
   classNameImage?: string;
   isFull?: boolean;
+  isSquareBannerMobile?: boolean;
 }) => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [isLastSlide, setIsLastSlide] = useState(false);
@@ -137,7 +139,12 @@ export const Banners = ({
           if (!imageDetail) return null;
 
           const imageElement = (
-            <div className="w-full aspect-square">
+            <div
+              className={twMerge(
+                'w-full',
+                isSquareBannerMobile && 'aspect-square',
+              )}
+            >
               <ImageWithFallback
                 image={imageDetail.image}
                 alt={imageDetail.image?.alt || 'minhtuauthentic'}

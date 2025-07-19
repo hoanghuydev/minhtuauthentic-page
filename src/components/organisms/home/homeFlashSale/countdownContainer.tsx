@@ -9,7 +9,7 @@ export default function CountdownContainer({ className, endDate }: Props) {
   return (
     <div
       className={twMerge(
-        'flex items-center flex-col justify-center',
+        'flex items-center gap-2 flex-col justify-center',
         className,
       )}
     >
