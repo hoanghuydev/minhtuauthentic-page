@@ -51,7 +51,7 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
           }
         >
           {/* Desktop Layout */}
-          <div className="hidden lg:flex w-full gap-2 relative">
+          <div className="hidden lg:!flex w-full gap-2 relative">
             {menu && (
               <MenuWrapper menu={menu} className={'w-[220px] flex-shrink-0'} />
             )}
