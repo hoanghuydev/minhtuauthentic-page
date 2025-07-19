@@ -24,7 +24,7 @@ export default function HighlightedNews({ content }: Props) {
       </h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
         <div
-          className="relative rounded-xl overflow-hidden lg:h-[500px] h-64 cursor-pointer"
+          className="relative rounded-xl overflow-hidden aspect-square cursor-pointer"
           onClick={() => router.push(generateSlugToHref(content.featured[0]?.slugs?.slug))}
         >
           <ImageWithFallback
@@ -49,7 +49,7 @@ export default function HighlightedNews({ content }: Props) {
           {content.news.map((post) => (
             <div
               key={post.id}
-              className="relative rounded-xl overflow-hidden lg:h-full h-64 cursor-pointer"
+              className="relative rounded-xl overflow-hidden h-full aspect-square cursor-pointer"
               onClick={() => router.push(generateSlugToHref(content.featured[0]?.slugs?.slug))}
             >
               <ImageWithFallback
