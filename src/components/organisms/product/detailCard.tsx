@@ -65,58 +65,63 @@ const ProductDetailCard = ({
     image: null,
   });
   const productSchema = useMemo(() => {
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : process.env.APP_URL;
-    const defaultVariant = product?.variants?.find(v => v.is_default);
+    const baseUrl =
+      typeof window !== 'undefined'
+        ? window.location.origin
+        : process.env.APP_URL;
+    const defaultVariant = product?.variants?.find((v) => v.is_default);
     const prices: number[] = [];
-    product?.variants?.forEach((v => {
+    product?.variants?.forEach((v) => {
       if (typeof v.regular_price === 'number') {
         prices.push(v.regular_price);
       }
-    }));
+    });
     return {
-      "@context": "http://schema.org",
-      "@type": "Product",
-      "name": product?.name ?? '',
-      "image": defaultVariant?.images?.map(image => image?.image?.url) || [],
-      "description": product?.seo?.description || '',
-      "brand": product?.brands?.map(brand => ({
-        "@type": "Brand",
-        "name": brand?.brand?.name || '',
+      '@context': 'http://schema.org',
+      '@type': 'Product',
+      name: product?.name ?? '',
+      image: defaultVariant?.images?.map((image) => image?.image?.url) || [],
+      description: product?.seo?.description || '',
+      brand: product?.brands?.map((brand) => ({
+        '@type': 'Brand',
+        name: brand?.brand?.name || '',
       })),
-      "review": {
-        "@type": "Review",
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "4",
-          "bestRating": "5"
+      review: {
+        '@type': 'Review',
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: '4',
+          bestRating: '5',
         },
-        "author": {
-          "@type": "Person",
-          "name": "Minh Tú Authentic"
-        }
+        author: {
+          '@type': 'Person',
+          name: 'Minh Tú Authentic',
+        },
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4,7",
-        "reviewCount": "9"
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4,7',
+        reviewCount: '9',
       },
-      "offers": {
-        "@type": "AggregateOffer",
-        "url": `${baseUrl}/${product?.slugs?.slug}`,
-        "priceCurrency": "VND",
-        "offerCount": 1,
-        "lowPrice": Math.min(...prices),
-        "highPrice": Math.max(...prices),
-        "priceValidUntil": dayjs(product?.created_at).add(1, 'year').format('YYYY-MM-DD'),
-        "itemCondition": "http://schema.org/NewCondition",
-        "availability": "http://schema.org/InStock",
-        "seller": {
-          "@type": "Organization",
-          "name": " Minh Tu Authentic",
-          "url": "https://minhtuauthentic.com"
-        }
-      }
-    }
+      offers: {
+        '@type': 'AggregateOffer',
+        url: `${baseUrl}/${product?.slugs?.slug}`,
+        priceCurrency: 'VND',
+        offerCount: 1,
+        lowPrice: Math.min(...prices),
+        highPrice: Math.max(...prices),
+        priceValidUntil: dayjs(product?.created_at)
+          .add(1, 'year')
+          .format('YYYY-MM-DD'),
+        itemCondition: 'http://schema.org/NewCondition',
+        availability: 'http://schema.org/InStock',
+        seller: {
+          '@type': 'Organization',
+          name: ' Minh Tu Authentic',
+          url: 'https://minhtuauthentic.com',
+        },
+      },
+    };
   }, [product]);
 
   const productContext = useContext(ProductDetailContext);
@@ -183,11 +188,13 @@ const ProductDetailCard = ({
             setting={settings.find(
               (item) => item.key === SETTING_KEY.DEAL_SOCK_SECTION.KEY,
             )}
-            mainVariant={productContext?.variantActive || product?.variants?.[0] || {}}
+            mainVariant={
+              productContext?.variantActive || product?.variants?.[0] || {}
+            }
           />
           <div
             className={
-              'flex flex-col-reverse lg:grid lg:grid-cols-3 gap-3 my-3 relative'
+              'flex flex-col-reverse lg:grid lg:grid-cols-3 gap-3 my-3 relative min-h-[300px]'
             }
           >
             <div className={'col-span-2'}>

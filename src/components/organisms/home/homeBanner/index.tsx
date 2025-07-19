@@ -4,6 +4,7 @@ import { useIsMobile } from '@/hooks/useDevice';
 import MenuWrapper from '@/components/molecules/header/menu/menuWrapper';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import { SettingOptionDto } from '@/dtos/SettingOption.dto';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
   banners: StaticContentsDto[];
@@ -11,16 +12,21 @@ type Props = {
   setting?: SettingOptionDto;
 };
 export default function HomeBanner({ banners, menu, setting }: Props) {
-  const isMobile = useIsMobile();
   const isFullWidth = setting?.isBannerFull || false;
 
   return (
     <>
       {isFullWidth ? (
-        <div id={'main-home-page'} className={'h-[450px] w-full max-lg:h-auto'}>
+        <div
+          id={'main-home-page'}
+          className={twMerge(
+            ' w-full max-lg:h-auto mt-[60px] lg:mt-0',
+            isFullWidth ? 'h-[560px]' : 'h-[450px]',
+          )}
+        >
           {/* Desktop: Menu overlay + Full banner */}
-          <div className={'container relative m-auto hidden lg:block'}>
-            <div className={'absolute top-3 z-[3] m-auto'}>
+          <div className={'container m-auto hidden lg:!block'}>
+            <div className={'absolute top-[50%] translate-y-[-50%] z-[3]'}>
               <div className={'container m-auto relative'}>
                 {menu && <MenuWrapper menu={menu} className={'w-[220px] '} />}
               </div>
@@ -28,7 +34,10 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
           </div>
 
           <Banners
-            className={'h-full lg:h-[450px]'}
+            className={twMerge(
+              'h-full',
+              isFullWidth ? 'h-[560px]' : 'h-[450px]',
+            )}
             banners={banners || []}
             classNameImage={'object-cover h-full object-center'}
             isFull={true}
@@ -38,7 +47,7 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
         <div
           id={'main-home-page'}
           className={
-            'lg:mt-[10px] lg:flex w-full gap-2 relative container mx-auto'
+            'mt-[60px] lg:mt-[10px] lg:flex w-full gap-2 relative container mx-auto'
           }
         >
           {/* Desktop Layout */}

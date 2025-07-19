@@ -95,7 +95,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
   return (
     <div
       className={twMerge(
-        'w-full relative shadow-custom mb-3 px-4 py-5 lg:px-[10px] mt-5 rounded-[8px] lg:py-[15px]',
+        'w-full relative shadow-custom mb-3 px-4 py-5 lg:px-[10px] mt-5 rounded-[8px] lg:py-[15px] min-h-[400px]',
         `bg-[${setting?.value?.backgroundColor ?? '#FFF2F6'}]`,
       )}
       style={{
@@ -111,7 +111,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
           unoptimized
           priority
         />
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full min-w-[285px] min-h-[55px]">
           <p className="absolute text-[18px] w-full z-10 left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] line-clamp-1 text-center text-white font-semibold">
             MUA KÈM GIÁ SỐC
           </p>
@@ -175,7 +175,11 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
                   type={'button'}
                   className={`
                     block grow bg-primary text-white rounded-[8px] p-[7px_6px] lg:p-[10px_12px] max-lg:text-sm
-                    ${dealSockVariants.length === 0 ? 'opacity-50' : 'opacity-100'}
+                    ${
+                      dealSockVariants.length === 0
+                        ? 'opacity-50'
+                        : 'opacity-100'
+                    }
                     transition-opacity duration-300 ease-in-out
                   `}
                   onClick={handleAddDealSockToCart}

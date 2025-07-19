@@ -41,7 +41,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
           >
             {/* Desktop Image */}
             {promotion?.images?.[0]?.image?.url && (
-              <div className="hidden-on-mobile show-on-pc w-full h-full">
+              <div className="hidden lg:!block w-full h-full">
                 <Image
                   src={promotion?.images?.[0]?.image?.url || ''}
                   className={'object-cover w-full !h-auto'}
@@ -56,7 +56,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
             {promotion?.images_mobile?.[0]?.image?.url && (
               <Image
                 src={promotion?.images_mobile?.[0]?.image?.url || ''}
-                className={'object-cover w-full !h-auto hidden-on-pc'}
+                className={'object-cover w-full !h-auto lg:!hidden'}
                 alt={'Khuyến mãi flash sale'}
                 unoptimized
                 width={562}
@@ -69,7 +69,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
               promotion?.images?.[0]?.image?.url && (
                 <Image
                   src={promotion?.images?.[0]?.image?.url || ''}
-                  className={'object-cover w-full !h-auto hidden-on-pc'}
+                  className={'object-cover w-full !h-auto lg:!hidden'}
                   alt={'Khuyến mãi flash sale'}
                   unoptimized
                   width={1219}
@@ -77,16 +77,13 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                 />
               )}
 
-            <div className="hidden-on-mobile show-on-pc absolute top-0 right-[20px]">
-              <CountdownContainer
-                className={'relative pt-12 flex'}
-                endDate={endDate}
-              />
+            <div className="hidden lg:!block absolute top-0 right-[20px]">
+              <CountdownContainer className={'pt-6'} endDate={endDate} />
             </div>
           </div>
-          <div className="show-on-mobile hidden-on-pc">
+          <div className="lg:!hidden">
             <CountdownContainer
-              className={'flex gap-3 mb-3 items-center justify-center'}
+              className={'flex mb-3 items-center justify-center'}
               endDate={endDate}
             />
           </div>

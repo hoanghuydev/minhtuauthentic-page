@@ -232,7 +232,9 @@ export const Header = ({ menu, settings }: Props) => {
               }
             >
               {user ? (
-                <span className={'capitalize'}>{user.name || user.email}</span>
+                <span className={'capitalize inline-block min-h-5'}>
+                  {user.name || user.email}
+                </span>
               ) : (
                 <>Tài khoản</>
               )}

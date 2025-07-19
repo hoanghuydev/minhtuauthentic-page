@@ -217,20 +217,3 @@ iframe {
 .ant-breadcrumb-link > a:hover {
   color: var(--primary-color) !important;
 }
-
-@media (min-width: 1024px) {
-  .show-on-pc {
-    display: block;
-  }
-  .hidden-on-pc {
-    display: none;
-  }
-}
-@media (max-width: 1023px) {
-  .hidden-on-mobile {
-    display: none;
-  }
-  .show-on-mobile {
-    display: block;
-  }
-}
