@@ -96,7 +96,7 @@ const ProductCard = ({
             )}
           {isShowListVariant && (
             <SelectVariant
-              key={`${product.id}-${_variant?.id || 'default'}`}
+              key={product.id}
               product={product}
               defaultVariant={_variant}
               onChange={(rs) => {
