@@ -68,6 +68,7 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
             <HomeBrand
               contents={homePage?.homeBrand}
               setting={settingsHome[SETTING_KEY.BRAND_SECTION.KEY]}
+              slidePerView={4}
             />
           </div>,
         );
@@ -77,6 +78,7 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
           <HomeBrand
             contents={homePage?.homeBrand}
             setting={settingsHome[SETTING_KEY.BRAND_SECTION.KEY]}
+            slidePerView={6}
           />,
         );
       }

@@ -7,8 +7,9 @@ import { SettingOptionDto } from '@/dtos/SettingOption.dto';
 type Props = {
   contents: BrandDto[];
   setting?: SettingOptionDto;
+  slidePerView?: number;
 };
-export default function HomeBrand({ contents, setting }: Props) {
+export default function HomeBrand({ contents, setting, slidePerView }: Props) {
   return (
     <div
       className={'p-3 rounded-[10px]'}
@@ -22,7 +23,7 @@ export default function HomeBrand({ contents, setting }: Props) {
         Thương hiệu nổi bật
       </h2>
       <SectionSwiper
-        slidesPerView={4}
+        slidesPerView={slidePerView || 4}
         classNameContainer={'border border-[#e4e4e4] rounded-[10px] p-3'}
         classNameItems={'relative w-full overflow-hidden'}
         spaceBetween={10}

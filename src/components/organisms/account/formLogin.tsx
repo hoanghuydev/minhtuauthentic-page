@@ -80,7 +80,7 @@ export default function FormLogin() {
   const [errorSubmit, setErrorSubmit] = useState<string | null>(null);
 
   return (
-    <div className="hidden lg:flex flex-1 min-h-screen px-8 py-16 justify-center">
+    <div className=" flex-1 min-h-screen px-8 py-16 justify-center">
       <div className="w-full flex justify-center">
         <div className="w-full h-full max-w-[440px] flex flex-col items-center pt-[30px]">
           <div className="w-full flex flex-col gap-2 lg:gap-3 justify-between items-center">

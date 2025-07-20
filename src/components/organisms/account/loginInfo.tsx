@@ -3,7 +3,7 @@ import Link from 'next/link';
 import loginPromotionCharacter from '@/static/images/login_promotion.png';
 const LoginInfo = () => {
   return (
-    <div className="flex-1 bg-gray-50 flex justify-center items-center px-4 py-8 lg:px-8 lg:py-16">
+    <div className="hidden lg:!flex flex-1 bg-gray-50 flex justify-center items-center px-4 py-8 lg:px-8 lg:py-16">
       <div className="w-full max-w-[840px]">
         <div className="w-full flex flex-col justify-center items-center gap-8 lg:gap-12 relative">
           {/* Header */}
