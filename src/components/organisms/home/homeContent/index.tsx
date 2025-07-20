@@ -8,6 +8,7 @@ import { ResponseHomePageDto } from '@/dtos/responseHomePage.dto';
 import { StaticComponentDto } from '@/dtos/StaticComponent.dto';
 import { groupBy } from '@/utils';
 import HomeCategoryItem from '../homeCategoryItem';
+import HomeBannerBrand from '../homeBannerBrand';
 
 type Props = {
   homePage: ResponseHomePageDto;
@@ -56,16 +57,30 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
       );
     }
     if (homePage?.homeBrand) {
-      _listComponent.push(
-        <HomeBrand
-          contents={homePage?.homeBrand}
-          setting={settingsHome[SETTING_KEY.BRAND_SECTION.KEY]}
-        />,
-      );
+      const hasBannerBrand =
+        homePage?.homeBannerBrand && homePage.homeBannerBrand.length > 0;
+
+      if (hasBannerBrand) {
+        // Có banner brand - hiển thị 2 cột
+        _listComponent.push(
+          <div className="grid grid-cols-1 lg:h-[300px] lg:grid-cols-2 gap-4 mt-3">
+            <HomeBannerBrand contents={homePage?.homeBannerBrand} />
+            <HomeBrand
+              contents={homePage?.homeBrand}
+              setting={settingsHome[SETTING_KEY.BRAND_SECTION.KEY]}
+            />
+          </div>,
+        );
+      } else {
+        // Không có banner brand - home brand full width
+        _listComponent.push(
+          <HomeBrand
+            contents={homePage?.homeBrand}
+            setting={settingsHome[SETTING_KEY.BRAND_SECTION.KEY]}
+          />,
+        );
+      }
     }
-    // if (homePage?.homeSupport && homePage?.homeSupport.length > 0) {
-    //   _listComponent.push(<HomeSupport contents={homePage?.homeSupport} />);
-    // }
     setListComponent(_listComponent);
   }, [blockContents]);
 

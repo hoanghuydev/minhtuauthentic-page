@@ -54,10 +54,6 @@ export default function CheckOrderTemplate() {
           Để theo dõi đơn hàng của bạn, vui lòng nhập ID đơn hàng của bạn vào ô
           bên dưới và nhấn nút Theo dõi.
         </p>
-        <p className={'mt-3 text-center'}>
-          Điều này đã được trao cho bạn trên biên nhận của bạn và trong email
-          xác nhận mà lẽ ra bạn phải nhận được.
-        </p>
         <form
           className={'mt-3'}
           onSubmit={handleSubmit(async (data) => {

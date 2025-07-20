@@ -16,9 +16,12 @@ type Props = {
 
 export default function HomeSupport({ contents, setting }: Props) {
   return (
-    <div className="relative my-3" style={{ backgroundColor: setting?.backgroundColor || '#fff' }}>
+    <div
+      className="relative my-3"
+      style={{ backgroundColor: setting?.backgroundColor || '#fff' }}
+    >
       <SectionSwiper
-        classNameContainer={'mb-[0.25rem] lg:mb-3 pb-4 pt-6 border-t border-b'}
+        classNameContainer={'mb-[0.25rem] lg:mb-3 py-4 border-t border-b'}
         classNameLeft={'d-none'}
         classNameRight={'d-none'}
         classNameItems={'flex items-center justify-center'}

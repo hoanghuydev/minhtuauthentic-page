@@ -19,6 +19,7 @@ export class ResponseHomePageDto {
     news: NewsDto[];
   };
   bannerUnderCategory?: StaticContentsDto[];
+  homeBannerBrand?: StaticContentsDto[];
   settings?: SettingsDto[];
   seo?: SeoDto;
 

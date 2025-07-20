@@ -61,6 +61,7 @@ export enum STATIC_CONTENT_TYPE {
   BANNER_MOBILE = 'banner-mobile',
   BANNER_ABOVE = 'banner-above',
   BANNER_BELOW = 'banner-below',
+  BANNER_BRAND = 'banner-brand',
   BLOCK_UNDER_SLIDE = 'home-block-under-slide',
   BLOCK_UNDER_CATEGORY = 'banner-under-category',
   BANNER_FULL_WIDTH = 'banner-full-width',

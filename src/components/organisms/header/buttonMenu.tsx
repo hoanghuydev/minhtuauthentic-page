@@ -10,7 +10,8 @@ import appContext from '@/contexts/appContext';
 const ButtonMenu = ({ menu }: { menu: ResponseMenuDto | undefined }) => {
   const appCtx = useContext(appContext);
   const [isReady, setIsReady] = useState<boolean>(false);
-  const {pathname} = useRouter();
+  const { pathname } = useRouter();
+
   useEffect(() => {
     setIsReady(true);
   }, []);

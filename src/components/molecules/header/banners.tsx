@@ -103,7 +103,8 @@ export const Banners = ({
                 classNameImage,
               )}
               loading="eager"
-              unoptimized={false}
+              priority={index === 0} // High priority for first banner
+              unoptimized={true}
               sizes="100vw"
               quality={100}
             />
@@ -130,52 +131,66 @@ export const Banners = ({
   );
 
   // Render mobile banners
-  const renderMobileBanners = () => (
-    <div className="w-full lg:!hidden">
-      <Swiper className="w-full" {...mobileSwiperConfig}>
-        {banners.map((banner, index) => {
-          // Ưu tiên sử dụng ảnh mobile, fallback về ảnh desktop nếu không có
-          const imageDetail = banner?.images_mobile?.[0] || banner?.images?.[0];
-          if (!imageDetail) return null;
+  const renderMobileBanners = () => {
+    // Filter banners that have mobile display enabled and mobile images
+    const mobileBanners = banners.filter(
+      (banner) =>
+        banner.is_mobile_visible &&
+        banner.images_mobile &&
+        banner.images_mobile.length > 0,
+    );
 
-          const imageElement = (
-            <div
-              className={twMerge(
-                'w-full',
-                isSquareBannerMobile && 'aspect-square',
-              )}
-            >
-              <ImageWithFallback
-                image={imageDetail.image}
-                alt={imageDetail.image?.alt || 'minhtuauthentic'}
-                className="object-cover w-full h-full"
-                loading="eager"
-                unoptimized={true}
-                sizes="100vw"
-                quality={80}
-              />
-            </div>
-          );
+    if (mobileBanners.length === 0) {
+      return null; // Don't render anything if no mobile banners
+    }
 
-          return (
-            <SwiperSlide
-              key={`mobile-${index}`}
-              className="w-full"
-              style={{ width: '100% !important' }}
-            >
-              {isFull ? (
-                imageElement
-              ) : (
-                <Link href={generateSlugToHref(banner?.properties?.slug)}>
-                  {imageElement}
-                </Link>
-              )}
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
-    </div>
-  );
+    return (
+      <div className="w-full lg:!hidden">
+        <Swiper className="w-full" {...mobileSwiperConfig}>
+          {mobileBanners.map((banner, index) => {
+            const imageDetail = banner.images_mobile?.[0];
+            if (!imageDetail) return null;
+
+            const imageElement = (
+              <div
+                className={twMerge(
+                  'w-full',
+                  isSquareBannerMobile && 'aspect-square',
+                )}
+              >
+                <ImageWithFallback
+                  image={imageDetail.image}
+                  alt={imageDetail.image?.alt || 'minhtuauthentic'}
+                  className="object-cover w-full h-full"
+                  loading="eager"
+                  priority={index === 0} // High priority for first mobile banner
+                  unoptimized={false}
+                  sizes="100vw"
+                  quality={80}
+                />
+              </div>
+            );
+
+            return (
+              <SwiperSlide
+                key={`mobile-${index}`}
+                className="w-full"
+                style={{ width: '100% !important' }}
+              >
+                {isFull ? (
+                  imageElement
+                ) : (
+                  <Link href={generateSlugToHref(banner?.properties?.slug)}>
+                    {imageElement}
+                  </Link>
+                )}
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
+    );
+  };
 
   return (
     <>

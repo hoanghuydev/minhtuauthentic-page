@@ -11,22 +11,23 @@ type Props = {
 export default function HomeBrand({ contents, setting }: Props) {
   return (
     <div
-      className={'p-3 mt-3 rounded-[10px]'}
+      className={'p-3 rounded-[10px]'}
       style={{ backgroundColor: setting?.backgroundColor || '#fff' }}
     >
       <h2
         className={
-          'text-[24px] font-semibold text-primary mb-3 text-center uppercase'
+          'text-[24px] font-bold text-primary mb-3 text-center uppercase'
         }
       >
         Thương hiệu nổi bật
       </h2>
       <SectionSwiper
-        slidesPerView={6}
+        slidesPerView={4}
         classNameContainer={'border border-[#e4e4e4] rounded-[10px] p-3'}
         classNameItems={'relative w-full overflow-hidden'}
         spaceBetween={10}
         loop={true}
+        auto={true}
         isGrid={true}
         isUseHeightWrapper={true}
         renderItem={(content: unknown) => {

@@ -32,7 +32,7 @@ export default function AccountInfoPage({
           label={'Thông tin tài khoản'}
           link={'/tai-khoan/thong-tin-tai-khoan'}
         />
-        <AccountTemplate>
+        <AccountTemplate profile={profile}>
           <AccountInfo profile={profile} />
         </AccountTemplate>
       </Layout>

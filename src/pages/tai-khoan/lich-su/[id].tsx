@@ -9,6 +9,8 @@ import AccountTemplate from '@/components/templates/AccountTemplate';
 import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import Layout from '@/components/templates/Layout';
 import { PageSetting } from '@/config/type';
+import { getProfile } from '@/utils/getDefaultServerSide';
+import { UserDto } from '@/dtos/User.dto';
 
 export const getServerSideProps = async (context: any) => {
   const order = context.query.id;
@@ -33,9 +35,12 @@ export const getServerSideProps = async (context: any) => {
     };
   } = rsOrderItems ? rsOrderItems : null;
 
+  const profile = await getProfile(context.req.cookies);
+
   return {
     props: {
       data: dataOrderItems?.data,
+      profile,
     },
   };
 };
@@ -44,9 +49,11 @@ export default function UserHistoryDetail({
   menu,
   footerContent,
   data,
+  profile,
   settings,
 }: {
   data: { order: OrdersDto; order_items: OrderItemsDto[] };
+  profile: UserDto;
 } & PageSetting) {
   return (
     <>
@@ -60,7 +67,7 @@ export default function UserHistoryDetail({
             link: '/tai-khoan/lich-su/' + data?.order?.id,
           }}
         />
-        <AccountTemplate>
+        <AccountTemplate profile={profile}>
           <OrderDetailTemplate order={data?.order} />
         </AccountTemplate>
       </Layout>

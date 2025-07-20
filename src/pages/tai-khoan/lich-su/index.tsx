@@ -9,18 +9,33 @@ import { OrdersDto } from '@/dtos/Orders.dto';
 import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import Layout from '@/components/templates/Layout';
 import { PageSetting, ServerSideProps } from '@/config/type';
+import { getProfile } from '@/utils/getDefaultServerSide';
+import { UserDto } from '@/dtos/User.dto';
+
+export const getServerSideProps = async (context: any) => {
+  const profile = await getProfile(context.req.cookies);
+  return {
+    props: {
+      profile,
+    },
+  };
+};
 
 export default function UserHistory({
   menu,
   footerContent,
+  profile,
   settings,
-}: PageSetting) {
+}: {
+  profile: UserDto;
+} & PageSetting) {
+  console.log(profile);
   return (
     <>
       <Header settings={settings} menu={menu} />
       <Layout settings={settings} menu={menu}>
         <BreadcrumbComponent label={'Lich sử'} link={'/tai-khoan/lich-su'} />
-        <AccountTemplate>
+        <AccountTemplate profile={profile}>
           <HistoryList />
         </AccountTemplate>
       </Layout>

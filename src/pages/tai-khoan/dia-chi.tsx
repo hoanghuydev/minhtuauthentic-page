@@ -5,18 +5,32 @@ import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import Layout from '@/components/templates/Layout';
 import { PageSetting } from '@/config/type';
 import Addresses from '@/components/organisms/address';
+import { getProfile } from '@/utils/getDefaultServerSide';
+import { UserDto } from '@/dtos/User.dto';
+
+export const getServerSideProps = async (context: any) => {
+  const profile = await getProfile(context.req.cookies);
+  return {
+    props: {
+      profile,
+    },
+  };
+};
 
 export default function UserHistory({
   menu,
   footerContent,
+  profile,
   settings,
-}: PageSetting) {
+}: {
+  profile: UserDto;
+} & PageSetting) {
   return (
     <>
       <Header settings={settings} menu={menu} />
       <Layout settings={settings} menu={menu}>
         <BreadcrumbComponent label={'Địa chỉ'} link={'/tai-khoan/dia-chi'} />
-        <AccountTemplate>
+        <AccountTemplate profile={profile}>
           <Addresses />
         </AccountTemplate>
       </Layout>

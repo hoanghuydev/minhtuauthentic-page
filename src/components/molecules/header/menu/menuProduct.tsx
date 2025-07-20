@@ -11,7 +11,6 @@ interface MenuProductProps {
 const MenuProduct = ({ isLoadingProducts }: MenuProductProps) => {
   const appCtx = useContext(AppContext);
   const products = appCtx?.menuProduct || [];
-  console.log('products', products);
   return (
     <div className="flex flex-col">
       <h3 className="text-lg font-medium mb-4">Sản phẩm</h3>
