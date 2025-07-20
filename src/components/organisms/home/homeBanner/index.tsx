@@ -21,7 +21,7 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
         <div
           id={'main-home-page'}
           className={twMerge(
-            ' w-full max-lg:h-auto mt-[60px] lg:mt-0',
+            'relative w-full max-lg:h-auto mt-[60px] lg:mt-0',
             isFullWidth ? 'h-[560px]' : 'h-[450px]',
           )}
         >
