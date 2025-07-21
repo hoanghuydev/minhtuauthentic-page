@@ -9,8 +9,9 @@ import AccountTemplate from '@/components/templates/AccountTemplate';
 import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import Layout from '@/components/templates/Layout';
 import { PageSetting } from '@/config/type';
-import { getProfile } from '@/utils/getDefaultServerSide';
+import { getProfile, getHomeSupport } from '@/utils/getDefaultServerSide';
 import { UserDto } from '@/dtos/User.dto';
+import HomeSupport from '@/components/organisms/home/homeSupport';
 
 export const getServerSideProps = async (context: any) => {
   const order = context.query.id;
@@ -36,11 +37,14 @@ export const getServerSideProps = async (context: any) => {
   } = rsOrderItems ? rsOrderItems : null;
 
   const profile = await getProfile(context.req.cookies);
+  const { homeSupport, supportSetting } = await getHomeSupport();
 
   return {
     props: {
       data: dataOrderItems?.data,
       profile,
+      homeSupport,
+      supportSetting,
     },
   };
 };
@@ -51,10 +55,16 @@ export default function UserHistoryDetail({
   data,
   profile,
   settings,
+  homeSupport,
+  supportSetting,
 }: {
   data: { order: OrdersDto; order_items: OrderItemsDto[] };
   profile: UserDto;
+  homeSupport: any[];
+  supportSetting: any;
 } & PageSetting) {
+  const hasSupport = Boolean(homeSupport?.length);
+
   return (
     <>
       <Header settings={settings} menu={menu} />
@@ -71,6 +81,12 @@ export default function UserHistoryDetail({
           <OrderDetailTemplate order={data?.order} />
         </AccountTemplate>
       </Layout>
+
+      {/* Support Section - ngoài layout, cùng cấp với footer */}
+      {hasSupport && (
+        <HomeSupport contents={homeSupport} setting={supportSetting} />
+      )}
+
       <Footer settings={settings} footerContent={footerContent} />
     </>
   );

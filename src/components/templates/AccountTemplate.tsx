@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { ReactNode } from 'react';
 import useUser from '@/hooks/useUser';
 import { useRouter } from 'next/router';
-import IconUser from '@/components/icons/user';
 import IconDocument from '@/components/icons/document';
 import MapIconFooter from '@/components/icons/menuFooter/Map';
 import IconLogout from '@/components/icons/logout';
@@ -10,6 +9,7 @@ import { UserDto } from '@/dtos/User.dto';
 import profileImage from '@/static/images/profile.png';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
+import IconSetting from '../icons/setting';
 
 export default function AccountTemplate({
   children,
@@ -74,7 +74,7 @@ export default function AccountTemplate({
                 className={twMerge('p-3 flex items-center gap-3 w-full')}
                 href={'/tai-khoan/thong-tin-tai-khoan'}
               >
-                <IconUser className={twMerge('w-5 h-5')} />
+                <IconSetting className={twMerge('w-5 h-5 text-[#212529]')} />
                 <span className={twMerge('text-base')}>
                   Thông tin tài khoản
                 </span>

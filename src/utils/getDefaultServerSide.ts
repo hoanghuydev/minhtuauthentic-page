@@ -100,3 +100,43 @@ export async function getProfile(
     return {} as UserDto;
   }
 }
+
+export async function getHomeSupport(): Promise<{
+  homeSupport: any[];
+  supportSetting: any;
+}> {
+  try {
+    const response = await fetch(`${process.env.BE_URL}/api/pages/home`);
+    if (!response.ok) {
+      return {
+        homeSupport: [],
+        supportSetting: undefined,
+      };
+    }
+
+    const data: { data: any } = await response.json();
+    const homePage = data?.data || {};
+
+    // Transform settings to object
+    const settingsHome = (homePage?.settings || []).reduce(
+      (acc: any, item: any) => {
+        if (item?.key) {
+          acc[item.key] = item?.value;
+        }
+        return acc;
+      },
+      {},
+    );
+
+    return {
+      homeSupport: homePage?.homeSupport || [],
+      supportSetting: settingsHome['support_section'],
+    };
+  } catch (error) {
+    console.error('Failed to fetch home support data:', error);
+    return {
+      homeSupport: [],
+      supportSetting: undefined,
+    };
+  }
+}

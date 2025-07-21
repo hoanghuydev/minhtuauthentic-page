@@ -4,26 +4,37 @@ import AccountTemplate from '@/components/templates/AccountTemplate';
 import BreadcrumbComponent from '@/components/molecules/breakcrumb';
 import Layout from '@/components/templates/Layout';
 import AccountInfo from '@/components/organisms/accountInfo';
-import { getProfile } from '@/utils/getDefaultServerSide';
+import { getProfile, getHomeSupport } from '@/utils/getDefaultServerSide';
 import { PageSetting } from '@/config/type';
 import { UserDto } from '@/dtos/User.dto';
+import HomeSupport from '@/components/organisms/home/homeSupport';
 
 export const getServerSideProps = async (context: any) => {
   const profile = await getProfile(context.req.cookies);
+  const { homeSupport, supportSetting } = await getHomeSupport();
   return {
     props: {
       profile,
+      homeSupport,
+      supportSetting,
     },
   };
 };
+
 export default function AccountInfoPage({
   menu,
   footerContent,
   profile,
   settings,
+  homeSupport,
+  supportSetting,
 }: {
   profile: UserDto;
+  homeSupport: any[];
+  supportSetting: any;
 } & PageSetting) {
+  const hasSupport = Boolean(homeSupport?.length);
+
   return (
     <>
       <Header settings={settings} menu={menu} />
@@ -36,6 +47,12 @@ export default function AccountInfoPage({
           <AccountInfo profile={profile} />
         </AccountTemplate>
       </Layout>
+
+      {/* Support Section - ngoài layout, cùng cấp với footer */}
+      {hasSupport && (
+        <HomeSupport contents={homeSupport} setting={supportSetting} />
+      )}
+
       <Footer settings={settings} footerContent={footerContent} />
     </>
   );

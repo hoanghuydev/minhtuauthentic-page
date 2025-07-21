@@ -1,18 +1,28 @@
 export const IconUser = ({ className }: { className?: string }) => {
+  const strokeStyle = {
+    fill: 'none',
+    stroke: '#fff',
+    strokeWidth: '30px',
+  };
+
   return (
     <svg
-      stroke="currentColor"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      height="24"
-      width="24"
+      id="icon-smember"
       xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 560 560"
+      width="20"
+      className={className}
     >
-      <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
-      <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+      <g id="Layer_2" data-name="Layer 2">
+        <g id="Layer_1-2" data-name="Layer 1">
+          <circle cx="280" cy="280" r="265" style={strokeStyle}></circle>
+          <circle cx="280" cy="210" r="115" style={strokeStyle}></circle>
+          <path
+            d="M86.82,461.4C124.71,354.71,241.91,298.93,348.6,336.82A205,205,0,0,1,473.18,461.4"
+            style={strokeStyle}
+          ></path>
+        </g>
+      </g>
     </svg>
   );
 };

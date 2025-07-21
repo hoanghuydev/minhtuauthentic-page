@@ -28,12 +28,9 @@ const schema = yup
 export default function FormLogin() {
   const { handleReCaptchaVerify } = useGoogleToken('minhtulogin');
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
   const {
     handleSubmit,
     control,
-    register,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -42,9 +39,6 @@ export default function FormLogin() {
       password: '',
     },
   });
-
-  const username = watch('username');
-  const password = watch('password');
 
   const { setCookieUser } = useUser();
 
@@ -80,12 +74,15 @@ export default function FormLogin() {
   const [errorSubmit, setErrorSubmit] = useState<string | null>(null);
 
   return (
-    <div className=" flex-1 min-h-screen px-8 py-16 justify-center">
+    <div className=" flex-1  p-6 justify-center">
       <div className="w-full flex justify-center">
         <div className="w-full h-full max-w-[440px] flex flex-col items-center pt-[30px]">
           <div className="w-full flex flex-col gap-2 lg:gap-3 justify-between items-center">
             <div className="w-full flex flex-col gap-2 lg:gap-3">
               {/* Login Form */}
+              <h1 className="hidden lg:!block text-2xl lg:text-3xl text-center text-primary font-bold">
+                Đăng nhập MINHTUAUTHENTIC
+              </h1>
               <form
                 className="w-full flex flex-col gap-2 lg:gap-3"
                 onSubmit={handleSubmit(async (data) => {
@@ -121,22 +118,14 @@ export default function FormLogin() {
                   <label className="flex items-center gap-2 font-medium select-none text-base">
                     Email / Số điện thoại
                   </label>
-                  <div className="flex flex-col gap-2">
-                    <div className="p-2 flex items-center gap-2 min-w-0 border transition-colors border-gray-300 focus-within:border-gray-600 text-base min-h-[40px] rounded-md pl-4">
-                      <input
-                        {...register('username')}
-                        type="text"
-                        className="w-full h-full bg-transparent border-none outline-none shadow-none ring-0 focus:outline-none focus:border-none focus:ring-0 focus-visible:outline-none focus-visible:border-none focus-visible:ring-0 placeholder:text-gray-300 placeholder:select-none disabled:opacity-80 disabled:cursor-not-allowed disabled:text-gray-500 disabled:placeholder:text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap"
-                        placeholder="Nhập email hoặc số điện thoại"
-                        value={username}
-                      />
-                    </div>
-                    {errors.username && (
-                      <span className="text-red-500 text-sm">
-                        {errors.username.message}
-                      </span>
-                    )}
-                  </div>
+                  <FormControl
+                    control={control}
+                    errors={errors}
+                    name="username"
+                    type="text"
+                    placeholder="Nhập email hoặc số điện thoại"
+                    prefix={<UserOutlined />}
+                  />
                 </div>
 
                 {/* Password Field */}
@@ -144,39 +133,14 @@ export default function FormLogin() {
                   <label className="flex items-center gap-2 font-medium select-none text-base">
                     Mật khẩu
                   </label>
-                  <div className="flex flex-col gap-2">
-                    <div className="p-2 flex items-center gap-2 min-w-0 border transition-colors border-gray-300 focus-within:border-gray-600 text-base min-h-[40px] rounded-md pl-4">
-                      <input
-                        {...register('password')}
-                        type={showPassword ? 'text' : 'password'}
-                        className="w-full h-full bg-transparent border-none outline-none shadow-none ring-0 focus:outline-none focus:border-none focus:ring-0 focus-visible:outline-none focus-visible:border-none focus-visible:ring-0 placeholder:text-gray-300 placeholder:select-none disabled:opacity-80 disabled:cursor-not-allowed disabled:text-gray-500 disabled:placeholder:text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap"
-                        autoComplete="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                        placeholder="Nhập mật khẩu của bạn"
-                        value={password}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="flex cursor-pointer items-center justify-center rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none transition-colors w-[20px] h-[20px] flex-shrink-0"
-                        aria-label={
-                          showPassword ? 'Hide password' : 'Show password'
-                        }
-                      >
-                        {showPassword ? (
-                          <EyeInvisibleOutlined className="w-3 h-3" />
-                        ) : (
-                          <EyeOutlined className="w-3 h-3" />
-                        )}
-                      </button>
-                    </div>
-                    {errors.password && (
-                      <span className="text-red-500 text-sm">
-                        {errors.password.message}
-                      </span>
-                    )}
-                  </div>
+                  <FormControl
+                    control={control}
+                    errors={errors}
+                    name="password"
+                    type="password"
+                    placeholder="Nhập mật khẩu của bạn"
+                    prefix={<LockOutlined />}
+                  />
                 </div>
 
                 {/* Submit Button */}

@@ -3,12 +3,12 @@ import Link from 'next/link';
 import loginPromotionCharacter from '@/static/images/login_promotion.png';
 const LoginInfo = () => {
   return (
-    <div className="hidden lg:!flex flex-1 bg-gray-50 flex justify-center items-center px-4 py-8 lg:px-8 lg:py-16">
+    <div className="hidden lg:!flex flex-1 bg-gray-50 flex justify-center items-center p-3 lg:p-6">
       <div className="w-full max-w-[840px]">
         <div className="w-full flex flex-col justify-center items-center gap-8 lg:gap-12 relative">
           {/* Header */}
           <div className="w-full flex flex-col justify-center items-center gap-4 lg:gap-6">
-            <div className="flex flex-col items-center justify-center text-base lg:text-xl font-medium">
+            <div className="flex flex-col items-center justify-center text-base lg:text-[20px] font-medium">
               <span className="text-center flex gap-2">
                 Chào mừng đến với{' '}
                 <span className="text-primary align-middle font-bold text-xl lg:text-2xl">
