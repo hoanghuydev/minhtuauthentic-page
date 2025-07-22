@@ -22,7 +22,6 @@ interface HomeProps extends PageSetting {
 }
 
 // Constants
-const REVALIDATE_TIME = 300; // 5 minutes
 const MAX_PRELOAD_BANNERS = 3;
 
 // Schema data moved to separate function for better readability
@@ -78,8 +77,8 @@ const extractBannerImages = (banners: any[] = []) => {
   return banners
     .filter(
       (banner) =>
-        banner?.is_mobile_visible &&
-        (banner?.images?.length > 0 || banner?.images_mobile?.length > 0),
+        (banner?.images?.length > 0 && banner?.is_visible) ||
+        (banner?.images_mobile?.length > 0 && banner?.is_mobile_visible),
     )
     .slice(0, MAX_PRELOAD_BANNERS)
     .flatMap((banner) => {
@@ -125,8 +124,8 @@ const fetchHomePageData = async () => {
   }
 };
 
-// Static Props
-export async function getStaticProps() {
+// Server-Side Props
+export async function getServerSideProps() {
   const homePage = await fetchHomePageData();
   const settingsHome = transformSettingsToObject(homePage?.settings);
 
@@ -135,7 +134,6 @@ export async function getStaticProps() {
       homePage,
       settingsHome,
     },
-    revalidate: REVALIDATE_TIME,
   };
 }
 

@@ -57,31 +57,13 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
       );
     }
     if (homePage?.homeBrand) {
-      const hasBannerBrand =
-        homePage?.homeBannerBrand && homePage.homeBannerBrand.length > 0;
-
-      if (hasBannerBrand) {
-        // Có banner brand - hiển thị 2 cột
-        _listComponent.push(
-          <div className="grid grid-cols-1 lg:h-[300px] lg:grid-cols-2 gap-4 mt-3">
-            <HomeBannerBrand contents={homePage?.homeBannerBrand} />
-            <HomeBrand
-              contents={homePage?.homeBrand}
-              setting={settingsHome[SETTING_KEY.BRAND_SECTION.KEY]}
-              slidePerView={4}
-            />
-          </div>,
-        );
-      } else {
-        // Không có banner brand - home brand full width
-        _listComponent.push(
-          <HomeBrand
-            contents={homePage?.homeBrand}
-            setting={settingsHome[SETTING_KEY.BRAND_SECTION.KEY]}
-            slidePerView={6}
-          />,
-        );
-      }
+      _listComponent.push(
+        <HomeBrand
+          contents={homePage?.homeBrand}
+          setting={settingsHome[SETTING_KEY.BRAND_SECTION.KEY]}
+          homeBannerBrand={homePage?.homeBannerBrand}
+        />,
+      );
     }
     setListComponent(_listComponent);
   }, [blockContents]);

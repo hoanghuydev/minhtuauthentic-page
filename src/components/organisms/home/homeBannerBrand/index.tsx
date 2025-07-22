@@ -7,18 +7,25 @@ import { generateSlugToHref } from '@/utils';
 import Link from 'next/link';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
-  contents?: StaticContentsDto[];
+  images?: StaticContentsDto[];
+  className?: string;
 };
 
-const HomeBannerBrand = ({ contents }: Props) => {
-  if (!contents || contents.length === 0) {
+const HomeBannerBrand = ({ images, className }: Props) => {
+  if (!images || images.length === 0) {
     return null;
   }
 
   return (
-    <div className="rounded-[10px] h-full bg-white">
+    <div
+      className={twMerge(
+        'rounded-[10px] h-full bg-white flex-1 overflow-hidden',
+        className,
+      )}
+    >
       <Swiper
         className="rounded-[10px] h-full"
         spaceBetween={10}
@@ -38,7 +45,7 @@ const HomeBannerBrand = ({ contents }: Props) => {
           },
         }}
       >
-        {contents.map((banner, index) => {
+        {images.map((banner, index) => {
           const image = banner?.images?.[0]?.image;
           if (!image) return null;
 
@@ -47,7 +54,7 @@ const HomeBannerBrand = ({ contents }: Props) => {
               <ImageWithFallback
                 image={image}
                 alt={banner.title || 'Banner thương hiệu'}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
                 unoptimized={true}
               />
             </div>
