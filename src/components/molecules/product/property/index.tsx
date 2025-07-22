@@ -141,13 +141,18 @@ const ProductProperty = ({
         </div>
         <div>
           <span>Giới tính: </span>
-          <span className={'font-semibold text-primary'}>
+          <Link
+            href={generateSlugToHref(
+              product?.categories?.[0]?.category?.slugs?.slug,
+            )}
+            className={'font-semibold text-primary'}
+          >
             {SexName(
               product?.product_property?.sex === 0
                 ? 0
                 : product?.product_property?.sex || 2,
             )}
-          </span>
+          </Link>
         </div>
         <div>
           <span>Trạng thái: </span>

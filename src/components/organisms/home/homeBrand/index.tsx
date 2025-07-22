@@ -8,6 +8,7 @@ import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import HomeBannerBrand from '../homeBannerBrand';
 import { useMemo } from 'react';
 import { twMerge } from 'tailwind-merge';
+
 type Props = {
   contents: BrandDto[];
   setting?: SettingOptionDto;
@@ -30,13 +31,15 @@ export default function HomeBrand({
       className={'p-3 rounded-[10px]'}
       style={{ backgroundColor: setting?.backgroundColor || '#fff' }}
     >
-      <h2
-        className={
-          'text-[24px] font-bold text-primary mb-3 text-center uppercase'
-        }
-      >
-        Thương hiệu nổi bật
-      </h2>
+      <Link href={'/thuong-hieu'}>
+        <h2
+          className={
+            'text-[24px] font-bold text-primary mb-3 text-center uppercase'
+          }
+        >
+          Thương hiệu nổi bật
+        </h2>
+      </Link>
       <div
         className={twMerge(
           'grid grid-cols-1 gap-2',

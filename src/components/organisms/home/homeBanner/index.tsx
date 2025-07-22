@@ -27,7 +27,7 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
         >
           {/* Desktop: Menu overlay + Full banner */}
           <div className={'container m-auto hidden lg:!block'}>
-            <div className={'absolute top-[50%] translate-y-[-50%] z-[3]'}>
+            <div className={'absolute top-3 z-[3] m-auto'}>
               <div className={'container m-auto relative'}>
                 {menu && <MenuWrapper menu={menu} className={'w-[220px] '} />}
               </div>
