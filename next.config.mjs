@@ -20,6 +20,7 @@ const nextConfig = withBundleAnalyzer({
       'be.minhtuauthentic.com',
       'be-new.mikiperfume.com',
       'cdn-static.smember.com.vn',
+      'minhtuauthentic-be.minhtuauthentic.com',
     ],
     formats: [],
   },

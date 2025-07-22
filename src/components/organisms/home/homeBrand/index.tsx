@@ -53,9 +53,10 @@ export default function HomeBrand({
         )}
         <SectionSwiper
           slidesPerView={slidesPerView || 4}
-          classNameContainer={
-            'border flex-1 border-[#e4e4e4] rounded-[10px] lg:h-[250px] p-3'
-          }
+          classNameContainer={twMerge(
+            'border flex-1 border-[#e4e4e4] rounded-[10px] p-3',
+            homeBannerBrand && homeBannerBrand.length > 0 && 'lg:h-[250px]',
+          )}
           classNameItems={'relative w-full overflow-hidden'}
           spaceBetween={10}
           loop={true}
