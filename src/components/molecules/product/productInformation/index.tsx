@@ -126,7 +126,7 @@ export default function ProductInformation({ product }: Props) {
                   className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}
                   key={index}
                 >
-                  <td className={'p-3'}>{item.label}</td>
+                  <td className={'p-3 whitespace-nowrap'}>{item.label}</td>
                   <td>{item.value}</td>
                 </tr>
               );

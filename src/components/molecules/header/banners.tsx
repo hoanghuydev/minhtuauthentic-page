@@ -116,13 +116,9 @@ export const Banners = ({
               className="w-full"
               style={{ width: '100% !important' }}
             >
-              {isFull ? (
-                imageElement
-              ) : (
-                <Link href={generateSlugToHref(banner?.properties?.slug)}>
-                  {imageElement}
-                </Link>
-              )}
+              <Link href={generateSlugToHref(banner?.properties?.slug)}>
+                {imageElement}
+              </Link>
             </SwiperSlide>
           );
         })}
@@ -181,13 +177,9 @@ export const Banners = ({
                   className="w-full"
                   style={{ width: '100% !important' }}
                 >
-                  {isFull ? (
-                    imageElement
-                  ) : (
-                    <Link href={generateSlugToHref(banner?.properties?.slug)}>
-                      {imageElement}
-                    </Link>
-                  )}
+                  <Link href={generateSlugToHref(banner?.properties?.slug_mobile || banner?.properties?.slug)}>
+                    {imageElement}
+                  </Link>
                 </SwiperSlide>
               );
             },

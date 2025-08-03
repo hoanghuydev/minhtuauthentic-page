@@ -176,6 +176,13 @@ const ProductProperty = ({
       </div>
       <hr className={'mt-3'} />
       <div className={'mt-3 overflow-hidden'}>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: product?.product_property?.description || '',
+          }}
+          className={'text-[14px] text-gray-700'}
+        >
+        </p>
         <ProductPrice
           prefix={'Giá'}
           variant={productContext?.variantActive}
