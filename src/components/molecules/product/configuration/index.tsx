@@ -146,7 +146,6 @@ export default function ProductConfiguration({
                       ) : (
                         <button
                           type={'button'}
-                          disabled={!variant?.is_in_stock}
                           onClick={() => {
                             setValueActiveId(() => {
                               const indexConfiguration =
@@ -161,8 +160,7 @@ export default function ProductConfiguration({
                           className={twMerge(
                             'rounded-[10px] p-2 lg:p-3 border border-gray-300 relative overflow-hidden font-semibold',
                             isActived ? 'border-primary' : '',
-                            !variant?.is_in_stock &&
-                              'cursor-not-allowed relative before:content-[attr(data-content)] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-white before:z-10 before:opacity-50',
+                            !variant?.is_in_stock && 'out-of-stock-variant',
                           )}
                         >
                           {renderItem(value, isActived)}

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import NewsClock from '@/components/atoms/news/clock';
 import { useRouter } from 'next/router';
-import { generateSlugToHref } from '@/utils';
+import { generateSlugToHref, getTitleNews } from '@/utils';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 
 type Props = {
@@ -35,10 +35,10 @@ export default function HighlightedNews({ content }: Props) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-60" />
           <div className="absolute bottom-0 p-4 text-white">
-            <div
+            <h3
               className="lg:text-2xl font-semibold mb-2 line-clamp-2"
               dangerouslySetInnerHTML={{
-                __html: content.featured[0]?.content || '',
+                __html: getTitleNews(content.featured[0]?.content || '') || '',
               }}
             />
             <NewsClock item={content.featured[0]} className={'text-white text-md'} />
@@ -60,10 +60,10 @@ export default function HighlightedNews({ content }: Props) {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-60" />
               <div className="absolute bottom-0 p-3 text-white">
-                <div
+                <h3
                   className="lg:text-xl font-semibold mb-2 line-clamp-2"
                   dangerouslySetInnerHTML={{
-                    __html: post.content || '',
+                    __html: getTitleNews(post.content || '') || '',
                   }}
                 />
                 <NewsClock item={post} className={'text-white text-md'} />

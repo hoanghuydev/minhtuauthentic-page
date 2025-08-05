@@ -17,6 +17,7 @@ export default function ProductCartCheckout({ variant, isQuickView, setQuickView
   const orderCtx = useContext(OrderContext);
   const [qty, setQty] = useState(1);
   const [indexCart, setIndexCart] = useState<number | null>(null);
+  const isOutOfStock = !variant?.is_in_stock;
 
   useEffect(() => {
     if (!variant?.id) return;
@@ -36,7 +37,7 @@ export default function ProductCartCheckout({ variant, isQuickView, setQuickView
   }, [orderCtx?.cart, variant?.id]);
 
   const handleAddToCart = () => {
-    if (!variant) return;
+    if (!variant || isOutOfStock) return;
 
     if (indexCart !== null && indexCart > -1) {
       orderCtx?.updateCart && orderCtx.updateCart(indexCart, qty);
@@ -44,6 +45,11 @@ export default function ProductCartCheckout({ variant, isQuickView, setQuickView
       orderCtx?.addCart && orderCtx.addCart(variant, qty);
     }
     setQuickViewModal && setQuickViewModal(false);
+  };
+
+  const handleOutOfStockClick = () => {
+    // Optional: Show toast or handle out of stock click
+    console.log('Product is out of stock');
   };
 
   return (
@@ -57,39 +63,60 @@ export default function ProductCartCheckout({ variant, isQuickView, setQuickView
           }}
         />
         <div className="flex-1 flex justify-between gap-3">
-          <button
-            className={
-              'flex flex-col bg-primary items-center justify-center p-[4px_10px] rounded-[10px] grow text-[12px]'
-            }
-            type={'button'}
-            onClick={() => {
-              handleAddToCart();
-              router.push('/gio-hang/tom-tat');
-            }}
-          >
-            <span
-              className={'text-white text-xl font-[700] lg:font-bold uppercase'}
+          {isOutOfStock ? (
+            <button
+              className={
+                'flex flex-col bg-gray-400 items-center justify-center p-[4px_10px] rounded-[10px] grow text-[12px] opacity-60'
+              }
+              type={'button'}
+              onClick={handleOutOfStockClick}
             >
-              Mua ngay
-            </span>
-            <span className={'text-white'}>
-              Giao Tận Nơi hoặc Nhận Tại Cửa Hàng
-            </span>
-          </button>
-          <button
-            className={
-              'flex flex-col border border-primary items-center justify-center  p-[4px_10px] rounded-[10px] w-[100px] text-[12px]'
-            }
-            type={'button'}
-            onClick={() => {
-              handleAddToCart();
-            }}
-          >
-            <span>
-              <CartPlus className={'w-6 h-6 text-primary'} />
-            </span>
-            <span className={'text-primary '}>Thêm vào giỏ</span>
-          </button>
+              <span
+                className={'text-white text-xl font-[700] lg:font-bold uppercase'}
+              >
+                Tạm hết hàng
+              </span>
+              <span className={'text-white'}>
+                Giao Tận Nơi hoặc Nhận Tại Cửa Hàng
+              </span>
+            </button>
+          ) : (
+            <>
+              <button
+                className={
+                  'flex flex-col bg-primary items-center justify-center p-[4px_10px] rounded-[10px] grow text-[12px]'
+                }
+                type={'button'}
+                onClick={() => {
+                  handleAddToCart();
+                  router.push('/gio-hang/tom-tat');
+                }}
+              >
+                <span
+                  className={'text-white text-xl font-[700] lg:font-bold uppercase'}
+                >
+                  Mua ngay
+                </span>
+                <span className={'text-white'}>
+                  Giao Tận Nơi hoặc Nhận Tại Cửa Hàng
+                </span>
+              </button>
+              <button
+                className={
+                  'flex flex-col border border-primary items-center justify-center  p-[4px_10px] rounded-[10px] w-[100px] text-[12px]'
+                }
+                type={'button'}
+                onClick={() => {
+                  handleAddToCart();
+                }}
+              >
+                <span>
+                  <CartPlus className={'w-6 h-6 text-primary'} />
+                </span>
+                <span className={'text-primary '}>Thêm vào giỏ</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
       <div id="script-general-container"></div>

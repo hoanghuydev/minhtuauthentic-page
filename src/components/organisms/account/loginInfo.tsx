@@ -11,8 +11,8 @@ const LoginInfo = () => {
             <div className="flex flex-col items-center justify-center text-base lg:text-[20px] font-medium">
               <span className="text-center flex gap-2">
                 Chào mừng đến với{' '}
-                <span className="text-primary align-middle font-bold text-xl lg:text-2xl">
-                  <h1>MINHTUAUTHENTIC</h1>
+                <span className="text-primary align-middle font-bold text-xl">
+                  MINHTUAUTHENTIC
                 </span>
               </span>
               <span className="text-center">
