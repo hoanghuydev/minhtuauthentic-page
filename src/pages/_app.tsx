@@ -45,6 +45,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <style>{`:root { --primary-color: ${
           settings?.commonSettings?.primaryColor || '#C44812'
         }; }`}</style>
+        <script dangerouslySetInnerHTML={{
+          __html: `history.scrollRestoration = "manual"`,
+        }} />
       </Head>
       <AppProvider>
         <OrderProvider>
