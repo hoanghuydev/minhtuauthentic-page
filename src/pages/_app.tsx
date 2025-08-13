@@ -24,50 +24,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const settings = useSettings();
   const router = useRouter();
   const _pageProps = { ...pageProps, ...settings };
-  const scrollPositions = useRef<{ [key: string]: number }>({});
-
-  useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      gtag.pageview(url);
-    };
-    router.events.on('routeChangeComplete', handleRouteChange);
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
-
-  // Scroll restoration logic
-  useEffect(() => {
-    const saveScrollPosition = (url: string) => {
-      scrollPositions.current[url] = window.scrollY;
-    };
-
-    const restoreScrollPosition = (url: string) => {
-      const savedPosition = scrollPositions.current[url];
-      if (savedPosition !== undefined) {
-        // Use requestAnimationFrame to ensure DOM is ready
-        requestAnimationFrame(() => {
-          window.scrollTo(0, savedPosition);
-        });
-      }
-    };
-
-    const handleRouteChangeStart = (url: string) => {
-      saveScrollPosition(router.asPath);
-    };
-
-    const handleRouteChangeComplete = (url: string) => {
-      restoreScrollPosition(url);
-    };
-
-    router.events.on('routeChangeStart', handleRouteChangeStart);
-    router.events.on('routeChangeComplete', handleRouteChangeComplete);
-
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChangeStart);
-      router.events.off('routeChangeComplete', handleRouteChangeComplete);
-    };
-  }, [router.events, router.asPath]);
 
   return (
     <>
@@ -79,9 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <style>{`:root { --primary-color: ${
           settings?.commonSettings?.primaryColor || '#C44812'
         }; }`}</style>
-        <script dangerouslySetInnerHTML={{
-          __html: `history.scrollRestoration = "manual"`,
-        }} />
+        
       </Head>
       <AppProvider>
         <OrderProvider>

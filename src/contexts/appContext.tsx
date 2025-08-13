@@ -28,6 +28,8 @@ export type TypeAppState = {
   setShowProductFooter: Dispatch<SetStateAction<boolean>> | undefined;
   currentVariant?: VariantDto | null;
   setCurrentVariant: Dispatch<SetStateAction<VariantDto | null>> | undefined;
+  productSynced: boolean;
+  setProductSynced: Dispatch<SetStateAction<boolean>> | undefined;
   menuProduct?: ProductDto[];
   setMenuProduct: Dispatch<SetStateAction<ProductDto[]>> | undefined;
   hintProductCategoryMenu?: Record<number, ProductDto[]>;
@@ -49,6 +51,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [settings, setSettings] = useState({});
   const [showProductFooter, setShowProductFooter] = useState(false);
   const [currentVariant, setCurrentVariant] = useState<VariantDto | null>(null);
+  const [productSynced, setProductSynced] = useState(false);
   const [menuProduct, setMenuProduct] = useState<ProductDto[]>([]);
   const [hintProductCategoryMenu, setHintProductCategoryMenu] = useState<
     Record<number, ProductDto[]>
@@ -61,15 +64,18 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       setIsOpenMenu(false);
       setIsOpenPopupProduct(null);
       setShowProductFooter(false);
-      setCurrentVariant(null);
+      if (!productSynced) {
+        setCurrentVariant(null);
+      }
+      setProductSynced(false);
     };
     router.events.on('routeChangeComplete', handleRouteComplete);
     return () => {
       router.events.off('routeChangeComplete', handleRouteComplete);
     };
-  }, [router]);
+  }, [router, productSynced]);
 
-  return (
+      return (
     <AppContext.Provider
       value={{
         user,
@@ -86,6 +92,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowProductFooter,
         currentVariant,
         setCurrentVariant,
+        productSynced,
+        setProductSynced,
         menuProduct,
         setMenuProduct,
         hintProductCategoryMenu,

@@ -1,12 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-/**
- * Component ScrollToTop
- * Tự động cuộn lên đầu trang khi:
- * 1. Component được mount (refresh trang)
- * 2. Route thay đổi (chuyển trang)
- */
 const ScrollToTop = () => {
   const router = useRouter();
 
@@ -26,17 +20,19 @@ const ScrollToTop = () => {
       return;
     }
 
-    const handleRouteChange = () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
+    const handleRouteChangeComplete = () => {
+      window.history.scrollRestoration = "auto";
     };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+    const handleRouteChangeStart = () => {
+      window.history.scrollRestoration = "manual";
+    };
 
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+    router.events.on('routeChangeStart', handleRouteChangeStart);
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+      router.events.off('routeChangeStart', handleRouteChangeStart);
     };
   }, [router]);
 
