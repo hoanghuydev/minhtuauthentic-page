@@ -40,8 +40,11 @@ const ProductProperty = ({
   useEffect(() => {
     if (productContext?.variantActive && appContext?.setCurrentVariant) {
       appContext.setCurrentVariant(productContext.variantActive);
+      
+      // Mark as synced để prevent reset khi route complete
+      appContext?.setProductSynced && appContext.setProductSynced(true);
     }
-  }, [productContext?.variantActive]);
+  }, [productContext?.variantActive, appContext?.setCurrentVariant, appContext?.setProductSynced]);
 
   useEffect(() => {
     if (isMobile) {

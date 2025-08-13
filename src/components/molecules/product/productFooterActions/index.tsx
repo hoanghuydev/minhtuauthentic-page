@@ -4,6 +4,7 @@ import AppContext from '@/contexts/appContext';
 import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PhoneOutlined } from '@ant-design/icons';
+import { isNull } from 'util';
 
 export default function ProductFooterActions() {
   const router = useRouter();
@@ -14,8 +15,6 @@ export default function ProductFooterActions() {
   // Use the variant from AppContext.currentVariant for global access
   const variant = appContext?.currentVariant;
   const isOutOfStock = !variant?.is_in_stock;
-
-
   useEffect(() => {
     if (!variant?.id) return;
 
