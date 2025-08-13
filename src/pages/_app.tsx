@@ -10,7 +10,7 @@ import { OrderProvider } from '@/contexts/orderContext';
 import Head from 'next/head';
 import { Nunito_Sans } from 'next/font/google';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import * as gtag from '@/utils/gtag';
 
 const nunitoSans = Nunito_Sans({
@@ -24,6 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const settings = useSettings();
   const router = useRouter();
   const _pageProps = { ...pageProps, ...settings };
+  const scrollPositions = useRef<{ [key: string]: number }>({});
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {
@@ -34,6 +35,39 @@ export default function App({ Component, pageProps }: AppProps) {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [router.events]);
+
+  // Scroll restoration logic
+  useEffect(() => {
+    const saveScrollPosition = (url: string) => {
+      scrollPositions.current[url] = window.scrollY;
+    };
+
+    const restoreScrollPosition = (url: string) => {
+      const savedPosition = scrollPositions.current[url];
+      if (savedPosition !== undefined) {
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(() => {
+          window.scrollTo(0, savedPosition);
+        });
+      }
+    };
+
+    const handleRouteChangeStart = (url: string) => {
+      saveScrollPosition(router.asPath);
+    };
+
+    const handleRouteChangeComplete = (url: string) => {
+      restoreScrollPosition(url);
+    };
+
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+    };
+  }, [router.events, router.asPath]);
 
   return (
     <>
