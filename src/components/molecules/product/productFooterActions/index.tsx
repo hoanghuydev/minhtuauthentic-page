@@ -1,29 +1,44 @@
 import CartPlus from '@/components/icons/cart-plus';
 import OrderContext from '@/contexts/orderContext';
-import ProductDetailContext from '@/contexts/productDetailContext';
-import { useContext } from 'react';
+import AppContext from '@/contexts/appContext';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PhoneOutlined } from '@ant-design/icons';
 
 export default function ProductFooterActions() {
   const router = useRouter();
   const orderCtx = useContext(OrderContext);
-  const productDetailCtx = useContext(ProductDetailContext);
+  const appContext = useContext(AppContext);
+  const [indexCart, setIndexCart] = useState<number | null>(null);
 
-  // Use the variant from ProductDetailContext instead of AppContext
-  const variant = productDetailCtx?.variantActive;
+  // Use the variant from AppContext.currentVariant for global access
+  const variant = appContext?.currentVariant;
   const isOutOfStock = !variant?.is_in_stock;
+
+
+  useEffect(() => {
+    if (!variant?.id) return;
+
+    const index = (orderCtx?.cart?.items || [])?.findIndex(
+      (item) => item.variant_id === variant?.id,
+    );
+
+    if (index !== -1) {
+      setIndexCart(index);
+    } else {
+      setIndexCart(null);
+    }
+  }, [orderCtx?.cart, variant?.id]);
 
   const handleAddToCart = () => {
     if (!variant || isOutOfStock) return;
 
-    // Check if variant is already in cart
-    const existingItemIndex = (orderCtx?.cart?.items || []).findIndex(
-      (item) => item.variant_id === variant.id,
-    );
-
-    if (existingItemIndex == -1) {
-      orderCtx?.addCart && orderCtx.addCart(variant);
+    if (indexCart !== null && indexCart > -1) {
+      // If item is already in cart, update quantity (default to 1)
+      orderCtx?.updateCart && orderCtx.updateCart(indexCart, 1);
+    } else {
+      // If item is not in cart, add it
+      orderCtx?.addCart && orderCtx.addCart(variant, 1);
     }
   };
 

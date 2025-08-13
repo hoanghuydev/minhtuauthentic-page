@@ -37,6 +37,13 @@ const ProductPropertyQuickView = ({
   const [variantConfigurationValueMap, setVariantConfigurationValueMap] =
     useState<Map<number, VariantDto> | null>(null);
 
+  // Sync variant to AppContext immediately when variantActive changes (remove isMobile condition)
+  useEffect(() => {
+    if (productContext?.variantActive && appContext?.setCurrentVariant) {
+      appContext.setCurrentVariant(productContext.variantActive);
+    }
+  }, [productContext?.variantActive]);
+
   useEffect(() => {
     if (isMobile) {
       const handleScroll = () => {
@@ -47,10 +54,7 @@ const ProductPropertyQuickView = ({
 
         if (buyButtonArea < 150 && appContext?.setShowProductFooter) {
           appContext.setShowProductFooter(true);
-
-          if (appContext.setCurrentVariant && productContext?.variantActive) {
-            appContext.setCurrentVariant(productContext.variantActive);
-          }
+          // Don't set variant here - it should already be synced by the useEffect above
         } else if (buyButtonArea >= 150 && appContext?.setShowProductFooter) {
           appContext.setShowProductFooter(false);
         }
