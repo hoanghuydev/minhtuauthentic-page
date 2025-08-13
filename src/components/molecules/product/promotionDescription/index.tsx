@@ -22,10 +22,12 @@ export default function PromotionDescription({
     {
       title: 'Ưu đãi thêm',
       image: giftBox,
+      size: 'w-9 h-9'
     },
     {
       title: 'Mã giảm giá',
       image: saleTag,
+      size: 'w-[45px] h-[45px]'
     },
   ]
   const [indexDisplay, setIndexDisplay] = useState(0);
@@ -55,7 +57,7 @@ export default function PromotionDescription({
         onClick={() => onChange(index)}
       >
         <div className={'flex items-center justify-center gap-1'}>
-          <Image src={content.image} alt={content.title} className="w-9 h-9"/>
+          <Image src={content.image} alt={content.title} className={content.size}/>
           <span
             className={twMerge(
               'text-[17px] font-[700] lg:font-bold',

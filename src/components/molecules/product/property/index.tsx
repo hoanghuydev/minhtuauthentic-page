@@ -13,7 +13,7 @@ import { generateSlugToHref, SexName } from '@/utils';
 import StartRating from '@/components/atoms/product/startRating';
 import { Rate } from 'antd/es';
 import { SettingsDto } from '@/dtos/Settings.dto';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import ProductDetailContext from '@/contexts/productDetailContext';
 import AppContext from '@/contexts/appContext';
 import { useIsMobile } from '@/hooks/useDevice';
@@ -38,6 +38,12 @@ const ProductProperty = ({
     useState<Map<number, VariantDto> | null>(null);
 
   useEffect(() => {
+    if (productContext?.variantActive && appContext?.setCurrentVariant) {
+      appContext.setCurrentVariant(productContext.variantActive);
+    }
+  }, [productContext?.variantActive]);
+
+  useEffect(() => {
     if (isMobile) {
       const handleScroll = () => {
         if (!overviewRef.current) return;
@@ -47,10 +53,6 @@ const ProductProperty = ({
 
         if (buyButtonArea < 150 && appContext?.setShowProductFooter) {
           appContext.setShowProductFooter(true);
-
-          if (appContext.setCurrentVariant && productContext?.variantActive) {
-            appContext.setCurrentVariant(productContext.variantActive);
-          }
         } else if (buyButtonArea >= 150 && appContext?.setShowProductFooter) {
           appContext.setShowProductFooter(false);
         }

@@ -124,8 +124,7 @@ const fetchHomePageData = async () => {
   }
 };
 
-// Server-Side Props
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const homePage = await fetchHomePageData();
   const settingsHome = transformSettingsToObject(homePage?.settings);
 
@@ -134,6 +133,7 @@ export async function getServerSideProps() {
       homePage,
       settingsHome,
     },
+    revalidate: 40,
   };
 }
 
