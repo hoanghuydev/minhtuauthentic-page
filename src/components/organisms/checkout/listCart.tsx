@@ -159,6 +159,11 @@ export default function ListCart({ paymentType, setValue, loading }: Props) {
                 key={key}
                 closable
                 className="h-[35px] flex items-center justify-center"
+                onClose={() => {
+                  order?.removeCoupon &&
+                    coupon.code &&
+                    order.removeCoupon(coupon.code);
+                }}
                 onClick={() => {
                   order?.removeCoupon &&
                     coupon.code &&

@@ -118,7 +118,7 @@ const ProductDetailImage = ({
                     setIsOpen && setIsOpen({ display: true, image });
                   }}
                   product={product}
-                  unoptimized={!isMobile}
+                  unoptimized={true}
                   quality={100}
                   onLoadingComplete={handleMainImageLoad}
                 />
