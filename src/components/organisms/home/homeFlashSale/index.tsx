@@ -4,23 +4,29 @@ import ProductCard from '@/components/organisms/product/card';
 import CouponsDto from '@/dtos/Coupons.dto';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { useIsDesktop, useIsMobile } from '@/hooks/useDevice';
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import SectionSwiperItem from '@/components/organisms/sectionSwiper/item';
+
 const CountdownContainer = dynamic(
   () => import('@/components/organisms/home/homeFlashSale/countdownContainer'),
   {
     ssr: false,
   },
 );
+
 type Props = {
   promotion?: PromotionsDto;
   setting?: SettingOptionDto;
 };
+
 export default function HomeFlashSale({ promotion, setting }: Props) {
   const endDate: Date = new Date(promotion?.end_date || '');
-  const isDesktop = useIsDesktop();
-  const isMobile = useIsMobile();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <>
       {endDate?.getTime() > new Date().getTime() && (
@@ -30,29 +36,60 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
         >
           <div
             className={
-              'flex justify-end mb-3 items-center h-[36px] lg:h-[120px] w-full relative px-3 lg:mb-3'
+              'flex justify-end mb-3 items-center w-full relative lg:h-[120px] lg:px-3 lg:mb-3'
             }
           >
+            {/* Desktop Image */}
             {promotion?.images?.[0]?.image?.url && (
+              <div className="hidden lg:!block w-full h-full">
+                <Image
+                  src={promotion?.images?.[0]?.image?.url || ''}
+                  className={'object-cover w-full !h-auto'}
+                  alt={'Khuyến mãi flash sale'}
+                  unoptimized
+                  fill
+                />
+              </div>
+            )}
+
+            {/* Mobile Image */}
+            {promotion?.images_mobile?.[0]?.image?.url && (
               <Image
-                src={promotion?.images?.[0]?.image?.url || ''}
-                className={'object-cover w-full !h-auto'}
+                src={promotion?.images_mobile?.[0]?.image?.url || ''}
+                className={'object-cover w-full !h-auto lg:!hidden'}
                 alt={'Khuyến mãi flash sale'}
                 unoptimized
-                fill
+                width={562}
+                height={180}
               />
             )}
-            {isDesktop && (
-              <CountdownContainer className={'relative'} endDate={endDate} />
-            )}
+
+            {/* Fallback: Show desktop image on mobile if mobile image is not available */}
+            {!promotion?.images_mobile?.[0]?.image?.url &&
+              promotion?.images?.[0]?.image?.url && (
+                <Image
+                  src={promotion?.images?.[0]?.image?.url || ''}
+                  className={'object-cover w-full !h-auto lg:!hidden'}
+                  alt={'Khuyến mãi flash sale'}
+                  unoptimized
+                  width={1219}
+                  height={120}
+                />
+              )}
+
+            <div className="hidden lg:!block absolute top-0 right-[20px]">
+              <CountdownContainer className={'pt-6'} endDate={endDate} />
+            </div>
           </div>
-          {isMobile && (
+          <div className="lg:!hidden">
             <CountdownContainer
-              className={'flex gap-3 mb-3 items-center justify-center'}
+              className={'flex mb-3 items-center justify-center'}
               endDate={endDate}
             />
-          )}
+          </div>
+
           <SectionSwiperItem
+            classNameContainer="pt-2"
             slidesPerView={5}
             slidePerViewMobile={2}
             spaceBetween={10}

@@ -52,14 +52,12 @@ export const InputSearchDesktop = ({ classname, isForMobile }: Props) => {
   }, [ref]);
 
   useEffect(() => {
-    if (isMobile) {
-      if (ctx?.isOpenSearch) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = 'auto';
-      }
+    if (ctx?.isOpenSearch && isMobile) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
     }
-  }, [ctx?.isOpenSearch]);
+  }, [ctx?.isOpenSearch, isMobile]);
 
   useEffect(() => {
     const handleKeyUp = (e: KeyboardEvent) => {

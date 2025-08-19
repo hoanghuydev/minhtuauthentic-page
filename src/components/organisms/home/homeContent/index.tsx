@@ -8,6 +8,7 @@ import { ResponseHomePageDto } from '@/dtos/responseHomePage.dto';
 import { StaticComponentDto } from '@/dtos/StaticComponent.dto';
 import { groupBy } from '@/utils';
 import HomeCategoryItem from '../homeCategoryItem';
+import HomeBannerBrand from '../homeBannerBrand';
 
 type Props = {
   homePage: ResponseHomePageDto;
@@ -60,11 +61,9 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
         <HomeBrand
           contents={homePage?.homeBrand}
           setting={settingsHome[SETTING_KEY.BRAND_SECTION.KEY]}
+          homeBannerBrand={homePage?.homeBannerBrand}
         />,
       );
-    }
-    if (homePage?.homeSupport && homePage?.homeSupport.length > 0) {
-      _listComponent.push(<HomeSupport contents={homePage?.homeSupport} />);
     }
     setListComponent(_listComponent);
   }, [blockContents]);

@@ -91,12 +91,14 @@ export default function CheckoutTemplate({
       address: '',
     },
   });
+  const [loading, setLoading] = useState(false);
 
   const paymentType = (payment_id?: number) => {
     const payment = paymentMap.get(Number(payment_id));
     return (payment || '')?.toLowerCase();
   };
   const onSubmit = (data: FormData) => {
+    setLoading(true);
     if (!data?.payment_id) {
       setError('payment_id', {
         message: 'Vui lòng chọn phương thức thanh toán',
@@ -213,6 +215,9 @@ export default function CheckoutTemplate({
       .catch((e) => {
         console.log('e', e);
         toast.error('Đã có lỗi xảy ra');
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -244,6 +249,7 @@ export default function CheckoutTemplate({
           <ListCart
             setValue={setValue}
             paymentType={paymentType(watch('payment_id' as any) as number)}
+            loading={loading}
           />
         </div>
       </form>

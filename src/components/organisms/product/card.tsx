@@ -58,10 +58,10 @@ const ProductCard = ({
     >
       <div>
         <div className={'flex items-center justify-end gap-2 px-2'}>
-          <Badge className={'bg-green'}>
+          <Badge className={'bg-price'}>
             Giảm {calculatePricePercent(_variant)}%
           </Badge>
-          <Badge className={'bg-price'}>Trả góp 0%</Badge>
+          <Badge className={'bg-green'}>Trả góp 0%</Badge>
         </div>
         <ProductCardImage product={product} variant={_variant} />
         {/* <div className={'px-2 h-[110px] lg:h-[75px] xl:h-[63px]'}> */}
@@ -96,7 +96,7 @@ const ProductCard = ({
             )}
           {isShowListVariant && (
             <SelectVariant
-              key={`${product.id}-${_variant?.id || 'default'}`}
+              key={product.id}
               product={product}
               defaultVariant={_variant}
               onChange={(rs) => {

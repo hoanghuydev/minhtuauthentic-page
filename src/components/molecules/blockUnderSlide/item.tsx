@@ -8,10 +8,12 @@ const BlockUnderSlideItem = ({
   content,
   classImage,
   isUseImageFill,
+  priority = false,
 }: {
   content: StaticContentsDto;
   classImage?: string;
   isUseImageFill?: boolean;
+  priority?: boolean;
 }) => {
   const imageDetail = content?.images?.[0];
   const image = imageDetail?.image || null;
@@ -35,6 +37,8 @@ const BlockUnderSlideItem = ({
             )}
             isFill={isUseImageFill}
             alt={imageDetail?.alt || content?.title || ''}
+            priority={priority}
+            loading={priority ? 'eager' : 'lazy'}
             unoptimized={!isMobile}
           />
         </Link>

@@ -146,19 +146,7 @@ export const CategoryFilterProvider = ({
   const updateRouter = (key: string, value: string | object) => {
     const params = getQueryString(key, value);
 
-    // Update URL without reload
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.pushState({ path: newUrl }, '', newUrl);
-
-    // Phát ra sự kiện để các component khác biết URL đã thay đổi
-    if (typeof window !== 'undefined') {
-      const popStateEvent = new PopStateEvent('popstate', {
-        state: { path: newUrl },
-      });
-      window.dispatchEvent(popStateEvent);
-    }
-
-    // Update state and fetch new data
+    // Update state based on the key
     if (key === 'filter') {
       setFilters(value as Record<string, (number | string)[]>);
     } else if (key === 'sort') {
@@ -173,7 +161,18 @@ export const CategoryFilterProvider = ({
       return;
     }
 
-    // Fetch new data
+    // For all filter changes, use Next.js router with shallow routing
+    // This ensures proper history management
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+
+    // Use router.push with shallow: true to update URL without full page reload
+    // but properly maintain browser history
+    router.push(newUrl, undefined, {
+      shallow: true,
+      scroll: false,
+    });
+
+    // Start loading and fetch new data
     setLoading(true);
     refreshData();
   };
@@ -273,12 +272,31 @@ export const CategoryFilterProvider = ({
   // Thêm useEffect để theo dõi khi URL thay đổi
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const handleURLChange = () => {
+      const handleURLChange = (event: PopStateEvent) => {
+        // When popstate event occurs (back/forward browser buttons)
+        // Check if the URL includes filter parameters but we're not on a filter page
         const currentParams = new URLSearchParams(window.location.search);
-        // Kiểm tra nếu có sự thay đổi về filter, limit, page, sort
-        if (currentParams.toString() !== queryString.toString()) {
-          refreshData();
+
+        // Get current route path segments
+        const pathSegments = window.location.pathname
+          .split('/')
+          .filter(Boolean);
+
+        // If we have filter parameters and we're on a product detail page (longer path)
+        // then we need to force reload to show the filter page
+        if (
+          currentParams.toString().includes('filter') &&
+          pathSegments.length > 1
+        ) {
+          // This checks if we're on a product detail page which would have more path segments
+          // Category pages typically have only one segment (e.g., /nuoc-hoa-unisex)
+          // Product pages have more (e.g., /product/some-product-slug)
+          window.location.reload();
+          return;
         }
+
+        // Otherwise just refresh the data with current URL parameters
+        refreshData();
       };
 
       // Theo dõi sự kiện popstate (khi người dùng nhấn nút back/forward của trình duyệt)

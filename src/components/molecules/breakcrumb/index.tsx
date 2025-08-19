@@ -1,8 +1,9 @@
 import { useIsMobile } from '@/hooks/useDevice';
 import { Breadcrumb } from 'antd/es';
 import Link from 'next/link';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import Head from 'next/head';
 
 type Props = {
   link: string;
@@ -60,12 +61,54 @@ export default function BreadcrumbComponent({
       setItems(_items);
     }
   }, []);
+
+  const breadcrumbSchema = useMemo(() => {
+    const baseUrl =
+      typeof window !== 'undefined'
+        ? window.location.origin
+        : process.env.APP_URL;
+    const elementList = [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Trang chủ',
+        item: `${baseUrl}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: label,
+        item: `${baseUrl}/${link}`,
+      },
+    ];
+
+    if (current) {
+      elementList.push({
+        '@type': 'ListItem',
+        position: 3,
+        name: current.label,
+        item: `${baseUrl}${current.link}`,
+      });
+    }
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: elementList,
+    };
+  }, [label, link, current]);
+
   return (
     <>
+      <Head>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+      </Head>
       {isMounted && isMobile && <div className={'mt-16'}></div>}
       <Breadcrumb
         className={twMerge(
-          'mb-3 overflow-auto scrollbar-hide [&>ol]:whitespace-nowrap [&>ol]:flex [&>ol]:flex-nowrap',
+          'mb-3 overflow-auto scrollbar-hide [&>ol]:whitespace-nowrap [&>ol]:flex [&>ol]:flex-nowrap [&>ol>li]:min-w-2 [&>ol>li]:h-6',
           className,
         )}
         items={items}

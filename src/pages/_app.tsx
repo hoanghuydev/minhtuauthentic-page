@@ -10,7 +10,7 @@ import { OrderProvider } from '@/contexts/orderContext';
 import Head from 'next/head';
 import { Nunito_Sans } from 'next/font/google';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import * as gtag from '@/utils/gtag';
 
 const nunitoSans = Nunito_Sans({
@@ -25,16 +25,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const _pageProps = { ...pageProps, ...settings };
 
-  useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      gtag.pageview(url);
-    };
-    router.events.on('routeChangeComplete', handleRouteChange);
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
-
   return (
     <>
       <Head>
@@ -45,6 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <style>{`:root { --primary-color: ${
           settings?.commonSettings?.primaryColor || '#C44812'
         }; }`}</style>
+        
       </Head>
       <AppProvider>
         <OrderProvider>

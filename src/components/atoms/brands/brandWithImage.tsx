@@ -18,14 +18,14 @@ export default function BrandWithImage({
   return (
     <div
       className={twMerge(
-        'p-1 lg:p-[10px_20px] overflow-hidden rounded-[10px] border border-gray-200',
+        'p-1 lg:p-[10px_20px] overflow-hidden rounded-[10px] border border-gray-200 flex items-center justify-center',
         className,
       )}
     >
       <Link href={generateSlugToHref(brand?.slugs?.slug || '')}>
         <ImageWithFallback
           image={brand?.images?.[0]?.image}
-          className={classNameImage}
+          className={twMerge(classNameImage, 'w-full h-full object-cover')}
         />
       </Link>
     </div>

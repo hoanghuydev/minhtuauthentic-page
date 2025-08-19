@@ -1,8 +1,12 @@
 import GmailIcon from '@/components/icons/gmail';
+import GoogleIcon from '@/components/icons/google';
+import Image from 'next/image';
+import { twMerge } from 'tailwind-merge';
 type Props = {
   title?: string;
-}
-export default function LoginOptions({title}: Props){
+  className?: string;
+};
+export default function LoginOptions({ title, className }: Props) {
   const handleLoginWithGmail = () => {
     window.open(
       `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT}&scope=https://www.googleapis.com/auth/userinfo.email&include_granted_scopes=true&response_type=token`,
@@ -11,24 +15,20 @@ export default function LoginOptions({title}: Props){
     );
   };
   return (
-    <div className={'login-options'}>
-      <div className={'login-options-title'}>
-          <span className={'relative bg-white px-4 font-bold'}>
-            {title}
-          </span>
-      </div>
-      <div className={'w-full flex items-center justify-center'}>
-        <div
-          className={
-            'rounded-[100%] cursor-pointer p-2 border border-gray-200'
-          }
-        >
-          <GmailIcon
-            className={'w-[20px] h-[20px] '}
-            onClick={handleLoginWithGmail}
-          />
+    <div className="w-full flex justify-center">
+      <button
+        onClick={handleLoginWithGmail}
+        type="button"
+        className={twMerge(
+          'flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed border border-gray-300 text-gray-800 bg-white hover:border-gray-400 hover:bg-gray-50 disabled:border-gray-300 disabled:text-gray-300 disabled:bg-white min-w-[120px] text-base px-4 py-3 min-h-[40px] rounded-md',
+          className,
+        )}
+      >
+        <div className="font-medium text-gray-900 flex items-center gap-2">
+          <GoogleIcon className="w-[20px] h-[20px]" />
+          Google
         </div>
-      </div>
+      </button>
     </div>
-  )
+  );
 }

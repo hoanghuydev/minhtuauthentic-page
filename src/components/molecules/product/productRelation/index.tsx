@@ -22,6 +22,10 @@ export default function ProductRelation({ products }: Props) {
       {products?.length > 0 && (
         <div className={'flex flex-col gap-3 mt-3 sticky top-0'}>
           {products.map((product, index) => {
+            const variant = (product?.variants || [])?.find(
+              (item) => item.is_default,
+            );
+
             return (
               <Link
                 href={generateSlugToHref(product?.slugs?.slug)}
@@ -31,10 +35,10 @@ export default function ProductRelation({ products }: Props) {
                 )}
               >
                 <div className={'flex items-center gap-2'}>
-                  <Badge className={'bg-green'}>
-                    Giảm {calculatePricePercent(productContext?.variantActive)}%
+                  <Badge className={'bg-price'}>
+                    Giảm {calculatePricePercent(variant)}%
                   </Badge>
-                  <Badge className={'bg-price'}>Trả góp 0%</Badge>
+                  <Badge className={'bg-green'}>Trả góp 0%</Badge>
                 </div>
                 <div className={twMerge('flex gap-3 mt-3')} key={index}>
                   <div>
@@ -56,7 +60,7 @@ export default function ProductRelation({ products }: Props) {
                       {product.title || product.name}
                     </h3>
                     <ProductPrice
-                      variant={productContext?.variantActive}
+                      variant={variant}
                       classNameRegularPrice={'font-semibold'}
                       classNamePrice={'font-[500] text-[10px]'}
                     />

@@ -31,13 +31,18 @@ export default function ProductInformation({ product }: Props) {
     {
       label: 'Giới tính',
       value: (
-        <span className={'font-[700] lg:font-bold'}>
+        <Link
+          href={generateSlugToHref(
+            product?.categories?.[0]?.category?.slugs?.slug,
+          )}
+          className={'text-primary font-[700] lg:font-bold'}
+        >
           {SexName(
             product?.product_property?.sex === 0
               ? 0
               : product?.product_property?.sex || 2,
           )}
-        </span>
+        </Link>
       ),
       is_visible: !!product?.product_property?.sex != null,
     },
@@ -121,7 +126,7 @@ export default function ProductInformation({ product }: Props) {
                   className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}
                   key={index}
                 >
-                  <td className={'p-3'}>{item.label}</td>
+                  <td className={'p-3 whitespace-nowrap'}>{item.label}</td>
                   <td>{item.value}</td>
                 </tr>
               );

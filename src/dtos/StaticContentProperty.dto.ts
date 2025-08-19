@@ -11,4 +11,5 @@ export class StaticComponentPropertyDto {
   position?: string;
   direction?: BLOCK_UNDER_CATEGORY_POSITION;
   position_index?: number;
+  slug_mobile?: string;
 }

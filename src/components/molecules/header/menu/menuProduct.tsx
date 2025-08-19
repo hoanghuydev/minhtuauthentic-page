@@ -11,7 +11,6 @@ interface MenuProductProps {
 const MenuProduct = ({ isLoadingProducts }: MenuProductProps) => {
   const appCtx = useContext(AppContext);
   const products = appCtx?.menuProduct || [];
-  console.log('products', products);
   return (
     <div className="flex flex-col">
       <h3 className="text-lg font-medium mb-4">Sản phẩm</h3>
@@ -33,7 +32,7 @@ const MenuProduct = ({ isLoadingProducts }: MenuProductProps) => {
           <div className="mt-4 text-center">
             <Link
               href="/san-pham"
-              className="inline-block px-4 py-2 text-sm font-medium text-primary hover:text-primary-dark"
+              className="inline-block px-4 py-2 text-primary hover:text-primary-dark font-medium"
             >
               Xem tất cả
             </Link>

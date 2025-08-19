@@ -7,6 +7,7 @@ export class StaticComponentPropertyDto {
   borderColor?: string;
   backgroundImage?: number;
   slug?: string;
+  slug_mobile?: string;
   tagLink?: TagLinkDto[];
   position_index?: number;
 }

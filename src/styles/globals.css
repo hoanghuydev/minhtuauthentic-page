@@ -101,6 +101,12 @@ iframe {
     @apply text-[#0782C1] underline cursor-pointer;
   }
 }
+.support-html {
+  p {
+    margin-block-end: 0;
+    margin-block-start: 0;
+  }
+}
 .html-description {
   img {
     @apply w-auto inline !important;
@@ -210,4 +216,50 @@ iframe {
 }
 .ant-breadcrumb-link > a:hover {
   color: var(--primary-color) !important;
+}
+
+/* Out of stock button styling */
+.out-of-stock-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.out-of-stock-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -20%;
+  right: -20%;
+  height: 2px;
+  background-color: #dc2626;
+  transform: translateY(-50%) rotate(-45deg);
+  z-index: 10;
+}
+
+.out-of-stock-btn:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+/* Out of stock variant styling (for ml selection) */
+.out-of-stock-variant {
+  position: relative;
+  overflow: hidden;
+}
+
+.out-of-stock-variant::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -10%;
+  right: -10%;
+  height: 2px;
+  background-color: #dc2626;
+  transform: translateY(-50%) rotate(-45deg);
+  z-index: 10;
+}
+
+.out-of-stock-variant:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }

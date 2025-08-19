@@ -20,6 +20,7 @@ type Props = {
   isUseNativeImage?: boolean;
   onMouseLeave?: (event: unknown) => void;
   sizes?: string;
+  onLoadingComplete?: () => void;
 };
 const ImageWithFallback = ({
   image,
@@ -36,6 +37,7 @@ const ImageWithFallback = ({
   product,
   isUseNativeImage,
   sizes = '(max-width: 768px) 100vw, 33vw',
+  onLoadingComplete,
 }: Props) => {
   const isMobile = useIsMobile();
   const [imgActiveSrc, setImageActiveSrc] = useState<string | StaticImageData>(
@@ -76,6 +78,7 @@ const ImageWithFallback = ({
             loading={loading}
             quality={quality || 70}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7u2tBwAFdgImpqLKKAAAAABJRU5ErkJggg=="
+            onLoad={() => onLoadingComplete && onLoadingComplete()}
           />
         ) : (
           <Image
@@ -101,6 +104,7 @@ const ImageWithFallback = ({
             sizes={sizes}
             loading={loading}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7u2tBwAFdgImpqLKKAAAAABJRU5ErkJggg=="
+            onLoad={() => onLoadingComplete && onLoadingComplete()}
           />
         )}
       </>
@@ -122,6 +126,7 @@ const ImageWithFallback = ({
         width={image?.width || 0}
         height={image?.height || 0}
         className={'select-none'}
+        onLoad={() => onLoadingComplete && onLoadingComplete()}
       />
     );
   };

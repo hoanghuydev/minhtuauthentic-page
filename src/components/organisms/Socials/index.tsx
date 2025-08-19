@@ -109,6 +109,7 @@ export default function Socials() {
             src={supportMenu}
             alt="Hỗ trợ"
             className="w-[48px] h-[48px] bg-white"
+            unoptimized
           />
         </button>
       </div>

@@ -165,6 +165,7 @@ const Footer = ({
                 alt={
                   'Minh Tu Authentic, Nước hoa chính hãng Tphcm, Quận Tân Phú, Mỹ phẩm'
                 }
+                unoptimized={true}
               />
             </Link>
           </div>

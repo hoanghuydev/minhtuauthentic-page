@@ -12,6 +12,7 @@ export type PopupDisplay = {
   data: unknown;
   display: boolean;
   isHaveChildren?: boolean;
+  currentCategoryId?: number;
 };
 export type MenuDisplay = {
   type?: string;
@@ -42,6 +43,7 @@ export type SEOProps = {
   width?: number;
   height?: number;
   keyword?: string;
+  noIndex?: boolean;
 };
 export enum LogoProps {
   HEADER = 'header',

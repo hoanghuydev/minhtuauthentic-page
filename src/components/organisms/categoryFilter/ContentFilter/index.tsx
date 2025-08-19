@@ -192,30 +192,40 @@ export default function ContentFilter({
           </h1>
           {category?.children && category?.children?.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {category.children.map((child, index) => (
-                <button
-                  type={'button'}
-                  key={index}
-                  onClick={() => {
-                    ctx?.updateRouter &&
-                      ctx.updateRouter('child', child.slugs?.slug || 'my-pham');
-                  }}
-                  className={twMerge(
-                    'bg-[#f3f4f6] border border-[#e5e7eb] rounded-[10px] text-[12px] p-[5px_10px] transition-colors duration-300',
-                    child.slugs?.slug === ctx?.router?.query['child'] &&
-                      'bg-primary text-white',
-                  )}
-                >
-                  <span>{child.name}</span>
-                </button>
-                //     <Link
-                //     key={child.id}
-                //      href={generateSlugToHref(child.slugs?.slug)}
-                //      className="px-3 py-1 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm transition-colors"
-                // >
-                //   {child.name}
-                // </Link>
-              ))}
+              {category.children.map((child, index) => {
+                const currentSlugPath = Array.isArray(
+                  ctx?.router?.query['slug'],
+                )
+                  ? ctx?.router?.query['slug'].join('/')
+                  : ctx?.router?.query['slug'];
+                return (
+                  <button
+                    type={'button'}
+                    key={index}
+                    onClick={() => {
+                      ctx?.updateRouter &&
+                        ctx.updateRouter(
+                          'child',
+                          child.slugs?.slug || 'my-pham',
+                        );
+                    }}
+                    className={twMerge(
+                      'bg-[#f3f4f6] border border-[#e5e7eb] rounded-[10px] text-[12px] p-[5px_10px] transition-colors duration-300',
+                      child.slugs?.slug === currentSlugPath &&
+                        'bg-primary text-white',
+                    )}
+                  >
+                    <span>{child.name}</span>
+                  </button>
+                  //     <Link
+                  //     key={child.id}
+                  //      href={generateSlugToHref(child.slugs?.slug)}
+                  //      className="px-3 py-1 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm transition-colors"
+                  // >
+                  //   {child.name}
+                  // </Link>
+                );
+              })}
             </div>
           )}
         </div>
@@ -270,7 +280,7 @@ export default function ContentFilter({
         </div>
       </div>
       <div className={'relative'}>
-        {ctx?.loading && (
+        {/* {ctx?.loading && (
           <div
             className={
               'absolute h-full w-full flex top-0 left-0 p-1 justify-center items-center z-[1] bg-[rgb(255_255_255_/_70%)]'
@@ -278,7 +288,7 @@ export default function ContentFilter({
           >
             <Loading />
           </div>
-        )}
+        )} */}
         {renderProduct}
         <div className={'flex justify-center mt-3'}>
           {ctx?.limit && ctx?.limit > -1 && ctx?.total > 0 && (
@@ -297,7 +307,22 @@ export default function ContentFilter({
               }
               pageSize={ctx?.limit || 12}
               onChange={(page: number) => {
-                ctx?.updateRouter && ctx.updateRouter('page', page.toString());
+                const params = new URLSearchParams(window.location.search);
+                params.set('page', page.toString());
+
+                // Use router.push with shallow: false to ensure full page reload
+                // which is better for pagination navigation
+                if (ctx?.router) {
+                  const newUrl = `${
+                    window.location.pathname
+                  }?${params.toString()}`;
+                  ctx.router.push(newUrl);
+                } else {
+                  // Fallback to direct URL change if router is not available
+                  window.location.href = `${window.location.origin}${
+                    window.location.pathname
+                  }?${params.toString()}`;
+                }
               }}
             />
           )}

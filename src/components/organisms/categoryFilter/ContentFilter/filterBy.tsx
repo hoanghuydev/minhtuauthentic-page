@@ -78,8 +78,9 @@ export default function FilterBy({ className, brands }: Props) {
         className={
           'border border-gray-300 p-1 lg:p-2 rounded-[5px] flex gap-1 bg-primary text-white items-center'
         }
+        onClick={() => handleClose(filter, item)}
       >
-        <button type={'button'} onClick={() => handleClose(filter, item)}>
+        <button type={'button'}>
           <CloseCircle className={'text-white w-5 h-5'} />
         </button>
         <span>{displayText}</span>

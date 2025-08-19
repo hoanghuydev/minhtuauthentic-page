@@ -5,32 +5,45 @@ import { StaticComponentDto } from '@/dtos/StaticComponent.dto';
 export default function useMenu(menu: ResponseMenuDto) {
   const [menuDisplay, setMenuDisplay] = useState<MenuDisplay[]>([]);
   useEffect(() => {
-    setMenuDisplay([
-      ...[
-        {
-          type: POPUP_TYPE.PRODUCT,
-          data: [],
-        },
-        {
-          type: POPUP_TYPE.BRAND,
-          data: menu?.brands || [],
-        },
-      ],
-      ...(menu?.homeMenuCategory || []).map((item: StaticComponentDto) => ({
+    // Sort menu categories by sort field before mapping
+    const sortedMenuCategories = (menu?.homeMenuCategory || [])
+      .sort((a, b) => (a.sort || 0) - (b.sort || 0))
+      .map((item: StaticComponentDto) => ({
         type: POPUP_TYPE.CATEGORY,
         data: item,
         isHaveChildren: !!(
           item?.category?.children?.length &&
           item?.category?.children?.length > 0
         ),
-      })),
-      ...[
-        {
-          type: POPUP_TYPE.NEWS,
-          data: [],
-        },
-      ],
-    ]);
-  }, []);
+        sort: item.sort || 0,
+      }));
+
+    // Create all menu items with sort priority
+    const allMenuItems = [
+      {
+        type: POPUP_TYPE.PRODUCT,
+        data: [],
+        sort: -999, // Always first
+      },
+      {
+        type: POPUP_TYPE.BRAND,
+        data: menu?.brands || [],
+        sort: -998, // Always second
+      },
+      ...sortedMenuCategories,
+      {
+        type: POPUP_TYPE.NEWS,
+        data: menu?.newsData || [],
+        sort: 999, // Always last
+      },
+    ];
+
+    // Sort all items and remove sort property for final result
+    const finalMenuDisplay = allMenuItems
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ sort, ...item }) => item);
+
+    setMenuDisplay(finalMenuDisplay);
+  }, [menu]);
   return {menuDisplay}
 }

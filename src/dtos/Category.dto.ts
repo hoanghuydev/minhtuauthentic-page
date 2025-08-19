@@ -4,6 +4,7 @@ import { IProductCategoryDto } from '@/dtos/IProductCategory.dto';
 import { ImageDetailDto } from '@/dtos/ImageDetail.dto';
 import { SlugDto } from '@/dtos/Slug.dto';
 import { SeoDto } from '@/dtos/Seo.dto';
+import { ProductDto } from './Product.dto';
 
 export class CategoryDto extends BaseDto {
   name?: string;
@@ -16,4 +17,5 @@ export class CategoryDto extends BaseDto {
   children?: CategoryDto[];
   slugs?: SlugDto;
   seo?: SeoDto;
+  hint_products?: ProductDto[];
 }

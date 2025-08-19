@@ -89,13 +89,13 @@ export const Header = ({ menu, settings }: Props) => {
             'max-lg:hidden container mx-auto flex justify-between items-center gap-[10px]'
           }
         >
-          <Link className={'shrink-0'} href={'/'}>
+          <a className={'shrink-0'} href={'/'}>
             <LogoComponent
               position={LogoProps.HEADER}
               settings={settings || []}
               className={'object-contain w-[230px] h-[60px] '}
             />
-          </Link>
+          </a>
 
           <ButtonMenu menu={menu} />
           {isDesktop && <InputSearchDesktop key={'input-search-desktop'} />}
@@ -232,7 +232,9 @@ export const Header = ({ menu, settings }: Props) => {
               }
             >
               {user ? (
-                <span className={'capitalize'}>{user.name || user.email}</span>
+                <span className={'capitalize inline-block min-h-5'}>
+                  {user.name || user.email}
+                </span>
               ) : (
                 <>Tài khoản</>
               )}

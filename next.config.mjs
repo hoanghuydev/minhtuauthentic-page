@@ -19,6 +19,7 @@ const nextConfig = withBundleAnalyzer({
       'be.mikiperfume.com',
       'be.minhtuauthentic.com',
       'be-new.mikiperfume.com',
+      'minhtuauthentic-be.minhtuauthentic.com',
     ],
     formats: [],
   },
@@ -34,6 +35,9 @@ const nextConfig = withBundleAnalyzer({
     'rc-input',
     'rc-table',
   ],
+  experimental: {
+    scrollRestoration: true,
+  },
 });
 
 export default nextConfig;

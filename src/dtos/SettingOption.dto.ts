@@ -19,4 +19,5 @@ export class SettingOptionDto {
     sort: number;
   }[];
   isBannerFull?: boolean;
+  isSquareBannerMobile?: boolean;
 }

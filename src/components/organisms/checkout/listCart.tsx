@@ -21,8 +21,9 @@ const FooterCheckout = dynamic(
 type Props = {
   paymentType?: string;
   setValue?: any;
+  loading?: boolean;
 };
-export default function ListCart({ paymentType, setValue }: Props) {
+export default function ListCart({ paymentType, setValue, loading }: Props) {
   const order = useContext(OrderContext);
   const [couponInput, setCouponInput] = useState<string>('');
   const [coupons, setCoupons] = useState<CouponsDto[]>([]);
@@ -122,9 +123,9 @@ export default function ListCart({ paymentType, setValue }: Props) {
   return (
     <>
       <div className={'border-l border-gray-200 px-3 flex-1'}>
-        <h3 className={'text-3xl font-[700] lg:font-bold'}>
+        <h2 className={'text-3xl font-[700] lg:font-bold'}>
           Thông tin giỏ hàng
-        </h3>
+        </h2>
         <div className={'flex flex-col gap-3 border-b border-gray-200 p-6'}>
           {order?.cart?.items?.map((item, key) => (
             <CheckItemCart
@@ -158,6 +159,11 @@ export default function ListCart({ paymentType, setValue }: Props) {
                 key={key}
                 closable
                 className="h-[35px] flex items-center justify-center"
+                onClose={() => {
+                  order?.removeCoupon &&
+                    coupon.code &&
+                    order.removeCoupon(coupon.code);
+                }}
                 onClick={() => {
                   order?.removeCoupon &&
                     coupon.code &&
@@ -243,6 +249,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
             }}
             type={paymentType}
             htmlType={'submit'}
+            loading={loading}
           />
         </div>
         <div className={'flex justify-between items-center mt-6'}>
@@ -258,7 +265,7 @@ export default function ListCart({ paymentType, setValue }: Props) {
           </div>
         </div>
       </div>
-      <FooterCheckout setValue={setValue} paymentType={paymentType} />
+      <FooterCheckout setValue={setValue} paymentType={paymentType} loading={loading} />
     </>
   );
 }

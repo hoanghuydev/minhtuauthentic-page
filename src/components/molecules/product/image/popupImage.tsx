@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { ProductDto } from '@/dtos/Product.dto';
 import { useProductImageDetail } from '@/hooks/useProductImageDetail';
@@ -21,7 +21,7 @@ type Props = {
 };
 export default function PopupImage({ open, product, image, setIsOpen }: Props) {
   const { images, imageActive, setImageActive } = useProductImageDetail({});
-  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
+  const swiperRef = useRef<SwiperClass | null>(null);
   useEffect(() => {
     if (image) {
       setImageActive(image);
@@ -29,6 +29,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
   }, [image]);
 
   useEffect(() => {
+    const swiper = swiperRef.current;
     if (swiper) {
       swiper.slideTo(images.findIndex((item) => item.url === imageActive?.url));
     }
@@ -60,20 +61,23 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
     );
   }, [images, imageActive]);
 
+  const handleClickNavigatorButton = (variant: string) => {
+    const swiper = swiperRef.current;
+    if (swiper) {
+      const currentSlide = swiper.activeIndex;
+      const indexMax = images.length - 1;
+      if (variant === 'next') {
+        swiper.slideTo(currentSlide === indexMax ? 0 : currentSlide + 1);
+      } else {
+        swiper.slideTo(currentSlide === 0 ? indexMax : currentSlide - 1);
+      }
+    }
+  }
+
   const renderNavigatorButton = (variant: string) => {
     return (
       <div
-        onClick={() => {
-          if (swiper) {
-            const currentSlide = swiper.activeIndex;
-            const indexMax = images?.length - 1;
-            if (variant === 'next') {
-              swiper.slideTo(currentSlide === indexMax ? 0 : currentSlide + 1);
-            } else {
-              swiper.slideTo(currentSlide === 0 ? indexMax : currentSlide - 1);
-            }
-          }
-        }}
+        onClick={() => handleClickNavigatorButton(variant)}
         className={twMerge(
           'absolute z-[2] w-[32px] h-[32px] rounded-full border border-[#dad4d4] cursor-pointer top-[calc(50%-22px)] lg:top-[calc(50%-16px)] bg-white flex justify-center items-center select-none',
           variant === 'next' ? 'right-[20px]' : 'left-[20px]',
@@ -94,7 +98,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
         className={'h-full select-none'}
         modules={[Pagination, EffectFade, Navigation]}
         effect={'fade'}
-        loop={true}
+        loop={false}
         slidesPerView={1}
         fadeEffect={{
           crossFade: true,
@@ -102,7 +106,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
         speed={400}
         key={'popup-image'}
         onSwiper={(swiper) => {
-          setSwiper(swiper);
+          swiperRef.current = swiper;
         }}
         onSlideChange={(swiper) => {
           const activeIndex = swiper.activeIndex;
@@ -120,6 +124,10 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
               image={image}
               product={product}
               setIsOpen={setIsOpen}
+              imageIndex={index}
+              totalImages={images.length}
+              onPrev={() => handleClickNavigatorButton('prev')}
+              onNext={() => handleClickNavigatorButton('next')}
             />
           </SwiperSlide>
         ))}

@@ -17,14 +17,14 @@ export const Banners = ({
   banners,
   className,
   classNameImage,
-  isMobile = false,
   isFull = false,
+  isSquareBannerMobile = false,
 }: {
   banners: StaticContentsDto[];
   className?: string;
   classNameImage?: string;
-  isMobile?: boolean;
   isFull?: boolean;
+  isSquareBannerMobile?: boolean;
 }) => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [isLastSlide, setIsLastSlide] = useState(false);
@@ -42,9 +42,9 @@ export const Banners = ({
     setIsFirstSlide(isFirst);
   };
 
-  // Cấu hình swiper
-  const swiperConfig = {
-    effect: 'fade' as const,
+  // Cấu hình swiper cho desktop
+  const desktopSwiperConfig = {
+    effect: isFull ? ('fade' as const) : undefined,
     spaceBetween: 50,
     slidesPerView: 1,
     pagination: true,
@@ -63,17 +63,33 @@ export const Banners = ({
     onSlideChange: handleSlideChange,
   };
 
-  return (
+  // Cấu hình swiper cho mobile
+  const mobileSwiperConfig = {
+    spaceBetween: 0,
+    slidesPerView: 1,
+    pagination: {
+      clickable: true,
+    },
+    modules: [Pagination, Autoplay],
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    loop: false,
+  };
+
+  // Render desktop banners
+  const renderDesktopBanners = () => (
     <div
       className={twMerge(
-        'relative banner-container h-full',
+        'relative banner-container h-full hidden lg:!block',
         isLastSlide && 'hide-next-button',
         isFirstSlide && 'hide-prev-button',
       )}
       onMouseEnter={() => swiperRef.current?.autoplay.stop()}
       onMouseLeave={() => swiperRef.current?.autoplay.start()}
     >
-      <Swiper className={className} {...swiperConfig}>
+      <Swiper className={className} {...desktopSwiperConfig}>
         {banners.map((banner, index) => {
           const imageDetail = banner?.images?.[0];
           if (!imageDetail) return null;
@@ -87,30 +103,97 @@ export const Banners = ({
                 classNameImage,
               )}
               loading="eager"
-              unoptimized={isMobile ? false : true}
+              priority={index === 0} // High priority for first banner
+              unoptimized={true}
               sizes="100vw"
-              quality={isMobile ? 80 : 100}
+              quality={100}
             />
           );
 
           return (
             <SwiperSlide
-              key={`${index}-${isMobile}`}
+              key={`desktop-${index}`}
               className="w-full"
               style={{ width: '100% !important' }}
             >
-              {isFull ? (
-                imageElement
-              ) : (
-                <Link href={generateSlugToHref(banner?.properties?.slug)}>
-                  {imageElement}
-                </Link>
-              )}
+              <Link href={generateSlugToHref(banner?.properties?.slug)}>
+                {imageElement}
+              </Link>
             </SwiperSlide>
           );
         })}
       </Swiper>
     </div>
+  );
+
+  // Render mobile banners
+  const renderMobileBanners = () => {
+    // Filter banners that have mobile display enabled and mobile images
+    let mobileBanners = banners.filter(
+      (banner) =>
+        banner.is_mobile_visible &&
+        banner.images_mobile &&
+        banner.images_mobile.length > 0,
+    );
+
+    // Chỉ khi không có banner mobile nào thì mới sử dụng banner PC
+    const shouldUsePcBanners = mobileBanners.length === 0;
+
+    return (
+      <div className="w-full lg:!hidden">
+        <Swiper className="w-full" {...mobileSwiperConfig}>
+          {(shouldUsePcBanners ? banners : mobileBanners).map(
+            (banner, index) => {
+              // Nếu sử dụng PC banner thì lấy từ images, nếu không thì lấy từ images_mobile
+              const imageDetail = shouldUsePcBanners
+                ? banner?.images?.[0]
+                : banner.images_mobile?.[0];
+
+              if (!imageDetail) return null;
+
+              const imageElement = (
+                <div
+                  className={twMerge(
+                    'w-full',
+                    isSquareBannerMobile && 'aspect-square',
+                  )}
+                >
+                  <ImageWithFallback
+                    image={imageDetail.image}
+                    alt={imageDetail.image?.alt || 'minhtuauthentic'}
+                    className="object-cover w-full h-full"
+                    loading="eager"
+                    priority={index === 0} // High priority for first mobile banner
+                    unoptimized={false}
+                    sizes="100vw"
+                    quality={80}
+                  />
+                </div>
+              );
+
+              return (
+                <SwiperSlide
+                  key={`mobile-${index}`}
+                  className="w-full"
+                  style={{ width: '100% !important' }}
+                >
+                  <Link href={generateSlugToHref(banner?.properties?.slug_mobile || banner?.properties?.slug)}>
+                    {imageElement}
+                  </Link>
+                </SwiperSlide>
+              );
+            },
+          )}
+        </Swiper>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {renderDesktopBanners()}
+      {renderMobileBanners()}
+    </>
   );
 };
 

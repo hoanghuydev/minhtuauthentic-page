@@ -7,8 +7,9 @@ type Props = {
   value: number;
   onChange: (value: number) => void;
   className?: string;
+  disabled?: boolean;
 };
-export default function CartInput({ value, onChange, className }: Props) {
+export default function CartInput({ value, onChange, className, disabled }: Props) {
   const [_value, setValue] = useState(value || 1);
   const [ready, setReady] = useState(false);
   const [debounce, setDebounce] = useState<number>(1);
@@ -33,32 +34,51 @@ export default function CartInput({ value, onChange, className }: Props) {
     <div
       className={twMerge(
         'flex items-center gap-2 justify-center border rounded-[10px] border-primary',
+        disabled && 'opacity-50 border-gray-400',
         className,
       )}
     >
       <button
-        className="text-[16px] font-extrabold block text-primary"
+        className={twMerge(
+          "text-[16px] font-extrabold block text-primary",
+          disabled && "text-gray-400 cursor-not-allowed"
+        )}
+        disabled={disabled}
         onClick={() => {
-          setValue((_value) => (_value - 1 < 0 ? 0 : _value - 1));
+          if (!disabled) {
+            setValue((_value) => (_value - 1 < 0 ? 0 : _value - 1));
+          }
         }}
       >
-        <MinusIcon className={'w-6 h-6 text-primary'} />
+        <MinusIcon className={twMerge('w-6 h-6 text-primary', disabled && 'text-gray-400')} />
       </button>
       <input
         type="text"
-        className="text-[16px] font-semibold w-[35px] text-black text-center bk-product-qty"
+        className={twMerge(
+          "text-[16px] font-semibold w-[35px] text-black text-center bk-product-qty",
+          disabled && "text-gray-400 cursor-not-allowed"
+        )}
         value={_value}
+        disabled={disabled}
         onChange={(e) => {
-          setValue(parseInt(e.target.value) || 1);
+          if (!disabled) {
+            setValue(parseInt(e.target.value) || 1);
+          }
         }}
       />
       <button
-        className="text-[16px] font-extrabold block text-primary"
+        className={twMerge(
+          "text-[16px] font-extrabold block text-primary",
+          disabled && "text-gray-400 cursor-not-allowed"
+        )}
+        disabled={disabled}
         onClick={() => {
-          setValue((_value) => _value + 1);
+          if (!disabled) {
+            setValue((_value) => _value + 1);
+          }
         }}
       >
-        <PlusIcon className={'w-6 h-6 text-primary'} />
+        <PlusIcon className={twMerge('w-6 h-6 text-primary', disabled && 'text-gray-400')} />
       </button>
     </div>
   );
