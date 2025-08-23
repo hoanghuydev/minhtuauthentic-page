@@ -17,9 +17,14 @@ const schema = yup.object({
 type Props = {
   product_id: number;
   refreshData: () => void;
+  className?: string;
 };
 
-export default function FormProductRating({ product_id, refreshData }: Props) {
+export default function FormProductRating({
+  product_id,
+  refreshData,
+  className,
+}: Props) {
   const {
     handleSubmit,
     control,
@@ -59,6 +64,7 @@ export default function FormProductRating({ product_id, refreshData }: Props) {
         reset();
         refreshData();
       })}
+      className={className}
     >
       <h3 className={'text-primary font-semibold text-xl mb-6'}>
         Thêm đánh giá của bạn
