@@ -25,7 +25,11 @@ export default function ProductRating({ product_id }: Props) {
   };
 
   return (
-    <div className={'rounded-xl border-gray-500 bg-white shadow-custom mt-3'}>
+    <div
+      className={
+        'rounded-xl overflow-hidden border-gray-500 bg-white shadow-custom mt-3'
+      }
+    >
       <div
         className={
           'bg-gray-100 text-primary font-semibold p-3 text-[16px] text-center'
