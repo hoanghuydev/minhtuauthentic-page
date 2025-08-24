@@ -1,7 +1,8 @@
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Input } from 'antd/es';
+import { Button } from 'antd/es';
+import { TextField } from '@mui/material';
 import StartRatingInput from '@/components/atoms/product/startRatingInput';
 import { toast } from 'react-toastify';
 
@@ -17,9 +18,14 @@ const schema = yup.object({
 type Props = {
   product_id: number;
   refreshData: () => void;
+  className?: string;
 };
 
-export default function FormProductRating({ product_id, refreshData }: Props) {
+export default function FormProductRating({
+  product_id,
+  refreshData,
+  className,
+}: Props) {
   const {
     handleSubmit,
     control,
@@ -59,11 +65,9 @@ export default function FormProductRating({ product_id, refreshData }: Props) {
         reset();
         refreshData();
       })}
+      className={className}
     >
-      <h3 className={'text-primary font-semibold text-xl mb-6'}>
-        Thêm đánh giá của bạn
-      </h3>
-      <div className={'flex gap-3 flex-col'}>
+      <div className={'flex gap-5 flex-col'}>
         <div className={'flex gap-3'}>
           <p>
             Xếp hạng của bạn <span className={'text-red-600'}>*</span>
@@ -80,32 +84,42 @@ export default function FormProductRating({ product_id, refreshData }: Props) {
               name={'name'}
               control={control}
               render={({ field }) => (
-                <Input
+                <TextField
                   {...field}
-                  placeholder={'Tên của bạn *'}
-                  className={'border border-gray-200 p-2 rounded-[10px]'}
+                  label={'Tên của bạn'}
+                  required
+                  variant="outlined"
+                  error={!!errors?.name}
+                  helperText={errors?.name?.message}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '10px',
+                    },
+                  }}
                 />
               )}
             />
-            {errors && errors.name && errors?.name?.message && (
-              <p className={'text-sm text-red-600'}>{errors?.name?.message}</p>
-            )}
           </div>
           <div className={'flex flex-col gap-2 flex-1'}>
             <Controller
               name={'phone'}
               control={control}
               render={({ field }) => (
-                <Input
+                <TextField
                   {...field}
-                  placeholder={'Số điện thoại *'}
-                  className={'border border-gray-200 p-2 rounded-[10px]'}
+                  label={'Số điện thoại'}
+                  required
+                  variant="outlined"
+                  error={!!errors?.phone}
+                  helperText={errors?.phone?.message}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '10px',
+                    },
+                  }}
                 />
               )}
             />
-            {errors && errors.phone && errors?.phone?.message && (
-              <p className={'text-red-600 text-sm'}>{errors?.phone?.message}</p>
-            )}
           </div>
         </div>
         <div className={'flex flex-col gap-2'}>
@@ -113,22 +127,28 @@ export default function FormProductRating({ product_id, refreshData }: Props) {
             name={'content'}
             control={control}
             render={({ field }) => (
-              <Input.TextArea
+              <TextField
                 {...field}
-                placeholder={'Đánh giá *'}
-                className={'border border-gray-200 p-2 rounded-[10px]'}
+                label={'Đánh giá *'}
+                variant="outlined"
+                fullWidth
+                multiline
                 rows={4}
+                error={!!errors?.content}
+                helperText={errors?.content?.message}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '10px',
+                  },
+                }}
               />
             )}
           />
-          {errors && errors.content && errors?.content?.message && (
-            <p className={'text-red-600 text-sm'}>{errors?.content?.message}</p>
-          )}
         </div>
       </div>
       <div className={'mt-6 ml-auto text-right'}>
         <Button type="primary" htmlType="submit" className={'bg-primary'}>
-          Gửi nhận xét
+          Gửi đánh giá
         </Button>
       </div>
     </form>

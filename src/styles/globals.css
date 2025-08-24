@@ -263,3 +263,11 @@ iframe {
   cursor: pointer;
   opacity: 0.8;
 }
+
+/* Override MUI TextField */
+.MuiInputBase-formControl > input {
+  padding: 10px 6px 14.5px 6px !important;
+}
+.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated {
+  top: -4px !important;
+}
