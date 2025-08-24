@@ -8,12 +8,12 @@ type Props = {
 };
 export function ProductRatingList({ ratings }: Props) {
   return (
-    <div className={'flex flex-col gap-6'}>
+    <div className={'flex flex-col'}>
       {ratings.map((rating, index) => {
         return (
           <>
             {index != 0 && <hr className="mx-4" />}
-            <div key={index} className={'flex flex-row gap-6'}>
+            <div key={index} className={'flex flex-row gap-6 my-4'}>
               <Avatar className={'bg-primary shrink-0'} size="large">
                 {rating?.name?.charAt(0).toUpperCase() || 'A'}
               </Avatar>
@@ -27,7 +27,7 @@ export function ProductRatingList({ ratings }: Props) {
                 </p>
                 <Rate disabled defaultValue={rating.point} />
                 <div
-                  className={'whitespace-pre-line'}
+                  className={'whitespace-pre-line text-justify'}
                   dangerouslySetInnerHTML={{ __html: rating?.content || '' }}
                 />
               </div>

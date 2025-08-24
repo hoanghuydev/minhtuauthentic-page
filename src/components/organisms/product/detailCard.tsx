@@ -203,7 +203,9 @@ const ProductDetailCard = ({
               <ProductQuestionAnswer
                 questions={product?.question_answers || []}
               />
-              {product.id && <ProductRating product_id={product.id} />}
+              {product.id && (
+                <ProductRating product_id={product.id} product={product} />
+              )}
               <ProductRelationWrapper
                 display={'mobile'}
                 products={relatedProducts}

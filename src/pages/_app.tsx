@@ -1,7 +1,9 @@
+import 'antd/dist/reset.css';
 import '@/styles/globals.css';
 import '@/styles/swiper-custom.css';
 import '@/styles/bk.css';
 import '@/styles/toc.css';
+
 import type { AppProps } from 'next/app';
 import { AppProvider } from '@/contexts/appContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -35,7 +37,6 @@ export default function App({ Component, pageProps }: AppProps) {
         <style>{`:root { --primary-color: ${
           settings?.commonSettings?.primaryColor || '#C44812'
         }; }`}</style>
-        
       </Head>
       <AppProvider>
         <OrderProvider>

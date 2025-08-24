@@ -1,4 +1,4 @@
-User-Agent: *
-Allow: /
+User-agent: *
+Disallow: /_next/image
 
 Sitemap: https://minhtuauthentic.com/sitemap.xml
