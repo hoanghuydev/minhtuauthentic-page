@@ -13,6 +13,7 @@ export class ResponseHomePageDto {
   homeBlockFeaturedCategory?: StaticContentsDto[];
   homeBrand?: BrandDto[];
   homeSupport?: StaticComponentDto[];
+  homeBlockFeaturedProductsCategory?: StaticContentsDto[];
   homeFlashSale?: PromotionsDto;
   homeNews?: {
     featured: NewsDto[];

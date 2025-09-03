@@ -1,5 +1,6 @@
 import { TagLinkDto } from '@/dtos/tagLink.dto';
 import { BLOCK_UNDER_CATEGORY_POSITION } from '@/config/enum';
+import { VariantDto } from './Variant.dto';
 
 export class StaticComponentPropertyDto {
   textColor?: string;
@@ -12,4 +13,5 @@ export class StaticComponentPropertyDto {
   direction?: BLOCK_UNDER_CATEGORY_POSITION;
   position_index?: number;
   slug_mobile?: string;
+  variants?: VariantDto[];
 }
