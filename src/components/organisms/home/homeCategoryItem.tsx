@@ -9,6 +9,7 @@ import BannerUnderCategory from "./bannerUnderCategory";
 import { StaticComponentDto } from "@/dtos/StaticComponent.dto";
 import { StaticContentsDto } from "@/dtos/StaticContents.dto";
 import { SettingOptionDto } from "@/dtos/SettingOption.dto";
+import HomeFeaturedProductsCategory from "./homeFeaturedProductsCategory";
 
 type Props = {
     index: number;
@@ -16,12 +17,16 @@ type Props = {
     homeBlockFeaturedCategory: StaticContentsDto[];
     settingsHome: Record<string, SettingOptionDto | undefined>;
     blockContents: Map<number | undefined, StaticComponentDto[]>;
+    featuredProductsCategories: StaticContentsDto[];
     staticComponent: StaticComponentDto;
 }
 
-export default function HomeCategoryItem({index, position, homeBlockFeaturedCategory, settingsHome, blockContents, staticComponent}: Props) {
+export default function HomeCategoryItem({index, position, homeBlockFeaturedCategory, settingsHome, blockContents, staticComponent, featuredProductsCategories}: Props) {
     return (
         <Fragment key={'GroupCategory_' + index}>
+          {position !== null && (
+            <HomeFeaturedProductsCategory content={featuredProductsCategories[position]} />
+          )}
           {position !== null && (
             <BannerUnderCategory
               key={index + 'banner-under-category'}

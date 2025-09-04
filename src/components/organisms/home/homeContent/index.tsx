@@ -43,6 +43,7 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
             }
             settingsHome={settingsHome}
             blockContents={blockContents}
+            featuredProductsCategories={homePage?.homeBlockFeaturedProductsCategory || []}
             staticComponent={item}
           />
         );
