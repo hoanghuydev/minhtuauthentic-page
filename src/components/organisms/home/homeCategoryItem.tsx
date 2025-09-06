@@ -30,7 +30,7 @@ export default function HomeCategoryItem({index, position, homeBlockFeaturedCate
           {position !== null && (
             <BannerUnderCategory
               key={index + 'banner-under-category'}
-              contents={blockContents.get(position) || []}
+              contents={blockContents.get(position + 1) || []}
             />
           )}
           {position === 0 && homeBlockFeaturedCategory && (
