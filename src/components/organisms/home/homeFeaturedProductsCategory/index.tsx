@@ -8,6 +8,9 @@ import { VariantDto } from '@/dtos/Variant.dto';
 import { useIsMobile } from '@/hooks/useDevice';
 import { SwiperClass } from 'swiper/react';
 import Link from 'next/link';
+import ProductCardImage from '@/components/molecules/product/image/productCardImage';
+import { ProductDto } from '@/dtos/Product.dto';
+import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 
 const ImageWithRatio = dynamic(
   () => import('@/components/atoms/images/imageWithRatio'),
@@ -46,12 +49,10 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
           </button>
         </div>
         <SectionSwiper
-          
           onSwiper={(swiper) => setSwiper(swiper)}
-          isGrid={isMobile} 
-          slidePerViewMobile={1}
-          isUseHeightWrapper={isMobile}
+          slidePerViewMobile={2}
           spaceBetweenMobile={10}
+          isNotDisplayNavigation={isMobile}
           spaceBetween={10}
           slidesPerView={3}
           loop={true}
@@ -63,19 +64,33 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
               className="group cursor-pointer overflow-hidden"
             >
               <div className={`rounded-lg md:rounded-xl bg-gray-50 transition-all duration-300`}>
-                <div className="flex items-center space-x-4">
+                <div className="flex flex-col items-start md:flex-row md:items-center space-x-4">
                   {/* Cột 1: Hình ảnh sản phẩm */} 
-                  <div className="flex-shrink-0">
-                    <div className="w-16 h-16 md:w-24 md:h-24 bg-white rounded-lg md:rounded-xl flex items-center justify-center overflow-hidden">
-                      <ImageWithRatio 
-                        image={(item as VariantDto).images?.[0]?.image as ImageDto} 
-                        imageClassName="w-12 h-12 md:w-20 md:h-20 object-contain group-hover:scale-110 transition-transform duration-300"
-                      />
+                  {isMobile ? (
+                    <ImageWithFallback
+                      image={(item as VariantDto).images?.[0]?.image as ImageDto}
+                      className={
+                        'object-contain w-full h-full rounded-lg'
+                      }
+                      // product={product}
+                      sizes={
+                        '(max-width: 500px) 100vw, (max-width: 768px) 60vw, (max-width: 1024px) 40vw, 30vw'
+                      }
+                      unoptimized={false}
+                    />
+                  ): (
+                    <div className="flex-shrink-0">
+                      <div className="w-16 h-16 md:w-24 md:h-24 bg-white rounded-lg md:rounded-xl flex items-center justify-center overflow-hidden">
+                        <ImageWithRatio 
+                          image={(item as VariantDto).images?.[0]?.image as ImageDto} 
+                          imageClassName="w-12 h-12 md:w-20 md:h-20 object-contain group-hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                   
                   {/* Cột 2: Thông tin sản phẩm */}
-                  <div className="flex-grow min-w-0">
+                  <div className="flex-grow min-w-0 py-2 md:py-0">
                     <h3 className="text-sm md:text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors truncate">
                       {(item as VariantDto).product?.name}
                     </h3>

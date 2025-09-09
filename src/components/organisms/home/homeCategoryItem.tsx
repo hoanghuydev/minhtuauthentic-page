@@ -16,7 +16,7 @@ type Props = {
     position: number | null;
     homeBlockFeaturedCategory: StaticContentsDto[];
     settingsHome: Record<string, SettingOptionDto | undefined>;
-    blockContents: Map<number | undefined, StaticComponentDto[]>;
+    blockContents: Map<string | undefined, StaticComponentDto[]>;
     featuredProductsCategories: StaticContentsDto[];
     staticComponent: StaticComponentDto;
 }
@@ -30,7 +30,7 @@ export default function HomeCategoryItem({index, position, homeBlockFeaturedCate
           {position !== null && (
             <BannerUnderCategory
               key={index + 'banner-under-category'}
-              contents={blockContents.get(position + 1) || []}
+              contents={blockContents.get((position + 1).toString()) || []}
             />
           )}
           {position === 0 && homeBlockFeaturedCategory && (
