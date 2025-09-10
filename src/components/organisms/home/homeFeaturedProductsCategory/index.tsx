@@ -61,10 +61,10 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
             <Link
               href={`/${(item as VariantDto).product?.slugs?.slug}`}
               key={(item as VariantDto).id}
-              className="group cursor-pointer overflow-hidden"
+              className="group cursor-pointer overflow-hidden min-h-[285px]"
             >
               <div className={`rounded-lg md:rounded-xl bg-gray-50 transition-all duration-300`}>
-                <div className="flex flex-col items-start md:flex-row md:items-center space-x-4">
+                <div className="flex flex-col items-start md:flex-row md:items-center">
                   {/* Cột 1: Hình ảnh sản phẩm */} 
                   {isMobile ? (
                     <ImageWithFallback
@@ -90,15 +90,15 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
                   )}
                   
                   {/* Cột 2: Thông tin sản phẩm */}
-                  <div className="flex-grow min-w-0 py-2 md:py-0">
-                    <h3 className="text-sm md:text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors truncate">
-                      {(item as VariantDto).product?.name}
+                  <div className="py-2 px-2">
+                    <h3 className="text-lg overflow-hidden min-h-[50px] line-clamp-2 font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                      {(item as VariantDto).product?.title}
                     </h3>
                     {
                       (item as VariantDto)?.variant_product_configuration_values?.map(
                         (item, index) => {
                           return (
-                            <p key={index} className={'text-sm text-gray-600'}>
+                            <p key={index} className={'text-[10px] min-h-[30px] text-gray-600'}>
                               {
                                 item.product_configuration_value?.product_configuration
                                   ?.name
