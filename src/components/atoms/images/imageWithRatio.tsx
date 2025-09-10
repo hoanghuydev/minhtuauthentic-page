@@ -17,10 +17,10 @@ export default function ImageWithRatio({
   href,
 }: Props) {
   const refContainer = useRef<HTMLDivElement | null>(null);
-  const ratio = (image.width || 0) / (image.height || 1);
+  const ratio = (image?.width || 0) / (image?.height || 1);
   const [wh, setWh] = useState({
-    width: image.width,
-    height: image.height,
+    width: image?.width,
+    height: image?.height,
   });
   const [ready, setReady] = useState(false);
   useEffect(() => {

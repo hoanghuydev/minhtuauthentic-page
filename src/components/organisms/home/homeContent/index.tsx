@@ -17,14 +17,14 @@ type Props = {
 
 export default function HomeContent({ homePage, settingsHome }: Props) {
   const [blockContents, setBlockContents] = useState<
-    Map<number | undefined, StaticComponentDto[]>
+    Map<string | undefined, StaticComponentDto[]>
   >(new Map());
   const [listComponent, setListComponent] = useState<ReactNode[]>([]);
 
   useEffect(() => {
     const contents = groupBy(
       homePage?.bannerUnderCategory || [],
-      (item) => item.properties?.position_index,
+      (item) => item.properties?.position_index?.toString(),
     );
     setBlockContents(contents);
   }, []);
@@ -43,6 +43,7 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
             }
             settingsHome={settingsHome}
             blockContents={blockContents}
+            featuredProductsCategories={homePage?.homeBlockFeaturedProductsCategory || []}
             staticComponent={item}
           />
         );
