@@ -4,13 +4,14 @@ import { VariantDto } from '@/dtos/Variant.dto';
 import ImageMagnifier from '@/components/atoms/images/imageMaginifier';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
 import { twMerge } from 'tailwind-merge';
-import { useProductImageDetail } from '@/hooks/useProductImageDetail';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useIsMobile } from '@/hooks/useDevice';
 import SectionSwiperItem from '@/components/organisms/sectionSwiper/item';
 import { SwiperClass } from 'swiper/react';
 import ImageCount from '@/components/atoms/imageCount';
+import ItemImageCarousel from '@/components/organisms/product/itemImageCarousel';
+import { useProductImageDetail } from '@/contexts/productDetailCarousel';
 
 type Props = {
   product: ProductDto;
@@ -23,18 +24,14 @@ const ProductDetailImage = ({
   containerClassName,
   setIsOpen,
 }: Props) => {
-  const { images, imageActive, setImageActive } = useProductImageDetail({});
-  const isMobile = useIsMobile();
+  const { images, imageActive, setImageActive } = useProductImageDetail();
   const [isMainImageLoaded, setIsMainImageLoaded] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const mainSwiper = useRef<SwiperClass|null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleClickImage = (image: ImageDto) => {
-    if (image) {
-      setImageActive(image);
-      setIsInitialLoad(false);
-    }
+  const handleClickImage = () => {
+    setIsInitialLoad(false);
   };
 
   useEffect(() => {
@@ -55,28 +52,9 @@ const ProductDetailImage = ({
           classNameContainer={'mt-3'}
           slidePerViewMobile={4}
           key={JSON.stringify(images)}
-          classNameItems={
-            'p-1 lg:hover:shadow-md transition-shadow duration-300 select-none lg:hover:border-primary border border-transparent'
-          }
           renderItem={(item) => {
             const imageItem = item as ImageDto;
-            return (
-              <ImageWithFallback
-                image={imageItem}
-                className={
-                  'w-full h-full object-contain hover:scale-105 select-none cursor-pointer border-[3px] border-[#e4e4e4]'
-                }
-                sizes="120px"
-                onClick={() => handleClickImage(imageItem)}
-                product={product}
-                onMouseEnter={() => {
-                  if (!isMobile) {
-                    handleClickImage(imageItem)
-                  }
-                }}
-                unoptimized={false}
-              />
-            ) as any;
+            return <ItemImageCarousel image={imageItem} product={product} clickAction={handleClickImage} />
           }}
           slidesPerView={6}
           spaceBetween={10}
