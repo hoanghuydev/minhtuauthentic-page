@@ -69,28 +69,34 @@ export default function RatingStatistics({ ratings, onWriteReview }: Props) {
     <div className="bg-white rounded-2xl p-6">
       {/* Hiển thị điểm trung bình và tổng số đánh giá */}
       <div className="flex flex-col md:flex-row items-center gap-6 mb-6">
-        <div className="text-center">
-          <div className="text-5xl font-bold text-primary mb-1">
-            {averageRating}
-            <span className="text-lg text-gray-400">/5</span>
+        <div className="flex justify-around items-center md:flex-col gap-2 w-full md:w-fit">
+          <div className="">
+            <div className="text-5xl font-bold text-primary mb-1">
+              {averageRating}
+              <span className="text-lg text-gray-400">/5</span>
+            </div>
+            <div className="mb-1">
+              <StaticStarRating rating={averageRating} size="lg" />
+            </div>
+            <div className="text-[14px] text-gray-600">
+              {totalRatings} lượt đánh giá
+            </div>
           </div>
-          <div className="mb-2">
-            <StaticStarRating rating={averageRating} size="lg" />
-          </div>
-          <div className="text-[14px] text-gray-600">
-            {totalRatings} lượt đánh giá
-          </div>
+          <Button type="primary" className="bg-primary p-6 text-lg" onClick={onWriteReview}>
+            Viết đánh giá
+          </Button>
         </div>
+        
 
         {/* Biểu đồ phân bố sao */}
-        <div className="md:flex-1 w-full md:w-auto">
+        <div className="w-full md:flex-1 md:w-auto">
           {[5, 4, 3, 2, 1].map((star, index) => {
             const count = starDistribution[index] || 0;
             const percentage =
               totalRatings > 0 ? (count / totalRatings) * 100 : 0;
 
             return (
-              <div key={star} className="flex items-center gap-2 mb-1">
+              <div key={star} className="flex items-center gap-1 justify-center">
                 <span className="text-sm w-3">{star}</span>
                 <span className="text-yellow-400">★</span>
                 <div className="flex-1 max-w-[60%] md:max-w-[70%] h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -109,11 +115,7 @@ export default function RatingStatistics({ ratings, onWriteReview }: Props) {
       </div>
 
       {/* Nút viết đánh giá */}
-      <div className="text-center">
-        <Button type="primary" className="bg-primary" onClick={onWriteReview}>
-          Viết đánh giá
-        </Button>
-      </div>
+      
     </div>
   );
 }
