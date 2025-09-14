@@ -27,7 +27,7 @@ const ProductDetailImage = ({
   const { images, imageActive, setImageActive } = useProductImageDetail();
   const [isMainImageLoaded, setIsMainImageLoaded] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const mainSwiper = useRef<SwiperClass|null>(null);
+  const mainSwiper = useRef<SwiperClass | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleClickImage = () => {
@@ -36,7 +36,7 @@ const ProductDetailImage = ({
 
   useEffect(() => {
     if (mainSwiper.current && imageActive) {
-      const idx = images.findIndex(img => img.id === imageActive.id);
+      const idx = images.findIndex((img) => img.id === imageActive.id);
       if (idx >= 0) mainSwiper.current.slideTo(idx);
     }
   }, [imageActive, images]);
@@ -47,7 +47,12 @@ const ProductDetailImage = ({
 
   const renderSlideImage = useMemo(() => {
     return (
-      <div className="relative">
+      <div
+        className="relative"
+        aria-hidden="true"
+        data-nosnippet="true"
+        role="presentation"
+      >
         <SectionSwiper
           classNameContainer={'mt-3'}
           slidePerViewMobile={4}
@@ -71,11 +76,15 @@ const ProductDetailImage = ({
 
   return (
     <div className={twMerge(containerClassName)}>
-      <div className={`relative ${
-        isInitialLoad
-          ? `transition-opacity duration-300 ${isMainImageLoaded ? 'opacity-100' : 'opacity-0'}`
-          : ''
-      }`}>
+      <div
+        className={`relative ${
+          isInitialLoad
+            ? `transition-opacity duration-300 ${
+                isMainImageLoaded ? 'opacity-100' : 'opacity-0'
+              }`
+            : ''
+        }`}
+      >
         <SectionSwiperItem
           renderItem={(item) => {
             const imageItem = item as ImageDto;
@@ -98,23 +107,26 @@ const ProductDetailImage = ({
                   product={product}
                   unoptimized={true}
                   quality={100}
+                  priority={true}
+                  loading="eager"
+                  alt={`${product.title || product.name} - Hình ảnh chính`}
                   onLoadingComplete={handleMainImageLoad}
                 />
               </div>
-            )
+            );
           }}
           key={JSON.stringify(images)}
           data={images}
           slidesPerView={1}
           spaceBetween={5}
           onSwiper={(swiperInstance: SwiperClass) => {
-            mainSwiper.current = swiperInstance
+            mainSwiper.current = swiperInstance;
           }}
           classNameLeft={'lg:left-[0px]'}
           classNameRight={'lg:right-[0px]'}
           onSlideChange={(idx) => {
-            setCurrentIndex(idx)
-            setImageActive(images[idx])
+            setCurrentIndex(idx);
+            setImageActive(images[idx]);
           }}
         />
         <ImageCount

@@ -69,7 +69,7 @@ export default function SelectVariant({
   return (
     <div className={'px-1 lg:px-2'}>
       <select
-        className={'p-2 rounded border w-full'}
+        className={'p-2 rounded border w-full truncate'}
         value={selectedVariant}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
           const value = parseInt(e.target.value);
