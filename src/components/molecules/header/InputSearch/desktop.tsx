@@ -55,7 +55,7 @@ export const InputSearchDesktop = ({ classname, isForMobile }: Props) => {
     if (ctx?.isOpenSearch && isMobile) {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflowX = 'hidden';
+      document.body.style.overflow = 'auto';
     }
   }, [ctx?.isOpenSearch, isMobile]);
 
