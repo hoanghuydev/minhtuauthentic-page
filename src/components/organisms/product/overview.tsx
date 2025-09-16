@@ -6,6 +6,7 @@ import { ProductConfigurationsDto } from '@/dtos/productConfigurations.dto';
 import { ImageDto } from '@/dtos/Image.dto';
 import { SettingsDto } from '@/dtos/Settings.dto';
 import ProductDetailContext from '@/contexts/productDetailContext';
+import { ProductImageDetailProvider } from '@/contexts/productDetailCarousel';
 
 type Props = {
   product: ProductDto;
@@ -39,11 +40,14 @@ export default function ProductOverview({
         'p-3 grid grid-cols-1 lg:grid-cols-2 rounded-[10px] shadow-custom mt-3 bg-white gap-3 relative'
       }
     >
-      <ProductDetailImage
-        containerClassName={'h-max lg:sticky top-0 bg-white'}
-        product={product}
-        setIsOpen={setIsOpen}
-      />
+      <ProductImageDetailProvider>
+        <ProductDetailImage
+          containerClassName={'h-max lg:sticky top-0 bg-white'}
+          product={product}
+          setIsOpen={setIsOpen}
+        />
+      </ProductImageDetailProvider>
+      
       <ProductProperty
         product={product}
         productConfigurations={productConfigurations || []}

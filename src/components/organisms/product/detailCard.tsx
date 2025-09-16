@@ -18,6 +18,7 @@ import ProductOverview from '@/components/organisms/product/overview';
 import ProductDetailContext from '@/contexts/productDetailContext';
 import Head from 'next/head';
 import dayjs from 'dayjs';
+import { ProductImageDetailProvider } from '@/contexts/productDetailCarousel';
 
 const ProductRating = dynamic(
   () => import('@/components/molecules/product/productRating'),
@@ -221,13 +222,14 @@ const ProductDetailCard = ({
             </div>
           </div>
           <ProductSeen product={product} />
-
-          <PopupImage
-            open={isOpen.display}
-            setIsOpen={setIsOpen}
-            image={isOpen.image}
-            product={product}
-          />
+          <ProductImageDetailProvider>
+            <PopupImage
+              open={isOpen.display}
+              setIsOpen={setIsOpen}
+              image={isOpen.image}
+              product={product}
+            />
+          </ProductImageDetailProvider>
         </>
       )}
     </>
