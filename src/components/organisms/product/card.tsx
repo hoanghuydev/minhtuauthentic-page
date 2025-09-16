@@ -65,7 +65,7 @@ const ProductCard = ({
         </div>
         <ProductCardImage product={product} variant={_variant} />
         {/* <div className={'px-2 h-[110px] lg:h-[75px] xl:h-[63px]'}> */}
-        <div className="px-2  overflow-hidden">
+        <div className="px-2 overflow-hidden">
           <h3
             className={twMerge(
               'font-bold line-clamp-4 ',

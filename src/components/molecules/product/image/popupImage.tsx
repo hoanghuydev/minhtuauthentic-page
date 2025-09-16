@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { ProductDto } from '@/dtos/Product.dto';
-import { useProductImageDetail } from '@/hooks/useProductImageDetail';
 import { ImageDto } from '@/dtos/Image.dto';
 import Close from '@/components/icons/close';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,8 +9,8 @@ import { Swiper as SwiperClass } from 'swiper/types';
 import PopupImageItem from '@/components/molecules/product/image/popupImageItem';
 import LeftOutlined from '@ant-design/icons/lib/icons/LeftOutlined';
 import RightOutlined from '@ant-design/icons/lib/icons/RightOutlined';
-import ProductDetailContext from '@/contexts/productDetailContext';
 import PopupSlideContent from '@/components/molecules/product/image/popupSlideContent';
+import { useProductImageDetail } from '@/contexts/productDetailCarousel';
 
 type Props = {
   open: boolean;
@@ -20,8 +19,9 @@ type Props = {
   setIsOpen?: (item: { display: boolean; image: ImageDto | null }) => void;
 };
 export default function PopupImage({ open, product, image, setIsOpen }: Props) {
-  const { images, imageActive, setImageActive } = useProductImageDetail({});
+  const { images, imageActive, setImageActive } = useProductImageDetail();
   const swiperRef = useRef<SwiperClass | null>(null);
+  const listImageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (image) {
       setImageActive(image);
@@ -31,7 +31,15 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
   useEffect(() => {
     const swiper = swiperRef.current;
     if (swiper) {
-      swiper.slideTo(images.findIndex((item) => item.url === imageActive?.url));
+      const index = images.findIndex((item) => item.url === imageActive?.url);
+      const listImage = listImageRef?.current?.querySelector(`[data-index="${index}"]`);
+      console.log(listImageRef.current)
+      swiper.slideTo(index);
+      listImage?.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',  // center horizontally
+        block: 'nearest'
+      })
     }
   }, [imageActive]);
 
@@ -48,13 +56,14 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
 
   const renderImage = useMemo(() => {
     return (
-      <div className={'w-max mx-auto flex gap-3 h-full py-3 max-lg:px-3'}>
+      <div ref={listImageRef} className={'w-max mx-auto flex gap-3 h-full py-3 max-lg:px-3'}>
         {images.map((imageItem, index) => (
           <PopupImageItem
             key={index}
             imageItem={imageItem}
             setImageActive={setImageActive}
             isActive={imageItem.id === imageActive?.id}
+            index={index}
           />
         ))}
       </div>

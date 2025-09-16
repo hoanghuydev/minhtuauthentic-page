@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState, useRef } from 'react';
 type Props = {
   imageItem: ImageDto;
   isActive: boolean;
+  index?: number
   setImageActive: (image: ImageDto) => void;
 };
 
@@ -13,6 +14,7 @@ export default function PopupImageItem({
   imageItem,
   isActive,
   setImageActive,
+  index,
 }: Props) {
   const [active, setActive] = useState<boolean>(isActive);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,6 +53,7 @@ export default function PopupImageItem({
 
   return (
     <div
+      data-index={index}
       className={twMerge(
         'w-[80px] h-[80px] select-none',
         active && 'border-2 overflow-hidden rounded-[10px] border-primary',
