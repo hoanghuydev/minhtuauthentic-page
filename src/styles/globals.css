@@ -101,6 +101,25 @@ iframe {
     @apply text-[#0782C1] underline cursor-pointer;
   }
 }
+.base-container-html {
+  h1 {
+    @apply text-[2em] leading-[1.2] my-[0.67em];
+  }
+  h2 {
+    @apply text-[1.5em] leading-[1.2] my-[0.83em];
+  }
+  h3 {
+    @apply text-[1.17em] leading-[1.2] my-[1em];
+  }
+  p {
+    margin-block-end: 1em;
+    margin-block-start: 1em;
+    @apply leading-[1.6] break-words;
+  }
+  a {
+    @apply text-[#0782C1] underline cursor-pointer;
+  }
+}
 .support-html {
   p {
     margin-block-end: 0;
