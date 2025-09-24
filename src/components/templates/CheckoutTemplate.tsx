@@ -201,6 +201,7 @@ export default function CheckoutTemplate({
                   window.location.href = item.paymentUrl;
                 } else {
                   toast.error('Đã có lỗi xảy ra');
+                  setLoading(false);
                 }
               });
           } else {
@@ -210,15 +211,14 @@ export default function CheckoutTemplate({
           }
         } else {
           toast.error('Đã có lỗi xảy ra');
+          setLoading(false);
         }
       })
       .catch((e) => {
         console.log('e', e);
         toast.error('Đã có lỗi xảy ra');
-      })
-      .finally(() => {
         setLoading(false);
-      });
+      })
   };
 
   return (
