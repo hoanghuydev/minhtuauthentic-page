@@ -82,7 +82,7 @@ export default function PromotionDescription({
       case 0:
         xhtml = (
           <div
-            className={'container-html html-description'}
+            className={'base-container-html html-description'}
             dangerouslySetInnerHTML={{
               __html: setting?.value?.content || '',
             }}
