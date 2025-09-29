@@ -107,7 +107,7 @@ export default function PopupEvent () {
               return (
                 <SwiperSlide
                   key={`desktop-${index}`}
-                  className="w-full"
+                  className="w-full slide-popup-event"
                 >
                   <Link href={generateSlugToHref(banner?.properties?.slug)}>
                     {imageElement}
