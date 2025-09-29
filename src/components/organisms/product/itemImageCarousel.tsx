@@ -37,7 +37,7 @@ export default function ItemImageCarousel ({ image, clickAction, product }: Prop
             handleClickImage(image)
           }
         }}
-        unoptimized={false}
+        unoptimized={true}
       />
     </div>
   )
