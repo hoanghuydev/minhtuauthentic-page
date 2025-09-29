@@ -290,3 +290,7 @@ iframe {
 .MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated {
   top: -4px !important;
 }
+
+.swiper-slide {
+  width: 100% !important;
+}
