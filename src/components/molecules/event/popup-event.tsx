@@ -10,7 +10,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 
 export default function PopupEvent () {
   const [isClient, setIsClient] = useState(false);
-  const [isOpen, setOpen] = useState(true)
+  const [isOpen, setOpen] = useState(false)
   const [banners, setBanners] = useState<StaticContentsDto[]>([])
   const swiperRef = useRef<SwiperClass | null>(null);
   const [isLastSlide, setIsLastSlide] = useState(false);
@@ -49,6 +49,7 @@ export default function PopupEvent () {
   }, [duration])
 
   const setSeenBanners = (index: number) => {
+    console.log(1);
     if(!banners[index]?.id) return
     const seenBanners: number[] = (JSON.parse(localStorage.getItem('seenBanners') || '[]')) as number[];
     if(seenBanners.includes(banners[index].id)) return
@@ -76,7 +77,7 @@ export default function PopupEvent () {
             onSwiper={(swiper: SwiperClass) => {
               swiperRef.current = swiper
             }}
-            onUpdate={() => setSeenBanners(0)}
+            onAfterInit={() => setSeenBanners(0)}
             onSlideChange={(swiper) => {
               setDuration((banners?.[swiper.activeIndex]?.properties?.duration || 15) * 1000)
               setSeenBanners(swiper.activeIndex);
