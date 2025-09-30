@@ -21,6 +21,7 @@ const nunitoSans = Nunito_Sans({
 import useSettings from '@/hooks/useSettings';
 import { SearchProvider } from '@/contexts/searchContext';
 import ScrollToTop from '@/components/atoms/ScrollToTop';
+import PopupEvent from '@/components/molecules/event/popup-event';
 
 export default function App({ Component, pageProps }: AppProps) {
   const settings = useSettings();
@@ -44,6 +45,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <ScrollToTop />
             <Component className={nunitoSans.className} {..._pageProps} />
             <ToastContainer />
+            <PopupEvent />
           </SearchProvider>
         </OrderProvider>
       </AppProvider>

@@ -4,8 +4,11 @@ import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { type } = req.query;
   const params = new URLSearchParams(req.query as any);
+  const ignoreIds = params.get('ignoreIds[]')
+  params.delete('ignoreIds[]')
+  ignoreIds?.split(',').map((id) => params.append('ignoreIds[]', id))
   const url = `${process.env.BE_URL}/api/pages/static-contents/${type}?${params.toString()}`;
-  return fetch(url)
+  return fetch(url) 
     .then((response) => response.json())
     .then((data: { data: StaticContentsDto[] }) => {
       res.status(200).json(data);
