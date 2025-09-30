@@ -14,4 +14,5 @@ export class StaticComponentPropertyDto {
   position_index?: number;
   slug_mobile?: string;
   variants?: VariantDto[];
+  duration?: number; // in seconds
 }
