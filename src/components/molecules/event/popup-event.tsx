@@ -1,5 +1,5 @@
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
-import { useEffect, useRef, useState } from 'react';
+import { JSX, MouseEventHandler, useEffect, useRef, useState } from 'react';
 import Close from '@/components/icons/close';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import Link from 'next/link';
@@ -17,6 +17,7 @@ export default function PopupEvent () {
   const [isFirstSlide, setIsFirstSlide] = useState(true);
   const [duration, setDuration] = useState(15000);
   const timer = useRef<NodeJS.Timeout | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -48,8 +49,13 @@ export default function PopupEvent () {
     }, duration);
   }, [duration])
 
+  const clickOutsideAction: MouseEventHandler<HTMLDivElement> = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if(contentRef.current && !contentRef.current.contains(event.target as Node)) {
+      setOpen(false)
+    }
+  }
+
   const setSeenBanners = (index: number) => {
-    console.log(1);
     if(!banners[index]?.id) return
     const seenBanners: number[] = (JSON.parse(localStorage.getItem('seenBanners') || '[]')) as number[];
     if(seenBanners.includes(banners[index].id)) return
@@ -59,12 +65,13 @@ export default function PopupEvent () {
   if (!isClient) return null;
   
   return isOpen && (
-    <div className='fixed flex justify-center items-center top-0 left-0 w-full h-screen z-50 bg-gray-900/50'>
+    <div className='fixed flex justify-center items-center top-0 left-0 w-full h-screen z-50 bg-gray-900/50' onClick={clickOutsideAction}>
       <div
+        ref={contentRef}
         className='relative flex-col p-2 max-w-sm md:max-w-xl min-w-[300px]'
       >
-        <div className="flex flex-row absolute -top-8 right-0 items-center p-2 mr-2 bg-red-600">
-          <Close className='w-6 text-white cursor-pointer' onClick={() => setOpen(false)}/>
+        <div className="flex flex-row absolute -top-8 right-0 cursor-pointer items-center p-2 mr-2 bg-red-600" onClick={() => setOpen(false)}>
+          <Close className='w-6 text-white'/>
           <div className='text-white'>close</div>
         </div>
         <div
