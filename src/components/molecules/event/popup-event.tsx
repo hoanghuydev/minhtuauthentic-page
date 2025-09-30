@@ -59,11 +59,14 @@ export default function PopupEvent () {
   if (!isClient) return null;
   
   return isOpen && (
-    <div className='fixed flex items-center justify-center top-0 left-0 w-full h-screen z-50 bg-gray-900/50'>
+    <div className='fixed flex justify-center items-center top-0 left-0 w-full h-screen z-50 bg-gray-900/50'>
       <div
-        className='relative flex-col p-2 max-w-[768px] min-w-[300px]'
+        className='relative flex-col p-2 max-w-sm md:max-w-xl min-w-[300px]'
       >
-        <Close className='w-8 text-white absolute -top-8 cursor-pointer right-0' onClick={() => setOpen(false)}/>
+        <div className="flex flex-row absolute -top-8 right-0 items-center p-2 mr-2 bg-red-600">
+          <Close className='w-6 text-white cursor-pointer' onClick={() => setOpen(false)}/>
+          <div className='text-white'>close</div>
+        </div>
         <div
           className={twMerge(
             'relative banner-container w-full h-full',
