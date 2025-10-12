@@ -50,7 +50,7 @@ export default function HighlightedNews({ content }: Props) {
             <div
               key={post.id}
               className="relative rounded-xl overflow-hidden h-full aspect-square cursor-pointer"
-              onClick={() => router.push(generateSlugToHref(content.featured[0]?.slugs?.slug))}
+              onClick={() => router.push(generateSlugToHref(post.slugs?.slug))}
             >
               <ImageWithFallback
                 image={post.images?.[0]?.image}

@@ -31,6 +31,9 @@ export default function NewsList({ news, total, title }: Props) {
   useEffect(() => {
     if (count > 1) {
       const params = new URLSearchParams(window.location.search);
+      for(let slug of (router.query.slug || [])) {
+        params.append("slug", slug);
+      }
       fetch('/api/news?limit=12&' + params.toString())
         .then((res) => res.json())
         .then((data: { data: ResponseNewsPageDto }) => {
@@ -69,7 +72,7 @@ export default function NewsList({ news, total, title }: Props) {
             showQuickJumper={true}
             showSizeChanger={false}
             current={page || 1}
-            pageSize={10}
+            pageSize={12}
             onChange={(page: number) => {
               setPage(page);
             }}

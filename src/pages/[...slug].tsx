@@ -9,7 +9,6 @@ import { ResponseCategoryFilterPageDto } from '@/dtos/responseCategoryFilterPage
 import { ResponseNewsDetailPageDto } from '@/dtos/ResponseNewsDetailPage.dto';
 import Layout from '@/components/templates/Layout';
 import { PageSetting, ServerSideProps } from '@/config/type';
-import { redirect } from 'next/navigation';
 import { Fragment, useMemo } from 'react';
 import NewsTemplate from '@/components/templates/NewsTemplate';
 import { generateSlugToHref } from '@/utils';
@@ -40,7 +39,12 @@ export const getServerSideProps = async (context: any) => {
     ? await res.json()
     : null;
   if (!data) {
-    redirect('not-found');
+    return {
+      redirect: {
+        destination: '/not-found',
+        permanent: false
+      }
+    }
   }
 
   let keyword = undefined;
@@ -200,6 +204,11 @@ export default function Page({
             <BreadcrumbComponent
               label={'Tin tức'}
               link={'/tin-tuc'}
+              additions={[{
+                label: _news?.news?.categories_news?.name || "",
+                link: generateSlugToHref(_news?.news?.categories_news?.slugs?.slug)
+                }
+              ]}
               current={{
                 label: _news?.news?.name || '',
                 link: generateSlugToHref(slug.slug),
