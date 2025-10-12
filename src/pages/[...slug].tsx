@@ -204,6 +204,11 @@ export default function Page({
             <BreadcrumbComponent
               label={'Tin tức'}
               link={'/tin-tuc'}
+              additions={[{
+                label: _news?.news?.categories_news?.name || "",
+                link: generateSlugToHref(_news?.news?.categories_news?.slugs?.slug)
+                }
+              ]}
               current={{
                 label: _news?.news?.name || '',
                 link: generateSlugToHref(slug.slug),

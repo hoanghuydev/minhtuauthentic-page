@@ -3,6 +3,7 @@ export default function NewsToc() {
     <>
       <div className="meta-toc">
         <div className="box-readmore">
+          <h3 className="text-xl font-bold">Mục lục</h3>
           <ul
             className="toc-list"
             data-toc="article"
