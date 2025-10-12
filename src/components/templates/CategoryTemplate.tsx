@@ -46,8 +46,8 @@ export default function CategoryTemplate({
   const data = slug?.data as ResponseCategoryFilterPageDto;
   const isDesktop = useIsDesktop();
   const renderLabelBreadcrumb: Record<string, string> = {
-    [Entity.CATEGORIES]: data.title || 'Danh mục',
-    [Entity.BRANDS]: data.title || 'Thương hiệu',
+    [Entity.CATEGORIES]: data?.title || 'Danh mục',
+    [Entity.BRANDS]: data?.title || 'Thương hiệu',
     [Entity.KEYWORDS]: slug?.keyword?.value || 'Từ khóa',
   };
   const description =

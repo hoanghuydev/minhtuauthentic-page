@@ -3,6 +3,7 @@ import { SlugDto } from '@/dtos/Slug.dto';
 import { BaseDto } from '@/dtos/Base.dto';
 import { SeoDto } from '@/dtos/Seo.dto';
 import { INewsCategoriesDto } from '@/dtos/INewsCategories.dto';
+import { CategoryNewsDto } from './CategoryNews.dto';
 
 export class NewsDto extends BaseDto {
   name?: string;
@@ -14,4 +15,5 @@ export class NewsDto extends BaseDto {
   slugs?: SlugDto;
   seo?: SeoDto;
   categories?: INewsCategoriesDto[];
+  categories_news?: CategoryNewsDto
 }
