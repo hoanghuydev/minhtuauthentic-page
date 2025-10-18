@@ -42,99 +42,99 @@ export default function FeaturedProductsFilter({
     typeof window !== 'undefined' ? window.location.search : '',
   );
 
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const handleURLChange = () => {
-  //       setCurrentUrl(window.location.search);
-  //     };
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleURLChange = () => {
+        setCurrentUrl(window.location.search);
+      };
 
-  //     window.addEventListener('popstate', handleURLChange);
+      window.addEventListener('popstate', handleURLChange);
 
-  //     return () => {
-  //       window.removeEventListener('popstate', handleURLChange);
-  //     };
-  //   }
-  // }, []);
+      return () => {
+        window.removeEventListener('popstate', handleURLChange);
+      };
+    }
+  }, []);
 
   // useEffect(() => {
   //   ctx?.setTotal && ctx.setTotal(total);
   // }, [total]);
 
   // // Cập nhật products khi props products thay đổi (SSR)
-  // useEffect(() => {
-  //   if (products?.length > 0) {
-  //     setProducts(products);
-  //     ctx?.setProducts && ctx.setProducts(products);
-  //   }
-  // }, [products]);
+  useEffect(() => {
+    if (variants?.length > 0) {
+      setVariants(variants);
+      ctx?.setProducts && ctx.setProducts(variants);
+    }
+  }, [variants]);
 
-  // const convertSettingToObject = () => {
-  //   let obj: Record<string, Record<string, string>> = {
-  //     sex: {
-  //       0: 'Nữ',
-  //       1: 'Nam',
-  //       2: 'Unisex',
-  //     },
-  //   };
-  //   if (settings) {
-  //     Object.keys(settings).map((setting) => {
-  //       const value = (settings as any)[setting];
-  //       if (Array.isArray(value)) {
-  //         switch (setting) {
-  //           case 'concentration_gradients':
-  //           case 'fragrance_retention':
-  //           case 'categories':
-  //             obj[setting] = value.reduce((acc, item) => {
-  //               acc[item.id] = item.name;
-  //               return acc;
-  //             }, {});
-  //             break;
-  //           case 'price_range':
-  //             obj[setting] = value.reduce((acc, item) => {
-  //               acc[item.min + '_' + item.max] = item.label;
-  //               return acc;
-  //             }, {});
-  //             break;
-  //           case 'product_configurations':
-  //             obj[setting] = {};
-  //             value.map((item) => {
-  //               item.values.map((item2: ProductConfigurationValuesDto) => {
-  //                 obj[setting][item2.id as any] = item2.value || '';
-  //               });
-  //             });
-  //             break;
-  //         }
-  //       }
-  //     });
-  //   }
-  //   return obj;
-  // };
+  const convertSettingToObject = () => {
+    let obj: Record<string, Record<string, string>> = {
+      sex: {
+        0: 'Nữ',
+        1: 'Nam',
+        2: 'Unisex',
+      },
+    };
+    if (settings) {
+      Object.keys(settings).map((setting) => {
+        const value = (settings as any)[setting];
+        if (Array.isArray(value)) {
+          switch (setting) {
+            case 'concentration_gradients':
+            case 'fragrance_retention':
+            case 'categories':
+              obj[setting] = value.reduce((acc, item) => {
+                acc[item.id] = item.name;
+                return acc;
+              }, {});
+              break;
+            case 'price_range':
+              obj[setting] = value.reduce((acc, item) => {
+                acc[item.min + '_' + item.max] = item.label;
+                return acc;
+              }, {});
+              break;
+            case 'product_configurations':
+              obj[setting] = {};
+              value.map((item) => {
+                item.values.map((item2: ProductConfigurationValuesDto) => {
+                  obj[setting][item2.id as any] = item2.value || '';
+                });
+              });
+              break;
+          }
+        }
+      });
+    }
+    return obj;
+  };
 
   useEffect(() => {
     setIsReady(true);
   }, []);
 
-  // useEffect(() => {
-  //   if (
-  //     ctx?.setObjFilterByValue &&
-  //     Object.keys(ctx?.objFilterByValue).length === 0
-  //   ) {
-  //     ctx.setObjFilterByValue(convertSettingToObject());
-  //   }
-  //   if (ctx?.setDataSlug) {
-  //     ctx.setDataSlug(slugData);
-  //   }
-  //   // Initialize products from SSR
-  //   if (ctx?.setProducts && products?.length > 0) {
-  //     ctx.setProducts(products);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (
+      ctx?.setObjFilterByValue &&
+      Object.keys(ctx?.objFilterByValue).length === 0
+    ) {
+      ctx.setObjFilterByValue(convertSettingToObject());
+    }
+    if (ctx?.setDataSlug) {
+      ctx.setDataSlug(slugData);
+    }
+    // Initialize products from SSR
+    if (ctx?.setProducts && variants?.length > 0) {
+      ctx.setProducts(variants);
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   if (isReady && ctx?.products) {
-  //     setProducts(ctx.products);
-  //   }
-  // }, [ctx?.products, isReady]);
+  useEffect(() => {
+    if (isReady && ctx?.products) {
+      setVariants(ctx.products);
+    }
+  }, [ctx?.products, isReady]);
 
   const renderProduct = useMemo(() => {
     return (

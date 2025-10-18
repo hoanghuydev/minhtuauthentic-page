@@ -53,8 +53,6 @@ export const getServerSideProps = async (context: any) => {
 
   let keyword = undefined;
 
-  console.log((data?.data?.data as StaticContentsDto));
-
   if (
     data?.data?.model === Entity.PRODUCTS ||
     data?.data?.model === Entity.CATEGORIES ||
@@ -235,7 +233,7 @@ export default function Page({
           </>
         );
       case Entity.STATIC_CONTENTS_ENTITY:
-        return <StaticContentTemplate data={slug?.data as ResponseStaticContentDetailDto} />
+        return <StaticContentTemplate data={slug as ResponseSlugPageDto<ResponseStaticContentDetailDto>} />
       default:
         return <NotFoundTemplate />;
     }
