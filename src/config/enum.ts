@@ -46,6 +46,7 @@ export enum Entity {
   IPRODUCTCATEGORIES = 'IProductCategoriesEntity',
   INEWSCATEGORIES = 'INewsCategoriesEntity',
   IPRODUCTBRANDS = 'IProductBrandsEntity',
+  STATIC_CONTENTS_ENTITY = 'StaticContentsEntity',
 }
 export enum STATIC_COMPONENT_TYPE {
   CATEGORY = 'home-category',
@@ -68,6 +69,7 @@ export enum STATIC_CONTENT_TYPE {
   BANNER_FULL_WIDTH_MOBILE = 'banner-full-width-mobile',
   FEATURE_CATEGORY = 'home-feature-category',
   FOOTER_PRIVACY_POLICY = 'footer-privacy-policy',
+  FEATURED_PRODUCTS_CATEGORY = 'featured-products-category',
 }
 
 export enum PRODUCT_CONFIGURATIONS {
