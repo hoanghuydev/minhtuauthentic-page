@@ -8,6 +8,7 @@ export class StaticContentsDto extends BaseDto {
   title?: string;
   content?: string;
   description?: string;
+  slugs?: SlugDto;
   images?: ImageDetailDto[];
   images_mobile?: ImageDetailDto[];
   is_mobile_visible?: boolean;

@@ -17,6 +17,10 @@ import { ResponseNewsPageDto } from '@/dtos/ResponseNewsPage.dto';
 import NotFoundTemplate from '@/components/templates/NotFoundTemplate';
 import HomeSupport from '@/components/organisms/home/homeSupport';
 import { SettingOptionDto } from '@/dtos/SettingOption.dto';
+import ResponseSendTransactionDto from '@/dtos/BaoKim/responseSendTransaction.dto';
+import { StaticContentsDto } from '@/dtos/StaticContents.dto';
+import StaticContentTemplate from '@/components/templates/StaticContentTemplate';
+import { ResponseStaticContentDetailDto } from '@/dtos/responseStaticContentDetail.dto';
 
 export const getServerSideProps = async (context: any) => {
   const { slug } = context.query;
@@ -55,7 +59,8 @@ export const getServerSideProps = async (context: any) => {
     data?.data?.model === Entity.BRANDS ||
     data?.data?.model === Entity.CATEGORY_NEWS ||
     data?.data?.model === Entity.NEWS ||
-    data?.data?.model === Entity.KEYWORDS
+    data?.data?.model === Entity.KEYWORDS ||
+    data?.data?.model === Entity.STATIC_CONTENTS_ENTITY
   ) {
     switch (data?.data?.model) {
       case Entity.PRODUCTS:
@@ -117,6 +122,9 @@ export const getServerSideProps = async (context: any) => {
         description = keywordEntity?.seo?.description;
         keyword = keywordEntity?.seo?.keyword;
         break;
+      case Entity.STATIC_CONTENTS_ENTITY:
+        let staticContentResponse = (data?.data as ResponseSlugPageDto<ResponseStaticContentDetailDto>).data;
+        title = staticContentResponse?.title;
     }
     context.res.setHeader(
       'Cache-Control',
@@ -224,6 +232,8 @@ export default function Page({
             />
           </>
         );
+      case Entity.STATIC_CONTENTS_ENTITY:
+        return <StaticContentTemplate data={slug as ResponseSlugPageDto<ResponseStaticContentDetailDto>} />
       default:
         return <NotFoundTemplate />;
     }

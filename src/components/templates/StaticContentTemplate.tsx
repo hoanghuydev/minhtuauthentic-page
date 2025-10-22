@@ -1,24 +1,41 @@
-import { StaticContentsDto } from '@/dtos/StaticContents.dto';
-import { twMerge } from 'tailwind-merge';
+import { STATIC_CONTENT_TYPE } from '@/config/enum';
+import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
+import _ from 'lodash';
+import dynamic from 'next/dynamic';
+import { ResponseStaticContentDetailDto } from '@/dtos/responseStaticContentDetail.dto';
+import { ResponseSlugPageDto } from '@/dtos/responseSlugPage.dto';
+import FeaturedProductsCategoryTemplate from './FeaturedProductsCategoryTemplate';
+
+
+const SettingFilter = dynamic(
+  () => import('@/components/organisms/categoryFilter/settingFilter'),
+  {
+    ssr: false,
+  },
+);
+
 
 type Props = {
-  staticContent: StaticContentsDto;
+  data: ResponseSlugPageDto<ResponseStaticContentDetailDto>;
+  menu?: ResponseMenuDto;
+  breadcrumb?: {
+    label: string;
+    link: string;
+  };
+  isSearch?: boolean;
 };
-const StaticContentTemplate = ({ staticContent }: Props) => {
+const StaticContentTemplate = ({ data, menu, breadcrumb, isSearch }: Props) => {
+  const renderContent = () => {
+    switch(data?.data?.type) {
+      case STATIC_CONTENT_TYPE.FEATURED_PRODUCTS_CATEGORY:
+        return <FeaturedProductsCategoryTemplate data={data} menu={menu} breadcrumb={breadcrumb} isSearch={isSearch} />
+    }
+  }
+
   return (
-    <div
-      className={twMerge(
-        'w-full max-rounded-[10px] shadow-custom bg-white overflow-hidden relative mx-auto rounded-[10px] p-3',
-      )}
-    >
-      <h1 className={'text-primary font-[700] lg:font-bold text-2xl mb-3'}>
-        {staticContent?.title}
-      </h1>
-      <div
-        className={'mt-6'}
-        dangerouslySetInnerHTML={{ __html: staticContent?.content || '' }}
-      />
-    </div>
-  );
+    <>
+      {renderContent()}
+    </>
+  )
 };
 export default StaticContentTemplate;
