@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import { PAYMENT_TYPE_ID } from '@/config/enum';
 import PaymentButton from '@/components/molecules/paymentButton';
 import { toast } from 'react-toastify';
+import AppContext from '@/contexts/appContext';
+import AuthRequireModal from '@/components/organisms/modal/AuthRequireModal';
 type Props = {
   variant?: VariantDto;
   isQuickView?: boolean;
@@ -15,8 +17,10 @@ type Props = {
 export default function ProductCartCheckout({ variant, isQuickView, setQuickViewModal }: Props) {
   const router = useRouter();
   const orderCtx = useContext(OrderContext);
+  const appCtx = useContext(AppContext);
   const [qty, setQty] = useState(1);
   const [indexCart, setIndexCart] = useState<number | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const isOutOfStock = !variant?.is_in_stock;
 
   useEffect(() => {
@@ -45,6 +49,20 @@ export default function ProductCartCheckout({ variant, isQuickView, setQuickView
       orderCtx?.addCart && orderCtx.addCart(variant, qty);
     }
     setQuickViewModal && setQuickViewModal(false);
+  };
+
+  const handleBuyNow = () => {
+    if (!variant || isOutOfStock) return;
+    
+    // Check if user is logged in
+    if (!appCtx?.user) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    // If user is logged in, proceed with normal flow
+    handleAddToCart();
+    router.push('/gio-hang/tom-tat');
   };
 
   const handleOutOfStockClick = () => {
@@ -87,10 +105,7 @@ export default function ProductCartCheckout({ variant, isQuickView, setQuickView
                   'flex flex-col bg-primary items-center justify-center p-[4px_10px] rounded-[10px] grow text-[12px]'
                 }
                 type={'button'}
-                onClick={() => {
-                  handleAddToCart();
-                  router.push('/gio-hang/tom-tat');
-                }}
+                onClick={handleBuyNow}
               >
                 <span
                   className={'text-white text-xl font-[700] lg:font-bold uppercase'}
@@ -139,6 +154,12 @@ export default function ProductCartCheckout({ variant, isQuickView, setQuickView
       {/*  type={2}*/}
       {/*/>*/}
       {/*</div>*/}
+      
+      <AuthRequireModal
+        open={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        redirectUrl={router.asPath}
+      />
     </>
   );
 }

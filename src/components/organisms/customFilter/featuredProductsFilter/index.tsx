@@ -16,29 +16,27 @@ import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import Link from 'next/link';
 import { generateSlugToHref } from '@/utils';
 import { twMerge } from 'tailwind-merge';
+import { VariantDto } from '@/dtos/Variant.dto';
 
 type Props = {
   settings?: ProductFilterOptionDto;
-  products: ProductDto[];
+  variants: VariantDto[];
   slugData: SlugDto;
   total: number;
   title?: string;
-  category?: CategoryDto;
   menu?: ResponseMenuDto;
 };
 
-export default function ContentFilter({
-  products,
+export default function FeaturedProductsFilter({
+  variants,
   settings,
   slugData,
   total,
   menu,
   title,
-  category,
 }: Props) {
   const ctx = useContext(CategoryFilterContext);
-
-  const [_products, setProducts] = useState<ProductDto[]>(products);
+  const [_variants, setVariants] = useState<VariantDto[]>(variants);
   const [isReady, setIsReady] = useState(false);
   const [currentUrl, setCurrentUrl] = useState<string>(
     typeof window !== 'undefined' ? window.location.search : '',
@@ -58,17 +56,17 @@ export default function ContentFilter({
     }
   }, []);
 
-  useEffect(() => {
-    ctx?.setTotal && ctx.setTotal(total);
-  }, [total]);
+  // useEffect(() => {
+  //   ctx?.setTotal && ctx.setTotal(total);
+  // }, [total]);
 
-  // Cập nhật products khi props products thay đổi (SSR)
+  // // Cập nhật products khi props products thay đổi (SSR)
   useEffect(() => {
-    if (products?.length > 0) {
-      setProducts(products);
-      ctx?.setProducts && ctx.setProducts(products);
+    if (variants?.length > 0) {
+      setVariants(variants);
+      ctx?.setProducts && ctx.setProducts(variants);
     }
-  }, [products]);
+  }, [variants]);
 
   const convertSettingToObject = () => {
     let obj: Record<string, Record<string, string>> = {
@@ -127,37 +125,34 @@ export default function ContentFilter({
       ctx.setDataSlug(slugData);
     }
     // Initialize products from SSR
-    if (ctx?.setProducts && products?.length > 0) {
-      ctx.setProducts(products);
+    if (ctx?.setProducts && variants?.length > 0) {
+      ctx.setProducts(variants);
     }
   }, []);
 
   useEffect(() => {
     if (isReady && ctx?.products) {
-      setProducts(ctx.products);
+      setVariants(ctx.products);
     }
   }, [ctx?.products, isReady]);
 
   const renderProduct = useMemo(() => {
     return (
       <>
-        {_products?.length ? (
+        {_variants?.length ? (
           <div
             className={
               'grid grid-cols-2 lg:grid-cols-4 w-full gap-1 lg:gap-3 relative'
             }
           >
-            {_products.map((product, index) => {
-              let variant = (product?.variants || [])?.find(
-                (item) => item.is_default || [],
-              );
-              if (!variant) {
+            {_variants.map((variant, index) => {
+              if (!variant || !variant.product) {
                 return null;
               }
               return (
                 <ProductCard
-                  key={`${product.id}-${variant.id}`}
-                  product={product}
+                  key={`${variant.product.id}-${variant.id}`}
+                  product={variant.product}
                   variant={variant}
                   isShowListVariant={true}
                   preloadVariants={true}
@@ -172,70 +167,16 @@ export default function ContentFilter({
         )}
       </>
     );
-  }, [_products]);
+  }, [_variants]);
   const renderTitle = () => {
-    if (ctx?.search) {
-      return (
-        <h1 className={'mb-3 lg:mb-6'}>
-          <span className={'text-3xl text-primary font-semibold'}>
-            Kết quả tìm kiếm cho:{' '}
-          </span>
-          <span className={'text-2xl '}>{ctx?.search}</span>
-        </h1>
-      );
-    } else if (title) {
-      return (
-        <div className="mb-3 lg:mb-6">
-          <h1 className={'mb-2'}>
-            <span className={'text-3xl text-primary font-semibold'}>
-              {title}
-            </span>
-          </h1>
-          {category?.children && category?.children?.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-2">
-              {category.children.map((child, index) => {
-                const currentSlugPath = Array.isArray(
-                  ctx?.router?.query['slug'],
-                )
-                  ? ctx?.router?.query['slug'].join('/')
-                  : ctx?.router?.query['slug'];
-                return (
-                  <button
-                    type={'button'}
-                    key={index}
-                    onClick={() => {
-                      ctx?.updateRouter &&
-                        ctx.updateRouter(
-                          'child',
-                          child.slugs?.slug || 'my-pham',
-                        );
-                    }}
-                    className={twMerge(
-                      'bg-[#f3f4f6] border border-[#e5e7eb] rounded-[10px] text-[12px] p-[5px_10px] transition-colors duration-300',
-                      child.slugs?.slug === currentSlugPath &&
-                        'bg-primary text-white',
-                    )}
-                  >
-                    <span>{child.name}</span>
-                  </button>
-                  //     <Link
-                  //     key={child.id}
-                  //      href={generateSlugToHref(child.slugs?.slug)}
-                  //      className="px-3 py-1 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm transition-colors"
-                  // >
-                  //   {child.name}
-                  // </Link>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      );
-    }
     return (
-      <h1 className={'mb-3 lg:mb-6'}>
-        <span className={'text-3xl text-primary font-semibold'}>Sản phẩm</span>
-      </h1>
+      <div className="mb-3 lg:mb-6">
+        <h1 className={'mb-2'}>
+          <span className={'text-3xl text-primary font-semibold'}>
+            {title}
+          </span>
+        </h1>
+      </div>
     );
   };
   return (

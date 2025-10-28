@@ -5,12 +5,14 @@ import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PhoneOutlined } from '@ant-design/icons';
 import { isNull } from 'util';
+import AuthRequireModal from '@/components/organisms/modal/AuthRequireModal';
 
 export default function ProductFooterActions() {
   const router = useRouter();
   const orderCtx = useContext(OrderContext);
   const appContext = useContext(AppContext);
   const [indexCart, setIndexCart] = useState<number | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Use the variant from AppContext.currentVariant for global access
   const variant = appContext?.currentVariant;
@@ -95,6 +97,10 @@ export default function ProductFooterActions() {
             }
             type={'button'}
             onClick={() => {
+              if (!appContext?.user) {
+                setShowAuthModal(true);
+                return;
+              }
               handleAddToCart();
               router.push('/gio-hang/tom-tat');
             }}
@@ -104,6 +110,12 @@ export default function ProductFooterActions() {
           </button>
         </>
       )}
+      
+      <AuthRequireModal
+        open={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        redirectUrl={router.asPath}
+      />
     </div>
   );
 }
