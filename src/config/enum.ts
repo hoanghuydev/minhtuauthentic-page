@@ -47,6 +47,7 @@ export enum Entity {
   INEWSCATEGORIES = 'INewsCategoriesEntity',
   IPRODUCTBRANDS = 'IProductBrandsEntity',
   STATIC_CONTENTS_ENTITY = 'StaticContentsEntity',
+  PROMOTIONS = 'PromotionsEntity',
 }
 export enum STATIC_COMPONENT_TYPE {
   CATEGORY = 'home-category',

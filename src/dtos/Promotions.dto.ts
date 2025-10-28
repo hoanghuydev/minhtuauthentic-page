@@ -4,6 +4,7 @@ import CouponsDto from '@/dtos/Coupons.dto';
 
 export class PromotionsDto extends BaseDto {
   name?: string;
+  slug?: string;
   type?: string;
   condition_syntax?: string;
   condition_value?: string;

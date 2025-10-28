@@ -37,6 +37,7 @@ export default function ContentFilter({
   category,
 }: Props) {
   const ctx = useContext(CategoryFilterContext);
+
   const [_products, setProducts] = useState<ProductDto[]>(products);
   const [isReady, setIsReady] = useState(false);
   const [currentUrl, setCurrentUrl] = useState<string>(
@@ -147,7 +148,7 @@ export default function ContentFilter({
             }
           >
             {_products.map((product, index) => {
-              const variant = (product?.variants || [])?.find(
+              let variant = (product?.variants || [])?.find(
                 (item) => item.is_default || [],
               );
               if (!variant) {

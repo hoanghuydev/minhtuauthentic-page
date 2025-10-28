@@ -35,7 +35,11 @@ export default function PopupEvent () {
         .then(data => {
           setBanners(data.data || [])
           setDuration((data?.data?.[0]?.properties?.duration|| 15) * 1000)
-          setOpen(data.data.length > 0)
+          if (data.data.length > 0) {
+            setTimeout(() => {
+              setOpen(true)
+            }, 6000)
+          }
         })
         .catch(() => setOpen(false)) 
     }

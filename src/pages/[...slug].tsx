@@ -60,7 +60,8 @@ export const getServerSideProps = async (context: any) => {
     data?.data?.model === Entity.CATEGORY_NEWS ||
     data?.data?.model === Entity.NEWS ||
     data?.data?.model === Entity.KEYWORDS ||
-    data?.data?.model === Entity.STATIC_CONTENTS_ENTITY
+    data?.data?.model === Entity.STATIC_CONTENTS_ENTITY ||
+    data?.data?.model === Entity.PROMOTIONS
   ) {
     switch (data?.data?.model) {
       case Entity.PRODUCTS:
@@ -125,6 +126,12 @@ export const getServerSideProps = async (context: any) => {
       case Entity.STATIC_CONTENTS_ENTITY:
         let staticContentResponse = (data?.data as ResponseSlugPageDto<ResponseStaticContentDetailDto>).data;
         title = staticContentResponse?.title;
+        break;
+      case Entity.PROMOTIONS:
+        let promotionResponse = (data?.data as ResponseSlugPageDto<ResponseCategoryFilterPageDto>).data;
+        title = promotionResponse?.title || 'Khuyến mãi';
+        description = 'Danh sách sản phẩm khuyến mãi';
+        break;
     }
     context.res.setHeader(
       'Cache-Control',
@@ -175,6 +182,7 @@ export default function Page({
       case Entity.CATEGORIES:
       case Entity.BRANDS:
       case Entity.KEYWORDS:
+      case Entity.PROMOTIONS:
         return (
           <CategoryTemplate
             slug={slug as ResponseSlugPageDto<ResponseCategoryFilterPageDto>}
