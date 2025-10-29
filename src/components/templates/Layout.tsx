@@ -40,6 +40,10 @@ const Socials = dynamic(() => import('@/components/organisms/Socials'), {
   ssr: false,
 });
 
+const CustomerService = dynamic(() => import('@/components/organisms/CustomerService'), {
+  ssr: false,
+});
+
 const LayoutMenu = dynamic(
   () => import('@/components/organisms/layout/LayoutMenu'),
   {
@@ -78,6 +82,7 @@ export default function Layout({
       </div>
       {isMobile && menu && <NavMenu menu={menu} settings={settings} />}
       <Socials />
+      <CustomerService />
       <MenuFooter isFixed={true} />
       <PopupProduct />
       {isMobile && (
