@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import OrderContext from '@/contexts/orderContext';
 import { formatMoney } from '@/utils';
 import Link from 'next/link';
@@ -8,6 +8,8 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { Button } from 'antd/es';
 import ArrowLeftOutlined from '@ant-design/icons/lib/icons/ArrowLeftOutlined';
+import useUser from '@/hooks/useUser';
+import AuthRequireModal from '@/components/organisms/modal/AuthRequireModal';
 
 const CartSummaryDesktop = dynamic(
   () => import('@/components/organisms/cartSummary/desktop'),
@@ -33,9 +35,19 @@ const CustomScript = dynamic(() => import('@/components/atoms/customScript'), {
 export default function CartSummaryTemplate() {
   const orderCtx = useContext(OrderContext);
   const router = useRouter();
+  const { user } = useUser();
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const isCartEmpty =
     !orderCtx?.cart?.items || orderCtx.cart.items.length === 0;
+
+  const handleCheckout = () => {
+    if (!user) {
+      setShowAuthModal(true);
+    } else {
+      router.push('/gio-hang/thanh-toan');
+    }
+  };
 
   return (
     <>
@@ -102,20 +114,26 @@ export default function CartSummaryTemplate() {
                   </tr>
                 </tbody>
               </table>
-              <Link
-                href={'/gio-hang/thanh-toan'}
+              <button
+                onClick={handleCheckout}
                 className={
-                  'block w-full p-3 text-xl font-semibold bg-primary text-white text-center rounded-[10px] shadow-custom cursor-pointer mt-3'
+                  'block w-full p-3 text-xl font-semibold bg-primary text-white text-center rounded-[10px] shadow-custom cursor-pointer mt-3 hover:bg-primary/90 transition-colors'
                 }
               >
                 Tiến hành thanh toán
-              </Link>
+              </button>
               <div className="bk-btn cart-summary mt-3"></div>
             </div>
           </>
         )}
       </div>
       <CustomScript />
+
+      <AuthRequireModal
+        open={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        redirectUrl={router.asPath}
+      />
     </>
   );
 }
