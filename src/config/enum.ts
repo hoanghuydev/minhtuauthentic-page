@@ -71,6 +71,7 @@ export enum STATIC_CONTENT_TYPE {
   FEATURE_CATEGORY = 'home-feature-category',
   FOOTER_PRIVACY_POLICY = 'footer-privacy-policy',
   FEATURED_PRODUCTS_CATEGORY = 'featured-products-category',
+  HOT_PROGRAM = 'hot-program',
 }
 
 export enum PRODUCT_CONFIGURATIONS {
