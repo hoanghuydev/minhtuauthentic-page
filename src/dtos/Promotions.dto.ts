@@ -1,10 +1,11 @@
 import { BaseDto } from '@/dtos/Base.dto';
 import { ImageDetailDto } from '@/dtos/ImageDetail.dto';
 import CouponsDto from '@/dtos/Coupons.dto';
+import { SlugDto } from './Slug.dto';
 
 export class PromotionsDto extends BaseDto {
   name?: string;
-  slug?: string;
+  slugs?: SlugDto;
   type?: string;
   condition_syntax?: string;
   condition_value?: string;

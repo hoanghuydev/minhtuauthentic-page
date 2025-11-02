@@ -261,7 +261,7 @@ export default function FeaturedProductsFilter({
                   ctx.router.push(newUrl);
                 } else {
                   // Fallback to direct URL change if router is not available
-                  window.location.href = `${window.location.origin}${
+                  window.location.href = `${process.env.NEXT_PUBLIC_APP_URL}${
                     window.location.pathname
                   }?${params.toString()}`;
                 }

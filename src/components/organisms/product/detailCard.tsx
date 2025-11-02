@@ -66,10 +66,7 @@ const ProductDetailCard = ({
     image: null,
   });
   const productSchema = useMemo(() => {
-    const baseUrl =
-      typeof window !== 'undefined'
-        ? window.location.origin
-        : process.env.APP_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
     const defaultVariant = product?.variants?.find((v) => v.is_default);
     const prices: number[] = [];
     product?.variants?.forEach((v) => {

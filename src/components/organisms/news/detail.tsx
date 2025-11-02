@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default function NewsDetail({ news }: Props) {
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : process.env.APP_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   const newsSchema = {
     "@context": "http://schema.org",
     "@type": "Article",
