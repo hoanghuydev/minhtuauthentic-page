@@ -30,8 +30,7 @@ export default function CustomerService() {
     }
   }, [data]);
 
-  // Don't render component if no hot programs
-  if (!hotPrograms || hotPrograms.length === 0) {
+  if (!hotPrograms || hotPrograms.length === 0 || isMobile) {
     return null;
   }
 

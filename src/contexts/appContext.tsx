@@ -75,7 +75,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [router, productSynced]);
 
-      return (
+  return (
     <AppContext.Provider
       value={{
         user,

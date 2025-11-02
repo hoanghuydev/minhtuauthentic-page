@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState, useRef } from 'react';
 type Props = {
   imageItem: ImageDto;
   isActive: boolean;
-  index?: number
+  index?: number;
   setImageActive: (image: ImageDto) => void;
 };
 
@@ -41,9 +41,8 @@ export default function PopupImageItem({
           }
         }}
         alt={imageItem.alt || ''}
-        sizes="80px"
-        quality={80}
-        unoptimized={false}
+        // sizes="80px"
+        unoptimized={true}
         className={
           'w-full h-full object-contain hover:scale-105 transition-transform duration-300 cursor-pointer'
         }
