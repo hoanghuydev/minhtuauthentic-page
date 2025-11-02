@@ -1,18 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useIsMobile } from '@/hooks/useDevice';
 import { Button } from 'antd';
 import Link from 'next/link';
-import {
-  FireOutlined,
-  ThunderboltOutlined,
-  SearchOutlined,
-  CloseOutlined,
-} from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
+import Image from 'next/image';
+import useSWR from 'swr';
+import { STATIC_CONTENT_TYPE } from '@/config/enum';
+import { StaticContentsDto } from '@/dtos/StaticContents.dto';
+
+const fetcher = () =>
+  fetch('/api/static-contents/' + STATIC_CONTENT_TYPE.HOT_PROGRAM, {
+    method: 'GET',
+  }).then((res) => res.json());
 
 export default function CustomerService() {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
+  const { data, error } = useSWR(
+    '/api/static-contents/' + STATIC_CONTENT_TYPE.HOT_PROGRAM,
+    fetcher,
+  );
+  const [hotPrograms, setHotPrograms] = useState<StaticContentsDto[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      const programs = data?.data as StaticContentsDto[];
+      setHotPrograms(programs || []);
+    }
+  }, [data]);
+
+  if (!hotPrograms || hotPrograms.length === 0 || isMobile) {
+    return null;
+  }
 
   return (
     <>
@@ -53,43 +73,41 @@ export default function CustomerService() {
             </div>
 
             <div className="p-3">
-              {/* Flash Sale Option */}
-              <Link href="/flash-sale">
-                <Button
-                  type="text"
-                  icon={<ThunderboltOutlined className="text-orange-500" />}
-                  className="flex items-center gap-3 px-3 py-3 hover:bg-gray-50 rounded-md transition-colors border-b border-gray-100 last:border-b-0 w-full justify-start h-auto"
-                >
-                  <span className="text-sm text-gray-700 font-medium">
-                    Flash sale
-                  </span>
-                </Button>
-              </Link>
-
-              {/* Deal Sốc Option */}
-              <Link href="/deal-sock">
-                <Button
-                  type="text"
-                  icon={<FireOutlined className="text-red-500" />}
-                  className="flex items-center gap-3 px-3 py-3 hover:bg-gray-50 rounded-md transition-colors w-full justify-start h-auto"
-                >
-                  <span className="text-sm text-gray-700 font-medium">
-                    Deal sốc
-                  </span>
-                </Button>
-              </Link>
-
-              <Link href="/xu-huong-tim-kiem">
-                <Button
-                  type="text"
-                  icon={<SearchOutlined className="text-blue-500" />}
-                  className="flex items-center gap-3 px-3 py-3 hover:bg-gray-50 rounded-md transition-colors w-full justify-start h-auto"
-                >
-                  <span className="text-sm text-gray-700 font-medium">
-                    Xu hướng tìm kiếm
-                  </span>
-                </Button>
-              </Link>
+              {hotPrograms.map((program, index) => (
+                <Link key={program.id} href={program.properties?.url || '#'}>
+                  <Button
+                    type="text"
+                    icon={
+                      program.images?.[0]?.image?.url ? (
+                        <Image
+                          src={program.images[0].image.url}
+                          alt={
+                            program.images[0].image.alt ||
+                            program.title ||
+                            'Hot program'
+                          }
+                          width={16}
+                          height={16}
+                          className="w-4 h-4"
+                        />
+                      ) : (
+                        <span className="w-4 h-4 bg-gray-300 rounded-sm flex items-center justify-center text-xs">
+                          🔥
+                        </span>
+                      )
+                    }
+                    className={`flex items-center gap-3 px-3 py-3 hover:bg-gray-50 rounded-md transition-colors w-full justify-start h-auto ${
+                      index < hotPrograms.length - 1
+                        ? 'border-b border-gray-100'
+                        : ''
+                    }`}
+                  >
+                    <span className="text-sm text-gray-700 font-medium">
+                      {program.title}
+                    </span>
+                  </Button>
+                </Link>
+              ))}
             </div>
           </div>
         )}

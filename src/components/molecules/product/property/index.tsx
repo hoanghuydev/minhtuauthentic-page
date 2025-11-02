@@ -40,11 +40,15 @@ const ProductProperty = ({
   useEffect(() => {
     if (productContext?.variantActive && appContext?.setCurrentVariant) {
       appContext.setCurrentVariant(productContext.variantActive);
-      
+
       // Mark as synced để prevent reset khi route complete
       appContext?.setProductSynced && appContext.setProductSynced(true);
     }
-  }, [productContext?.variantActive, appContext?.setCurrentVariant, appContext?.setProductSynced]);
+  }, [
+    productContext?.variantActive,
+    appContext?.setCurrentVariant,
+    appContext?.setProductSynced,
+  ]);
 
   useEffect(() => {
     if (isMobile) {
@@ -186,8 +190,7 @@ const ProductProperty = ({
             __html: product?.product_property?.description || '',
           }}
           className={'text-[14px] text-gray-700'}
-        >
-        </p>
+        ></p>
         <ProductPrice
           prefix={'Giá'}
           variant={productContext?.variantActive}

@@ -16,7 +16,7 @@ export default function ProductFooterActions() {
 
   // Use the variant from AppContext.currentVariant for global access
   const variant = appContext?.currentVariant;
-  const isOutOfStock = !variant?.is_in_stock;
+  const isOutOfStock = variant ? !variant?.is_in_stock : false;
   useEffect(() => {
     if (!variant?.id) return;
 
@@ -110,7 +110,7 @@ export default function ProductFooterActions() {
           </button>
         </>
       )}
-      
+
       <AuthRequireModal
         open={showAuthModal}
         onClose={() => setShowAuthModal(false)}

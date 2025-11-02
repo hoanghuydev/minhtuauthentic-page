@@ -59,7 +59,13 @@ const ProductDetailImage = ({
           key={JSON.stringify(images)}
           renderItem={(item) => {
             const imageItem = item as ImageDto;
-            return <ItemImageCarousel image={imageItem} product={product} clickAction={handleClickImage} />
+            return (
+              <ItemImageCarousel
+                image={imageItem}
+                product={product}
+                clickAction={handleClickImage}
+              />
+            );
           }}
           slidesPerView={6}
           spaceBetween={10}
@@ -106,7 +112,6 @@ const ProductDetailImage = ({
                   }}
                   product={product}
                   unoptimized={true}
-                  quality={100}
                   priority={true}
                   loading="eager"
                   alt={`${product.title || product.name} - Hình ảnh chính`}
