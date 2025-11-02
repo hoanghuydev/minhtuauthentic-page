@@ -57,10 +57,7 @@ export default function CategoryTemplate({
     '';
 
   const categorySchema = useMemo(() => {
-    const baseUrl =
-      typeof window !== 'undefined'
-        ? window.location.origin
-        : process.env.APP_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
     const itemListElement = data?.products?.map((product, index) => {
       const defaultVariant = product?.variants?.find((v) => v.is_default);
       return {

@@ -79,10 +79,7 @@ export default function BreadcrumbComponent({
   }, []);
 
   const breadcrumbSchema = useMemo(() => {
-    const baseUrl =
-      typeof window !== 'undefined'
-        ? window.location.origin
-        : process.env.APP_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
     const elementList = [
       {
         '@type': 'ListItem',
