@@ -33,7 +33,7 @@ export default function SocialsList() {
       {display.map((social, index) => (
         <div
           key={index + '-social'}
-          className="flex items-center group bg-primary text-white rounded-full justify-between"
+          className="flex items-center group bg-[#c52927] text-white rounded-full justify-between"
         >
           <Link
             href={social?.properties?.url?.trim() || '/'}

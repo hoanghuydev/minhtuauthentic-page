@@ -124,17 +124,7 @@ const Footer = ({
           }
         >
           <p className={'py-2'}>
-            Copyright ©2024 <b>MINH TU AUTHENTIC</b> . Phát triển bởi{' '}
-            <b>
-              <Link
-                href={
-                  'https://www.linkedin.com/in/hu%E1%BB%B3nh-anh-khoa-0b09971b7/'
-                }
-                target={'_blank'}
-              >
-                Khoa Huynh
-              </Link>
-            </b>
+            Copyright ©2024 <b>MINH TU AUTHENTIC</b>
           </p>
           <div className={'flex items-center gap-3'}>
             <Link
