@@ -47,12 +47,25 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
       >
         <div className="px-4 w-full py-4">
           <div className="flex items-center justify-between mb-8">
-            <h2
-              className="text-2xl font-bold  uppercase tracking-wide"
-              style={{ color: content?.properties?.textColor || '#000000' }}
-            >
-              {content?.title || 'Danh mục nổi bật'}
-            </h2>
+            {content?.slugs?.slug ? (
+              <Link
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/${content.slugs.slug}`}
+              >
+                <h2
+                  className="text-2xl font-bold uppercase tracking-wide hover:opacity-80 transition-opacity"
+                  style={{ color: content?.properties?.textColor || '#000000' }}
+                >
+                  {content?.title || 'Danh mục nổi bật'}
+                </h2>
+              </Link>
+            ) : (
+              <h2
+                className="text-2xl font-bold uppercase tracking-wide"
+                style={{ color: content?.properties?.textColor || '#000000' }}
+              >
+                {content?.title || 'Danh mục nổi bật'}
+              </h2>
+            )}
             <button
               onClick={seeMore}
               className="flex items-center bg-gray-100 p-2 rounded-xl text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"

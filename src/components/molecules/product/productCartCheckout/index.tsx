@@ -102,7 +102,7 @@ export default function ProductCartCheckout({ variant, isQuickView, setQuickView
             <>
               <button
                 className={
-                  'flex flex-col bg-primary items-center justify-center p-[4px_10px] rounded-[10px] grow text-[12px]'
+                  'flex flex-col bg-[#c52927] items-center justify-center p-[4px_10px] rounded-[10px] grow text-[12px]'
                 }
                 type={'button'}
                 onClick={handleBuyNow}

@@ -49,7 +49,7 @@ export default function Widget() {
 
       <div
         className={twMerge(
-          'fixed right-8 bottom-[155px] z-50 flex flex-col gap-3 items-end',
+          'fixed right-8 bottom-[155px] z-[100] flex flex-col gap-3 items-end',
           isMobile ? 'right-4' : 'right-8',
         )}
       >

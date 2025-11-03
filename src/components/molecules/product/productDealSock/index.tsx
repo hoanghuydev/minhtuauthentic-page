@@ -13,6 +13,7 @@ import OrderContext from '@/contexts/orderContext';
 import { calculatePriceMinus, formatMoney } from '@/utils';
 import { twMerge } from 'tailwind-merge';
 import Image from 'next/image';
+import Link from 'next/link';
 type Props = {
   setting?: SettingsDto;
   mainVariant: VariantDto;
@@ -113,12 +114,12 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
         />
         <div className="relative w-full h-full min-w-[285px] min-h-[55px]">
           {promotion?.slugs && promotion?.slugs?.slug ? (
-            <a
+            <Link
               href={`${process.env.NEXT_PUBLIC_APP_URL}/${promotion.slugs.slug}`}
               className="absolute text-[18px] w-full z-10 left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] line-clamp-1 text-center text-white font-semibold block"
             >
               {promotion?.name || 'MUA KÈM GIÁ SỐC'}
-            </a>
+            </Link>
           ) : (
             <p className="absolute text-[18px] w-full z-10 left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] line-clamp-1 text-center text-white font-semibold">
               {promotion?.name || 'MUA KÈM GIÁ SỐC'}

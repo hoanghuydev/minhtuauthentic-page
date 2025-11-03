@@ -86,9 +86,9 @@ export default function CustomerService() {
                             program.title ||
                             'Hot program'
                           }
-                          width={16}
-                          height={16}
-                          className="w-4 h-4"
+                          width={200}
+                          height={200}
+                          className="w-8 h-8"
                         />
                       ) : (
                         <span className="w-4 h-4 bg-gray-300 rounded-sm flex items-center justify-center text-xs">

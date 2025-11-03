@@ -83,7 +83,7 @@ export default function NavMenu({ menu, className, settings }: Props) {
       <div className={'flex w-full h-full bg-[rgb(254_242_242/1)] '}>
         <div
           className={
-            'h-[calc(100svh-152px)] overflow-y-auto overflow-x-hidden w-[100px] text-primary'
+            'h-[calc(100svh-152px)] overflow-y-auto overflow-x-hidden w-[100px] text-[#ff114d]'
           }
         >
           {menuDisplay.map((item, index) => {
