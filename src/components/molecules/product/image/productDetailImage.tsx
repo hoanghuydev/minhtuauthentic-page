@@ -1,5 +1,6 @@
 import { ProductDto } from '@/dtos/Product.dto';
 import { ImageDto } from '@/dtos/Image.dto';
+import { VideoDetailDto } from '@/dtos/VideoDetail.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
 import ImageMagnifier from '@/components/atoms/images/imageMaginifier';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
@@ -12,11 +13,13 @@ import { SwiperClass } from 'swiper/react';
 import ImageCount from '@/components/atoms/imageCount';
 import ItemImageCarousel from '@/components/organisms/product/itemImageCarousel';
 import { useProductImageDetail } from '@/contexts/productDetailCarousel';
+import YouTubeEmbed from '@/components/atoms/video/YouTubeEmbed';
+import MediaItem from '@/dtos/Media.dto';
 
 type Props = {
   product: ProductDto;
   containerClassName?: string;
-  setIsOpen?: (item: { display: boolean; image: ImageDto | null }) => void;
+  setIsOpen?: (item: { display: boolean; media: MediaItem | null }) => void;
 };
 
 const ProductDetailImage = ({
@@ -24,7 +27,7 @@ const ProductDetailImage = ({
   containerClassName,
   setIsOpen,
 }: Props) => {
-  const { images, imageActive, setImageActive } = useProductImageDetail();
+  const { images, videos, mediaItems, mediaActive, setMediaActive } = useProductImageDetail();
   const [isMainImageLoaded, setIsMainImageLoaded] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const mainSwiper = useRef<SwiperClass | null>(null);
@@ -35,15 +38,15 @@ const ProductDetailImage = ({
   };
 
   useEffect(() => {
-    if (mainSwiper.current && imageActive) {
-      const idx = images.findIndex((img) => img.id === imageActive.id);
+    if (mainSwiper.current && mediaActive) {
+      const idx = mediaItems.findIndex((item) => item.id === mediaActive.id);
       if (idx >= 0) mainSwiper.current.slideTo(idx);
     }
-  }, [imageActive, images]);
+  }, [mediaActive, mediaItems]);
 
   useEffect(() => {
     setCurrentIndex(0);
-  }, [images]);
+  }, [mediaItems]);
 
   const renderSlideImage = useMemo(() => {
     return (
@@ -56,24 +59,23 @@ const ProductDetailImage = ({
         <SectionSwiper
           classNameContainer={'mt-3'}
           slidePerViewMobile={4}
-          key={JSON.stringify(images)}
+          key={JSON.stringify(mediaItems)}
           renderItem={(item) => {
-            const imageItem = item as ImageDto;
-            return (
-              <ItemImageCarousel
-                image={imageItem}
-                product={product}
-                clickAction={handleClickImage}
-              />
-            );
+              return (
+                <ItemImageCarousel
+                  media={item as MediaItem}
+                  product={product}
+                  clickAction={handleClickImage}
+                />
+              );
           }}
           slidesPerView={6}
           spaceBetween={10}
-          data={images}
+          data={mediaItems}
         />
       </div>
     );
-  }, [imageActive, images]);
+  }, [mediaItems, product]);
 
   // Custom onLoad handler for the main product image
   const handleMainImageLoad = () => {
@@ -93,35 +95,53 @@ const ProductDetailImage = ({
       >
         <SectionSwiperItem
           renderItem={(item) => {
-            const imageItem = item as ImageDto;
-            return (
-              <div
-                className="product-detail-main-image-wrapper"
-                style={{
-                  backgroundColor: 'white',
-                  position: 'relative',
-                }}
-              >
-                <ImageWithFallback
-                  image={imageItem}
-                  className={twMerge(
-                    'object-contain cursor-pointer bk-product-image select-none lg:max-w-[568px] w-full m-auto',
-                  )}
-                  onClick={(image: ImageDto | null) => {
-                    setIsOpen && setIsOpen({ display: true, image });
+            const mediaItem = item as MediaItem;
+            
+            if (mediaItem.type === 'image') {
+              const imageItem = mediaItem.data as ImageDto;
+              return (
+                <div
+                  className="product-detail-main-image-wrapper"
+                  style={{
+                    backgroundColor: 'white',
+                    position: 'relative',
                   }}
-                  product={product}
-                  unoptimized={true}
-                  priority={true}
-                  loading="eager"
-                  alt={`${product.title || product.name} - Hình ảnh chính`}
-                  onLoadingComplete={handleMainImageLoad}
-                />
-              </div>
-            );
+                >
+                  <ImageWithFallback
+                    image={imageItem}
+                    className={twMerge(
+                      'object-contain cursor-pointer bk-product-image select-none lg:max-w-[568px] w-full m-auto',
+                    )}
+                    onClick={() => {
+                      setIsOpen && setIsOpen({ display: true, media: mediaItem });
+                    }}
+                    product={product}
+                    unoptimized={true}
+                    priority={true}
+                    loading="eager"
+                    alt={`${product.title || product.name} - Hình ảnh chính`}
+                    onLoadingComplete={handleMainImageLoad}
+                  />
+                </div>
+              );
+            } else if (mediaItem.type === 'video') {
+              const videoItem = mediaItem.data as VideoDetailDto;
+              return (
+                <div className="product-detail-main-video-wrapper m-auto max-h-full w-full flex overflow-hidden">
+                  <YouTubeEmbed 
+                    video={videoItem}
+                    width="100%"
+                    height="auto"
+                    className="product-detail-main-video-wrapper m-auto max-h-full lg:max-w-[568px] aspect-square"
+                    title={videoItem.video?.name || 'Product video'}
+                  />
+                </div>
+              );
+            }
+            return null;
           }}
-          key={JSON.stringify(images)}
-          data={images}
+          key={JSON.stringify(mediaItems)}
+          data={mediaItems}
           slidesPerView={1}
           spaceBetween={5}
           onSwiper={(swiperInstance: SwiperClass) => {
@@ -131,12 +151,15 @@ const ProductDetailImage = ({
           classNameRight={'lg:right-[0px]'}
           onSlideChange={(idx) => {
             setCurrentIndex(idx);
-            setImageActive(images[idx]);
+            const currentMedia = mediaItems[idx];
+            if (currentMedia) {
+              setMediaActive(currentMedia);
+            }
           }}
         />
         <ImageCount
           currentIndex={currentIndex}
-          total={images.length}
+          total={mediaItems.length}
           onPrev={() => mainSwiper.current?.slidePrev()}
           onNext={() => mainSwiper.current?.slideNext()}
         />

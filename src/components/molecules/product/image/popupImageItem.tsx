@@ -2,22 +2,25 @@ import { twMerge } from 'tailwind-merge';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { ImageDto } from '@/dtos/Image.dto';
 import { useEffect, useMemo, useState, useRef } from 'react';
+import MediaItem from '@/dtos/Media.dto';
+import { VideoDetailDto } from '@/dtos/VideoDetail.dto';
 
 type Props = {
-  imageItem: ImageDto;
+  media: MediaItem;
   isActive: boolean;
   index?: number;
-  setImageActive: (image: ImageDto) => void;
+  setMediaActive: (media: MediaItem) => void;
 };
 
 export default function PopupImageItem({
-  imageItem,
+  media,
   isActive,
-  setImageActive,
+  setMediaActive,
   index,
 }: Props) {
   const [active, setActive] = useState<boolean>(isActive);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const image = media.type === 'image' ? media.data as ImageDto : (media.data as VideoDetailDto).video! as ImageDto;
 
   useEffect(() => {
     setActive(isActive);
@@ -27,10 +30,10 @@ export default function PopupImageItem({
     return (
       <ImageWithFallback
         // onClick={() => handleClickImage(imageItem)}
-        image={imageItem}
+        image={image}
         onMouseEnter={() => {
           const timeout = setTimeout(() => {
-            setImageActive(imageItem);
+            setMediaActive(media);
           }, 70);
           hoverTimeoutRef.current = timeout;
         }}
@@ -40,15 +43,15 @@ export default function PopupImageItem({
             hoverTimeoutRef.current = null;
           }
         }}
-        alt={imageItem.alt || ''}
+        alt={image.alt || image.name || ''}
         // sizes="80px"
         unoptimized={true}
         className={
-          'w-full h-full object-contain hover:scale-105 transition-transform duration-300 cursor-pointer'
+          'w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer'
         }
       />
     );
-  }, [imageItem, setImageActive]);
+  }, [media, setMediaActive]);
 
   return (
     <div

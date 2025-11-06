@@ -19,6 +19,7 @@ import ProductDetailContext from '@/contexts/productDetailContext';
 import Head from 'next/head';
 import dayjs from 'dayjs';
 import { ProductImageDetailProvider } from '@/contexts/productDetailCarousel';
+import MediaItem from '@/dtos/Media.dto';
 
 const ProductRating = dynamic(
   () => import('@/components/molecules/product/productRating'),
@@ -60,10 +61,10 @@ const ProductDetailCard = ({
 }: Props) => {
   const [isOpen, setIsOpen] = useState<{
     display: boolean;
-    image: ImageDto | null;
+    media: MediaItem | null;
   }>({
     display: false,
-    image: null,
+    media: null,
   });
   const productSchema = useMemo(() => {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
@@ -131,7 +132,9 @@ const ProductDetailCard = ({
         ) || product?.variants?.[0],
       );
     }
-
+    if (productContext?.setProduct && !productContext.product) {
+      productContext.setProduct(product);
+    }
     const resetItem = () => {
       localStorage.setItem(
         'product_seen',
@@ -161,7 +164,7 @@ const ProductDetailCard = ({
         resetItem();
       }
     }
-  }, [productContext?.variantActive]);
+  }, [productContext?.variantActive, productContext?.product]);
 
   return (
     <>
@@ -223,7 +226,7 @@ const ProductDetailCard = ({
             <PopupImage
               open={isOpen.display}
               setIsOpen={setIsOpen}
-              image={isOpen.image}
+              media={isOpen.media || ({} as MediaItem)}
               product={product}
             />
           </ProductImageDetailProvider>

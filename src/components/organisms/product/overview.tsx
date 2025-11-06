@@ -7,10 +7,11 @@ import { ImageDto } from '@/dtos/Image.dto';
 import { SettingsDto } from '@/dtos/Settings.dto';
 import ProductDetailContext from '@/contexts/productDetailContext';
 import { ProductImageDetailProvider } from '@/contexts/productDetailCarousel';
+import MediaItem from '@/dtos/Media.dto';
 
 type Props = {
   product: ProductDto;
-  setIsOpen?: (item: { display: boolean; image: ImageDto | null }) => void;
+  setIsOpen?: (item: { display: boolean; media: MediaItem | null }) => void;
   productConfigurations?: ProductConfigurationsDto[];
   settings?: SettingsDto[];
   isShouldSetProductActive?: boolean;
