@@ -39,19 +39,14 @@ const ImageWithFallback = ({
   sizes = '(max-width: 768px) 100vw, 33vw',
   onLoadingComplete,
 }: Props) => {
-  const isMobile = useIsMobile();
   const [imgActiveSrc, setImageActiveSrc] = useState<string | StaticImageData>(
-    isMobile
-      ? image?.thumbnail_url || image?.url || noImage
-      : image?.url || noImage,
+    image?.thumbnail_url || image?.url || noImage
   );
   const ref = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     setImageActiveSrc(
-      isMobile
-        ? image?.thumbnail_url || image?.url || noImage
-        : image?.url || noImage,
+      image?.thumbnail_url || image?.url || noImage
     );
   }, [image]);
   const renderImage = () => {

@@ -4,6 +4,7 @@ import { IProductConcentrationGradientDto } from './IProductConcentrationGradien
 import { IProductFragranceRetentionDto } from '@/dtos/IProductFragranceRetention.dto';
 import { IProductBrandDto } from '@/dtos/IProductBrand.dto';
 import { ImageDetailDto } from '@/dtos/ImageDetail.dto';
+import { VideoDetailDto } from '@/dtos/VideoDetail.dto';
 import { ProductPropertyDto } from '@/dtos/ProductProperty.dto';
 import { SlugDto } from '@/dtos/Slug.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
@@ -30,6 +31,7 @@ export class ProductDto extends BaseDto {
   variants?: VariantDto[];
   product_property?: ProductPropertyDto;
   images?: ImageDetailDto[];
+  videos?: VideoDetailDto[];
   slugs?: SlugDto;
   seo?: SeoDto;
   question_answers?: QuestionAnswerDto[];

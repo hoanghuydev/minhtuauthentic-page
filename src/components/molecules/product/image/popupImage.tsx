@@ -11,27 +11,30 @@ import LeftOutlined from '@ant-design/icons/lib/icons/LeftOutlined';
 import RightOutlined from '@ant-design/icons/lib/icons/RightOutlined';
 import PopupSlideContent from '@/components/molecules/product/image/popupSlideContent';
 import { useProductImageDetail } from '@/contexts/productDetailCarousel';
+import MediaItem from '@/dtos/Media.dto';
+import { VideoDetailDto } from '@/dtos/VideoDetail.dto';
+import noImage from '@/static/images/no-image.png';
 
 type Props = {
   open: boolean;
   product: ProductDto;
-  image: ImageDto | null;
-  setIsOpen?: (item: { display: boolean; image: ImageDto | null }) => void;
+  media: MediaItem;
+  setIsOpen?: (item: { display: boolean; media: MediaItem | null }) => void;
 };
-export default function PopupImage({ open, product, image, setIsOpen }: Props) {
-  const { images, imageActive, setImageActive } = useProductImageDetail();
+export default function PopupImage({ open, product, media, setIsOpen }: Props) {
+  const { mediaItems, mediaActive, setMediaActive } = useProductImageDetail();
   const swiperRef = useRef<SwiperClass | null>(null);
   const listImageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (image) {
-      setImageActive(image);
+    if (media) {
+      setMediaActive(media);
     }
-  }, [image]);
+  }, [media]);
 
   useEffect(() => {
     const swiper = swiperRef.current;
     if (swiper) {
-      const index = images.findIndex((item) => item.url === imageActive?.url);
+      const index = mediaItems.findIndex((item) => item.id === mediaActive?.id && item.type === mediaActive?.type);
       const listImage = listImageRef?.current?.querySelector(`[data-index="${index}"]`);
       console.log(listImageRef.current)
       swiper.slideTo(index);
@@ -41,7 +44,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
         block: 'nearest'
       })
     }
-  }, [imageActive]);
+  }, [mediaActive]);
 
   useEffect(() => {
     if (open) {
@@ -57,24 +60,24 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
   const renderImage = useMemo(() => {
     return (
       <div ref={listImageRef} className={'w-max mx-auto flex gap-3 h-full py-3 max-lg:px-3'}>
-        {images.map((imageItem, index) => (
+        {mediaItems.map((mediaItem, index) => (
           <PopupImageItem
             key={index}
-            imageItem={imageItem}
-            setImageActive={setImageActive}
-            isActive={imageItem.id === imageActive?.id}
+            media={mediaItem}
+            setMediaActive={setMediaActive}
+            isActive={mediaItem.id === mediaActive?.id && mediaItem.type === mediaActive?.type}
             index={index}
           />
         ))}
       </div>
     );
-  }, [images, imageActive]);
+  }, [mediaItems, mediaActive]);
 
   const handleClickNavigatorButton = (variant: string) => {
     const swiper = swiperRef.current;
     if (swiper) {
       const currentSlide = swiper.activeIndex;
-      const indexMax = images.length - 1;
+      const indexMax = mediaItems.length - 1;
       if (variant === 'next') {
         swiper.slideTo(currentSlide === indexMax ? 0 : currentSlide + 1);
       } else {
@@ -119,22 +122,22 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
         }}
         onSlideChange={(swiper) => {
           const activeIndex = swiper.activeIndex;
-          if (images[activeIndex]) {
-            setImageActive(images[activeIndex]);
+          if (mediaItems[activeIndex]) {
+            setMediaActive(mediaItems[activeIndex]);
           }
         }}
       >
-        {images.map((image, index) => (
+        {mediaItems.map((mediaItem, index) => (
           <SwiperSlide
-            key={image.url + '_' + index}
+            key={mediaItem.id + '_' + mediaItem.type + '_' + index}
             className="relative flex justify-center items-center h-full w-full select-none"
           >
             <PopupSlideContent
-              image={image}
+              media={mediaItem}
               product={product}
               setIsOpen={setIsOpen}
-              imageIndex={index}
-              totalImages={images.length}
+              mediaIndex={index}
+              totalMedia={mediaItems.length}
               onPrev={() => handleClickNavigatorButton('prev')}
               onNext={() => handleClickNavigatorButton('next')}
             />
@@ -142,13 +145,13 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
         ))}
       </Swiper>
     );
-  }, [images]);
+  }, [mediaItems]);
 
   return (
     <>
       <div
         style={{
-          backgroundImage: `url("${imageActive?.url}")`,
+          backgroundImage: `url("${(mediaActive?.data as ImageDto)?.url || (mediaActive?.data as ImageDto)?.thumbnail_url || (mediaActive?.data as VideoDetailDto)?.video?.thumbnail_url || noImage}")`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
@@ -169,8 +172,8 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
             }
           >
             <div className={'relative h-full max-lg:px-3'}>
-              {images.length > 0 && renderSwiper}
-              {images.length > 0 && (
+              {mediaItems.length > 0 && renderSwiper}
+              {mediaItems.length > 0 && (
                 <>
                   {renderNavigatorButton('prev')}
                   {renderNavigatorButton('next')}
@@ -187,7 +190,7 @@ export default function PopupImage({ open, product, image, setIsOpen }: Props) {
               'w-8 h-8 absolute top-3 right-3 grid place-items-center cursor-pointer bg-white rounded-full'
             }
             onClick={() => {
-              setIsOpen && setIsOpen({ display: false, image: null });
+              setIsOpen && setIsOpen({ display: false, media: null });
             }}
           >
             <Close className={' cursor-pointer w-6 h-6 block'} />
