@@ -40,13 +40,13 @@ const ImageWithFallback = ({
   onLoadingComplete,
 }: Props) => {
   const [imgActiveSrc, setImageActiveSrc] = useState<string | StaticImageData>(
-    image?.thumbnail_url || image?.url || noImage
+     image?.url || image?.thumbnail_url || noImage
   );
   const ref = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     setImageActiveSrc(
-      image?.thumbnail_url || image?.url || noImage
+       image?.url || image?.thumbnail_url || noImage
     );
   }, [image]);
   const renderImage = () => {
