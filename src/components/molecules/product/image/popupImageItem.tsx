@@ -4,6 +4,7 @@ import { ImageDto } from '@/dtos/Image.dto';
 import { useEffect, useMemo, useState, useRef } from 'react';
 import MediaItem from '@/dtos/Media.dto';
 import { VideoDetailDto } from '@/dtos/VideoDetail.dto';
+import { PlayCircleOutlined } from '@ant-design/icons';
 
 type Props = {
   media: MediaItem;
@@ -20,13 +21,39 @@ export default function PopupImageItem({
 }: Props) {
   const [active, setActive] = useState<boolean>(isActive);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const image = media.type === 'image' ? media.data as ImageDto : (media.data as VideoDetailDto).video! as ImageDto;
+  
+  const image = useMemo(() => {
+    return {...media.data} as ImageDto;
+  }, [media]);
 
   useEffect(() => {
     setActive(isActive);
   }, [isActive]);
 
   const renderImage = useMemo(() => {
+    if (media.type === 'video') {
+      return (
+        <div
+          className="w-full h-full bg-white border border-gray-200 flex flex-col items-center justify-center gap-1 hover:scale-105 transition-transform duration-300 cursor-pointer"
+          onMouseEnter={() => {
+            const timeout = setTimeout(() => {
+              setMediaActive(media);
+            }, 70);
+            hoverTimeoutRef.current = timeout;
+          }}
+          onMouseLeave={() => {
+            if (hoverTimeoutRef.current) {
+              clearTimeout(hoverTimeoutRef.current as NodeJS.Timeout);
+              hoverTimeoutRef.current = null;
+            }
+          }}
+        >
+          <PlayCircleOutlined className="text-gray-600 text-base" />
+          <span className="text-[10px] text-gray-600 font-medium">Video</span>
+        </div>
+      );
+    }
+
     return (
       <ImageWithFallback
         // onClick={() => handleClickImage(imageItem)}
@@ -51,7 +78,7 @@ export default function PopupImageItem({
         }
       />
     );
-  }, [media, setMediaActive]);
+  }, [media, setMediaActive, image]);
 
   return (
     <div
