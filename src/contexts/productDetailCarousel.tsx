@@ -40,26 +40,28 @@ export const ProductImageDetailProvider = ({ children }: { children: JSX.Element
       });
     }
     setVideos(listVideo);
+
     
     const combinedMedia: MediaItem[] = [
-      ...listImage.map((img, index) => ({
-        id: img.id,
-        type: 'image' as const,
-        data: img,
-        sort: index
-      })),
       ...listVideo.map((vid, index) => ({
         id: vid.video?.id,
         type: 'video' as const,
         data: vid,
-        sort: listImage.length + index
+        sort: index
+      })),
+      ...listImage.map((img, index) => ({
+        id: img.id,
+        type: 'image' as const,
+        data: img,
+        sort: listVideo.length + index
       }))
     ];
     
     setMediaItems(orderBy(combinedMedia, 'sort'));
     
     if (listImage[0]) {
-      setMediaActive(combinedMedia[0]);
+      const firstImageIndex = listVideo.length;
+      setMediaActive(combinedMedia[firstImageIndex]);
     }
   }, [productContext?.variantActive]);
 

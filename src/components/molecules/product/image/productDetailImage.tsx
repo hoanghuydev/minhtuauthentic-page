@@ -32,21 +32,27 @@ const ProductDetailImage = ({
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const mainSwiper = useRef<SwiperClass | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const handleClickImage = () => {
     setIsInitialLoad(false);
   };
 
   useEffect(() => {
-    if (mainSwiper.current && mediaActive) {
-      const idx = mediaItems.findIndex((item) => item.id === mediaActive.id);
-      if (idx >= 0) mainSwiper.current.slideTo(idx);
+    const videosCount = videos.length;
+    setCurrentIndex(videosCount);
+  }, [mediaItems, videos]);
+
+  useEffect(() => {
+    if (mainSwiper.current && mediaActive && mediaItems.length > 0) {
+      const idx = mediaItems.findIndex((item) => item.id === mediaActive.id && item.type === mediaActive.type);
+      if (idx >= 0) {
+        if (mainSwiper.current) {
+          mainSwiper.current.slideTo(idx, 0);
+        }
+      }
     }
   }, [mediaActive, mediaItems]);
 
-  useEffect(() => {
-    setCurrentIndex(0);
-  }, [mediaItems]);
+
 
   const renderSlideImage = useMemo(() => {
     return (
@@ -58,7 +64,7 @@ const ProductDetailImage = ({
       >
         <SectionSwiper
           classNameContainer={'mt-3'}
-          slidePerViewMobile={4}
+          slidePerViewMobile={5}
           key={JSON.stringify(mediaItems)}
           renderItem={(item) => {
               return (
@@ -146,6 +152,15 @@ const ProductDetailImage = ({
           spaceBetween={5}
           onSwiper={(swiperInstance: SwiperClass) => {
             mainSwiper.current = swiperInstance;
+            // Slide to active media position when swiper is initialized
+            if (mediaActive && mediaItems.length > 0) {
+              const idx = mediaItems.findIndex((item) => item.id === mediaActive.id && item.type === mediaActive.type);
+              if (idx >= 0) {
+                setTimeout(() => {
+                  swiperInstance.slideTo(idx, 0);
+                }, 50);
+              }
+            }
           }}
           classNameLeft={'lg:left-[0px]'}
           classNameRight={'lg:right-[0px]'}

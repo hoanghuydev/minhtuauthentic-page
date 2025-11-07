@@ -41,7 +41,7 @@ export default function PopupSlideContent({
     >
       <div
         ref={imageRef}
-        className="relative h-full select-none isolate pointer-events-auto"
+        className="relative h-full w-full md:w-auto select-none isolate pointer-events-auto"
       >
         {media.type === 'image' ? (
           <ImageWithFallback
