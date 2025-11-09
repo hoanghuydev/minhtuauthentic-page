@@ -107,7 +107,8 @@ export default function CheckoutAddress({
             errors={errors}
             name={'address'}
             type={'text'}
-            placeholder={'Tên đường, số nhà'}
+            label={'Địa chỉ cụ thể'}
+            placeholder={'Nhập tên đường, số nhà'}
             className={'col-span-2'}
           />
         </div>

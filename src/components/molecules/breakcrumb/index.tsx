@@ -8,7 +8,7 @@ import Head from 'next/head';
 type Props = {
   link: string;
   label: string;
-  additions?: { label: string; link: string }[] ;
+  additions?: { label: string; link: string }[];
   current?: { label: string; link: string };
   className?: string;
 };
@@ -17,7 +17,7 @@ export default function BreadcrumbComponent({
   label,
   current,
   className,
-  additions
+  additions,
 }: Props) {
   const [items, setItems] = useState<{ title: ReactNode | string }[]>([
     {
@@ -49,20 +49,17 @@ export default function BreadcrumbComponent({
   useEffect(() => {
     if (current) {
       const _items = [...items];
-      (additions || []).map(breadItem => {
-        if(breadItem.label && breadItem.link) {
+      (additions || []).map((breadItem) => {
+        if (breadItem.label && breadItem.link) {
           _items.push({
             title: (
-              <Link
-                href={breadItem.link}
-                style={{ color:'#323232' }}
-              >
+              <Link href={breadItem.link} style={{ color: '#323232' }}>
                 {breadItem.label}
               </Link>
             ),
-          })
+          });
         }
-      })
+      });
       _items.push({
         title: (
           <Link
@@ -96,15 +93,15 @@ export default function BreadcrumbComponent({
     ];
 
     (additions || []).forEach((item) => {
-      if(item.label && item.link) {
+      if (item.label && item.link) {
         elementList.push({
           '@type': 'ListItem',
           position: elementList.length + 1,
           name: item.label,
           item: `${baseUrl}/${item.link}`,
-        })
+        });
       }
-    })
+    });
 
     if (current) {
       elementList.push({

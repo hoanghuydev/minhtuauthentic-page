@@ -16,6 +16,7 @@ type Props = {
   className?: string;
   prefix?: ReactNode;
   field?: any;
+  label?: string;
   selectOptions?: {
     label: string | ReactNode;
     value: string;
@@ -37,16 +38,22 @@ const RenderField = ({
   radioOptions,
   options,
 }: RenderFieldProps) => {
+  const inputClassName =
+    'w-full h-full bg-transparent border-none outline-none shadow-none ring-0 focus:outline-none focus:border-none focus:ring-0 focus-visible:outline-none focus-visible:border-none focus-visible:ring-0 placeholder:text-gray-300 placeholder:select-none disabled:opacity-80 disabled:cursor-not-allowed disabled:text-gray-500 disabled:placeholder:text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap';
+
   switch (type) {
     case 'password':
       return (
-        <Input
-          type={'password'}
-          placeholder={placeholder}
-          {...field}
-          prefix={prefix}
-          onChange={(e) => onChange(e.target.value)}
-        />
+        <div className="p-2 flex items-center gap-2 min-w-0 border transition-colors border-gray-300 focus-within:border-gray-600 text-base min-h-[40px] rounded-md pl-4">
+          <input
+            type="password"
+            placeholder={placeholder}
+            value={field.value}
+            onChange={(e) => onChange(e.target.value)}
+            className={inputClassName}
+          />
+          {prefix}
+        </div>
       );
     case 'collapse':
       return (
@@ -84,21 +91,28 @@ const RenderField = ({
       );
     case 'textarea':
       return (
-        <TextArea
-          placeholder={placeholder}
-          onChange={(e) => onChange(e.target.value)}
-          style={{ height: 100 }}
-          value={field.value}
-        />
+        <div className="p-2 flex items-center gap-2 min-w-0 border transition-colors border-gray-300 focus-within:border-gray-600 text-base min-h-[100px] rounded-md pl-4">
+          <textarea
+            placeholder={placeholder}
+            onChange={(e) => onChange(e.target.value)}
+            value={field.value}
+            className={inputClassName + ' resize-none'}
+            style={{ height: 100 }}
+          />
+        </div>
       );
     default:
       return (
-        <Input
-          placeholder={placeholder}
-          value={field.value}
-          prefix={prefix}
-          onChange={(e) => onChange(e.target.value)}
-        />
+        <div className="p-2 flex items-center gap-2 min-w-0 border transition-colors border-gray-300 focus-within:border-gray-600 text-base min-h-[40px] rounded-md pl-4">
+          <input
+            type="text"
+            placeholder={placeholder}
+            value={field.value}
+            onChange={(e) => onChange(e.target.value)}
+            className={inputClassName}
+          />
+          {prefix}
+        </div>
       );
   }
 };
@@ -110,34 +124,42 @@ export default function FormControl({
   placeholder,
   prefix,
   className,
+  label,
   selectOptions,
   radioOptions,
   options,
 }: Props) {
   return (
-    <div className={className}>
-      <Controller
-        name={name}
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <RenderField
-            prefix={prefix}
-            placeholder={placeholder}
-            type={type}
-            selectOptions={selectOptions}
-            radioOptions={radioOptions}
-            field={field}
-            options={options}
-            onChange={(value: string) => {
-              field.onChange(value);
-            }}
-          />
-        )}
-      />
-      {errors && errors[name] && errors[name]?.message && (
-        <p className={'ml-2 text-red-400 text-sm'}>{errors[name]?.message}</p>
+    <div className={`flex gap-2 group flex-col ${className || ''}`}>
+      {label && (
+        <label className="flex items-center gap-2 font-medium select-none text-base">
+          {label}
+        </label>
       )}
+      <div className="flex flex-col gap-2">
+        <Controller
+          name={name}
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <RenderField
+              prefix={prefix}
+              placeholder={placeholder}
+              type={type}
+              selectOptions={selectOptions}
+              radioOptions={radioOptions}
+              field={field}
+              options={options}
+              onChange={(value: string) => {
+                field.onChange(value);
+              }}
+            />
+          )}
+        />
+        {errors && errors[name] && errors[name]?.message && (
+          <span className="text-red-500 text-sm">{errors[name]?.message}</span>
+        )}
+      </div>
     </div>
   );
 }
