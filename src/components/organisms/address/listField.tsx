@@ -96,7 +96,8 @@ export default function ListFieldFormAddress({
         errors={errors}
         name={'name'}
         type={'text'}
-        placeholder={'Tên người nhận'}
+        label={'Tên người nhận'}
+        placeholder={'Nhập tên người nhận'}
         className={'col-span-2'}
       />
       <FormControl
@@ -104,14 +105,16 @@ export default function ListFieldFormAddress({
         errors={errors}
         name={'email'}
         type={'text'}
-        placeholder={'Email'}
+        label={'Email'}
+        placeholder={'Nhập email'}
       />
       <FormControl
         control={control}
         errors={errors}
         name={'phone'}
         type={'text'}
-        placeholder={'Số điện thoại'}
+        label={'Số điện thoại'}
+        placeholder={'Nhập số điện thoại'}
       />
       {ready && (
         <>
@@ -130,7 +133,8 @@ export default function ListFieldFormAddress({
             )}
             name={'shipping_city'}
             type={'select'}
-            placeholder={'Tỉnh/ Thành phố'}
+            label={'Tỉnh/ Thành phố'}
+            placeholder={'Chọn tỉnh/ thành phố'}
           />
           <FormControl
             control={control}
@@ -143,7 +147,8 @@ export default function ListFieldFormAddress({
             })}
             name={'shipping_district'}
             type={'select'}
-            placeholder={'Quận/ Huyện'}
+            label={'Quận/ Huyện'}
+            placeholder={'Chọn quận/ huyện'}
           />
           <FormControl
             control={control}
@@ -156,7 +161,8 @@ export default function ListFieldFormAddress({
             })}
             name={'shipping_ward'}
             type={'select'}
-            placeholder={'Phường/ Xã'}
+            label={'Phường/ Xã'}
+            placeholder={'Chọn phường/ xã'}
           />
         </>
       )}

@@ -42,7 +42,7 @@ export default function FormCheckout({
       toast('Giỏ hàng trống', { type: 'error' });
       window.location.href = '/';
     }
-  }, []);
+  }, [orderCtx?.cart]);
 
   return (
     <div className={'flex-1'}>
@@ -107,7 +107,8 @@ export default function FormCheckout({
           errors={errors}
           name={'note'}
           type={'textarea'}
-          placeholder={'Ghi chú'}
+          label={'Ghi chú đơn hàng'}
+          placeholder={'Nhập ghi chú cho đơn hàng (tùy chọn)'}
           className={'col-span-2'}
         />
       </div>
