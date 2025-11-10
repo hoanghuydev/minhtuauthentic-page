@@ -55,7 +55,7 @@ export default function DefaultSeo({ settings, seo }: Props) {
           seo?.description ||
           setting?.value?.page_description ||
           'Minh tu Authentic',
-        images: [
+        images: seo?.images?.length ? seo.images : [
           {
             url:
               seo?.image ||
