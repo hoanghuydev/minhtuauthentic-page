@@ -40,6 +40,12 @@ export type SEOProps = {
   description?: string | null;
   canonical?: string;
   image?: string;
+  images?: Array<{
+    url: string;
+    width?: number;
+    height?: number;
+    alt?: string;
+  }>;
   width?: number;
   height?: number;
   keyword?: string;
