@@ -42,7 +42,7 @@ export default function FormCheckout({
       toast('Giỏ hàng trống', { type: 'error' });
       window.location.href = '/';
     }
-  }, [orderCtx?.cart]);
+  }, []);
 
   return (
     <div className={'flex-1'}>
