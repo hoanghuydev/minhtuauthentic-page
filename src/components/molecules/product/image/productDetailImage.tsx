@@ -89,7 +89,7 @@ const ProductDetailImage = ({
   };
 
   return (
-    <div className={twMerge(containerClassName)} itemScope itemType="http://schema.org/ImageGallery">
+    <div className={twMerge(containerClassName)}>
       <div
         className={`relative ${
           isInitialLoad
@@ -112,8 +112,6 @@ const ProductDetailImage = ({
                     backgroundColor: 'white',
                     position: 'relative',
                   }}
-                  itemScope
-                  itemType="http://schema.org/ImageObject"
                 >
                   <ImageWithFallback
                     image={imageItem}
@@ -129,23 +127,13 @@ const ProductDetailImage = ({
                     loading="eager"
                     alt={`${product.title || product.name} - Hình ảnh chính`}
                     onLoadingComplete={handleMainImageLoad}
-                    itemProp="contentUrl"
                   />
-                  {/* Hidden structured data for SEO */}
-                  <meta itemProp="url" content={imageItem?.url || ''} />
-                  <meta itemProp="width" content={imageItem?.width?.toString() || '800'} />
-                  <meta itemProp="height" content={imageItem?.height?.toString() || '600'} />
-                  <meta itemProp="name" content={`${product.title || product.name} - Hình ảnh sản phẩm`} />
                 </div>
               );
             } else if (mediaItem.type === 'video') {
               const videoItem = mediaItem.data as VideoDetailDto;
               return (
-                <div 
-                  className="product-detail-main-video-wrapper m-auto max-h-full w-full flex overflow-hidden"
-                  itemScope
-                  itemType="http://schema.org/VideoObject"
-                >
+                <div className="product-detail-main-video-wrapper m-auto max-h-full w-full flex overflow-hidden">
                   <YouTubeEmbed 
                     video={videoItem}
                     width="100%"
@@ -153,10 +141,6 @@ const ProductDetailImage = ({
                     className="product-detail-main-video-wrapper m-auto max-h-full lg:max-w-[568px] aspect-square"
                     title={videoItem.video?.name || 'Product video'}
                   />
-                  {/* Hidden structured data for SEO */}
-                  <meta itemProp="name" content={videoItem.video?.name || `${product.title || product.name} - Video sản phẩm`} />
-                  <meta itemProp="description" content={`Video giới thiệu sản phẩm ${product.title || product.name}`} />
-                  <meta itemProp="uploadDate" content={videoItem.video?.created_at ? new Date(videoItem.video.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]} />
                 </div>
               );
             }

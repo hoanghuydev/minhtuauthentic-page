@@ -75,34 +75,11 @@ const ProductDetailCard = ({
         prices.push(v.regular_price);
       }
     });
-
-    const allImages: string[] = [];
-    
-    if (product?.feature_image_detail?.image?.url) {
-      allImages.push(product.feature_image_detail.image.url);
-    }
-    
-    product?.variants?.forEach((variant) => {
-      variant?.images?.forEach((imageItem) => {
-        if (imageItem?.image?.url && !allImages.includes(imageItem.image.url)) {
-          allImages.push(imageItem.image.url);
-        }
-      });
-    });
-
-    if (allImages.length === 0 && defaultVariant?.images) {
-      defaultVariant.images.forEach((imageItem) => {
-        if (imageItem?.image?.url) {
-          allImages.push(imageItem.image.url);
-        }
-      });
-    }
-
     return {
       '@context': 'http://schema.org',
       '@type': 'Product',
       name: product?.name ?? '',
-      image: allImages,
+      image: defaultVariant?.images?.map((image) => image?.image?.url) || [],
       description: product?.seo?.description || '',
       brand: product?.brands?.map((brand) => ({
         '@type': 'Brand',
@@ -187,7 +164,7 @@ const ProductDetailCard = ({
         resetItem();
       }
     }
-  }, [productContext?.variantActive, productContext?.product, product, productContext]);
+  }, [productContext?.variantActive, productContext?.product]);
 
   return (
     <>
