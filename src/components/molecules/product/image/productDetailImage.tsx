@@ -27,7 +27,8 @@ const ProductDetailImage = ({
   containerClassName,
   setIsOpen,
 }: Props) => {
-  const { images, videos, mediaItems, mediaActive, setMediaActive } = useProductImageDetail();
+  const { images, videos, mediaItems, mediaActive, setMediaActive } =
+    useProductImageDetail();
   const [isMainImageLoaded, setIsMainImageLoaded] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const mainSwiper = useRef<SwiperClass | null>(null);
@@ -43,7 +44,9 @@ const ProductDetailImage = ({
 
   useEffect(() => {
     if (mainSwiper.current && mediaActive && mediaItems.length > 0) {
-      const idx = mediaItems.findIndex((item) => item.id === mediaActive.id && item.type === mediaActive.type);
+      const idx = mediaItems.findIndex(
+        (item) => item.id === mediaActive.id && item.type === mediaActive.type,
+      );
       if (idx >= 0) {
         if (mainSwiper.current) {
           mainSwiper.current.slideTo(idx, 0);
@@ -51,8 +54,6 @@ const ProductDetailImage = ({
       }
     }
   }, [mediaActive, mediaItems]);
-
-
 
   const renderSlideImage = useMemo(() => {
     return (
@@ -67,13 +68,13 @@ const ProductDetailImage = ({
           slidePerViewMobile={5}
           key={JSON.stringify(mediaItems)}
           renderItem={(item) => {
-              return (
-                <ItemImageCarousel
-                  media={item as MediaItem}
-                  product={product}
-                  clickAction={handleClickImage}
-                />
-              );
+            return (
+              <ItemImageCarousel
+                media={item as MediaItem}
+                product={product}
+                clickAction={handleClickImage}
+              />
+            );
           }}
           slidesPerView={6}
           spaceBetween={10}
@@ -102,7 +103,7 @@ const ProductDetailImage = ({
         <SectionSwiperItem
           renderItem={(item) => {
             const mediaItem = item as MediaItem;
-            
+
             if (mediaItem.type === 'image') {
               const imageItem = mediaItem.data as ImageDto;
               return (
@@ -119,10 +120,13 @@ const ProductDetailImage = ({
                       'object-contain cursor-pointer bk-product-image select-none lg:max-w-[568px] w-full m-auto',
                     )}
                     onClick={() => {
-                      setIsOpen && setIsOpen({ display: true, media: mediaItem });
+                      setIsOpen &&
+                        setIsOpen({ display: true, media: mediaItem });
                     }}
                     product={product}
-                    unoptimized={true}
+                    sizes="100vw"
+                    quality={100}
+                    unoptimized={false}
                     priority={true}
                     loading="eager"
                     alt={`${product.title || product.name} - Hình ảnh chính`}
@@ -134,7 +138,7 @@ const ProductDetailImage = ({
               const videoItem = mediaItem.data as VideoDetailDto;
               return (
                 <div className="product-detail-main-video-wrapper m-auto max-h-full w-full flex overflow-hidden">
-                  <YouTubeEmbed 
+                  <YouTubeEmbed
                     video={videoItem}
                     width="100%"
                     height="auto"
@@ -154,7 +158,10 @@ const ProductDetailImage = ({
             mainSwiper.current = swiperInstance;
             // Slide to active media position when swiper is initialized
             if (mediaActive && mediaItems.length > 0) {
-              const idx = mediaItems.findIndex((item) => item.id === mediaActive.id && item.type === mediaActive.type);
+              const idx = mediaItems.findIndex(
+                (item) =>
+                  item.id === mediaActive.id && item.type === mediaActive.type,
+              );
               if (idx >= 0) {
                 setTimeout(() => {
                   swiperInstance.slideTo(idx, 0);
