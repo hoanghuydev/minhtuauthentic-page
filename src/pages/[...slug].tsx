@@ -28,8 +28,7 @@ export const getServerSideProps = async (context: any) => {
     description = undefined,
     image = null,
     width = 0,
-    height = 0,
-    productImages: Array<{url: string; width?: number; height?: number; alt?: string}> = [];
+    height = 0;
   const res = await fetch(
     process.env.BE_URL +
       '/api/pages/slug/' +
@@ -77,34 +76,6 @@ export const getServerSideProps = async (context: any) => {
           product?.data?.product?.feature_image_detail?.image?.height || 0;
         description = product?.data?.product?.seo?.description;
         keyword = product?.data?.product?.seo?.keyword;
-        
-        // Collect all product images for better SEO indexing
-        productImages = [];
-        
-        // Add feature image first (highest priority)
-        if (product?.data?.product?.feature_image_detail?.image?.url) {
-          productImages.push({
-            url: product.data.product.feature_image_detail.image.url,
-            width: product.data.product.feature_image_detail.image.width || 800,
-            height: product.data.product.feature_image_detail.image.height || 600,
-            alt: `${product.data.product.name || product.data.product.title} - Hình ảnh chính`
-          });
-        }
-        
-        // Add all variant images
-        product?.data?.product?.variants?.forEach((variant, variantIndex) => {
-          variant?.images?.forEach((imageItem, imageIndex) => {
-            if (imageItem?.image?.url && !productImages.some(img => img.url === imageItem.image?.url)) {
-              productImages.push({
-                url: imageItem.image.url,
-                width: imageItem.image.width || 800,
-                height: imageItem.image.height || 600,
-                alt: `${product?.data?.product?.name || product?.data?.product?.title} - Hình ảnh ${productImages.length + 1}`
-              });
-            }
-          });
-        });
-        
         break;
       case Entity.NEWS:
         let news = data?.data as ResponseSlugPageDto<ResponseNewsDetailPageDto>;
@@ -176,7 +147,6 @@ export const getServerSideProps = async (context: any) => {
       width,
       height,
       image,
-      productImages: data?.data?.model === Entity.PRODUCTS ? productImages : undefined,
     },
   };
 };
@@ -189,7 +159,6 @@ export default function Page({
   width,
   height,
   keyword,
-  productImages,
   settings,
   menu,
   footerContent,
@@ -201,7 +170,6 @@ export default function Page({
   width?: number;
   height?: number;
   keyword?: string;
-  productImages?: Array<{url: string; width?: number; height?: number; alt?: string}>;
 } & ServerSideProps &
   PageSetting) {
   const renderTemplate = () => {
@@ -313,7 +281,6 @@ export default function Page({
           title,
           description,
           image,
-          images: productImages,
           width,
           height,
           keyword,
