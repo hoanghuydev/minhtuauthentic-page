@@ -106,6 +106,8 @@ const ProductDetailImage = ({
 
             if (mediaItem.type === 'image') {
               const imageItem = mediaItem.data as ImageDto;
+              imageItem.width = 1000;
+              imageItem.height = 1000;
               return (
                 <div
                   className="product-detail-main-image-wrapper"
@@ -117,12 +119,8 @@ const ProductDetailImage = ({
                   <ImageWithFallback
                     image={imageItem}
                     className={twMerge(
-                      'object-contain cursor-pointer bk-product-image select-none lg:max-w-[568px] w-full m-auto',
+                      'object-contain bk-product-image select-none lg:max-w-[568px] w-full m-auto',
                     )}
-                    onClick={() => {
-                      setIsOpen &&
-                        setIsOpen({ display: true, media: mediaItem });
-                    }}
                     product={product}
                     sizes="100vw"
                     quality={100}
@@ -131,6 +129,20 @@ const ProductDetailImage = ({
                     loading="eager"
                     alt={`${product.title || product.name} - Hình ảnh chính`}
                     onLoadingComplete={handleMainImageLoad}
+                  />
+                  {/* Overlay với ảnh raw để copy link gốc khi click chuột phải */}
+                  <ImageWithFallback
+                    image={imageItem}
+                    className="absolute top-0 left-0 opacity-0 w-full h-full object-contain cursor-pointer select-none"
+                    product={product}
+                    sizes="100vw"
+                    unoptimized={true}
+                    loading="lazy"
+                    alt={`${product.title || product.name} - No index`}
+                    onClick={() => {
+                      setIsOpen &&
+                        setIsOpen({ display: true, media: mediaItem });
+                    }}
                   />
                 </div>
               );
