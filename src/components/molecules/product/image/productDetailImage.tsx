@@ -138,7 +138,7 @@ const ProductDetailImage = ({
                     sizes="100vw"
                     unoptimized={true}
                     loading="lazy"
-                    alt={`${product.title || product.name} - No index`}
+                    alt={`Overlay image - no index`}
                     onClick={() => {
                       setIsOpen &&
                         setIsOpen({ display: true, media: mediaItem });
