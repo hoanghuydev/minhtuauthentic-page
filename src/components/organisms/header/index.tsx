@@ -35,46 +35,48 @@ const HeaderCart = dynamic(() => import('@/components/icons/header-cart'), {
 type Props = {
   menu?: ResponseMenuDto | undefined;
   settings?: SettingsDto[];
+  headerMarquee?: any[];
 };
-export const Header = ({ menu, settings }: Props) => {
+export const Header = ({ menu, settings, headerMarquee }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useUser();
   const orderCtx = useContext(OrderContext);
   const isDesktop = useIsDesktop();
-  const pageHeader = (settings || []).find(
-    (item) => item?.key && item?.key === SETTING_KEY.GENERAL.PAGE_HEADER.KEY,
+  const marqueeItems = Array.from(
+    { length: 15 },
+    (_, i) => headerMarquee?.[i % headerMarquee?.length],
   );
+  console.log(marqueeItems);
 
   return (
     <>
-      <div
-        className={
-          ' hidden lg:!grid  bg-primaryGrey relative z-[3] grid-cols-3 items-center p-3 h-[50px]'
-        }
-      >
-        {pageHeader?.value && (
-          <>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: pageHeader?.value?.page_title_left || '',
-              }}
-            />
-            <div
-              className={'text-center'}
-              dangerouslySetInnerHTML={{
-                __html: pageHeader?.value?.page_title_center || '',
-              }}
-            />
-            <div
-              className={'text-right'}
-              dangerouslySetInnerHTML={{
-                __html: pageHeader?.value?.page_title_right || '',
-              }}
-            />
-          </>
-        )}
-      </div>
+      {/* Header Marquee */}
+      {headerMarquee && headerMarquee.length > 0 && (
+        <div
+          className={
+            'hidden lg:flex bg-primaryGrey relative z-[3] items-center h-[45px] overflow-hidden'
+          }
+        >
+          <div className="marquee-container w-full">
+            <div className="marquee-content">
+              {/* Render items twice for seamless loop */}
+              {marqueeItems.map((item, index) => (
+                <span key={`marquee-${index}`} className="marquee-item">
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: item.content || '',
+                    }}
+                  />
+                  {index < marqueeItems.length - 1 && (
+                    <span className="mx-4">•</span>
+                  )}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       <header
         id={'header'}
         className={'bg-primary lg:py-[10px] sticky top-0 left-0 z-[20]'}

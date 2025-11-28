@@ -54,6 +54,7 @@ export type PageSetting = {
   footerContent: ResponseFooterDto | undefined;
   settings: SettingsDto[];
   commonSettings?: CommonSettingDto;
+  headerMarquee?: any[];
 };
 export type OptionProps = {
   label: string;

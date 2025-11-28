@@ -21,6 +21,7 @@ export class ResponseHomePageDto {
   };
   bannerUnderCategory?: StaticContentsDto[];
   homeBannerBrand?: StaticContentsDto[];
+  headerMarquee?: StaticContentsDto[];
   settings?: SettingsDto[];
   seo?: SeoDto;
 

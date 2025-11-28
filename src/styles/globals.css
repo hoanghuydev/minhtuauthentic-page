@@ -294,3 +294,31 @@ iframe {
 .slide-popup-event {
   width: 100% !important;
 }
+
+/* Marquee Header */
+.marquee-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.marquee-content {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 40s linear infinite;
+  will-change: transform;
+}
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+}
+@keyframes marquee {
+  0% {
+    transform: translateX(2%);
+  }
+  100% {
+    transform: translateX(-40%);
+  }
+}

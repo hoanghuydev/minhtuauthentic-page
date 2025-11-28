@@ -46,9 +46,9 @@ export const getServerSideProps = async (context: any) => {
     return {
       redirect: {
         destination: '/not-found',
-        permanent: false
-      }
-    }
+        permanent: false,
+      },
+    };
   }
 
   let keyword = undefined;
@@ -124,11 +124,15 @@ export const getServerSideProps = async (context: any) => {
         keyword = keywordEntity?.seo?.keyword;
         break;
       case Entity.STATIC_CONTENTS_ENTITY:
-        let staticContentResponse = (data?.data as ResponseSlugPageDto<ResponseStaticContentDetailDto>).data;
+        let staticContentResponse = (
+          data?.data as ResponseSlugPageDto<ResponseStaticContentDetailDto>
+        ).data;
         title = staticContentResponse?.title;
         break;
       case Entity.PROMOTIONS:
-        let promotionResponse = (data?.data as ResponseSlugPageDto<ResponseCategoryFilterPageDto>).data;
+        let promotionResponse = (
+          data?.data as ResponseSlugPageDto<ResponseCategoryFilterPageDto>
+        ).data;
         title = promotionResponse?.title || 'Khuyến mãi';
         description = 'Danh sách sản phẩm khuyến mãi';
         break;
@@ -162,6 +166,7 @@ export default function Page({
   settings,
   menu,
   footerContent,
+  headerMarquee,
 }: {
   slug: ResponseSlugPageDto<unknown>;
   title?: string | null;
@@ -220,10 +225,13 @@ export default function Page({
             <BreadcrumbComponent
               label={'Tin tức'}
               link={'/tin-tuc'}
-              additions={[{
-                label: _news?.news?.categories_news?.name || "",
-                link: generateSlugToHref(_news?.news?.categories_news?.slugs?.slug)
-                }
+              additions={[
+                {
+                  label: _news?.news?.categories_news?.name || '',
+                  link: generateSlugToHref(
+                    _news?.news?.categories_news?.slugs?.slug,
+                  ),
+                },
               ]}
               current={{
                 label: _news?.news?.name || '',
@@ -241,7 +249,11 @@ export default function Page({
           </>
         );
       case Entity.STATIC_CONTENTS_ENTITY:
-        return <StaticContentTemplate data={slug as ResponseSlugPageDto<ResponseStaticContentDetailDto>} />
+        return (
+          <StaticContentTemplate
+            data={slug as ResponseSlugPageDto<ResponseStaticContentDetailDto>}
+          />
+        );
       default:
         return <NotFoundTemplate />;
     }
@@ -273,7 +285,7 @@ export default function Page({
 
   return (
     <Fragment key={'Slug_' + slug?.slug}>
-      <Header settings={settings} menu={menu} />
+      <Header settings={settings} menu={menu} headerMarquee={headerMarquee} />
       <Layout
         settings={settings}
         menu={menu}

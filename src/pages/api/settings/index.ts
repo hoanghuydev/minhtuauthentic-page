@@ -12,7 +12,7 @@ export default async function handler(
 ) {
   if (req.method === 'GET') {
     try {
-      const [menuResponse, footerResponse, settingsResponse] =
+      const [menuResponse, footerResponse, settingsResponse, homeResponse] =
         await Promise.all([
           fetch(process.env.BE_URL + '/api/pages/menu').then((res) =>
             res.json(),
@@ -21,6 +21,9 @@ export default async function handler(
             res.json(),
           ),
           fetch(process.env.BE_URL + '/api/pages/settings').then((res) =>
+            res.json(),
+          ),
+          fetch(process.env.BE_URL + '/api/pages/home').then((res) =>
             res.json(),
           ),
         ]);
@@ -39,6 +42,7 @@ export default async function handler(
         footerContent: footerResponse?.data || undefined,
         settings: settingsResponse?.data as SettingsDto[],
         commonSettings,
+        headerMarquee: homeResponse?.data?.headerMarquee || [],
       });
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch data' });

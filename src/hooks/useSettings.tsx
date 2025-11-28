@@ -15,6 +15,7 @@ export default function useSettings(): PageSetting {
     footerContent: undefined,
     settings: [],
     commonSettings: undefined,
+    headerMarquee: [],
   });
   useEffect(() => {
     if (data) {

@@ -10,6 +10,7 @@ export default async function getDefaultSeverSide(): Promise<{
   menu: ResponseMenuDto | undefined;
   footerContent: ResponseFooterDto | undefined;
   settings: SettingsDto[];
+  headerMarquee?: any[];
 }> {
   const resMenu: { data: ResponseMenuDto } = await fetch(
     process.env.BE_URL + '/api/pages/menu',
@@ -32,10 +33,18 @@ export default async function getDefaultSeverSide(): Promise<{
     .catch((error) => {
       return null;
     });
+  const resHome: { data: any } = await fetch(
+    process.env.BE_URL + '/api/pages/home',
+  )
+    .then((res) => res.json())
+    .catch((error) => {
+      return null;
+    });
   return {
     menu: resMenu?.data || undefined,
     footerContent: resFooter?.data || undefined,
     settings: resSetting?.data as SettingsDto[],
+    headerMarquee: resHome?.data?.headerMarquee || [],
   };
 }
 

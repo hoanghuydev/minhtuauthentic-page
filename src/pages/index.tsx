@@ -176,7 +176,7 @@ export default function Home({
         ))}
       </Head>
 
-      <Header settings={settings} menu={menu} />
+      <Header settings={settings} menu={menu} headerMarquee={homePage?.headerMarquee} />
 
       <HomeBanner
         setting={settingsHome[SETTING_KEY.BANNER_SECTION.KEY]}
