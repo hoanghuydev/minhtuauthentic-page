@@ -175,6 +175,10 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
             slidePerViewMobile={2}
             spaceBetween={10}
             isUseHeightWrapper={false}
+            auto={{
+              delay: 6000,
+              disableOnInteraction: false,
+            }}
             renderItem={(item: unknown) => {
               const coupon = item as CouponsDto;
               const variant = coupon?.coupon_details?.[0].variant;

@@ -24,7 +24,13 @@ export type SwiperProps = {
   debug?: boolean;
   onLoad?: () => void;
   isMobile?: boolean;
-  auto?: boolean;
+  auto?:
+    | boolean
+    | {
+        delay?: number;
+        disableOnInteraction?: boolean;
+        pauseOnMouseEnter?: boolean;
+      };
   slidePerViewMobile?: number;
   spaceBetweenMobile?: number;
   classNameLeft?: string;
