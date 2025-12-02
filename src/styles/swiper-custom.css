@@ -54,3 +54,726 @@
 .swiper-slide.swiper-slide-visible.swiper-slide-fully-visible.swiper-slide-active {
   z-index: 100;
 }
+
+/* ======================================
+   BANNER SLIDE ANIMATIONS (PowerPoint-like)
+   ====================================== */
+
+/* Base animation wrapper */
+.banner-anim-wrapper {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Animation timing variables */
+:root {
+  --banner-anim-duration: 0.8s;
+  --banner-anim-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --banner-anim-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ==================
+   KEYFRAME DEFINITIONS
+   ================== */
+
+/* Fade In */
+@keyframes bannerFade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Zoom In - Scale from small to normal */
+@keyframes bannerZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Zoom Out - Scale from large to normal */
+@keyframes bannerZoomOut {
+  0% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Slide from Left */
+@keyframes bannerSlideLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide from Right */
+@keyframes bannerSlideRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide from Top */
+@keyframes bannerSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide from Bottom */
+@keyframes bannerSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Rotate In */
+@keyframes bannerRotateIn {
+  0% {
+    opacity: 0;
+    transform: rotate(-15deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* Bounce In */
+@keyframes bannerBounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Flip X (horizontal flip) */
+@keyframes bannerFlipX {
+  0% {
+    opacity: 0;
+    transform: perspective(800px) rotateX(90deg);
+  }
+  40% {
+    transform: perspective(800px) rotateX(-20deg);
+  }
+  60% {
+    opacity: 1;
+    transform: perspective(800px) rotateX(10deg);
+  }
+  80% {
+    transform: perspective(800px) rotateX(-5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(800px) rotateX(0deg);
+  }
+}
+
+/* Flip Y (vertical flip) */
+@keyframes bannerFlipY {
+  0% {
+    opacity: 0;
+    transform: perspective(800px) rotateY(-90deg);
+  }
+  40% {
+    transform: perspective(800px) rotateY(20deg);
+  }
+  60% {
+    opacity: 1;
+    transform: perspective(800px) rotateY(-10deg);
+  }
+  80% {
+    transform: perspective(800px) rotateY(5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(800px) rotateY(0deg);
+  }
+}
+
+/* Scale Up with spring */
+@keyframes bannerScaleUp {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-10deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Blur In */
+@keyframes bannerBlur {
+  0% {
+    opacity: 0;
+    filter: blur(20px);
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
+}
+
+/* Swing In */
+@keyframes bannerSwing {
+  0% {
+    opacity: 0;
+    transform: perspective(500px) rotateY(-60deg) translateZ(-100px);
+  }
+  60% {
+    opacity: 1;
+    transform: perspective(500px) rotateY(10deg) translateZ(0);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(500px) rotateY(0deg) translateZ(0);
+  }
+}
+
+/* ==================
+   STATIC TRANSITIONS (No movement)
+   ================== */
+
+/* Dissolve - pixelate effect */
+@keyframes bannerDissolve {
+  0% {
+    opacity: 0;
+    filter: contrast(1.5) saturate(0);
+  }
+  50% {
+    opacity: 0.7;
+    filter: contrast(1.2) saturate(0.5);
+  }
+  100% {
+    opacity: 1;
+    filter: contrast(1) saturate(1);
+  }
+}
+
+/* Iris - circular reveal from center */
+@keyframes bannerIris {
+  0% {
+    clip-path: circle(0% at 50% 50%);
+    opacity: 1;
+  }
+  100% {
+    clip-path: circle(100% at 50% 50%);
+    opacity: 1;
+  }
+}
+
+/* Wipe from Left */
+@keyframes bannerWipeLeft {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* Wipe from Right */
+@keyframes bannerWipeRight {
+  0% {
+    clip-path: inset(0 0 0 100%);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* Wipe from Top */
+@keyframes bannerWipeUp {
+  0% {
+    clip-path: inset(0 0 100% 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* Wipe from Bottom */
+@keyframes bannerWipeDown {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* Flash - white flash transition */
+@keyframes bannerFlash {
+  0% {
+    opacity: 0;
+    filter: brightness(3);
+  }
+  30% {
+    opacity: 1;
+    filter: brightness(2);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+/* Curtain Horizontal - expand from center horizontally */
+@keyframes bannerCurtainH {
+  0% {
+    clip-path: inset(0 50% 0 50%);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* Curtain Vertical - expand from center vertically */
+@keyframes bannerCurtainV {
+  0% {
+    clip-path: inset(50% 0 50% 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* ==================
+   TILE/GRID ANIMATION KEYFRAMES
+   ================== */
+
+/* Tile fade in */
+@keyframes tileReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Tile flip */
+@keyframes tileFlip {
+  0% {
+    opacity: 0;
+    transform: perspective(400px) rotateY(-90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(400px) rotateY(0deg);
+  }
+}
+
+/* Tile zoom */
+@keyframes tileZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Tile rotate */
+@keyframes tileRotate {
+  0% {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* Blinds horizontal */
+@keyframes blindsH {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* Blinds vertical */
+@keyframes blindsV {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* Checkerboard fade */
+@keyframes checkerFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(45deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* ==================
+   ANIMATION CLASSES (triggered by .swiper-slide-active)
+   ================== */
+
+/* Only apply animations when slide becomes active */
+.swiper-slide-active .banner-anim-wrapper[data-anim='fade'] {
+  animation: bannerFade var(--banner-anim-duration) var(--banner-anim-easing)
+    both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='zoomIn'] {
+  animation: bannerZoomIn var(--banner-anim-duration) var(--banner-anim-easing)
+    both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='zoomOut'] {
+  animation: bannerZoomOut var(--banner-anim-duration) var(--banner-anim-easing)
+    both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='slideLeft'] {
+  animation: bannerSlideLeft var(--banner-anim-duration)
+    var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='slideRight'] {
+  animation: bannerSlideRight var(--banner-anim-duration)
+    var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='slideUp'] {
+  animation: bannerSlideUp var(--banner-anim-duration) var(--banner-anim-easing)
+    both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='slideDown'] {
+  animation: bannerSlideDown var(--banner-anim-duration)
+    var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='rotateIn'] {
+  animation: bannerRotateIn var(--banner-anim-duration)
+    var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='bounceIn'] {
+  animation: bannerBounceIn 1s var(--banner-anim-easing-bounce) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='flipX'] {
+  animation: bannerFlipX 1s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='flipY'] {
+  animation: bannerFlipY 1s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='scaleUp'] {
+  animation: bannerScaleUp var(--banner-anim-duration)
+    var(--banner-anim-easing-bounce) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='blur'] {
+  animation: bannerBlur var(--banner-anim-duration) var(--banner-anim-easing)
+    both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='swing'] {
+  animation: bannerSwing 0.9s var(--banner-anim-easing) both;
+}
+
+/* Static transition animations */
+.swiper-slide-active .banner-anim-wrapper[data-anim='dissolve'] {
+  animation: bannerDissolve 1s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='iris'] {
+  animation: bannerIris 0.9s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='wipeLeft'] {
+  animation: bannerWipeLeft 0.8s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='wipeRight'] {
+  animation: bannerWipeRight 0.8s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='wipeUp'] {
+  animation: bannerWipeUp 0.8s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='wipeDown'] {
+  animation: bannerWipeDown 0.8s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='flash'] {
+  animation: bannerFlash 0.6s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='curtainH'] {
+  animation: bannerCurtainH 0.8s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-anim-wrapper[data-anim='curtainV'] {
+  animation: bannerCurtainV 0.8s var(--banner-anim-easing) both;
+}
+
+/* ==================
+   TILE GRID STYLES
+   ================== */
+
+/* Tile grid container */
+.banner-tile-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Base tile styles */
+.banner-tile {
+  overflow: hidden;
+  opacity: 0;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Tile content positioning */
+.banner-tile-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+/* Tile grid configurations */
+.banner-tile-grid[data-cols='5'] {
+  grid-template-columns: repeat(5, 1fr);
+}
+.banner-tile-grid[data-cols='6'] {
+  grid-template-columns: repeat(6, 1fr);
+}
+.banner-tile-grid[data-rows='4'] {
+  grid-template-rows: repeat(4, 1fr);
+}
+.banner-tile-grid[data-rows='5'] {
+  grid-template-rows: repeat(5, 1fr);
+}
+
+/* Tile animations triggered when parent slide is active */
+.swiper-slide-active .banner-tile-grid[data-anim='tiles'] .banner-tile {
+  animation: tileReveal 0.5s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-tile-grid[data-anim='tilesFlip'] .banner-tile {
+  animation: tileFlip 0.6s var(--banner-anim-easing) both;
+}
+
+.swiper-slide-active .banner-tile-grid[data-anim='tilesZoom'] .banner-tile {
+  animation: tileZoom 0.5s var(--banner-anim-easing-bounce) both;
+}
+
+.swiper-slide-active .banner-tile-grid[data-anim='tilesRotate'] .banner-tile {
+  animation: tileRotate 0.6s var(--banner-anim-easing-bounce) both;
+}
+
+.swiper-slide-active .banner-tile-grid[data-anim='blindsH'] .banner-tile {
+  animation: blindsH 0.5s var(--banner-anim-easing) both;
+  transform-origin: top center;
+}
+
+.swiper-slide-active .banner-tile-grid[data-anim='blindsV'] .banner-tile {
+  animation: blindsV 0.5s var(--banner-anim-easing) both;
+  transform-origin: center left;
+}
+
+.swiper-slide-active .banner-tile-grid[data-anim='checkerboard'] .banner-tile {
+  animation: checkerFade 0.5s var(--banner-anim-easing-bounce) both;
+}
+
+/* Animation delays generated by CSS custom properties */
+.banner-tile {
+  animation-delay: calc(var(--tile-delay, 0) * 0.05s);
+}
+
+/* Initial state for non-active slides (hide until animation starts) */
+.banner-anim-wrapper[data-anim] {
+  opacity: 0;
+}
+
+/* Make sure active slide is visible */
+.swiper-slide-active .banner-anim-wrapper[data-anim] {
+  opacity: 1;
+}
+
+/* Tile wrapper needs to be visible (tiles handle their own opacity) */
+.banner-anim-wrapper[data-anim='tiles'],
+.banner-anim-wrapper[data-anim='tilesFlip'],
+.banner-anim-wrapper[data-anim='tilesZoom'],
+.banner-anim-wrapper[data-anim='tilesRotate'],
+.banner-anim-wrapper[data-anim='blindsH'],
+.banner-anim-wrapper[data-anim='blindsV'],
+.banner-anim-wrapper[data-anim='checkerboard'] {
+  opacity: 1;
+}
+
+/* Hide base content when tile animation is active (tiles overlay it) */
+.swiper-slide-active .banner-anim-wrapper[data-anim='tiles'] .banner-tile-base,
+.swiper-slide-active
+  .banner-anim-wrapper[data-anim='tilesFlip']
+  .banner-tile-base,
+.swiper-slide-active
+  .banner-anim-wrapper[data-anim='tilesZoom']
+  .banner-tile-base,
+.swiper-slide-active
+  .banner-anim-wrapper[data-anim='tilesRotate']
+  .banner-tile-base,
+.swiper-slide-active
+  .banner-anim-wrapper[data-anim='blindsH']
+  .banner-tile-base,
+.swiper-slide-active
+  .banner-anim-wrapper[data-anim='blindsV']
+  .banner-tile-base,
+.swiper-slide-active
+  .banner-anim-wrapper[data-anim='checkerboard']
+  .banner-tile-base {
+  opacity: 0;
+}
+
+/* Mobile optimizations - reduce animation complexity for performance */
+@media (max-width: 1024px) {
+  :root {
+    --banner-anim-duration: 0.6s;
+  }
+
+  /* Simplify 3D transforms on mobile */
+  .swiper-slide-active .banner-anim-wrapper[data-anim='flipX'],
+  .swiper-slide-active .banner-anim-wrapper[data-anim='flipY'],
+  .swiper-slide-active .banner-anim-wrapper[data-anim='swing'] {
+    animation: bannerFade 0.5s var(--banner-anim-easing) both;
+  }
+
+  /* Simplify tile animations on mobile - use fewer tiles */
+  .banner-tile-grid[data-cols='6'] {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .banner-tile-grid[data-rows='4'] {
+    grid-template-rows: repeat(3, 1fr);
+  }
+
+  /* Faster tile animations on mobile */
+  .swiper-slide-active .banner-tile-grid .banner-tile {
+    animation-duration: 0.3s !important;
+  }
+
+  .banner-tile {
+    animation-delay: calc(var(--tile-delay, 0) * 0.03s) !important;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .banner-anim-wrapper[data-anim] {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .banner-tile {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .banner-tile-base {
+    opacity: 1 !important;
+  }
+
+  .banner-tile-grid {
+    display: none !important;
+  }
+}
