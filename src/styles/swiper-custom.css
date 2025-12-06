@@ -66,19 +66,11 @@
   display: block;
 }
 
-/* Animation timing variables - Tăng duration để mượt hơn */
+/* Animation timing variables */
 :root {
-  --banner-anim-duration: 1.2s; /* Tăng từ 0.8s lên 1.2s */
-  --banner-anim-duration-long: 1.5s; /* Cho animation phức tạp */
-  --banner-anim-duration-tile: 0.8s; /* Cho từng tile */
-  /* Easing mượt hơn - ease-out-quart */
-  --banner-anim-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
-  /* Easing cho bounce effect - nhẹ nhàng hơn */
-  --banner-anim-easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  /* Easing cho tile - staggered feel */
-  --banner-anim-easing-tile: cubic-bezier(0.22, 1, 0.36, 1);
-  /* Delay giữa các tile */
-  --tile-stagger-delay: 0.06s; /* Tăng từ 0.05s */
+  --banner-anim-duration: 0.8s;
+  --banner-anim-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --banner-anim-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 /* ==================
@@ -548,18 +540,15 @@
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='bounceIn'] {
-  animation: bannerBounceIn var(--banner-anim-duration-long)
-    var(--banner-anim-easing-bounce) both;
+  animation: bannerBounceIn 1s var(--banner-anim-easing-bounce) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='flipX'] {
-  animation: bannerFlipX var(--banner-anim-duration-long)
-    var(--banner-anim-easing) both;
+  animation: bannerFlipX 1s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='flipY'] {
-  animation: bannerFlipY var(--banner-anim-duration-long)
-    var(--banner-anim-easing) both;
+  animation: bannerFlipY 1s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='scaleUp'] {
@@ -573,53 +562,44 @@
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='swing'] {
-  animation: bannerSwing var(--banner-anim-duration) var(--banner-anim-easing)
-    both;
+  animation: bannerSwing 0.9s var(--banner-anim-easing) both;
 }
 
-/* Static transition animations - Mượt hơn với duration dài hơn */
+/* Static transition animations */
 .swiper-slide-active .banner-anim-wrapper[data-anim='dissolve'] {
-  animation: bannerDissolve var(--banner-anim-duration-long)
-    var(--banner-anim-easing) both;
+  animation: bannerDissolve 1s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='iris'] {
-  animation: bannerIris var(--banner-anim-duration) var(--banner-anim-easing)
-    both;
+  animation: bannerIris 0.9s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='wipeLeft'] {
-  animation: bannerWipeLeft var(--banner-anim-duration)
-    var(--banner-anim-easing) both;
+  animation: bannerWipeLeft 0.8s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='wipeRight'] {
-  animation: bannerWipeRight var(--banner-anim-duration)
-    var(--banner-anim-easing) both;
+  animation: bannerWipeRight 0.8s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='wipeUp'] {
-  animation: bannerWipeUp var(--banner-anim-duration) var(--banner-anim-easing)
-    both;
+  animation: bannerWipeUp 0.8s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='wipeDown'] {
-  animation: bannerWipeDown var(--banner-anim-duration)
-    var(--banner-anim-easing) both;
+  animation: bannerWipeDown 0.8s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='flash'] {
-  animation: bannerFlash 0.8s var(--banner-anim-easing) both;
+  animation: bannerFlash 0.6s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='curtainH'] {
-  animation: bannerCurtainH var(--banner-anim-duration)
-    var(--banner-anim-easing) both;
+  animation: bannerCurtainH 0.8s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-anim-wrapper[data-anim='curtainV'] {
-  animation: bannerCurtainV var(--banner-anim-duration)
-    var(--banner-anim-easing) both;
+  animation: bannerCurtainV 0.8s var(--banner-anim-easing) both;
 }
 
 /* ==================
@@ -666,47 +646,40 @@
   grid-template-rows: repeat(5, 1fr);
 }
 
-/* Tile animations triggered when parent slide is active - Mượt hơn */
+/* Tile animations triggered when parent slide is active */
 .swiper-slide-active .banner-tile-grid[data-anim='tiles'] .banner-tile {
-  animation: tileReveal var(--banner-anim-duration-tile)
-    var(--banner-anim-easing-tile) both;
+  animation: tileReveal 0.5s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-tile-grid[data-anim='tilesFlip'] .banner-tile {
-  animation: tileFlip var(--banner-anim-duration-tile)
-    var(--banner-anim-easing-tile) both;
+  animation: tileFlip 0.6s var(--banner-anim-easing) both;
 }
 
 .swiper-slide-active .banner-tile-grid[data-anim='tilesZoom'] .banner-tile {
-  animation: tileZoom var(--banner-anim-duration-tile)
-    var(--banner-anim-easing-bounce) both;
+  animation: tileZoom 0.5s var(--banner-anim-easing-bounce) both;
 }
 
 .swiper-slide-active .banner-tile-grid[data-anim='tilesRotate'] .banner-tile {
-  animation: tileRotate var(--banner-anim-duration-tile)
-    var(--banner-anim-easing-bounce) both;
+  animation: tileRotate 0.6s var(--banner-anim-easing-bounce) both;
 }
 
 .swiper-slide-active .banner-tile-grid[data-anim='blindsH'] .banner-tile {
-  animation: blindsH var(--banner-anim-duration-tile)
-    var(--banner-anim-easing-tile) both;
+  animation: blindsH 0.5s var(--banner-anim-easing) both;
   transform-origin: top center;
 }
 
 .swiper-slide-active .banner-tile-grid[data-anim='blindsV'] .banner-tile {
-  animation: blindsV var(--banner-anim-duration-tile)
-    var(--banner-anim-easing-tile) both;
+  animation: blindsV 0.5s var(--banner-anim-easing) both;
   transform-origin: center left;
 }
 
 .swiper-slide-active .banner-tile-grid[data-anim='checkerboard'] .banner-tile {
-  animation: checkerFade var(--banner-anim-duration-tile)
-    var(--banner-anim-easing-bounce) both;
+  animation: checkerFade 0.5s var(--banner-anim-easing-bounce) both;
 }
 
-/* Animation delays generated by CSS custom properties - Tăng stagger để mượt hơn */
+/* Animation delays generated by CSS custom properties */
 .banner-tile {
-  animation-delay: calc(var(--tile-delay, 0) * var(--tile-stagger-delay));
+  animation-delay: calc(var(--tile-delay, 0) * 0.05s);
 }
 
 /* Initial state for non-active slides (hide until animation starts) */
@@ -756,18 +729,14 @@
 /* Mobile optimizations - reduce animation complexity for performance */
 @media (max-width: 1024px) {
   :root {
-    --banner-anim-duration: 0.8s;
-    --banner-anim-duration-long: 1s;
-    --banner-anim-duration-tile: 0.5s;
-    --tile-stagger-delay: 0.04s;
+    --banner-anim-duration: 0.6s;
   }
 
   /* Simplify 3D transforms on mobile */
   .swiper-slide-active .banner-anim-wrapper[data-anim='flipX'],
   .swiper-slide-active .banner-anim-wrapper[data-anim='flipY'],
   .swiper-slide-active .banner-anim-wrapper[data-anim='swing'] {
-    animation: bannerFade var(--banner-anim-duration) var(--banner-anim-easing)
-      both;
+    animation: bannerFade 0.5s var(--banner-anim-easing) both;
   }
 
   /* Simplify tile animations on mobile - use fewer tiles */
@@ -776,6 +745,15 @@
   }
   .banner-tile-grid[data-rows='4'] {
     grid-template-rows: repeat(3, 1fr);
+  }
+
+  /* Faster tile animations on mobile */
+  .swiper-slide-active .banner-tile-grid .banner-tile {
+    animation-duration: 0.3s !important;
+  }
+
+  .banner-tile {
+    animation-delay: calc(var(--tile-delay, 0) * 0.03s) !important;
   }
 }
 
