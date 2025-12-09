@@ -21,6 +21,7 @@ type Props = {
   onMouseLeave?: (event: unknown) => void;
   sizes?: string;
   onLoadingComplete?: () => void;
+  style?: React.CSSProperties;
 };
 const ImageWithFallback = ({
   image,
@@ -37,17 +38,16 @@ const ImageWithFallback = ({
   product,
   isUseNativeImage,
   sizes = '(max-width: 768px) 100vw, 33vw',
+  style,
   onLoadingComplete,
 }: Props) => {
   const [imgActiveSrc, setImageActiveSrc] = useState<string | StaticImageData>(
-     image?.url || image?.thumbnail_url || noImage
+    image?.url || image?.thumbnail_url || noImage,
   );
   const ref = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    setImageActiveSrc(
-       image?.url || image?.thumbnail_url || noImage
-    );
+    setImageActiveSrc(image?.url || image?.thumbnail_url || noImage);
   }, [image]);
   const renderImage = () => {
     return (
@@ -72,6 +72,7 @@ const ImageWithFallback = ({
             priority={priority}
             loading={loading}
             quality={quality || 70}
+            style={style}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7u2tBwAFdgImpqLKKAAAAABJRU5ErkJggg=="
             onLoad={() => onLoadingComplete && onLoadingComplete()}
           />
@@ -98,6 +99,7 @@ const ImageWithFallback = ({
             }}
             sizes={sizes}
             loading={loading}
+            style={style}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7u2tBwAFdgImpqLKKAAAAABJRU5ErkJggg=="
             onLoad={() => onLoadingComplete && onLoadingComplete()}
           />
@@ -121,6 +123,7 @@ const ImageWithFallback = ({
         width={image?.width || 0}
         height={image?.height || 0}
         className={'select-none'}
+        style={style}
         onLoad={() => onLoadingComplete && onLoadingComplete()}
       />
     );
