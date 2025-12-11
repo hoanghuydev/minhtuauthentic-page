@@ -86,8 +86,14 @@ const MenuPopup = ({
         return <MenuBrand brands={(data?.data as BrandDto[]) || []} />;
       },
       [POPUP_TYPE.NEWS]: () => {
-        return <MenuNews newsData={data?.data as { news: NewsDto[]; categoryNews: CategoryDto[] }} />;
-      }
+        return (
+          <MenuNews
+            newsData={
+              data?.data as { news: NewsDto[]; categoryNews: CategoryDto[] }
+            }
+          />
+        );
+      },
     };
     return obj[data.type || '']();
   };
@@ -111,7 +117,7 @@ const MenuPopup = ({
           )}
           <div
             className={twMerge(
-              ' max-lg:hidden h-full lg:w-full bg-white p-4 pl-4 overflow-hidden flex',
+              ' max-lg:hidden h-full lg:w-full bg-white p-4 pl-4 overflow-hidden flex z-[1000]',
               isOpenMenu ? 'rounded-r-[10px]' : 'shadow-custom rounded-[10px] ',
             )}
           >

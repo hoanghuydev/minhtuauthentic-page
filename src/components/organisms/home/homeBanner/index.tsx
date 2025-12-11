@@ -27,7 +27,7 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
         >
           {/* Desktop: Menu overlay + Full banner */}
           <div className={'container m-auto hidden lg:!block'}>
-            <div className={'absolute top-3 z-[3] m-auto'}>
+            <div className={'absolute top-3 z-[15] m-auto'}>
               <div className={'container m-auto relative'}>
                 {menu && <MenuWrapper menu={menu} className={'w-[220px] '} />}
               </div>
@@ -55,7 +55,9 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
           {/* Desktop Layout */}
           <div className="hidden lg:!flex w-full gap-2 relative">
             {menu && (
-              <MenuWrapper menu={menu} className={'w-[220px] flex-shrink-0'} />
+              <div className="relative z-[15] flex-shrink-0">
+                <MenuWrapper menu={menu} className={'w-[220px]'} />
+              </div>
             )}
             <div className={'min-h-[140px] flex-grow overflow-hidden'}>
               <Banners
