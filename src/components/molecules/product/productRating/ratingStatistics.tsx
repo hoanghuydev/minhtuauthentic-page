@@ -2,6 +2,8 @@ import RatingDto from '@/dtos/Rating.dto';
 import { Button } from 'antd/es';
 import { useMemo } from 'react';
 import StaticStarRating from '@/components/atoms/product/staticStarRating';
+import Image from 'next/image';
+import rateCharacterImg from '@/static/images/rate_character.png';
 
 type Props = {
   ratings: RatingDto[];
@@ -51,6 +53,15 @@ export default function RatingStatistics({ ratings, onWriteReview }: Props) {
     return (
       <div className="bg-white rounded-2xl p-6 text-center">
         <div className="mb-4">
+          <div className="flex justify-center mb-4">
+            <Image
+              src={rateCharacterImg}
+              alt="Rate Character"
+              width={80}
+              height={80}
+              className="object-contain"
+            />
+          </div>
           <p className="text-lg font-semibold text-gray-600 mb-2">
             Hiện chưa có đánh giá nào.
           </p>
@@ -82,11 +93,14 @@ export default function RatingStatistics({ ratings, onWriteReview }: Props) {
               {totalRatings} lượt đánh giá
             </div>
           </div>
-          <Button type="primary" className="bg-primary p-6 text-lg" onClick={onWriteReview}>
+          <Button
+            type="primary"
+            className="bg-primary p-6 text-lg"
+            onClick={onWriteReview}
+          >
             Viết đánh giá
           </Button>
         </div>
-        
 
         {/* Biểu đồ phân bố sao */}
         <div className="w-full md:flex-1 md:w-auto">
@@ -96,7 +110,10 @@ export default function RatingStatistics({ ratings, onWriteReview }: Props) {
               totalRatings > 0 ? (count / totalRatings) * 100 : 0;
 
             return (
-              <div key={star} className="flex items-center gap-1 justify-center">
+              <div
+                key={star}
+                className="flex items-center gap-1 justify-center"
+              >
                 <span className="text-sm w-3">{star}</span>
                 <span className="text-yellow-400">★</span>
                 <div className="flex-1 max-w-[60%] md:max-w-[70%] h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -115,7 +132,6 @@ export default function RatingStatistics({ ratings, onWriteReview }: Props) {
       </div>
 
       {/* Nút viết đánh giá */}
-      
     </div>
   );
 }

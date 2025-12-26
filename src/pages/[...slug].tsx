@@ -53,6 +53,26 @@ export const getServerSideProps = async (context: any) => {
 
   let keyword = undefined;
 
+  // Build canonical URL with query parameters
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL + '/' + (slug as string[]).join('/');
+  const queryParams = new URLSearchParams();
+
+  // Preserve important query parameters for category/filter pages
+  Object.keys(context.query).forEach((key) => {
+    if (key !== 'slug' && context.query[key]) {
+      // Only include meaningful query parameters (not empty strings)
+      if (typeof context.query[key] === 'string' && context.query[key].trim()) {
+        queryParams.set(key, context.query[key]);
+      } else if (Array.isArray(context.query[key])) {
+        queryParams.set(key, context.query[key].join(','));
+      }
+    }
+  });
+
+  const canonical =
+    baseUrl + (queryParams.toString() ? '?' + queryParams.toString() : '');
+
   if (
     data?.data?.model === Entity.PRODUCTS ||
     data?.data?.model === Entity.CATEGORIES ||
@@ -151,6 +171,8 @@ export const getServerSideProps = async (context: any) => {
       width,
       height,
       image,
+      keyword,
+      canonical,
     },
   };
 };
@@ -163,6 +185,7 @@ export default function Page({
   width,
   height,
   keyword,
+  canonical,
   settings,
   menu,
   footerContent,
@@ -175,6 +198,7 @@ export default function Page({
   width?: number;
   height?: number;
   keyword?: string;
+  canonical?: string;
 } & ServerSideProps &
   PageSetting) {
   const renderTemplate = () => {
@@ -296,7 +320,8 @@ export default function Page({
           width,
           height,
           keyword,
-          canonical: process.env.NEXT_PUBLIC_APP_URL + '/' + slug?.slug,
+          canonical:
+            canonical || process.env.NEXT_PUBLIC_APP_URL + '/' + slug?.slug,
         }}
       >
         {renderTemplate()}

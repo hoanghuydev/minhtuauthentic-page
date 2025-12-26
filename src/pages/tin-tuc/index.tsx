@@ -22,9 +22,11 @@ export const getServerSideProps = async (context: any) => {
   )
     .then((res) => res.json())
     .catch((err) => null);
+  const canonical = process.env.NEXT_PUBLIC_APP_URL + '/tin-tuc';
   return {
     props: {
       news: rsNews?.data,
+      canonical,
     },
   };
 };
@@ -34,14 +36,22 @@ export default function News({
   footerContent,
   news,
   settings,
+  canonical,
 }: {
   news: ResponseNewsPageDto;
+  canonical: string;
 } & PageSetting) {
   const isMobile = useIsMobile();
   return (
     <>
       <Header settings={settings} menu={menu} />
-      <Layout settings={settings} menu={menu}>
+      <Layout
+        settings={settings}
+        menu={menu}
+        seo={{
+          canonical,
+        }}
+      >
         <BreadcrumbComponent
           label={'Tin tức'}
           link={'/tin-tuc'}

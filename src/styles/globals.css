@@ -322,3 +322,15 @@ iframe {
     transform: translateX(-40%);
   }
 }
+
+a:hover:not(:has(*)) {
+  color: #0066cc !important;
+}
+
+a:hover {
+  color: #0066cc !important;
+}
+
+a:hover:has(*) {
+  color: inherit !important;
+}

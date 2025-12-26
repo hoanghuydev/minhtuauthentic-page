@@ -93,11 +93,11 @@ export default function NewsTemplate({
                 'w-full rounded-[10px] overflow-hidden relative mx-auto p-3'
               }
             >
-              <h3
+              <h2
                 className={'text-3xl text-primary font-[700] lg:font-bold mb-3'}
               >
                 Bài viết gần đây
-              </h3>
+              </h2>
               <div>
                 <NewsSmallList news={newest} />
               </div>
