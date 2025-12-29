@@ -25,24 +25,8 @@ export const getServerSideProps = async (context: any) => {
     ? await productRes.json()
     : null;
 
-  // Build canonical URL with query parameters
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL + '/san-pham';
-  const queryParams = new URLSearchParams();
-
-  // Preserve important query parameters for product search/filter pages
-  Object.keys(context.query).forEach((key) => {
-    if (context.query[key]) {
-      // Only include meaningful query parameters (not empty strings)
-      if (typeof context.query[key] === 'string' && context.query[key].trim()) {
-        queryParams.set(key, context.query[key]);
-      } else if (Array.isArray(context.query[key])) {
-        queryParams.set(key, context.query[key].join(','));
-      }
-    }
-  });
-
-  const canonical =
-    baseUrl + (queryParams.toString() ? '?' + queryParams.toString() : '');
+  // Build canonical URL without query parameters
+  const canonical = process.env.NEXT_PUBLIC_APP_URL + '/san-pham';
 
   return {
     props: {
