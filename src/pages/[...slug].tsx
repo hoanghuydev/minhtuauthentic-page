@@ -53,25 +53,8 @@ export const getServerSideProps = async (context: any) => {
 
   let keyword = undefined;
 
-  // Build canonical URL with query parameters
-  const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL + '/' + (slug as string[]).join('/');
-  const queryParams = new URLSearchParams();
-
-  // Preserve important query parameters for category/filter pages
-  Object.keys(context.query).forEach((key) => {
-    if (key !== 'slug' && context.query[key]) {
-      // Only include meaningful query parameters (not empty strings)
-      if (typeof context.query[key] === 'string' && context.query[key].trim()) {
-        queryParams.set(key, context.query[key]);
-      } else if (Array.isArray(context.query[key])) {
-        queryParams.set(key, context.query[key].join(','));
-      }
-    }
-  });
-
   const canonical =
-    baseUrl + (queryParams.toString() ? '?' + queryParams.toString() : '');
+    process.env.NEXT_PUBLIC_APP_URL + '/' + (slug as string[]).join('/');
 
   if (
     data?.data?.model === Entity.PRODUCTS ||
@@ -320,8 +303,7 @@ export default function Page({
           width,
           height,
           keyword,
-          canonical:
-            canonical || process.env.NEXT_PUBLIC_APP_URL + '/' + slug?.slug,
+          canonical,
         }}
       >
         {renderTemplate()}
