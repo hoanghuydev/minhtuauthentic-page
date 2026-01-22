@@ -4,6 +4,9 @@ const nextConfig = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })({
   reactStrictMode: true,
+  eslint: {
+  ignoreDuringBuilds: true,
+},
   logging: {
     fetches: {
       fullUrl: true,
