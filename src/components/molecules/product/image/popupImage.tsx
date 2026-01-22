@@ -36,7 +36,6 @@ export default function PopupImage({ open, product, media, setIsOpen }: Props) {
     if (swiper) {
       const index = mediaItems.findIndex((item) => item.id === mediaActive?.id && item.type === mediaActive?.type);
       const listImage = listImageRef?.current?.querySelector(`[data-index="${index}"]`);
-      console.log(listImageRef.current)
       swiper.slideTo(index);
       listImage?.scrollIntoView({
         behavior: 'smooth',

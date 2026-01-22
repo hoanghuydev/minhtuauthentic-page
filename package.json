@@ -23,6 +23,7 @@
     "crypto": "^1.0.1",
     "dayjs": "^1.11.13",
     "flipdown": "^0.3.2",
+    "framer-motion": "^12.23.26",
     "glob": "^13.0.0",
     "jsonwebtoken": "^9.0.2",
     "jws": "^4.0.1",
