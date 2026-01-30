@@ -1,12 +1,8 @@
 import withBundleAnalyzer from '@next/bundle-analyzer';
-import withLess from 'next-with-less';
 const nextConfig = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })({
   reactStrictMode: true,
-  eslint: {
-  ignoreDuringBuilds: true,
-},
   logging: {
     fetches: {
       fullUrl: true,
@@ -44,6 +40,7 @@ const nextConfig = withBundleAnalyzer({
   webpack: (config) => {
     return config;
   },
+  turbopack: {},
 });
 
 export default nextConfig;
