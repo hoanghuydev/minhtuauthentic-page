@@ -47,6 +47,20 @@ const CustomerService = dynamic(
   },
 );
 
+const EventButton = dynamic(
+  () => import('@/components/organisms/EventButton'),
+  {
+    ssr: false,
+  },
+);
+
+const PopupEvent = dynamic(
+  () => import('@/components/molecules/event/popup-event'),
+  {
+    ssr: false,
+  },
+);
+
 const LayoutMenu = dynamic(
   () => import('@/components/organisms/layout/LayoutMenu'),
   {
@@ -70,6 +84,18 @@ export default function Layout({
 }: Props) {
   const isDesktop = useIsDesktop();
   const isMobile = useIsMobile();
+  const [hasActiveEvents, setHasActiveEvents] = useState(false);
+  const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
+  const [eventButtonKey, setEventButtonKey] = useState(0);
+
+  const handleEventButtonClick = () => {
+    setIsEventPopupOpen(true);
+  };
+
+  const handleNewBannersDetected = () => {
+    // Force re-render event button when new banners are detected
+    setEventButtonKey(prev => prev + 1);
+  };
   return (
     <>
       <DefaultSeo settings={settings} seo={seo} />
@@ -84,8 +110,22 @@ export default function Layout({
         {isDesktop && menu && <LayoutMenu menu={menu} />}
       </div>
       {isMobile && menu && <NavMenu menu={menu} settings={settings} />}
-      <Widget />
+      <Widget 
+        hasActiveEvents={hasActiveEvents} 
+        onEventClick={handleEventButtonClick}
+      />
       {isDesktop && !isMobile && <CustomerService />}
+      <EventButton 
+        key={eventButtonKey}
+        hasActiveEvents={hasActiveEvents} 
+        onClick={handleEventButtonClick}
+      />
+      <PopupEvent 
+        externalOpen={isEventPopupOpen}
+        onOpenChange={setIsEventPopupOpen}
+        onBannersLoaded={setHasActiveEvents}
+        onNewBannersDetected={handleNewBannersDetected}
+      />
       <MenuFooter isFixed={true} />
       <PopupProduct />
       {isMobile && (

@@ -34,6 +34,9 @@ export default async function handler(
           case SETTING_KEY.GENERAL.PRIMARY_COLOR.KEY:
             commonSettings.primaryColor = setting.value?.backgroundColor;
             break;
+          case SETTING_KEY.GENERAL.EVENT_BUTTON_TITLE.KEY:
+            commonSettings.eventButtonTitle = setting.value?.title;
+            break;
         }
       });
 

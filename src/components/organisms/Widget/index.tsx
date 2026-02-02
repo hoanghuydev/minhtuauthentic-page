@@ -7,9 +7,14 @@ import HotProgramsList from './HotProgramsList';
 import supportMenu from '@/static/images/support_menu_icon.png';
 import FireFlame from '@/components/icons/fire-flame';
 
-type WidgetType = 'socials' | 'hotPrograms' | null;
+type WidgetType = 'socials' | 'hotPrograms' | 'event' | null;
 
-export default function Widget() {
+interface WidgetProps {
+  hasActiveEvents?: boolean;
+  onEventClick?: () => void;
+}
+
+export default function Widget({ hasActiveEvents = false, onEventClick }: WidgetProps) {
   const isMobile = useIsMobile();
   const [activeWidget, setActiveWidget] = useState<WidgetType>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -35,7 +40,12 @@ export default function Widget() {
   };
 
   const toggleWidget = (widget: WidgetType) => {
-    setActiveWidget(activeWidget === widget ? null : widget);
+    if (widget === 'event' && onEventClick) {
+      onEventClick();
+      setActiveWidget(null);
+    } else {
+      setActiveWidget(activeWidget === widget ? null : widget);
+    }
   };
 
   return (
@@ -56,6 +66,13 @@ export default function Widget() {
         {activeWidget === 'hotPrograms' && <HotProgramsList />}
 
         {activeWidget === 'socials' && <SocialsList />}
+
+        {isMobile && hasActiveEvents && (
+          <EventButton
+            isActive={activeWidget === 'event'}
+            onClick={() => toggleWidget('event')}
+          />
+        )}
 
         {isMobile && (
           <HotProgramsButton
@@ -101,6 +118,36 @@ export default function Widget() {
         )}
       </div>
     </>
+  );
+}
+
+function EventButton({
+  isActive,
+  onClick,
+}: {
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="relative w-[48px] h-[48px] bg-transparent select-none overflow-visible rounded-full flex items-center justify-center"
+      aria-label="Sự kiện"
+    >
+      <span
+        className="
+          absolute z-0
+          inset-[5px]
+          rounded-full bg-purple-500/40
+          animate-[ping_1.1s_cubic-bezier(0.8,0,0.8,1)_infinite]
+          pointer-events-none
+        "
+      />
+
+      <div className="relative w-[48px] h-[48px] bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex flex-col items-center justify-center text-white shadow-lg">
+        <span className="text-[9px] font-bold leading-none">EVENT</span>
+      </div>
+    </button>
   );
 }
 

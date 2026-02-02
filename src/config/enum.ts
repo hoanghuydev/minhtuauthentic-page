@@ -116,6 +116,10 @@ export const SETTING_KEY = {
       KEY: 'logo',
       LABEL: 'Logo',
     },
+    EVENT_BUTTON_TITLE: {
+      KEY: 'event_button_title',
+      LABEL: 'Tiêu đề nút sự kiện',
+    },
   },
   BANNER_SECTION: {
     KEY: 'banner_section',

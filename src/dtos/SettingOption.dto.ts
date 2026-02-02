@@ -4,6 +4,7 @@ import { ImageDetailDto } from '@/dtos/ImageDetail.dto';
 export class SettingOptionDto {
   backgroundColor?: string;
   content?: string;
+  title?: string;
   page_description?: string;
   page_title?: string;
   page_title_left?: string;

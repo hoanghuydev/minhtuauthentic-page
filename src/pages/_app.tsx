@@ -15,7 +15,6 @@ import { Nunito_Sans } from 'next/font/google';
 import useSettings from '@/hooks/useSettings';
 import { SearchProvider } from '@/contexts/searchContext';
 import ScrollToTop from '@/components/atoms/ScrollToTop';
-import PopupEvent from '@/components/molecules/event/popup-event';
 import CodeInjection from '@/components/molecules/CodeInjection';
 import { getCodeInjectionData } from '@/utils/codeInjection';
 import { CodeInjectionDto } from '@/dtos/codeInjection.dto';
@@ -51,7 +50,6 @@ function MyApp({ Component, pageProps, codeInjectionHeader, codeInjectionFooter 
             <ScrollToTop />
             <Component className={nunitoSans.className} {..._pageProps} />
             <ToastContainer />
-            <PopupEvent />
             <CodeInjection type="footer" data={codeInjectionFooter} />
           </SearchProvider>
         </OrderProvider>

@@ -8,7 +8,14 @@ import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { twMerge } from 'tailwind-merge';
 import { Navigation, Pagination } from 'swiper/modules';
 
-export default function PopupEvent () {
+interface PopupEventProps {
+  externalOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  onBannersLoaded?: (hasBanners: boolean) => void;
+  onNewBannersDetected?: () => void;
+}
+
+export default function PopupEvent ({ externalOpen, onOpenChange, onBannersLoaded, onNewBannersDetected }: PopupEventProps = {}) {
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setOpen] = useState(false)
   const [banners, setBanners] = useState<StaticContentsDto[]>([])
@@ -18,6 +25,7 @@ export default function PopupEvent () {
   const [duration, setDuration] = useState(15000);
   const timer = useRef<NodeJS.Timeout | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
+  const autoOpenTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -26,36 +34,83 @@ export default function PopupEvent () {
   useEffect(() => {
     if (isClient) {
       const seenBanners: number[] = (JSON.parse(localStorage.getItem('seenBanners') || '[]')) as number[];
-      const searchParams = new URLSearchParams();
-      for(let id of seenBanners) {
-        searchParams.append("ignoreIds[]", id.toString());
-      }
-      fetch(`/api/static-contents/popup-event?${searchParams}`)
+      const detectedBanners: number[] = (JSON.parse(localStorage.getItem('detectedBanners') || '[]')) as number[];
+      
+      // Fetch all active popups (no filtering)
+      fetch(`/api/static-contents/popup-event`)
         .then(res => res.json())
         .then(data => {
-          setBanners(data.data || [])
-          setDuration((data?.data?.[0]?.properties?.duration|| 15) * 1000)
-          if (data.data.length > 0) {
-            setTimeout(() => {
-              setOpen(true)
-            }, 6000)
+          const allBanners = data.data || [];
+          setBanners(allBanners)
+          setDuration((allBanners?.[0]?.properties?.duration|| 15) * 1000)
+          const hasBanners = allBanners.length > 0;
+          
+          if (onBannersLoaded) {
+            onBannersLoaded(hasBanners);
+          }
+          
+          // Check if there are new banners (never detected before)
+          if (hasBanners) {
+            const currentBannerIds = allBanners.map((b: StaticContentsDto) => b.id);
+            const hasNewBanners = currentBannerIds.some((id: number) => !detectedBanners.includes(id));
+            
+            if (hasNewBanners && onNewBannersDetected) {
+              // Save detected banners
+              localStorage.setItem('detectedBanners', JSON.stringify(currentBannerIds));
+              onNewBannersDetected();
+            } else if (!hasNewBanners && detectedBanners.length === 0) {
+              // First time detection
+              localStorage.setItem('detectedBanners', JSON.stringify(currentBannerIds));
+            }
+            
+            // Auto-open only if there are unseen banners
+            const hasUnseenBanners = currentBannerIds.some((id: number) => !seenBanners.includes(id));
+            if (hasUnseenBanners && externalOpen === undefined) {
+              autoOpenTimer.current = setTimeout(() => {
+                setOpen(true)
+              }, 6000)
+            }
           }
         })
         .catch(() => setOpen(false)) 
     }
-  }, [isClient])
+    return () => {
+      if (autoOpenTimer.current) {
+        clearTimeout(autoOpenTimer.current);
+      }
+    }
+  }, [isClient, onBannersLoaded, onNewBannersDetected])
 
   useEffect(() => {
-    if (!isClient) return;
+    if (externalOpen !== undefined) {
+      setOpen(externalOpen);
+      if (externalOpen && autoOpenTimer.current) {
+        clearTimeout(autoOpenTimer.current);
+      }
+    }
+  }, [externalOpen]);
+
+  useEffect(() => {
+    if (!isClient || !isOpen) return;
     if(timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
-      setOpen(false)
+      handleClose();
     }, duration);
-  }, [duration])
+    return () => {
+      if(timer.current) clearTimeout(timer.current);
+    }
+  }, [duration, isOpen, isClient])
+
+  const handleClose = () => {
+    setOpen(false);
+    if (onOpenChange) {
+      onOpenChange(false);
+    }
+  }
 
   const clickOutsideAction: MouseEventHandler<HTMLDivElement> = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if(contentRef.current && !contentRef.current.contains(event.target as Node)) {
-      setOpen(false)
+      handleClose();
     }
   }
 
@@ -74,7 +129,7 @@ export default function PopupEvent () {
         ref={contentRef}
         className='relative flex-col p-2 max-w-sm md:max-w-xl min-w-[300px]'
       >
-        <div className="flex flex-row absolute -top-8 right-0 cursor-pointer items-center p-2 mr-2 bg-red-600" onClick={() => setOpen(false)}>
+        <div className="flex flex-row absolute -top-8 right-0 cursor-pointer items-center p-2 mr-2 bg-red-600" onClick={handleClose}>
           <Close className='w-6 text-white'/>
           <div className='text-white'>close</div>
         </div>
