@@ -22,22 +22,22 @@ const NotFoundTemplate = ({
   const router = useRouter();
   const [countdown, setCountdown] = useState(countdownSeconds);
 
-  useEffect(() => {
-    if (!showCountdown) return;
+  // useEffect(() => {
+  //   if (!showCountdown) return;
 
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          router.push(redirectPath);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  //   const timer = setInterval(() => {
+  //     setCountdown((prev) => {
+  //       if (prev <= 1) {
+  //         clearInterval(timer);
+  //         router.push(redirectPath);
+  //         return 0;
+  //       }
+  //       return prev - 1;
+  //     });
+  //   }, 1000);
 
-    return () => clearInterval(timer);
-  }, [router, redirectPath, showCountdown]);
+  //   return () => clearInterval(timer);
+  // }, [router, redirectPath, showCountdown]);
 
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
