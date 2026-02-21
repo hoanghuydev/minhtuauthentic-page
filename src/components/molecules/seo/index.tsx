@@ -22,12 +22,15 @@ export default function DefaultSeo({ settings, seo }: Props) {
   // Check if current route should use base canonical URL
   const useBaseCanonical = shouldUseBaseCanonical(router.pathname);
 
+  // Get pathname without query parameters for canonical URL
+  const pathWithoutQuery = router.asPath.split('?')[0].split('#')[0];
+
   // Determine canonical URL
   const canonicalUrl =
     seo?.canonical ||
     (useBaseCanonical
       ? process.env.NEXT_PUBLIC_APP_URL
-      : process.env.NEXT_PUBLIC_APP_URL + router.asPath);
+      : process.env.NEXT_PUBLIC_APP_URL + pathWithoutQuery);
 
   return (
     <NextSeo

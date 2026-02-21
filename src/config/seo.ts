@@ -31,6 +31,7 @@ export const NO_INDEX_ROUTES: string[] = [
 export const BASE_CANONICAL_ROUTES: string[] = [
   // Thêm các route cần canonical URL là URL gốc ở đây
   // Ví dụ: các trang chiến dịch tạm thời, trang không cần coi là nội dung riêng biệt
+  '/', // Homepage - không bao gồm query params trong canonical
   '/gio-hang/thanh-cong',
 ];
 
