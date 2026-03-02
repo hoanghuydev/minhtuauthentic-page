@@ -15,7 +15,7 @@ const schema = yup
   })
   .required();
 export default function FormForgetPassword() {
-  const { handleReCaptchaVerify } = useGoogleToken('minhtuforget');
+  // const { handleReCaptchaVerify } = useGoogleToken('minhtuforget');
   const router = useRouter();
   const {
     handleSubmit,
@@ -44,10 +44,10 @@ export default function FormForgetPassword() {
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
-        const token = await handleReCaptchaVerify();
+        // const token = await handleReCaptchaVerify();
         fetch('/api/user/reset-password', {
           method: 'POST',
-          body: JSON.stringify({ ...data, token }),
+          body: JSON.stringify({ ...data }),
         })
           .then((rs) => rs.json())
           .then((data) => {

@@ -8,11 +8,11 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     const url = `${process.env.BE_URL}/api/pages/customers/register`;
-    // const result: boolean = await validateGoogleRecaptcha(req.body);
-    // if (!result) {
-    //   res.status(400).json({ message: 'Invalid reCAPTCHA' });
-    //   return;
-    // }
+    const result: boolean = await validateGoogleRecaptcha(req.body);
+    if (!result) {
+      res.status(400).json({ message: 'Invalid reCAPTCHA' });
+      return;
+    }
     await fetch(url, {
       method: 'POST',
       body: req.body,
