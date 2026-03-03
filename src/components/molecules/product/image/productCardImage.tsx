@@ -8,10 +8,12 @@ const ProductCardImage = ({
   variant,
   className,
   product,
+  unoptimized = true,
 }: {
   variant: VariantDto;
   product: ProductDto;
   className?: string;
+  unoptimized?: boolean;
 }) => {
   const image: ImageDto | undefined =
     variant?.images?.sort((a, b) => (a.id || 0) - (b.id || 0))?.[0]?.image ||
@@ -35,7 +37,7 @@ const ProductCardImage = ({
           // sizes={
           //   '(max-width: 500px) 100vw, (max-width: 768px) 60vw, (max-width: 1024px) 40vw, 30vw'
           // }
-          unoptimized={true}
+          unoptimized={unoptimized}
         />
       </Link>
     </div>

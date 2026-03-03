@@ -77,6 +77,7 @@ const DealSockCard = ({
           product={product}
           variant={_variant}
           className={'px-4'}
+          unoptimized={false}
         />
         {/* <div className={'px-2 h-[110px] lg:h-[75px] xl:h-[63px]'}> */}
         <div className="px-4 overflow-hidden">
