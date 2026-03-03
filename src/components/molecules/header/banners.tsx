@@ -132,7 +132,7 @@ export const Banners = ({
                       className="object-cover w-full h-full"
                       loading="eager"
                       priority={index === 0}
-                      unoptimized={false}
+                      unoptimized={true}
                       sizes="100vw"
                       quality={80}
                     />
