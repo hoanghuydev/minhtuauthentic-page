@@ -5,7 +5,8 @@ import Header from '@/components/organisms/header';
 import Layout from '@/components/templates/Layout';
 import NotFoundTemplate from '@/components/templates/NotFoundTemplate';
 
-export const getServerSideProps = (async () => {
+export const getServerSideProps = (async (context) => {
+  context.res.statusCode = 410;
   const resDefault = await getDefaultSeverSide();
   return {
     props: resDefault,

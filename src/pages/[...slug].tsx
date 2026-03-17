@@ -51,10 +51,38 @@ export const getServerSideProps = async (context: any) => {
     };
   }
 
-  let keyword = undefined;
-
   const canonical =
     process.env.NEXT_PUBLIC_APP_URL + '/' + (slug as string[]).join('/');
+
+  const KNOWN_MODELS: string[] = [
+    Entity.PRODUCTS,
+    Entity.VARIANTS,
+    Entity.CATEGORIES,
+    Entity.BRANDS,
+    Entity.KEYWORDS,
+    Entity.PROMOTIONS,
+    Entity.CATEGORY_NEWS,
+    Entity.NEWS,
+    Entity.STATIC_CONTENTS_ENTITY,
+  ];
+
+  if (!data?.data?.model || !KNOWN_MODELS.includes(data.data.model)) {
+    context.res.statusCode = 410;
+    return {
+      props: {
+        slug: null,
+        title: null,
+        description: null,
+        width: 0,
+        height: 0,
+        image: null,
+        keyword: null,
+        canonical,
+      },
+    };
+  }
+
+  let keyword = undefined;
 
   if (
     data?.data?.model === Entity.PRODUCTS ||
