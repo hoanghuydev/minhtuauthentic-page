@@ -66,6 +66,7 @@ export default function CategoryTemplate({
         item: {
           '@type': 'Product',
           name: product?.title,
+          description: product?.title,
           image: product?.feature_image_detail?.image?.url,
           url: `${baseUrl}/${product?.slugs?.slug}`,
           offers: {
