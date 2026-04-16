@@ -73,6 +73,7 @@ export enum STATIC_CONTENT_TYPE {
   FEATURED_PRODUCTS_CATEGORY = 'featured-products-category',
   HOT_PROGRAM = 'hot-program',
   HEADER_MARQUEE = 'header-marquee',
+  BANNER_SQUARE = 'banner-square',
 }
 
 export enum PRODUCT_CONFIGURATIONS {

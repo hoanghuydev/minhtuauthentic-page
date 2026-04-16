@@ -20,6 +20,7 @@ export class ResponseHomePageDto {
     news: NewsDto[];
   };
   bannerUnderCategory?: StaticContentsDto[];
+  bannerSquare?: StaticContentsDto[];
   homeBannerBrand?: StaticContentsDto[];
   headerMarquee?: StaticContentsDto[];
   settings?: SettingsDto[];

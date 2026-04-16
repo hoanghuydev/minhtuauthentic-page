@@ -19,6 +19,9 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
   const [blockContents, setBlockContents] = useState<
     Map<string | undefined, StaticComponentDto[]>
   >(new Map());
+  const [blockSquareContents, setBlockSquareContents] = useState<
+    Map<string | undefined, StaticComponentDto[]>
+  >(new Map());
   const [listComponent, setListComponent] = useState<ReactNode[]>([]);
 
   useEffect(() => {
@@ -27,6 +30,12 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
       (item) => item.properties?.position_index?.toString(),
     );
     setBlockContents(contents);
+
+    const squareContents = groupBy(
+      homePage?.bannerSquare || [],
+      (item) => item.properties?.position_index?.toString(),
+    );
+    setBlockSquareContents(squareContents);
   }, []);
 
   useEffect(() => {
@@ -43,6 +52,7 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
             }
             settingsHome={settingsHome}
             blockContents={blockContents}
+            blockSquareContents={blockSquareContents}
             featuredProductsCategories={homePage?.homeBlockFeaturedProductsCategory || []}
             staticComponent={item}
           />
@@ -67,7 +77,7 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
       );
     }
     setListComponent(_listComponent);
-  }, [blockContents]);
+  }, [blockContents, blockSquareContents]);
 
   return (
     <div className="home-content">

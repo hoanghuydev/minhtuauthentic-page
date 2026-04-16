@@ -6,6 +6,7 @@ import { Fragment } from "react";
 
 import GroupCategory from "../groupCategory";
 import BannerUnderCategory from "./bannerUnderCategory";
+import BannerSquare from "./bannerSquare";
 import { StaticComponentDto } from "@/dtos/StaticComponent.dto";
 import { StaticContentsDto } from "@/dtos/StaticContents.dto";
 import { SettingOptionDto } from "@/dtos/SettingOption.dto";
@@ -17,11 +18,12 @@ type Props = {
     homeBlockFeaturedCategory: StaticContentsDto[];
     settingsHome: Record<string, SettingOptionDto | undefined>;
     blockContents: Map<string | undefined, StaticComponentDto[]>;
+    blockSquareContents: Map<string | undefined, StaticComponentDto[]>;
     featuredProductsCategories: StaticContentsDto[];
     staticComponent: StaticComponentDto;
 }
 
-export default function HomeCategoryItem({index, position, homeBlockFeaturedCategory, settingsHome, blockContents, staticComponent, featuredProductsCategories}: Props) {
+export default function HomeCategoryItem({index, position, homeBlockFeaturedCategory, settingsHome, blockContents, blockSquareContents, staticComponent, featuredProductsCategories}: Props) {
     return (
         <Fragment key={'GroupCategory_' + index}>
           {position !== null && (
@@ -31,6 +33,11 @@ export default function HomeCategoryItem({index, position, homeBlockFeaturedCate
             <BannerUnderCategory
               key={index + 'banner-under-category'}
               contents={blockContents.get((position + 1).toString()) || []}
+            />
+          )}
+          {position !== null && (
+            <BannerSquare
+              contents={blockSquareContents.get((position + 1).toString()) || []}
             />
           )}
           {position === 0 && homeBlockFeaturedCategory && (
