@@ -49,6 +49,7 @@ export default function CategoryTemplate({
     [Entity.CATEGORIES]: data?.title || 'Danh mục',
     [Entity.BRANDS]: data?.title || 'Thương hiệu',
     [Entity.KEYWORDS]: slug?.keyword?.value || 'Từ khóa',
+    [Entity.PROMOTIONS]: data?.title || 'Khuyến mãi',
   };
   const description =
     data?.category?.static_components?.[0]?.description ||
