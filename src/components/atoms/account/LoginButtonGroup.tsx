@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button } from 'antd/es';
 import Link from 'next/link';
 type Props = {
   mainTitle?: string;

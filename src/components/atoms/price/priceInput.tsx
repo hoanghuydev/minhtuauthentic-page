@@ -1,4 +1,4 @@
-import { InputNumber } from 'antd';
+import { InputNumber } from 'antd/es';
 import { useContext, useEffect, useState } from 'react';
 import OrderContext from '@/contexts/orderContext';
 import { OrderItemsDto } from '@/dtos/OrderItems.dto';

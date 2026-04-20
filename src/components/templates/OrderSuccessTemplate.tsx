@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import Loading from '../atoms/loading';
 import Image from 'next/image';
 import { statusOrder } from '@/utils';
-import { Steps } from 'antd';
+import { Steps } from 'antd/es';
 import { OrderStatus } from '../../config/enum';
 
 export default function OrderSuccessTemplate() {

@@ -1,4 +1,4 @@
-import { Collapse } from 'antd';
+import { Collapse } from 'antd/es';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { useEffect, useState } from 'react';
 import { OptionProps } from '@/config/type';

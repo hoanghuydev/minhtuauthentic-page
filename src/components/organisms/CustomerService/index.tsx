@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useIsMobile } from '@/hooks/useDevice';
-import { Button } from 'antd';
+import { Button } from 'antd/es';
 import Link from 'next/link';
 import { CloseOutlined } from '@ant-design/icons';
 import Image from 'next/image';

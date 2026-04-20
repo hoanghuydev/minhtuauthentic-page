@@ -44,16 +44,16 @@ function MyApp({ Component, pageProps, codeInjectionHeader, codeInjectionFooter 
         }; }`}</style>
       </Head>
       <CodeInjection type="header" data={codeInjectionHeader} />
-      <AppProvider>
-        <OrderProvider>
-          <SearchProvider>
-            <ScrollToTop />
-            <Component className={nunitoSans.className} {..._pageProps} />
-            <ToastContainer />
-            <CodeInjection type="footer" data={codeInjectionFooter} />
-          </SearchProvider>
-        </OrderProvider>
-      </AppProvider>
+        <AppProvider>
+          <OrderProvider>
+            <SearchProvider>
+              <ScrollToTop />
+              <Component {..._pageProps} />
+              <ToastContainer />
+              <CodeInjection type="footer" data={codeInjectionFooter} />
+            </SearchProvider>
+          </OrderProvider>
+        </AppProvider>
     </>
   );
 }
