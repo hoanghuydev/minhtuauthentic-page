@@ -23,6 +23,7 @@ export default function NavbarMenuListButton({ settings, className }: Props) {
       <button
         type={'button'}
         className={'w-[40px] lg:hidden'}
+        aria-label="Mở menu"
         onClick={() => {
           appCtx?.setIsOpenNavMenu &&
             appCtx.setIsOpenNavMenu(!appCtx?.isOpenNavMenu);

@@ -44,6 +44,7 @@ export default function CartInput({ value, onChange, className, disabled }: Prop
           disabled && "text-gray-400 cursor-not-allowed"
         )}
         disabled={disabled}
+        aria-label="Giảm số lượng"
         onClick={() => {
           if (!disabled) {
             setValue((_value) => (_value - 1 < 0 ? 0 : _value - 1));
@@ -60,6 +61,7 @@ export default function CartInput({ value, onChange, className, disabled }: Prop
         )}
         value={_value}
         disabled={disabled}
+        aria-label="Số lượng"
         onChange={(e) => {
           if (!disabled) {
             setValue(parseInt(e.target.value) || 1);
@@ -72,6 +74,7 @@ export default function CartInput({ value, onChange, className, disabled }: Prop
           disabled && "text-gray-400 cursor-not-allowed"
         )}
         disabled={disabled}
+        aria-label="Tăng số lượng"
         onClick={() => {
           if (!disabled) {
             setValue((_value) => _value + 1);

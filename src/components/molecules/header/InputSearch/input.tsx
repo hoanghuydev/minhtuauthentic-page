@@ -62,6 +62,7 @@ export default function InputSearch({
           type="link"
           className="p-0 hover:bg-transparent"
           onClick={handleSearch}
+          aria-label="Tìm kiếm"
         >
           <SearchOutlined className="w-6 h-6" />
         </Button>
@@ -72,6 +73,7 @@ export default function InputSearch({
           icon={<CloseCircle className="w-6 h-6" />}
           type="link"
           onClick={handleClear}
+          aria-label="Xóa tìm kiếm"
         />
       }
       onClick={onClick}
