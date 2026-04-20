@@ -10,6 +10,7 @@ import { ResponseNewsDetailPageDto } from '@/dtos/ResponseNewsDetailPage.dto';
 import Layout from '@/components/templates/Layout';
 import { PageSetting, ServerSideProps } from '@/config/type';
 import { Fragment, useMemo } from 'react';
+import Head from 'next/head';
 import NewsTemplate from '@/components/templates/NewsTemplate';
 import { generateSlugToHref } from '@/utils';
 import BreadcrumbComponent from '@/components/molecules/breakcrumb';
@@ -320,6 +321,17 @@ export default function Page({
 
   return (
     <Fragment key={'Slug_' + slug?.slug}>
+      {/* Preload LCP image cho mobile - bắt đầu download ngay từ HTML parse thay vì đợi JS hydrate */}
+      {slug?.model === Entity.PRODUCTS && image && (
+        <Head>
+          <link
+            rel="preload"
+            as="image"
+            href={`/_next/image?url=${encodeURIComponent(image)}&w=750&q=100`}
+            media="(max-width: 1024px)"
+          />
+        </Head>
+      )}
       <Header settings={settings} menu={menu} headerMarquee={headerMarquee} />
       <Layout
         settings={settings}

@@ -101,13 +101,14 @@ const ProductDetailImage = ({
         }`}
       >
         <SectionSwiperItem
-          renderItem={(item) => {
+          renderItem={(item, index) => {
             const mediaItem = item as MediaItem;
 
             if (mediaItem.type === 'image') {
               const imageItem = mediaItem.data as ImageDto;
               imageItem.width = 1000;
               imageItem.height = 1000;
+              const isFirst = index === 0;
               return (
                 <div
                   className="product-detail-main-image-wrapper"
@@ -125,10 +126,10 @@ const ProductDetailImage = ({
                     sizes="(max-width: 1024px) 100vw, 568px"
                     quality={100}
                     unoptimized={false}
-                    priority={true}
-                    loading="eager"
+                    priority={isFirst}
+                    loading={isFirst ? "eager" : "lazy"}
                     alt={`${product.title || product.name} - Hình ảnh chính`}
-                    onLoadingComplete={handleMainImageLoad}
+                    onLoadingComplete={isFirst ? handleMainImageLoad : undefined}
                   />
                   {/* Overlay với ảnh raw để copy link gốc khi click chuột phải - chỉ load sau khi ảnh chính đã load */}
                   {isMainImageLoaded && (

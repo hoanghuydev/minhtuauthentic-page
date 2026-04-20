@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 export type SwiperProps = {
   classNameContainer?: string;
   classNameItems?: string;
-  renderItem: (content: unknown) => ReactNode;
+  renderItem: (content: unknown, index: number) => ReactNode;
   data: unknown[];
   loop?: boolean;
   heightItem?: number;
@@ -147,7 +147,7 @@ export default function SectionSwiperItem({
                     className={classNameItems}
                     key={index}
                   >
-                    {renderItem(content)}
+                    {renderItem(content, index)}
                   </SectionSwiperSlide>
                 </SwiperSlide>
               );
