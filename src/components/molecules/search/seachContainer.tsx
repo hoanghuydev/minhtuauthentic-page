@@ -26,7 +26,7 @@ import SearchContext from '@/contexts/searchContext';
 import { NewsDto } from '@/dtos/News.dto';
 import { ProductDto } from '@/dtos/Product.dto';
 import InputSearch from '@/components/molecules/header/InputSearch/input';
-import { type InputRef } from 'antd/es';
+import { type InputRef } from 'antd';
 import { useRouter } from 'next/router';
 
 type Props = {

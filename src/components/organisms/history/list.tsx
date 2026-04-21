@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { formatMoney, statusOrder } from '@/utils';
 import { useIsDesktop, useIsMobile } from '@/hooks/useDevice';
 import dynamic from 'next/dynamic';
-import { DatePicker } from 'antd/es';
+import { DatePicker } from 'antd';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/atoms/loading';
 const HistoryMobileView = dynamic(

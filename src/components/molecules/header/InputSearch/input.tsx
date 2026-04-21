@@ -1,5 +1,5 @@
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
-import { Button, Input, InputRef } from 'antd/es';
+import { Button, Input, InputRef } from 'antd';
 import CloseCircle from '@/components/icons/closeCircle';
 import { RefObject, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';

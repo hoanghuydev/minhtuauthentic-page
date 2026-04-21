@@ -33,7 +33,12 @@ export default function Document() {
           name="google-site-verification"
           content="5P0Wm8H0ZaYhmtLWPwgMqdt6Z-o-0rOd1XTfaPRNu78"
         />
-
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+          rel="stylesheet"
+        />
         <script
           data-partytown-config
           type="application/ld+json"

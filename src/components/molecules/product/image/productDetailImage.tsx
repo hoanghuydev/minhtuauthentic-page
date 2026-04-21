@@ -122,7 +122,7 @@ const ProductDetailImage = ({
                       'object-contain bk-product-image select-none lg:max-w-[568px] w-full m-auto',
                     )}
                     product={product}
-                    sizes="(max-width: 1024px) 100vw, 568px"
+                    sizes="100vw"
                     quality={100}
                     unoptimized={false}
                     priority={true}
@@ -130,22 +130,20 @@ const ProductDetailImage = ({
                     alt={`${product.title || product.name} - Hình ảnh chính`}
                     onLoadingComplete={handleMainImageLoad}
                   />
-                  {/* Overlay với ảnh raw để copy link gốc khi click chuột phải - chỉ load sau khi ảnh chính đã load */}
-                  {isMainImageLoaded && (
-                    <ImageWithFallback
-                      image={imageItem}
-                      className="absolute top-0 left-0 opacity-0 w-full h-full object-contain cursor-pointer select-none"
-                      product={product}
-                      sizes="100vw"
-                      unoptimized={true}
-                      loading="lazy"
-                      alt={`Overlay image - no index`}
-                      onClick={() => {
-                        setIsOpen &&
-                          setIsOpen({ display: true, media: mediaItem });
-                      }}
-                    />
-                  )}
+                  {/* Overlay với ảnh raw để copy link gốc khi click chuột phải */}
+                  <ImageWithFallback
+                    image={imageItem}
+                    className="absolute top-0 left-0 opacity-0 w-full h-full object-contain cursor-pointer select-none"
+                    product={product}
+                    sizes="100vw"
+                    unoptimized={true}
+                    loading="lazy"
+                    alt={`Overlay image - no index`}
+                    onClick={() => {
+                      setIsOpen &&
+                        setIsOpen({ display: true, media: mediaItem });
+                    }}
+                  />
                 </div>
               );
             } else if (mediaItem.type === 'video') {

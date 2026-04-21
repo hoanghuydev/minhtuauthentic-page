@@ -57,7 +57,7 @@ export default function PromotionDescription({
         onClick={() => onChange(index)}
       >
         <div className={'flex items-center justify-center gap-1'}>
-          <Image src={content.image} alt="" className={content.size} aria-hidden="true" width={48} height={48} sizes="48px"/>
+          <Image src={content.image} alt="" className={content.size} aria-hidden="true"/>
           <span
             className={twMerge(
               'text-[17px] font-[700] lg:font-bold',

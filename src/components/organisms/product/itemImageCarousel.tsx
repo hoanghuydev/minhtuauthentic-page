@@ -58,6 +58,7 @@ export default function ItemImageCarousel ({ media, clickAction, product }: Prop
               handleClickImage(media)
             }
           }}
+          unoptimized={true}
         />
       )}
     </div>
