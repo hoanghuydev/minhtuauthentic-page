@@ -77,6 +77,7 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
           <SectionSwiper
             onSwiper={(swiper) => setSwiper(swiper)}
             slidePerViewMobile={2}
+            speed={1500}
             spaceBetweenMobile={10}
             isNotDisplayNavigation={isMobile}
             spaceBetween={10}

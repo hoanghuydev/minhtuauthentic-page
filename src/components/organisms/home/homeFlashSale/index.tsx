@@ -172,6 +172,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
           <SectionSwiperItem
             classNameContainer="pt-2"
             slidesPerView={5}
+            speed={1500}
             slidePerViewMobile={2}
             spaceBetween={10}
             isUseHeightWrapper={false}

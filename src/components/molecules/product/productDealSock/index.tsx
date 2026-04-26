@@ -136,6 +136,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
             <SectionSwiper
               slidesPerView={5}
               slidePerViewMobile={2}
+              speed={1500}
               spaceBetween={10}
               auto={{
                 delay: 6000,

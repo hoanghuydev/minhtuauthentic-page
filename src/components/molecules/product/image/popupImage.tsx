@@ -114,7 +114,7 @@ export default function PopupImage({ open, product, media, setIsOpen }: Props) {
         fadeEffect={{
           crossFade: true,
         }}
-        speed={400}
+        speed={700}
         key={'popup-image'}
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
