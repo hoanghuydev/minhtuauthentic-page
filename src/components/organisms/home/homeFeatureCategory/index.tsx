@@ -1,4 +1,5 @@
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
+import useSwiperSpeed from '@/hooks/useSwiperSpeed';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
 import BlockUnderSlideItem from '@/components/molecules/blockUnderSlide/item';
 import { SettingOptionDto } from '@/dtos/SettingOption.dto';
@@ -8,6 +9,7 @@ type Props = {
   setting?: SettingOptionDto;
 };
 export default function HomeFeatureCategory({ contents, setting }: Props) {
+  const swiperSpeed = useSwiperSpeed();
   return (
     <div
       className={'mt-3 mx-auto p-1 lg:p-3 rounded-[10px]'}
@@ -25,7 +27,7 @@ export default function HomeFeatureCategory({ contents, setting }: Props) {
       <SectionSwiper
         slidesPerView={10}
         spaceBetween={10}
-        speed={1500}
+        speed={swiperSpeed}
         slidePerViewMobile={4}
         renderItem={(item: unknown) => {
           const content = item as StaticContentsDto;

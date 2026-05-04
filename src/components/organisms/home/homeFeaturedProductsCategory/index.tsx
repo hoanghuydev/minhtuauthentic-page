@@ -1,4 +1,5 @@
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
+import useSwiperSpeed from '@/hooks/useSwiperSpeed';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
 import { PlusIcon } from '@/components/icons/plus';
 import dynamic from 'next/dynamic';
@@ -26,6 +27,7 @@ type Props = {
 export default function HomeFeaturedProductsCategory({ content }: Props) {
   const [offset, setOffset] = useState(0);
   const isMobile = useIsMobile();
+  const swiperSpeed = useSwiperSpeed();
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
   const seeMore = () => {
     if (!swiper) return;
@@ -77,7 +79,7 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
           <SectionSwiper
             onSwiper={(swiper) => setSwiper(swiper)}
             slidePerViewMobile={2}
-            speed={1500}
+            speed={swiperSpeed}
             spaceBetweenMobile={10}
             isNotDisplayNavigation={isMobile}
             spaceBetween={10}

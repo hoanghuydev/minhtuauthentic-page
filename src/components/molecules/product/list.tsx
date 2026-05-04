@@ -4,6 +4,7 @@ import { ProductDto } from '@/dtos/Product.dto';
 import { PromotionsDto } from '@/dtos/Promotions.dto';
 import { SettingsDto } from '@/dtos/Settings.dto';
 import { ReactNode } from 'react';
+import useSwiperSpeed from '@/hooks/useSwiperSpeed';
 type Props = {
   products: ProductDto[];
   isShowConfiguration?: boolean;
@@ -22,6 +23,7 @@ export default function ProductList({
   buttonText,
   rightTitle,
 }: Props) {
+  const swiperSpeed = useSwiperSpeed();
   return (
     <div
       style={{ backgroundColor: setting?.value?.backgroundColor }}
@@ -40,7 +42,7 @@ export default function ProductList({
         slidesPerView={5}
         slidePerViewMobile={2}
         spaceBetween={10}
-        speed={1500}
+        speed={swiperSpeed}
         auto={true}
         loop={false}
         renderItem={(item: unknown) => {

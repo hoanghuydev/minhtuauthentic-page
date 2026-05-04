@@ -37,6 +37,9 @@ export default async function handler(
           case SETTING_KEY.GENERAL.EVENT_BUTTON_TITLE.KEY:
             commonSettings.eventButtonTitle = setting.value?.title;
             break;
+          case SETTING_KEY.GENERAL.SWIPER_SPEED.KEY:
+            commonSettings.swiperSpeed = setting.value?.speed;
+            break;
         }
       });
 

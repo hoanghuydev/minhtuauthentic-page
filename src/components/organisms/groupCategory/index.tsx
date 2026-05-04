@@ -2,6 +2,7 @@ import ProductCard from '../product/card';
 import { TagLink } from '@/components/molecules/tagLink';
 import { StaticComponentDto } from '@/dtos/StaticComponent.dto';
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import useSwiperSpeed from '@/hooks/useSwiperSpeed';
 import { TagLinkDto } from '@/dtos/tagLink.dto';
 import { generateSlugToHref } from '@/utils';
 import Link from 'next/link';
@@ -25,6 +26,7 @@ const GroupCategory = ({
     staticComponent?.properties?.tagLink || [],
   );
   const [isReady, setIsReady] = useState(false);
+  const swiperSpeed = useSwiperSpeed();
   useEffect(() => {
     setIsReady(true);
   }, []);
@@ -101,7 +103,7 @@ const GroupCategory = ({
         slidesPerView={5}
         slidePerViewMobile={2}
         spaceBetween={5}
-        speed={1500}
+        speed={swiperSpeed}
         isUseHeightWrapper={true}
         renderItem={(item: unknown) => {
           const iProduct = item as IProductCategoryDto;

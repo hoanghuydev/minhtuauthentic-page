@@ -2,6 +2,7 @@ import { PromotionsDto } from '@/dtos/Promotions.dto';
 import CouponsDto from '@/dtos/Coupons.dto';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
 import { ReactNode, useContext, useEffect, useState } from 'react';
+import useSwiperSpeed from '@/hooks/useSwiperSpeed';
 import useSWR from 'swr';
 import { PROMOTION_TYPE } from '@/config/enum';
 import { SettingsDto } from '@/dtos/Settings.dto';
@@ -32,6 +33,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
 
   const order = useContext(OrderContext);
   const [dealSockVariants, setDealSockVariants] = useState<VariantDto[]>([]);
+  const swiperSpeed = useSwiperSpeed();
   const [totalSavings, setTotalSavings] = useState<number>(0);
 
   const [promotion, setPromotion] = useState<PromotionsDto>();
@@ -136,7 +138,7 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
             <SectionSwiper
               slidesPerView={5}
               slidePerViewMobile={2}
-              speed={1500}
+              speed={swiperSpeed}
               spaceBetween={10}
               auto={{
                 delay: 6000,

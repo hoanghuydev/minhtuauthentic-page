@@ -21,4 +21,5 @@ export class SettingOptionDto {
   }[];
   isBannerFull?: boolean;
   isSquareBannerMobile?: boolean;
+  speed?: number;
 }

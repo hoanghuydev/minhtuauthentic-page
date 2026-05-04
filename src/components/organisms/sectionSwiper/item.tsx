@@ -165,7 +165,7 @@ export default function SectionSwiperItem({
         )}
       </>
     );
-  }, [heightWrapper, ready, swiper]);
+  }, [heightWrapper, ready, swiper, speed]);
 
   return (
     <>

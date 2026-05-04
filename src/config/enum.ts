@@ -121,6 +121,10 @@ export const SETTING_KEY = {
       KEY: 'event_button_title',
       LABEL: 'Tiêu đề nút sự kiện',
     },
+    SWIPER_SPEED: {
+      KEY: 'swiper_speed',
+      LABEL: 'Tốc độ chuyển sản phẩm',
+    },
   },
   BANNER_SECTION: {
     KEY: 'banner_section',

@@ -1,4 +1,5 @@
 import { BrandDto } from '@/dtos/Brand.dto';
+import useSwiperSpeed from '@/hooks/useSwiperSpeed';
 import Image from 'next/image';
 import noImage from '@/static/images/no-image.png';
 import Link from 'next/link';
@@ -19,6 +20,7 @@ export default function HomeBrand({
   setting,
   homeBannerBrand,
 }: Props) {
+  const swiperSpeed = useSwiperSpeed();
   const slidesPerView = useMemo(() => {
     if (homeBannerBrand && homeBannerBrand.length > 0) {
       return 4;
@@ -56,7 +58,7 @@ export default function HomeBrand({
         )}
         <SectionSwiper
           slidesPerView={slidesPerView || 4}
-          speed={1500}
+          speed={swiperSpeed}
           classNameContainer={twMerge(
             'border flex-1 border-[#e4e4e4] rounded-[10px] p-3',
             homeBannerBrand && homeBannerBrand.length > 0 && 'lg:h-[250px]',

@@ -5,6 +5,7 @@ import CouponsDto from '@/dtos/Coupons.dto';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { ReactNode, useState, useEffect } from 'react';
+import useSwiperSpeed from '@/hooks/useSwiperSpeed';
 import SectionSwiperItem from '@/components/organisms/sectionSwiper/item';
 
 const CountdownContainer = dynamic(
@@ -22,6 +23,7 @@ type Props = {
 export default function HomeFlashSale({ promotion, setting }: Props) {
   const endDate: Date = new Date(promotion?.end_date || '');
   const [isClient, setIsClient] = useState(false);
+  const swiperSpeed = useSwiperSpeed();
 
   useEffect(() => {
     setIsClient(true);
@@ -172,7 +174,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
           <SectionSwiperItem
             classNameContainer="pt-2"
             slidesPerView={5}
-            speed={1500}
+            speed={swiperSpeed}
             slidePerViewMobile={2}
             spaceBetween={10}
             isUseHeightWrapper={false}
