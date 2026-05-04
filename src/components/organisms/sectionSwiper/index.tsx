@@ -18,6 +18,7 @@ const SectionSwiper = (props: SwiperProps) => {
         <SectionSwiperItem
           {...props}
           slidesPerView={props.slidePerViewMobile || 2}
+          speed={props.speed || 1500}
           spaceBetween={props.spaceBetweenMobile || 5}
         />
       )}
@@ -25,6 +26,7 @@ const SectionSwiper = (props: SwiperProps) => {
         <SectionSwiperItem
           {...props}
           slidesPerView={props.slidesPerView || 5}
+          speed={props.speed || 1500}
           spaceBetween={props.spaceBetween || 10}
         />
       )}

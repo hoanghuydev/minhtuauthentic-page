@@ -56,6 +56,7 @@ export default function HomeBrand({
         )}
         <SectionSwiper
           slidesPerView={slidesPerView || 4}
+          speed={1500}
           classNameContainer={twMerge(
             'border flex-1 border-[#e4e4e4] rounded-[10px] p-3',
             homeBannerBrand && homeBannerBrand.length > 0 && 'lg:h-[250px]',

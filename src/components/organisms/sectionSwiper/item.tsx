@@ -36,6 +36,7 @@ export type SwiperProps = {
   classNameLeft?: string;
   classNameRight?: string;
   onSwiper?: (swiper: SwiperClass) => void;
+  speed?: number;
 };
 export default function SectionSwiperItem({
   classNameContainer,
@@ -58,6 +59,7 @@ export default function SectionSwiperItem({
   classNameLeft,
   classNameRight,
   onSwiper,
+  speed,
 }: SwiperProps) {
   const rows = 2;
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -76,9 +78,9 @@ export default function SectionSwiperItem({
         onClick={() => {
           if (swiper) {
             if (variant === 'next') {
-              swiper.slideNext();
+              swiper.slideNext(speed);
             } else {
-              swiper.slidePrev();
+              swiper.slidePrev(speed);
             }
           }
         }}
@@ -113,6 +115,8 @@ export default function SectionSwiperItem({
           modules={isGrid ? [Grid, Autoplay] : [Pagination, Autoplay]}
           autoplay={auto}
           loop={loop}
+          speed={speed}
+          cssMode={false}
           className={twMerge('mx-auto w-full')}
           wrapperClass={'mx-auto'}
           onSwiper={(swiper) => {

@@ -40,6 +40,7 @@ export default function ProductList({
         slidesPerView={5}
         slidePerViewMobile={2}
         spaceBetween={10}
+        speed={1500}
         auto={true}
         loop={false}
         renderItem={(item: unknown) => {

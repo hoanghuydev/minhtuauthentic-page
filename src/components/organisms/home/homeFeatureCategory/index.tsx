@@ -25,6 +25,7 @@ export default function HomeFeatureCategory({ contents, setting }: Props) {
       <SectionSwiper
         slidesPerView={10}
         spaceBetween={10}
+        speed={1500}
         slidePerViewMobile={4}
         renderItem={(item: unknown) => {
           const content = item as StaticContentsDto;

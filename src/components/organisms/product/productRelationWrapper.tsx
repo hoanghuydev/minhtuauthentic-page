@@ -1,8 +1,5 @@
 import dynamic from 'next/dynamic';
 import { ProductDto } from '@/dtos/Product.dto';
-import { ReactNode } from 'react';
-import ProductCard from '@/components/organisms/product/card';
-import SectionSwiper from '@/components/organisms/sectionSwiper';
 import ProductList from '@/components/molecules/product/list';
 import { useIsDesktop } from '@/hooks/useDevice';
 import { useIsMobile } from '@/hooks/useDevice';
