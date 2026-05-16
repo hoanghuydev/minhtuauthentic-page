@@ -113,32 +113,21 @@ const ProductDetailImage = ({
                   className="product-detail-main-image-wrapper"
                   style={{
                     backgroundColor: 'white',
-                    position: 'relative',
                   }}
                 >
                   <ImageWithFallback
                     image={imageItem}
                     className={twMerge(
-                      'object-contain bk-product-image select-none lg:max-w-[568px] w-full m-auto',
+                      'object-contain bk-product-image select-none lg:max-w-[568px] w-full m-auto cursor-pointer',
                     )}
                     product={product}
                     sizes="100vw"
                     quality={100}
-                    unoptimized={false}
+                    unoptimized={true}
                     priority={true}
                     loading="eager"
                     alt={`${product.title || product.name} - Hình ảnh chính`}
                     onLoadingComplete={handleMainImageLoad}
-                  />
-                  {/* Overlay với ảnh raw để copy link gốc khi click chuột phải */}
-                  <ImageWithFallback
-                    image={imageItem}
-                    className="absolute top-0 left-0 opacity-0 w-full h-full object-contain cursor-pointer select-none"
-                    product={product}
-                    sizes="100vw"
-                    unoptimized={true}
-                    loading="lazy"
-                    alt={`Overlay image - no index`}
                     onClick={() => {
                       setIsOpen &&
                         setIsOpen({ display: true, media: mediaItem });
