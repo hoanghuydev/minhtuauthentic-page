@@ -57,12 +57,7 @@ const ProductDetailImage = ({
 
   const renderSlideImage = useMemo(() => {
     return (
-      <div
-        className="relative"
-        aria-hidden="true"
-        data-nosnippet="true"
-        role="presentation"
-      >
+      <div className="relative" aria-hidden="true" role="presentation">
         <SectionSwiper
           classNameContainer={'mt-3'}
           slidePerViewMobile={5}
