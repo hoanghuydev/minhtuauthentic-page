@@ -45,12 +45,12 @@ export default function ProductRelation({ products }: Props) {
                     <div
                       aria-hidden="true"
                       style={{
-                        backgroundImage: `url(${
+                        backgroundImage: `url("${
                           (
                             product?.feature_image_detail?.image ||
                             productContext?.variantActive?.images?.[0]?.image
                           )?.url || noImage.src
-                        })`,
+                        }")`,
                         backgroundSize: 'contain',
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',

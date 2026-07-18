@@ -42,9 +42,9 @@ const ProductCardImage = ({
             role="presentation"
             aria-hidden="true"
             style={{
-              backgroundImage: `url(${
+              backgroundImage: `url("${
                 image?.url || image?.thumbnail_url || noImage.src
-              })`,
+              }")`,
               backgroundSize: 'contain',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
