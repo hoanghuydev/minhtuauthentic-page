@@ -45,7 +45,8 @@ function resolveSlugPath(req: NextApiRequest): string {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'GET') {
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    res.setHeader('Allow', 'GET, HEAD');
     res.status(405).json({ message: 'Method Not Allowed' });
     return;
   }
@@ -136,5 +137,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     'Cache-Control',
     'public, max-age=300, stale-while-revalidate=3600',
   );
+  res.setHeader('Content-Length', Buffer.byteLength(markdown));
+
+  if (req.method === 'HEAD') {
+    res.status(200).end();
+    return;
+  }
   res.status(200).send(markdown);
 }
