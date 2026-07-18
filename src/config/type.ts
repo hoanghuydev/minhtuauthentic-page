@@ -44,6 +44,7 @@ export type SEOProps = {
   height?: number;
   keyword?: string;
   noIndex?: boolean;
+  hasMarkdownAlternate?: boolean;
 };
 export enum LogoProps {
   HEADER = 'header',

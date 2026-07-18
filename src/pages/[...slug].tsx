@@ -29,6 +29,12 @@ export const getServerSideProps = async (context: any) => {
     image = null,
     width = 0,
     height = 0;
+  const MARKDOWN_MODELS: string[] = [
+    Entity.PRODUCTS,
+    Entity.CATEGORIES,
+    Entity.BRANDS,
+    Entity.NEWS,
+  ];
   const res = await fetch(
     process.env.BE_URL +
       '/api/pages/slug/' +
@@ -184,6 +190,7 @@ export const getServerSideProps = async (context: any) => {
       image,
       keyword,
       canonical,
+      hasMarkdownAlternate: MARKDOWN_MODELS.includes(data?.data?.model || ''),
     },
   };
 };
@@ -197,6 +204,7 @@ export default function Page({
   height,
   keyword,
   canonical,
+  hasMarkdownAlternate,
   settings,
   menu,
   footerContent,
@@ -210,6 +218,7 @@ export default function Page({
   height?: number;
   keyword?: string;
   canonical?: string;
+  hasMarkdownAlternate?: boolean;
 } & ServerSideProps &
   PageSetting) {
   const renderTemplate = () => {
@@ -332,6 +341,7 @@ export default function Page({
           height,
           keyword,
           canonical,
+          hasMarkdownAlternate,
         }}
       >
         {renderTemplate()}

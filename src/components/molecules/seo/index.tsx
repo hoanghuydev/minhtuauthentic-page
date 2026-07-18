@@ -72,6 +72,17 @@ export default function DefaultSeo({ settings, seo }: Props) {
         url: process.env.NEXT_PUBLIC_APP_URL + router.asPath,
       }}
       canonical={canonicalUrl}
+      additionalLinkTags={
+        seo?.hasMarkdownAlternate
+          ? [
+              {
+                rel: 'alternate',
+                type: 'text/markdown',
+                href: `${canonicalUrl}.md`,
+              },
+            ]
+          : undefined
+      }
     />
   );
 }
