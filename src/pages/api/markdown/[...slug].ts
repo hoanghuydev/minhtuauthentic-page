@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Entity } from '@/config/enum';
+import { Entity, MARKDOWN_SUPPORTED_ENTITIES } from '@/config/enum';
 import { ResponseSlugPageDto } from '@/dtos/responseSlugPage.dto';
 import { ResponseProductDetailPageDto } from '@/dtos/responseProductDetailPage.dto';
 import { ResponseNewsDetailPageDto } from '@/dtos/ResponseNewsDetailPage.dto';
@@ -7,13 +7,6 @@ import { ResponseCategoryFilterPageDto } from '@/dtos/responseCategoryFilterPage
 import { CategoryDto } from '@/dtos/Category.dto';
 import { BrandDto } from '@/dtos/Brand.dto';
 import { htmlToMarkdown } from '@/utils/htmlToMarkdown';
-
-const SUPPORTED_MODELS: string[] = [
-  Entity.PRODUCTS,
-  Entity.NEWS,
-  Entity.CATEGORIES,
-  Entity.BRANDS,
-];
 
 function buildDocument(title: string, seoDescription: string | undefined, body: string, canonical: string) {
   const parts = [`# ${title}`];
@@ -74,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const payload: { data: ResponseSlugPageDto<unknown> } = await beRes.json();
   const slug = payload?.data;
 
-  if (!slug?.model || !SUPPORTED_MODELS.includes(slug.model)) {
+  if (!slug?.model || !MARKDOWN_SUPPORTED_ENTITIES.includes(slug.model)) {
     res.status(404).send('Not found');
     return;
   }

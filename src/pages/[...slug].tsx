@@ -2,7 +2,7 @@ import Header from '@/components/organisms/header';
 import Footer from '@/components/organisms/footer';
 import ProductTemplate from '@/components/templates/ProductTemplate';
 import { ResponseSlugPageDto } from '@/dtos/responseSlugPage.dto';
-import { Entity, SETTING_KEY } from '@/config/enum';
+import { Entity, MARKDOWN_SUPPORTED_ENTITIES, SETTING_KEY } from '@/config/enum';
 import { ResponseProductDetailPageDto } from '@/dtos/responseProductDetailPage.dto';
 import CategoryTemplate from '@/components/templates/CategoryTemplate';
 import { ResponseCategoryFilterPageDto } from '@/dtos/responseCategoryFilterPage.dto';
@@ -29,12 +29,6 @@ export const getServerSideProps = async (context: any) => {
     image = null,
     width = 0,
     height = 0;
-  const MARKDOWN_MODELS: string[] = [
-    Entity.PRODUCTS,
-    Entity.CATEGORIES,
-    Entity.BRANDS,
-    Entity.NEWS,
-  ];
   const res = await fetch(
     process.env.BE_URL +
       '/api/pages/slug/' +
@@ -190,7 +184,7 @@ export const getServerSideProps = async (context: any) => {
       image,
       keyword,
       canonical,
-      hasMarkdownAlternate: MARKDOWN_MODELS.includes(data?.data?.model || ''),
+      hasMarkdownAlternate: MARKDOWN_SUPPORTED_ENTITIES.includes(data?.data?.model || ''),
     },
   };
 };

@@ -23,10 +23,8 @@ export function htmlToMarkdown(html?: string | null): string {
   }
 
   const clean = sanitizeHtml(html, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.filter(
-      (tag) => tag !== 'iframe' && tag !== 'script' && tag !== 'style',
-    ),
-    allowedAttributes: false,
+    allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
+    allowedAttributes: sanitizeHtml.defaults.allowedAttributes,
     allowedSchemes: ['http', 'https', 'mailto'],
   });
 

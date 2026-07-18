@@ -49,6 +49,12 @@ export enum Entity {
   STATIC_CONTENTS_ENTITY = 'StaticContentsEntity',
   PROMOTIONS = 'PromotionsEntity',
 }
+export const MARKDOWN_SUPPORTED_ENTITIES: string[] = [
+  Entity.PRODUCTS,
+  Entity.NEWS,
+  Entity.CATEGORIES,
+  Entity.BRANDS,
+];
 export enum STATIC_COMPONENT_TYPE {
   CATEGORY = 'home-category',
   MENU_CATEGORY = 'home-menu-category',
