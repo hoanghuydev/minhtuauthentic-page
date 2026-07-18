@@ -8,10 +8,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const slugPath = resolveSlugPathFromRequest(req, '.md', '/api/markdown/');
+  const slugPath = resolveSlugPathFromRequest(req, '.txt', '/api/text/');
   const { status, body } = await resolveAiDocument(slugPath);
 
-  res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
   if (status === 200) {
     res.setHeader(
       'Cache-Control',
