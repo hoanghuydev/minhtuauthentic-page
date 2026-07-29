@@ -18,7 +18,7 @@ export default function ProductRelationWrapper({ display, products }: Props) {
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
   return (
-    <div data-nosnippet>
+    <>
       {display === 'mobile' && (
         <>
           {isMobile && (
@@ -31,6 +31,6 @@ export default function ProductRelationWrapper({ display, products }: Props) {
       {display === 'desktop' && (
         <>{isDesktop && <ProductRelation products={products} />}</>
       )}
-    </div>
+    </>
   );
 }

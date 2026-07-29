@@ -97,7 +97,6 @@ export default function ProductDealSock({ setting, mainVariant }: Props) {
 
   return (
     <div
-      data-nosnippet
       className={twMerge(
         'w-full relative shadow-custom mb-3 px-4 py-5 lg:px-[10px] mt-5 rounded-[8px] lg:py-[15px] min-h-[400px]',
         `bg-[${setting?.value?.backgroundColor ?? '#FFF2F6'}]`,

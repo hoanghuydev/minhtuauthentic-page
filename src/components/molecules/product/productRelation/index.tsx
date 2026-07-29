@@ -1,4 +1,5 @@
 import { ProductDto } from '@/dtos/Product.dto';
+import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { twMerge } from 'tailwind-merge';
 import { calculatePricePercent, generateSlugToHref } from '@/utils';
 import Link from 'next/link';
@@ -7,7 +8,6 @@ import ProductPrice from '@/components/molecules/product/price';
 import Badge from '@/components/atoms/badge';
 import { useContext } from 'react';
 import ProductDetailContext from '@/contexts/productDetailContext';
-import noImage from '@/static/images/no-image.png';
 
 type Props = {
   products: ProductDto[];
@@ -42,20 +42,17 @@ export default function ProductRelation({ products }: Props) {
                 </div>
                 <div className={twMerge('flex gap-3 mt-3')} key={index}>
                   <div>
-                    <div
-                      aria-hidden="true"
-                      style={{
-                        backgroundImage: `url("${
-                          (
-                            product?.feature_image_detail?.image ||
-                            productContext?.variantActive?.images?.[0]?.image
-                          )?.url || noImage.src
-                        }")`,
-                        backgroundSize: 'contain',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                      }}
-                      className={'w-[70px] h-[70px] min-w-[70px]'}
+                    <ImageWithFallback
+                      image={
+                        product?.feature_image_detail?.image ||
+                        productContext?.variantActive?.images?.[0]?.image
+                      }
+                      className={
+                        'w-[70px] h-[70px] min-w-[70px] object-contain'
+                      }
+                      quality={80}
+                      sizes="70px"
+                      unoptimized={false}
                     />
                   </div>
                   <div>
