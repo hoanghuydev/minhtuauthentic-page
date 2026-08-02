@@ -166,6 +166,12 @@ export const getServerSideProps = async (context: any) => {
         ).data;
         title = promotionResponse?.title || 'Khuyến mãi';
         description = 'Danh sách sản phẩm khuyến mãi';
+        const promotionImage =
+          promotionResponse?.promotion?.images?.[0]?.image ||
+          promotionResponse?.products?.[0]?.feature_image_detail?.image;
+        image = promotionImage?.url || null;
+        width = promotionImage?.width || 0;
+        height = promotionImage?.height || 0;
         break;
     }
     context.res.setHeader(

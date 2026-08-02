@@ -3,6 +3,7 @@ import { ProductFilterOptionDto } from '@/dtos/ProductFilterSettingOption/Produc
 import { CategoryDto } from '@/dtos/Category.dto';
 import { BrandDto } from '@/dtos/Brand.dto';
 import KeywordsDto from '@/dtos/Keywords.dto';
+import { PromotionsDto } from '@/dtos/Promotions.dto';
 
 export class ResponseCategoryFilterPageDto {
   products?: ProductDto[];
@@ -11,5 +12,6 @@ export class ResponseCategoryFilterPageDto {
   category?: CategoryDto;
   brand?: BrandDto;
   keyword?: KeywordsDto;
+  promotion?: PromotionsDto;
   title?: string;
 }

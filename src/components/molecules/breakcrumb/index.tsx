@@ -77,6 +77,8 @@ export default function BreadcrumbComponent({
 
   const breadcrumbSchema = useMemo(() => {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+    const absoluteUrl = (path: string) =>
+      `${baseUrl}/${(path || '').replace(/^\/+/, '')}`;
     const elementList = [
       {
         '@type': 'ListItem',
@@ -84,13 +86,17 @@ export default function BreadcrumbComponent({
         name: 'Trang chủ',
         item: `${baseUrl}/`,
       },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: label,
-        item: `${baseUrl}/${link}`,
-      },
     ];
+
+    // Google rejects the whole BreadcrumbList when an item has no name
+    if (label) {
+      elementList.push({
+        '@type': 'ListItem',
+        position: elementList.length + 1,
+        name: label,
+        item: absoluteUrl(link),
+      });
+    }
 
     (additions || []).forEach((item) => {
       if (item.label && item.link) {
@@ -98,17 +104,17 @@ export default function BreadcrumbComponent({
           '@type': 'ListItem',
           position: elementList.length + 1,
           name: item.label,
-          item: `${baseUrl}/${item.link}`,
+          item: absoluteUrl(item.link),
         });
       }
     });
 
-    if (current) {
+    if (current?.label) {
       elementList.push({
         '@type': 'ListItem',
         position: elementList.length + 1,
         name: current.label,
-        item: `${baseUrl}${current.link}`,
+        item: absoluteUrl(current.link),
       });
     }
 
@@ -117,7 +123,7 @@ export default function BreadcrumbComponent({
       '@type': 'BreadcrumbList',
       itemListElement: elementList,
     };
-  }, [label, link, current]);
+  }, [label, link, current, additions]);
 
   return (
     <>
