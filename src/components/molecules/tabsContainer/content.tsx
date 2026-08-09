@@ -1,11 +1,13 @@
 import { twMerge } from 'tailwind-merge';
 import { useEffect, useRef, useState } from 'react';
+import Toc from '@/components/atoms/toc';
 type Props = {
   className?: string;
   index: number;
   indexActive: number;
   item: string;
   setHeight: (value: number) => void;
+  showToc?: boolean;
 };
 export default function TabContent({
   className,
@@ -13,11 +15,15 @@ export default function TabContent({
   item,
   indexActive,
   setHeight,
+  showToc,
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     setReady(true);
+    if (showToc) {
+      window.onToc?.();
+    }
   }, []);
   useEffect(() => {
     if (ready) {
@@ -34,8 +40,10 @@ export default function TabContent({
         className,
       )}
     >
+      {showToc && <Toc />}
       <div
         ref={ref}
+        id={showToc ? 'toc-content' : undefined}
         className={'container-html'}
         dangerouslySetInnerHTML={{
           __html: item,

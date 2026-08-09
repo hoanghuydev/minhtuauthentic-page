@@ -1,8 +1,10 @@
 import { OrderItemsDto } from '@/dtos/OrderItems.dto';
 import { OrdersDto } from '@/dtos/Orders.dto';
 import { Fragment, ReactNode, useEffect, useState } from 'react';
-import { Table, TableColumnsType } from 'antd/es';
+import { Button, Table, TableColumnsType } from 'antd/es';
 import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 import {
   calculatePriceMinus,
   formatMoney,
@@ -10,7 +12,9 @@ import {
   promotionName,
   statusOrder,
 } from '@/utils';
+import { OrderStatus } from '@/config/enum';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
+import CancelOrderModal from '@/components/organisms/modal/CancelOrderModal';
 import Link from 'next/link';
 import { DataType } from 'csstype';
 
@@ -18,6 +22,7 @@ type Props = {
   order: OrdersDto;
 };
 export default function OrderDetailTemplate({ order }: Props) {
+  const router = useRouter();
   const [orderField, setOrderField] = useState<
     {
       label: string;
@@ -26,6 +31,28 @@ export default function OrderDetailTemplate({ order }: Props) {
   >([]);
   const [totalPriceWithoutCoupon, setTotalPriceWithoutCoupon] =
     useState<number>(0);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+
+  const handleCancelOrder = async () => {
+    try {
+      setIsCancelling(true);
+      const res = await fetch(`/api/orders/${order.id}/cancel`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data?.message || 'Huỷ đơn hàng thất bại');
+      }
+      toast.success('Đã huỷ đơn hàng');
+      setIsCancelModalOpen(false);
+      router.replace(router.asPath);
+    } catch (e: any) {
+      toast.error(e.message || 'Đã có lỗi xảy ra');
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   useEffect(() => {
     let totalPriceWithoutCoupon: number = 0;
@@ -177,9 +204,16 @@ export default function OrderDetailTemplate({ order }: Props) {
     <>
       {order && (
         <>
-          <h1 className={'text-2xl text-primary font-[700] lg:font-bold mb-3'}>
-            Chi tiết đơn hàng
-          </h1>
+          <div className={'flex items-center justify-between mb-3'}>
+            <h1 className={'text-2xl text-primary font-[700] lg:font-bold'}>
+              Chi tiết đơn hàng
+            </h1>
+            {order.status === OrderStatus.NEW && (
+              <Button danger onClick={() => setIsCancelModalOpen(true)}>
+                Huỷ đơn hàng
+              </Button>
+            )}
+          </div>
           <div className={'grid grid-cols-2 gap-3'}>
             {orderField.map((item, key) => {
               return (
@@ -190,6 +224,13 @@ export default function OrderDetailTemplate({ order }: Props) {
               );
             })}
           </div>
+          <CancelOrderModal
+            isOpen={isCancelModalOpen}
+            isLoading={isCancelling}
+            orderId={order.id}
+            onClose={() => setIsCancelModalOpen(false)}
+            onConfirm={handleCancelOrder}
+          />
           <div className={'mt-3'}>
             <h2 className={'text-xl text-primary font-[700] lg:font-bold mb-3'}>
               Sản phẩm

@@ -50,14 +50,20 @@ export const Header = ({ menu, settings, headerMarquee }: Props) => {
   const pageHeader = (settings || []).find(
     (item) => item?.key && item?.key === SETTING_KEY.GENERAL.PAGE_HEADER.KEY,
   );
+  const hasMarquee = !!headerMarquee && headerMarquee.length > 0;
 
   return (
     <>
-      <div className={' hidden lg:!flex bg-primaryGrey z-[3] p-3 h-[50px]'}>
+      <div
+        className={twMerge(
+          'bg-primaryGrey z-[3] p-3 h-[50px]',
+          hasMarquee ? 'flex' : 'hidden lg:!flex',
+        )}
+      >
         {pageHeader?.value && (
           <div
             className={
-              'text-left w-[30%] overflow-hidden text-ellipsis whitespace-nowrap'
+              'max-lg:hidden text-left w-[30%] overflow-hidden text-ellipsis whitespace-nowrap'
             }
             dangerouslySetInnerHTML={{
               __html: pageHeader?.value?.page_title_left || '',
@@ -65,10 +71,10 @@ export const Header = ({ menu, settings, headerMarquee }: Props) => {
           />
         )}
         {/* Header Marquee */}
-        {headerMarquee && headerMarquee.length > 0 && (
+        {hasMarquee && (
           <div
             className={
-              'bg-primaryGrey relative z-[3] w-[50%] flex items-center my-auto overflow-hidden'
+              'bg-primaryGrey relative z-[3] w-full lg:w-[50%] flex items-center my-auto overflow-hidden'
             }
           >
             <div className="marquee-container w-full">
@@ -93,7 +99,7 @@ export const Header = ({ menu, settings, headerMarquee }: Props) => {
         {pageHeader?.value && (
           <div
             className={
-              ' w-[20%] overflow-hidden text-ellipsis whitespace-nowrap'
+              'max-lg:hidden w-[20%] overflow-hidden text-ellipsis whitespace-nowrap'
             }
           >
             <div

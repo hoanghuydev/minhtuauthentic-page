@@ -5,8 +5,14 @@ type Props = {
   header: string[];
   content: string[];
   className?: string;
+  tocTabIndex?: number;
 };
-export default function TabsContainer({ header, content, className }: Props) {
+export default function TabsContainer({
+  header,
+  content,
+  className,
+  tocTabIndex,
+}: Props) {
   const [indexActive, setIndexActive] = useState<number>(0);
   const [height, setHeight] = useState(0);
   function renderButton(item: string, index: number) {
@@ -48,6 +54,7 @@ export default function TabsContainer({ header, content, className }: Props) {
                 item={item}
                 index={index}
                 indexActive={indexActive}
+                showToc={index === tocTabIndex}
                 setHeight={(value: number) => {
                   setHeight((height: number) => {
                     if (height < value) return value;

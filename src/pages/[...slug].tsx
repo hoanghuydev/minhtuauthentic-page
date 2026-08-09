@@ -166,9 +166,11 @@ export const getServerSideProps = async (context: any) => {
         ).data;
         title = promotionResponse?.title || 'Khuyến mãi';
         description = 'Danh sách sản phẩm khuyến mãi';
+        // The promotion banner is a wide strip (2240x240) that social scrapers
+        // crop badly, so the square product shot wins as the share image
         const promotionImage =
-          promotionResponse?.promotion?.images?.[0]?.image ||
-          promotionResponse?.products?.[0]?.feature_image_detail?.image;
+          promotionResponse?.products?.[0]?.feature_image_detail?.image ||
+          promotionResponse?.promotion?.images?.[0]?.image;
         image = promotionImage?.url || null;
         width = promotionImage?.width || 0;
         height = promotionImage?.height || 0;

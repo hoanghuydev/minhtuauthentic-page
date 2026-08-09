@@ -1,7 +1,7 @@
 import NewsClock from '@/components/atoms/news/clock';
 import { NewsDto } from '@/dtos/News.dto';
 import Script from 'next/script';
-import NewsToc from '@/components/atoms/news/toc';
+import Toc from '@/components/atoms/toc';
 import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -77,7 +77,7 @@ export default function NewsDetail({ news }: Props) {
         </script>
       </Head>
       {news && <NewsClock item={news} />}
-      <NewsToc />
+      <Toc />
       {renderContent}
       <Script
         strategy={'beforeInteractive'}
@@ -87,7 +87,7 @@ export default function NewsDetail({ news }: Props) {
       <Script strategy={'beforeInteractive'} src={'/js/toc.js'} async={false} />
       <Script
         strategy={'afterInteractive'}
-        src={'/news-detail.min.js'}
+        src={'/toc.min.js'}
         async={false}
       />
     </>
