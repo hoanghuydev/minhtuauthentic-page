@@ -1,9 +1,7 @@
 import NewsClock from '@/components/atoms/news/clock';
 import { NewsDto } from '@/dtos/News.dto';
-import Script from 'next/script';
 import Toc from '@/components/atoms/toc';
-import { useEffect, useMemo } from 'react';
-import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 import Head from 'next/head';
 
 type Props = {
@@ -45,19 +43,6 @@ export default function NewsDetail({ news }: Props) {
     "dateModified": "2025-05-25T10:00:00+07:00"
   }
 
-  const router = useRouter();
-  useEffect(() => {
-    const handleRouteComplete = () => {
-      if (window && window.onToc) {
-        window.onToc();
-      }
-    };
-    router.events.on('routeChangeComplete', handleRouteComplete);
-    return () => {
-      router.events.on('routeChangeComplete', handleRouteComplete);
-    };
-  }, [router]);
-
   const renderContent = useMemo(() => {
     return (
       <>
@@ -68,7 +53,7 @@ export default function NewsDetail({ news }: Props) {
         />
       </>
     );
-  }, []);
+  }, [news?.content]);
   return (
     <>
       <Head>
@@ -77,19 +62,8 @@ export default function NewsDetail({ news }: Props) {
         </script>
       </Head>
       {news && <NewsClock item={news} />}
-      <Toc />
+      <Toc contentKey={news?.id} />
       {renderContent}
-      <Script
-        strategy={'beforeInteractive'}
-        src={'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'}
-        async={false}
-      />
-      <Script strategy={'beforeInteractive'} src={'/js/toc.js'} async={false} />
-      <Script
-        strategy={'afterInteractive'}
-        src={'/toc.min.js'}
-        async={false}
-      />
     </>
   );
 }

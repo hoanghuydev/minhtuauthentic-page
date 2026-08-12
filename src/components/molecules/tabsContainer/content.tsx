@@ -21,9 +21,6 @@ export default function TabContent({
   const [ready, setReady] = useState(false);
   useEffect(() => {
     setReady(true);
-    if (showToc) {
-      window.onToc?.();
-    }
   }, []);
   useEffect(() => {
     if (ready) {
