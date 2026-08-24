@@ -1,4 +1,6 @@
 import CheckOutlined from '@ant-design/icons/lib/icons/CheckOutlined';
+import QuestionCircleOutlined from '@ant-design/icons/lib/icons/QuestionCircleOutlined';
+import { Tooltip } from 'antd/es';
 import { ProductConfigurationsDto } from '@/dtos/productConfigurations.dto';
 import { ReactNode, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -81,6 +83,9 @@ export default function ProductConfiguration({
     return (
       <>
         <span>{value.value}</span>
+        {value.description && (
+          <QuestionCircleOutlined className={'ml-1 text-gray-400 align-middle'} />
+        )}
         {isActived && (
           <span
             className={
@@ -99,6 +104,34 @@ export default function ProductConfiguration({
         )}
       </>
     ) as ReactNode;
+  };
+
+  const withDescriptionTooltip = (
+    node: ReactNode,
+    value: ProductConfigurationValuesDto,
+  ): ReactNode => {
+    if (!value.description) {
+      return node;
+    }
+    return (
+      <Tooltip
+        placement={'top'}
+        color={'#ffffff'}
+        // để người dùng kịp rê chuột từ nút lên tooltip mà tooltip chưa đóng
+        mouseEnterDelay={0.15}
+        mouseLeaveDelay={0.4}
+        overlayStyle={{ maxWidth: '320px' }}
+        styles={{ body: { color: '#333333' } }}
+        title={
+          <div
+            className={'product-configuration-description'}
+            dangerouslySetInnerHTML={{ __html: value.description }}
+          />
+        }
+      >
+        {node}
+      </Tooltip>
+    );
   };
 
   return (
@@ -133,39 +166,45 @@ export default function ProductConfiguration({
                     >
                       {variant?.link &&
                       variant?.is_in_stock &&
-                      router.asPath !== generateSlugToHref(variant?.link) ? (
-                        <Link
-                          href={generateSlugToHref(variant?.link)}
-                          className={twMerge(
-                            'rounded-[10px] p-2 lg:p-3 border border-gray-300 relative overflow-hidden font-semibold',
-                            isActived ? 'border-primary' : '',
+                      router.asPath !== generateSlugToHref(variant?.link)
+                        ? withDescriptionTooltip(
+                            <Link
+                              href={generateSlugToHref(variant?.link)}
+                              className={twMerge(
+                                'rounded-[10px] p-2 lg:p-3 border border-gray-300 relative overflow-hidden font-semibold',
+                                isActived ? 'border-primary' : '',
+                              )}
+                            >
+                              {renderItem(value, isActived, variant)}
+                            </Link>,
+                            value,
+                          )
+                        : withDescriptionTooltip(
+                            <button
+                              type={'button'}
+                              onClick={() => {
+                                setValueActiveId(() => {
+                                  const indexConfiguration =
+                                    valueIdActive.findIndex(
+                                      (_item) =>
+                                        _item.configurationId === item.id,
+                                    );
+                                  const newValue = [...valueIdActive];
+                                  newValue[indexConfiguration].valueId =
+                                    value.id!;
+                                  return newValue;
+                                });
+                              }}
+                              className={twMerge(
+                                'rounded-[10px] p-2 lg:p-3 border border-gray-300 relative overflow-hidden font-semibold',
+                                isActived ? 'border-primary' : '',
+                                !variant?.is_in_stock && 'out-of-stock-variant',
+                              )}
+                            >
+                              {renderItem(value, isActived)}
+                            </button>,
+                            value,
                           )}
-                        >
-                          {renderItem(value, isActived, variant)}
-                        </Link>
-                      ) : (
-                        <button
-                          type={'button'}
-                          onClick={() => {
-                            setValueActiveId(() => {
-                              const indexConfiguration =
-                                valueIdActive.findIndex(
-                                  (_item) => _item.configurationId === item.id,
-                                );
-                              const newValue = [...valueIdActive];
-                              newValue[indexConfiguration].valueId = value.id!;
-                              return newValue;
-                            });
-                          }}
-                          className={twMerge(
-                            'rounded-[10px] p-2 lg:p-3 border border-gray-300 relative overflow-hidden font-semibold',
-                            isActived ? 'border-primary' : '',
-                            !variant?.is_in_stock && 'out-of-stock-variant',
-                          )}
-                        >
-                          {renderItem(value, isActived)}
-                        </button>
-                      )}
                     </div>
                   );
                 })}

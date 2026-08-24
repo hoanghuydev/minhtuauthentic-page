@@ -345,3 +345,29 @@ a:hover {
 a:hover:has(*) {
   color: inherit !important;
 }
+
+/* Nội dung HTML mô tả giá trị biến thể hiển thị trong tooltip */
+.product-configuration-description {
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.product-configuration-description p {
+  margin-bottom: 4px;
+}
+
+.product-configuration-description p:last-child {
+  margin-bottom: 0;
+}
+
+.product-configuration-description ul,
+.product-configuration-description ol {
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.product-configuration-description a {
+  color: #0066cc;
+  text-decoration: underline;
+}
