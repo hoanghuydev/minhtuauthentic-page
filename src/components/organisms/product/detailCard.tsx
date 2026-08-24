@@ -20,6 +20,9 @@ import Head from 'next/head';
 import dayjs from 'dayjs';
 import { ProductImageDetailProvider } from '@/contexts/productDetailCarousel';
 import MediaItem from '@/dtos/Media.dto';
+import { StaticContentsDto } from '@/dtos/StaticContents.dto';
+import { SettingOptionDto } from '@/dtos/SettingOption.dto';
+import HomeSupport from '@/components/organisms/home/homeSupport';
 
 const ProductRating = dynamic(
   () => import('@/components/molecules/product/productRating'),
@@ -52,12 +55,16 @@ type Props = {
   relatedProducts: ProductDto[];
   productConfigurations: ProductConfigurationsDto[];
   settings: SettingsDto[];
+  homeSupport?: StaticContentsDto[];
+  settingsHome?: SettingsDto[];
 };
 const ProductDetailCard = ({
   product,
   productConfigurations,
   relatedProducts,
   settings,
+  homeSupport,
+  settingsHome,
 }: Props) => {
   const [isOpen, setIsOpen] = useState<{
     display: boolean;
@@ -122,6 +129,12 @@ const ProductDetailCard = ({
       },
     };
   }, [product]);
+
+  const supportSetting = useMemo<SettingOptionDto | undefined>(() => {
+    return (settingsHome || []).find(
+      (item) => item?.key === SETTING_KEY.SUPPORT_SECTION.KEY,
+    )?.value;
+  }, [settingsHome]);
 
   const productContext = useContext(ProductDetailContext);
   useEffect(() => {
@@ -193,6 +206,13 @@ const ProductDetailCard = ({
               productContext?.variantActive || product?.variants?.[0] || {}
             }
           />
+          {!!homeSupport?.length && (
+            <HomeSupport
+              contents={homeSupport}
+              setting={supportSetting}
+              fullWidth
+            />
+          )}
           <div
             className={
               'flex flex-col-reverse lg:grid lg:grid-cols-3 gap-3 my-3 relative min-h-[300px]'
