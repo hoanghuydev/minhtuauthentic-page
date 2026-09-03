@@ -59,83 +59,99 @@ export default function CategoryTemplate({
 
   const categorySchema = useMemo(() => {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
-    const itemListElement = data?.products?.map((product, index) => {
-      const defaultVariant = product?.variants?.find((v) => v.is_default);
-      return {
-        '@type': 'ListItem',
-        position: index + 1,
-        item: {
-          '@type': 'Product',
-          name: product?.title,
-          description: product?.title,
-          image: product?.feature_image_detail?.image?.url,
-          url: `${baseUrl}/${product?.slugs?.slug}`,
-          offers: {
-            '@type': 'Offer',
-            priceCurrency: 'VND',
-            price: defaultVariant?.regular_price,
-            priceValidUntil: dayjs(product?.created_at)
-              .add(1, 'year')
-              .format('YYYY-MM-DD'),
-            availability: 'http://schema.org/InStock',
-            itemCondition: 'http://schema.org/NewCondition',
-          },
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.7',
-            reviewCount: '89',
-          },
-          review: [
-            {
-              '@type': 'Review',
-              author: {
-                '@type': 'Person',
-                name: 'Nguyễn Văn A',
-              },
-              datePublished: '2025-06-10',
-              reviewBody:
-                'Hương thơm rất nam tính và bền lâu, rất hài lòng với sản phẩm.',
-              reviewRating: {
-                '@type': 'Rating',
-                ratingValue: '5',
-                bestRating: '5',
-              },
+    // Google drops the whole carousel when a ListItem has no name or no url,
+    // so build the list from products that can supply both.
+    const itemListElement = (data?.products || [])
+      .filter(
+        (product) => (product?.title || product?.name) && product?.slugs?.slug,
+      )
+      .map((product, index) => {
+        const defaultVariant = product?.variants?.find((v) => v.is_default);
+        const productName = product?.title || product?.name;
+        return {
+          '@type': 'ListItem',
+          position: index + 1,
+          name: productName,
+          item: {
+            '@type': 'Product',
+            name: productName,
+            description: productName,
+            image: product?.feature_image_detail?.image?.url,
+            url: `${baseUrl}/${product?.slugs?.slug}`,
+            offers: {
+              '@type': 'Offer',
+              priceCurrency: 'VND',
+              price: defaultVariant?.regular_price,
+              priceValidUntil: dayjs(product?.created_at)
+                .add(1, 'year')
+                .format('YYYY-MM-DD'),
+              availability: 'http://schema.org/InStock',
+              itemCondition: 'http://schema.org/NewCondition',
             },
-            {
-              '@type': 'Review',
-              author: {
-                '@type': 'Person',
-                name: 'Trần Thị B',
-              },
-              datePublished: '2025-05-20',
-              reviewBody: 'Chất lượng tốt, giao hàng nhanh chóng.',
-              reviewRating: {
-                '@type': 'Rating',
-                ratingValue: '4',
-                bestRating: '5',
-              },
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: '4.7',
+              reviewCount: '89',
             },
-          ],
-        },
-      };
-    });
+            review: [
+              {
+                '@type': 'Review',
+                author: {
+                  '@type': 'Person',
+                  name: 'Nguyễn Văn A',
+                },
+                datePublished: '2025-06-10',
+                reviewBody:
+                  'Hương thơm rất nam tính và bền lâu, rất hài lòng với sản phẩm.',
+                reviewRating: {
+                  '@type': 'Rating',
+                  ratingValue: '5',
+                  bestRating: '5',
+                },
+              },
+              {
+                '@type': 'Review',
+                author: {
+                  '@type': 'Person',
+                  name: 'Trần Thị B',
+                },
+                datePublished: '2025-05-20',
+                reviewBody: 'Chất lượng tốt, giao hàng nhanh chóng.',
+                reviewRating: {
+                  '@type': 'Rating',
+                  ratingValue: '4',
+                  bestRating: '5',
+                },
+              },
+            ],
+          },
+        };
+      });
+
+    // A carousel needs at least two items; emitting a shorter list only
+    // produces invalid structured data in Search Console.
+    if (itemListElement.length < 2) {
+      return null;
+    }
 
     return {
       '@context': 'http://schema.org',
       '@type': 'ItemList',
       url: `${baseUrl}/${slug?.slug}`,
-      numberOfItems: data?.products?.length || 0,
+      numberOfItems: itemListElement.length,
       itemListOrder: 'http://schema.org/ItemListOrderAscending',
       itemListElement: itemListElement,
     };
   }, [data?.products, slug?.slug]);
   return (
     <>
-      <Head>
-        <script type="application/ld+json">
-          {JSON.stringify(categorySchema)}
-        </script>
-      </Head>
+      {categorySchema && (
+        <Head>
+          <script type="application/ld+json">
+            {JSON.stringify(categorySchema)}
+          </script>
+        </Head>
+      )}
       <CategoryFilterProvider isSearch={isSearch}>
         <BreadcrumbComponent
           label={
