@@ -40,6 +40,10 @@ export default async function handler(
           case SETTING_KEY.GENERAL.SWIPER_SPEED.KEY:
             commonSettings.swiperSpeed = setting.value?.speed;
             break;
+          case SETTING_KEY.GENERAL.FREE_SHIPPING.KEY:
+            commonSettings.freeShippingMinOrderPrice =
+              setting.value?.min_order_price;
+            break;
         }
       });
 

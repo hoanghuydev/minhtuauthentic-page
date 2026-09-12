@@ -22,4 +22,5 @@ export class SettingOptionDto {
   isBannerFull?: boolean;
   isSquareBannerMobile?: boolean;
   speed?: number;
+  min_order_price?: number;
 }

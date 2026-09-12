@@ -131,6 +131,10 @@ export const SETTING_KEY = {
       KEY: 'swiper_speed',
       LABEL: 'Tốc độ chuyển sản phẩm',
     },
+    FREE_SHIPPING: {
+      KEY: 'free_shipping',
+      LABEL: 'Miễn phí vận chuyển',
+    },
   },
   BANNER_SECTION: {
     KEY: 'banner_section',

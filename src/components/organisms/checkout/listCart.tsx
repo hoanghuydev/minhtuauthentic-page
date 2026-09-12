@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import OrderContext from '@/contexts/orderContext';
+import useFreeShipping from '@/hooks/useFreeShipping';
 import { formatMoney } from '@/utils';
 import CheckItemCart from '@/components/organisms/checkout/itemCart';
 import CouponsDto from '@/dtos/Coupons.dto';
@@ -25,6 +26,7 @@ type Props = {
 };
 export default function ListCart({ paymentType, setValue, loading }: Props) {
   const order = useContext(OrderContext);
+  const isFreeShipping = useFreeShipping();
   const [couponInput, setCouponInput] = useState<string>('');
   const [coupons, setCoupons] = useState<CouponsDto[]>([]);
   useEffect(() => {
@@ -209,7 +211,9 @@ export default function ListCart({ paymentType, setValue, loading }: Props) {
           )}
           <div className={'font-semibold flex justify-between items-center'}>
             <span>Phí vận chuyển:</span>
-            <span className={'text-red-600'}>0</span>
+            <span className={'text-red-600'}>
+              {isFreeShipping ? '0' : 'Dao động theo khu vực'}
+            </span>
           </div>
           <div
             className={
