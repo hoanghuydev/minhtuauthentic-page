@@ -222,7 +222,7 @@ const ProductDetailCard = ({
             </div>
           </div>
           <ProductSeen product={product} />
-          <ProductImageDetailProvider>
+          <ProductImageDetailProvider product={product}>
             <PopupImage
               open={isOpen.display}
               setIsOpen={setIsOpen}
