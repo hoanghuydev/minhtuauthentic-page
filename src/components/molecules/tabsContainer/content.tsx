@@ -1,12 +1,11 @@
+import { useMemo } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useEffect, useRef, useState } from 'react';
 import Toc from '@/components/atoms/toc';
 type Props = {
   className?: string;
   index: number;
   indexActive: number;
   item: string;
-  setHeight: (value: number) => void;
   showToc?: boolean;
 };
 export default function TabContent({
@@ -14,23 +13,12 @@ export default function TabContent({
   index,
   item,
   indexActive,
-  setHeight,
   showToc,
 }: Props) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    setReady(true);
-    if (showToc) {
-      window.onToc?.();
-    }
-  }, []);
-  useEffect(() => {
-    if (ready) {
-      const height = ref.current?.clientHeight;
-      setHeight && setHeight(height ? height + 48 : 0);
-    }
-  }, [ready]);
+  // A fresh object would make React re-apply the markup on every parent render,
+  // rebuilding the whole description and wiping the ids the TOC puts on headings.
+  const html = useMemo(() => ({ __html: item }), [item]);
+
   return (
     <div
       key={index}
@@ -42,12 +30,9 @@ export default function TabContent({
     >
       {showToc && <Toc />}
       <div
-        ref={ref}
         id={showToc ? 'toc-content' : undefined}
         className={'container-html'}
-        dangerouslySetInnerHTML={{
-          __html: item,
-        }}
+        dangerouslySetInnerHTML={html}
       />
     </div>
   );

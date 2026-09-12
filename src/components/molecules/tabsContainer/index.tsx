@@ -14,7 +14,6 @@ export default function TabsContainer({
   tocTabIndex,
 }: Props) {
   const [indexActive, setIndexActive] = useState<number>(0);
-  const [height, setHeight] = useState(0);
   function renderButton(item: string, index: number) {
     const active = index === indexActive;
     return (
@@ -55,12 +54,6 @@ export default function TabsContainer({
                 index={index}
                 indexActive={indexActive}
                 showToc={index === tocTabIndex}
-                setHeight={(value: number) => {
-                  setHeight((height: number) => {
-                    if (height < value) return value;
-                    return height;
-                  });
-                }}
               />
             )
           );
