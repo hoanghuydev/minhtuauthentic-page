@@ -13,6 +13,8 @@ type TocNode = {
 
 type Props = {
   contentId?: string;
+  /** Change this to make the TOC rescan when the content is replaced. */
+  contentKey?: string | number;
 };
 
 const HEADINGS = 'h2, h3, h4';
@@ -26,14 +28,34 @@ function easeInOutQuad(progress: number) {
     : 1 - (2 - 2 * progress) ** 2 / 2;
 }
 
-function slugify(text: string) {
-  return text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/đ/g, 'd')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+// Kept byte-for-byte compatible with the old jQuery plugin (public/js/toc.js)
+// so heading ids - and therefore any anchor already shared or indexed - stay
+// exactly the same after moving the TOC to React.
+function changeToSlug(value = '') {
+  return (
+    '@' +
+    value
+      .toLowerCase()
+      .replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a')
+      .replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e')
+      .replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i')
+      .replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o')
+      .replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u')
+      .replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y')
+      .replace(/đ/gi, 'd')
+      .replace(
+        /\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi,
+        '',
+      )
+      .replace(/ /gi, '-')
+      .replace(/&nbsp;/gi, '-')
+      .replace(/\-\-\-\-\-/gi, '-')
+      .replace(/\-\-\-\-/gi, '-')
+      .replace(/\-\-\-/gi, '-')
+      .replace(/ /g, '')
+      .replace(/\-\-/gi, '-') +
+    '@'
+  ).replace(/\@\-|\-\@|\@/gi, '');
 }
 
 function collectHeadings(content: HTMLElement): TocNode[] {
@@ -47,9 +69,12 @@ function collectHeadings(content: HTMLElement): TocNode[] {
       const text = heading.textContent?.trim();
       if (!text) return;
 
-      let id = heading.id || slugify(text) || 'muc-luc';
-      for (let suffix = 2; taken.has(id); suffix++) {
-        id = `${slugify(text)}-${suffix}`;
+      // Overwrite any existing id and use the plugin's '_N' collision suffix:
+      // both are needed for the ids to match what is already indexed.
+      const base = changeToSlug(text) || 'muc-luc';
+      let id = base;
+      for (let suffix = 1; taken.has(id); suffix++) {
+        id = `${base}_${suffix}`;
       }
       taken.add(id);
       heading.id = id;
@@ -69,7 +94,10 @@ function collectHeadings(content: HTMLElement): TocNode[] {
   return root;
 }
 
-export default function Toc({ contentId = 'toc-content' }: Props) {
+export default function Toc({
+  contentId = 'toc-content',
+  contentKey,
+}: Props) {
   const [nodes, setNodes] = useState<TocNode[]>([]);
   const [collapsed, setCollapsed] = useState(false);
   const animation = useRef<number | undefined>(undefined);
@@ -77,7 +105,7 @@ export default function Toc({ contentId = 'toc-content' }: Props) {
   useEffect(() => {
     const content = document.getElementById(contentId);
     if (content) setNodes(collectHeadings(content));
-  }, [contentId]);
+  }, [contentId, contentKey]);
 
   // Resolved by position rather than by id: the headings live inside a
   // dangerouslySetInnerHTML block, so a re-render there can replace them.

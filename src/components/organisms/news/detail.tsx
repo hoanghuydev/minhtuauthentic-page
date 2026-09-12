@@ -53,7 +53,7 @@ export default function NewsDetail({ news }: Props) {
         />
       </>
     );
-  }, []);
+  }, [news?.content]);
   return (
     <>
       <Head>
@@ -62,7 +62,7 @@ export default function NewsDetail({ news }: Props) {
         </script>
       </Head>
       {news && <NewsClock item={news} />}
-      <Toc />
+      <Toc contentKey={news?.id} />
       {renderContent}
     </>
   );

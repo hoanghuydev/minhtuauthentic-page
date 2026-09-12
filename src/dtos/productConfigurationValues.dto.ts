@@ -5,6 +5,7 @@ import { IVariantProductConfigurationValuesDto } from '@/dtos/iVariantProductCon
 export class ProductConfigurationValuesDto extends BaseDto {
   product_configuration_id?: number;
   value?: string;
+  description?: string;
   product_configuration?: ProductConfigurationsDto;
   variant_product_configuration_values?: IVariantProductConfigurationValuesDto[]
   constructor(init?: Partial<ProductConfigurationValuesDto>) {

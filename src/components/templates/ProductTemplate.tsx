@@ -32,6 +32,8 @@ const ProductTemplate = ({
           relatedProducts={data?.relatedProducts || []}
           productConfigurations={data?.productConfigurations || []}
           settings={data?.settings || []}
+          homeSupport={data?.homeSupport || []}
+          settingsHome={data?.settingsHome || []}
         />
       )}
       <CustomScript isHaveFudiin={true} />

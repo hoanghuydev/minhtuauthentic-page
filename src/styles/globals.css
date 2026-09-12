@@ -155,6 +155,17 @@ iframe {
     border-width: 5px;
   }
 }
+/* Kéo section ra tràn đủ chiều ngang màn hình dù đang nằm trong .container */
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+/* clip (không dùng hidden) để không phá position: sticky */
+html,
+body {
+  overflow-x: clip;
+}
 .support-html {
   p {
     margin-block-end: 0;
@@ -368,4 +379,30 @@ a:hover {
 
 a:hover:has(*) {
   color: inherit !important;
+}
+
+/* Nội dung HTML mô tả giá trị biến thể hiển thị trong tooltip */
+.product-configuration-description {
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.product-configuration-description p {
+  margin-bottom: 4px;
+}
+
+.product-configuration-description p:last-child {
+  margin-bottom: 0;
+}
+
+.product-configuration-description ul,
+.product-configuration-description ol {
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.product-configuration-description a {
+  color: #0066cc;
+  text-decoration: underline;
 }

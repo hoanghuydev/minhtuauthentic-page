@@ -8,16 +8,18 @@ import { ImageDto } from '@/dtos/Image.dto';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { SettingOptionDto } from '@/dtos/SettingOption.dto';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
   contents?: StaticContentsDto[];
   setting?: SettingOptionDto;
+  fullWidth?: boolean;
 };
 
-export default function HomeSupport({ contents, setting }: Props) {
+export default function HomeSupport({ contents, setting, fullWidth }: Props) {
   return (
     <div
-      className="relative my-3"
+      className={twMerge('relative my-3', fullWidth && 'full-bleed')}
       style={{ backgroundColor: setting?.backgroundColor || '#fff' }}
     >
       <SectionSwiper

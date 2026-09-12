@@ -60,7 +60,7 @@ export default function OrderDetailTemplate({ order }: Props) {
       totalPriceWithoutCoupon += Number(item.price) || 0;
     });
     setTotalPriceWithoutCoupon(totalPriceWithoutCoupon);
-  }, []);
+  }, [order]);
 
   const columns: TableColumnsType = [
     {
@@ -198,7 +198,9 @@ export default function OrderDetailTemplate({ order }: Props) {
       }
       setOrderField(items);
     });
-  }, []);
+    // `router.replace` sau khi huỷ đơn trả về `order` mới nhưng không
+    // remount component, nên phải phụ thuộc `order` mới thấy trạng thái mới.
+  }, [order]);
 
   return (
     <>
