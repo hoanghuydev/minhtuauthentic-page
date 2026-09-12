@@ -120,6 +120,41 @@ iframe {
     @apply text-[#0782C1] underline cursor-pointer;
   }
 }
+/* CKEditor only draws table borders inside its own editing area (cke_show_border),
+   and Tailwind's preflight zeroes the width that a `border="N"` attribute would set —
+   so editor content arrives here borderless. Restore a default that an inline style
+   or the dialog's border size can still override. */
+.container-html,
+.base-container-html {
+  /* Editor HTML has no wrapper to scroll, so on mobile the table becomes the
+     scroll box itself and the cell borders stand in for its frame. */
+  table {
+    @apply w-full max-w-full my-4 border-collapse border border-[#e4e4e4] max-lg:block max-lg:overflow-x-auto max-lg:border-0;
+  }
+  th,
+  td {
+    @apply border border-[#e4e4e4] p-2 align-top max-lg:min-w-[120px];
+  }
+  th {
+    @apply bg-grey text-left font-bold;
+  }
+  table[border='0'],
+  table[border='0'] :is(th, td) {
+    @apply border-0;
+  }
+  table[border='2'] {
+    border-width: 2px;
+  }
+  table[border='3'] {
+    border-width: 3px;
+  }
+  table[border='4'] {
+    border-width: 4px;
+  }
+  table[border='5'] {
+    border-width: 5px;
+  }
+}
 .support-html {
   p {
     margin-block-end: 0;
