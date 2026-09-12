@@ -14,7 +14,7 @@ const ProductTemplate = ({
   data,
 }: ResponseSlugPageDto<ResponseProductDetailPageDto>) => {
   return (
-    <ProductDetailProvider>
+    <ProductDetailProvider product={data?.product}>
       <BreadcrumbComponent
         label={data?.product?.categories?.[0]?.category?.name || 'Sản phẩm'}
         link={
