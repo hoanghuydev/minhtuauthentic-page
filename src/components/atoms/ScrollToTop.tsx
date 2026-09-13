@@ -4,39 +4,31 @@ import { useRouter } from 'next/router';
 const ScrollToTop = () => {
   const router = useRouter();
 
-  // Xử lý khi component mount (refresh trang)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    }
+    // Own the offset outright: left on 'auto' the browser re-applies the previous
+    // scroll position on reload, which shows as a jump before this lands.
+    window.history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
   }, []);
 
-  // Xử lý khi route thay đổi (chuyển trang)
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const handleRouteChangeComplete = () => {
-      window.history.scrollRestoration = "auto";
-    };
-
-    const handleRouteChangeStart = () => {
-      window.history.scrollRestoration = "manual";
+    // Shallow pushes are the category filters and the news pager, which stay on
+    // the page and pass `scroll: false` on purpose.
+    const handleRouteChangeComplete = (
+      _url: string,
+      { shallow }: { shallow: boolean },
+    ) => {
+      if (!shallow) {
+        window.scrollTo(0, 0);
+      }
     };
 
     router.events.on('routeChangeComplete', handleRouteChangeComplete);
-    router.events.on('routeChangeStart', handleRouteChangeStart);
     return () => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete);
-      router.events.off('routeChangeStart', handleRouteChangeStart);
     };
   }, [router]);
 
-  // Component này không render gì cả
   return null;
 };
 
