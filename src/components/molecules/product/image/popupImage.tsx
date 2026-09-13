@@ -14,6 +14,7 @@ import { useProductImageDetail } from '@/contexts/productDetailCarousel';
 import MediaItem from '@/dtos/Media.dto';
 import { VideoDetailDto } from '@/dtos/VideoDetail.dto';
 import noImage from '@/static/images/no-image.png';
+import { setBodyScrollLocked } from '@/utils/bodyScroll';
 
 type Props = {
   open: boolean;
@@ -46,13 +47,9 @@ export default function PopupImage({ open, product, media, setIsOpen }: Props) {
   }, [mediaActive]);
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    setBodyScrollLocked(open);
     return () => {
-      document.body.style.overflow = 'auto';
+      setBodyScrollLocked(false);
     };
   }, [open]);
 

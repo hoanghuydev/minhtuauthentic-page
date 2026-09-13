@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { SEARCH_KEYWORD } from '@/config/enum';
 import { useIsMobile } from '@/hooks/useDevice';
+import { setBodyScrollLocked } from '@/utils/bodyScroll';
 
 export type TypeSearchState = {
   isOpenSearch: boolean;
@@ -33,11 +34,7 @@ export const SearchProvider = ({ children }: { children: React.ReactNode }) => {
   }, [searchValue]);
 
   useEffect(() => {
-    if (isOpenSearch && isMobile) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    setBodyScrollLocked(isOpenSearch && isMobile);
   }, [isOpenSearch, isMobile]);
 
   const saveKeyword = useCallback(() => {

@@ -18,6 +18,7 @@ import NavMenuContent from '@/components/organisms/MobileMenu/navMenu/content';
 import Loading from '@/components/atoms/loading';
 import { useRouter } from 'next/router';
 import { SettingsDto } from '@/dtos/Settings.dto';
+import { setBodyScrollLocked } from '@/utils/bodyScroll';
 type Props = {
   menu: ResponseMenuDto;
   className?: string;
@@ -62,10 +63,8 @@ export default function NavMenu({ menu, className, settings }: Props) {
   useEffect(() => {
     if (!appCtx?.isOpenNavMenu) {
       setLoading(false);
-      document.body.style.overflow = 'auto';
-    } else {
-      document.body.style.overflow = 'hidden';
     }
+    setBodyScrollLocked(Boolean(appCtx?.isOpenNavMenu));
   }, [appCtx?.isOpenNavMenu]);
 
   return (

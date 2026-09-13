@@ -18,6 +18,7 @@ import { SettingsDto } from '@/dtos/Settings.dto';
 import InputSearch from '@/components/molecules/header/InputSearch/input';
 import searchContext from '@/contexts/searchContext';
 import SearchContainer from '@/components/molecules/search/seachContainer';
+import { setBodyScrollLocked } from '@/utils/bodyScroll';
 type Props = {
   classname?: string;
   classNameInput?: string;
@@ -52,11 +53,7 @@ export const InputSearchDesktop = ({ classname, isForMobile }: Props) => {
   }, [ref]);
 
   useEffect(() => {
-    if (ctx?.isOpenSearch && isMobile) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    setBodyScrollLocked(Boolean(ctx?.isOpenSearch) && isMobile);
   }, [ctx?.isOpenSearch, isMobile]);
 
   useEffect(() => {
