@@ -34,9 +34,6 @@ const nextConfig = withBundleAnalyzer({
     'rc-input',
     'rc-table',
   ],
-  experimental: {
-    scrollRestoration: true,
-  },
   webpack: (config) => {
     return config;
   },

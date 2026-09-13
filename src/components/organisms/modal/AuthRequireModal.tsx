@@ -3,6 +3,7 @@ import Image from 'next/image';
 import characterShow from '@/static/images/character-show.png';
 import Link from 'next/link';
 import { CloseOutlined } from '@ant-design/icons';
+import { setBodyScrollLocked } from '@/utils/bodyScroll';
 
 interface AuthRequireModalProps {
   open: boolean;
@@ -15,17 +16,10 @@ const AuthRequireModal = ({
   onClose,
   redirectUrl,
 }: AuthRequireModalProps) => {
-  // Prevent body scroll when modal is open
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
-    // Cleanup on unmount
+    setBodyScrollLocked(open);
     return () => {
-      document.body.style.overflow = 'unset';
+      setBodyScrollLocked(false);
     };
   }, [open]);
 
