@@ -43,8 +43,15 @@ export default function SelectVariant({
     fetch('/api/product/variants/' + product.id)
       .then((res) => res.json())
       .then((res: { statusCode: number; data: VariantDto[] }) => {
+        // pages/api/product/variants/[id].ts LUÔN trả HTTP 200, kể cả khi BE
+        // hỏng thì body vẫn là {"data":null,"statusCode":500} — nên kiểm `res.ok`
+        // là vô nghĩa. Chốt theo payload: chưa có mảng data thì coi như chưa tải
+        // được, để `isFetch` giữ false và lần chạm sau còn thử lại.
+        if (!Array.isArray(res?.data)) {
+          throw new Error('payload variants không hợp lệ');
+        }
         const listOptions: SelectOption[] = [];
-        const data = res?.data || [];
+        const data = res.data;
         data.map((item) => {
           const prefixLabel =
             item?.variant_product_configuration_values?.[0]
@@ -133,7 +140,10 @@ export default function SelectVariant({
           cancelHoverLoad();
           loadOptions();
         }}
-        onFocus={loadOptions}
+        // focus cũng phải qua ngưỡng: giữ Tab lướt qua trang chủ là đi qua 168
+        // select, gọi thẳng loadOptions ở đây bắn ~168 request.
+        onFocus={scheduleHoverLoad}
+        onBlur={cancelHoverLoad}
       >
         <option value="0">Mời chọn size</option>
         {isLoading && options.length === 0 && (

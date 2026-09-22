@@ -56,20 +56,27 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
               /api/settings. Trước đây khối này chỉ render khi có `menu`, nên
               banner rộng 1241px lúc SSR rồi co xuống 1013px sau hydrate ⇒ cao
               507px xuống 414px ⇒ CLS 0.239 trên desktop. */}
-          <div className="hidden lg:block relative z-[15] flex-shrink-0 w-[220px]">
+          {/* `lg:!block` chứ không `lg:block`: script Fundiin (customScript.tsx)
+              chèn một <style> inline 946 byte có `.hidden{display:none}`, đứng
+              SAU Tailwind nên thắng `.lg\:block`. Khi đó cột này sập về 0x0,
+              banner giãn ra 1240px và CLS nhảy 0.0067 -> 0.12. Đây là element
+              duy nhất trong codebase còn dùng `hidden lg:block` không dấu `!`. */}
+          <div className="hidden lg:!block relative z-[15] flex-shrink-0 w-[220px]">
             {menu && <MenuWrapper menu={menu} className={'w-[220px]'} />}
           </div>
 
           {/* Một <Banners> duy nhất: bản thân nó đã tự tách cây desktop
               (hidden lg:!block) và cây mobile (lg:!hidden). Trước đây khối này
               được render hai lần nên có tới 4 NivoSlider cùng mount. */}
-          {/* Khung banner phải CỐ ĐỊNH tỉ lệ. Để chiều cao chạy theo nội dung
-              thì mỗi slide cao lệch nhau ~1px, và Chrome coi slide sau (lớn hơn
-              1013px² = đúng một hàng pixel) là ứng viên LCP mới — LCP nhảy từ
-              0.5s sang 4.7s đúng lúc slider tự chuyển slide. Ảnh desktop là
-              2030x830; khoá đúng tỉ lệ đó thì mọi slide vẽ cùng một hộp.
-              `self-start` là bắt buộc: trong flex row, `align-items: stretch`
-              mặc định kéo chiều cao theo nội dung và đè mất `aspect-ratio`. */}
+          {/* Cần CẢ HAI class, bỏ cái nào cũng hỏng — đã đo bằng ablation.
+              Cơ chế: cột menu cao 415px, `align-items: stretch` của flex row
+              kéo khung banner cao thêm 0.83px so với tỉ lệ ảnh. Slide kế tiếp
+              vẽ <img> mới trong cái hộp lớn hơn đúng một hàng pixel (1013px²),
+              Chrome coi đó là ứng viên LCP mới ⇒ LCP nhảy 0.3s -> 4.7s đúng lúc
+              slider tự chuyển. `self-start` gỡ stretch; `aspect` giữ tỉ lệ vì
+              đầu ra của /_next/image trôi theo width (414.17 -> 414.74).
+              KHÔNG phải do file banner lệch tỉ lệ: đo marker SOF của JPEG cho
+              thấy 9/9 file đúng 2030x830. */}
           <div
             className={
               'min-h-[140px] flex-grow overflow-hidden lg:self-start lg:aspect-[2030/830]'
