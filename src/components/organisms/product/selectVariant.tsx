@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { ProductDto } from '@/dtos/Product.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
 
@@ -21,18 +21,30 @@ export default function SelectVariant({
   preloadVariants = false, // Mặc định là false
 }: Props) {
   const [isFetch, setIsFetch] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<SelectOption[]>([]);
   const [listVariant, setListVariant] = useState<VariantDto[]>([]);
   const [selectedVariant, setSelectedVariant] = useState<number>(
     defaultVariant?.id || 0,
   );
+  // Chặn gọi trùng: pointerenter, pointerdown và focus có thể cùng bắn ra trong
+  // một lần người dùng chạm vào select.
+  const inflight = useRef(false);
+  // Trang chủ có ~168 select. Rê chuột lướt ngang lưới sẽ bắn hàng chục request
+  // nếu tải ngay ở pointerenter, nên chờ người dùng dừng lại một nhịp.
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const loadOptions = () => {
+  const loadOptions = useCallback(() => {
+    if (isFetch || inflight.current) {
+      return;
+    }
+    inflight.current = true;
+    setIsLoading(true);
     fetch('/api/product/variants/' + product.id)
       .then((res) => res.json())
       .then((res: { statusCode: number; data: VariantDto[] }) => {
         const listOptions: SelectOption[] = [];
-        const { data } = res;
+        const data = res?.data || [];
         data.map((item) => {
           const prefixLabel =
             item?.variant_product_configuration_values?.[0]
@@ -49,8 +61,34 @@ export default function SelectVariant({
         setListVariant(data);
         setOptions(listOptions);
         setIsFetch(true);
+      })
+      .catch(() => {
+        // Để nguyên isFetch = false: lần chạm sau sẽ thử lại.
+      })
+      .finally(() => {
+        inflight.current = false;
+        setIsLoading(false);
       });
-  };
+  }, [isFetch, product.id]);
+
+  const cancelHoverLoad = useCallback(() => {
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current);
+      hoverTimer.current = null;
+    }
+  }, []);
+
+  const scheduleHoverLoad = useCallback(() => {
+    if (isFetch || inflight.current || hoverTimer.current) {
+      return;
+    }
+    hoverTimer.current = setTimeout(() => {
+      hoverTimer.current = null;
+      loadOptions();
+    }, 180);
+  }, [isFetch, loadOptions]);
+
+  useEffect(() => cancelHoverLoad, [cancelHoverLoad]);
 
   // Cập nhật selectedVariant khi defaultVariant thay đổi
   useEffect(() => {
@@ -81,21 +119,28 @@ export default function SelectVariant({
             variant && onChange(variant);
           }
         }}
-        onClick={() => {
-          if (!isFetch) {
-            setOptions([
-              {
-                label: 'Loading...',
-                value: 0,
-              },
-            ]);
-            setTimeout(() => {
-              loadOptions();
-            }, 100);
-          }
+        // KHÔNG dùng onClick. Với <select> native, Chrome mở popup ngay ở
+        // mousedown và chỉ dispatch `click` SAU KHI popup đóng lại — nên gọi
+        // fetch trong onClick khiến danh sách size chỉ được tải khi người dùng
+        // đã tắt select đi, phải mở lần thứ hai mới thấy.
+        //
+        // pointerenter: chuột dừng lại 180ms (desktop) — tải xong trước khi bấm.
+        // pointerdown : bắn TRƯỚC khi popup mở, phủ cả chạm trên mobile.
+        // focus       : phủ đường bàn phím (Tab rồi Space/Enter).
+        onPointerEnter={scheduleHoverLoad}
+        onPointerLeave={cancelHoverLoad}
+        onPointerDown={() => {
+          cancelHoverLoad();
+          loadOptions();
         }}
+        onFocus={loadOptions}
       >
         <option value="0">Mời chọn size</option>
+        {isLoading && options.length === 0 && (
+          <option value="0" disabled>
+            Đang tải...
+          </option>
+        )}
         {options.map((item) => (
           <option key={item.value} value={item.value}>
             {item.label}
