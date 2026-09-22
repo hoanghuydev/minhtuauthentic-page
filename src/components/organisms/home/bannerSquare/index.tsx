@@ -48,7 +48,10 @@ export default function BannerSquare({ contents }: Props) {
                 image={image!}
                 alt={item.title || 'Banner'}
                 className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
-                unoptimized={true}
+                unoptimized={false}
+                // mobile 1 cột; desktop tối đa 3 cột trong container 1240px
+                sizes="(max-width: 768px) 100vw, (max-width: 1240px) 33vw, 410px"
+                quality={75}
               />
             </div>
           );

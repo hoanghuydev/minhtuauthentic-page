@@ -12,7 +12,7 @@ export default async function handler(
 ) {
   if (req.method === 'GET') {
     try {
-      const [menuResponse, footerResponse, settingsResponse, homeResponse] =
+      const [menuResponse, footerResponse, settingsResponse, marqueeResponse] =
         await Promise.all([
           fetch(process.env.BE_URL + '/api/pages/menu').then((res) =>
             res.json(),
@@ -23,9 +23,9 @@ export default async function handler(
           fetch(process.env.BE_URL + '/api/pages/settings').then((res) =>
             res.json(),
           ),
-          fetch(process.env.BE_URL + '/api/pages/home').then((res) =>
-            res.json(),
-          ),
+          fetch(
+            process.env.BE_URL + '/api/pages/static-contents/header-marquee',
+          ).then((res) => res.json()),
         ]);
 
       const commonSettings: CommonSettingDto = new CommonSettingDto();
@@ -43,12 +43,16 @@ export default async function handler(
         }
       });
 
+      res.setHeader(
+        'Cache-Control',
+        'public, max-age=60, stale-while-revalidate=300',
+      );
       res.status(200).json({
         menu: menuResponse?.data || undefined,
         footerContent: footerResponse?.data || undefined,
         settings: settingsResponse?.data as SettingsDto[],
         commonSettings,
-        headerMarquee: homeResponse?.data?.headerMarquee || [],
+        headerMarquee: marqueeResponse?.data || [],
       });
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch data' });

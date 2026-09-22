@@ -1,6 +1,6 @@
 import { SETTING_KEY } from '@/config/enum';
 import HomeNews from '../homeNews';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import HomeBrand from '../homeBrand';
 import HomeSupport from '../homeSupport';
 import { SettingOptionDto } from '@/dtos/SettingOption.dto';
@@ -16,29 +16,25 @@ type Props = {
 };
 
 export default function HomeContent({ homePage, settingsHome }: Props) {
-  const [blockContents, setBlockContents] = useState<
+  const blockContents = useMemo<Map<string | undefined, StaticComponentDto[]>>(
+    () =>
+      groupBy(homePage?.bannerUnderCategory || [], (item) =>
+        item.properties?.position_index?.toString(),
+      ),
+    [homePage?.bannerUnderCategory],
+  );
+
+  const blockSquareContents = useMemo<
     Map<string | undefined, StaticComponentDto[]>
-  >(new Map());
-  const [blockSquareContents, setBlockSquareContents] = useState<
-    Map<string | undefined, StaticComponentDto[]>
-  >(new Map());
-  const [listComponent, setListComponent] = useState<ReactNode[]>([]);
+  >(
+    () =>
+      groupBy(homePage?.bannerSquare || [], (item) =>
+        item.properties?.position_index?.toString(),
+      ),
+    [homePage?.bannerSquare],
+  );
 
-  useEffect(() => {
-    const contents = groupBy(
-      homePage?.bannerUnderCategory || [],
-      (item) => item.properties?.position_index?.toString(),
-    );
-    setBlockContents(contents);
-
-    const squareContents = groupBy(
-      homePage?.bannerSquare || [],
-      (item) => item.properties?.position_index?.toString(),
-    );
-    setBlockSquareContents(squareContents);
-  }, []);
-
-  useEffect(() => {
+  const listComponent = useMemo<ReactNode[]>(() => {
     const _listComponent = (homePage?.homeCategory || []).map(
       (item: StaticComponentDto, key: number) => {
         const position = key % 4 === 0 ? key / 4 : null;
@@ -76,8 +72,8 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
         />,
       );
     }
-    setListComponent(_listComponent);
-  }, [blockContents, blockSquareContents]);
+    return _listComponent;
+  }, [homePage, settingsHome, blockContents, blockSquareContents]);
 
   return (
     <div className="home-content">

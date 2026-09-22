@@ -22,7 +22,9 @@ interface HomeProps extends PageSetting {
 }
 
 // Constants
-const MAX_PRELOAD_BANNERS = 3;
+// Trùng breakpoint `lg` của Tailwind, nơi Banners đổi giữa cây desktop và mobile.
+const DESKTOP_MEDIA = '(min-width: 1024px)';
+const MOBILE_MEDIA = '(max-width: 1023.98px)';
 
 // Schema data moved to separate function for better readability
 const generateStoreSchema = () => ({
@@ -72,31 +74,46 @@ const generateStoreSchema = () => ({
   ],
 });
 
-// Utility function to extract banner images for preloading
-const extractBannerImages = (banners: any[] = []) => {
-  return banners
-    .filter(
-      (banner) =>
-        (banner?.images?.length > 0 && banner?.is_visible) ||
-        (banner?.images_mobile?.length > 0 && banner?.is_mobile_visible),
-    )
-    .slice(0, MAX_PRELOAD_BANNERS)
-    .flatMap((banner) => {
-      const images: string[] = [];
+// Chỉ ảnh đầu của mỗi cây là ứng viên LCP; mỗi preload gắn media để trình duyệt
+// chỉ tải đúng ảnh của breakpoint đang hiển thị.
+// Nhánh mobile lặp lại đúng logic chọn ảnh của Banners (molecules/header/banners).
+const extractBannerPreloads = (
+  banners: any[] = [],
+): { url: string; media: string }[] => {
+  const preloads: { url: string; media: string }[] = [];
 
-      // Add desktop image
-      if (banner.images?.[0]?.image?.url) {
-        images.push(banner.images[0].image.url);
-      }
+  // ImageWithFallback lùi về thumbnail_url khi thiếu url, nên phải lấy y hệt.
+  const srcOf = (imageDetail: any) =>
+    imageDetail?.image?.url || imageDetail?.image?.thumbnail_url;
 
-      // Add mobile image
-      if (banner.images_mobile?.[0]?.image?.url) {
-        images.push(banner.images_mobile[0].image.url);
-      }
+  const desktopUrl = srcOf(banners.find((banner) => banner?.images?.[0])?.images?.[0]);
+  if (desktopUrl) {
+    preloads.push({ url: desktopUrl, media: DESKTOP_MEDIA });
+  }
 
-      return images;
-    });
+  const mobileBanners = banners.filter(
+    (banner) => banner?.is_mobile_visible && banner?.images_mobile?.length > 0,
+  );
+  const mobileUrl = mobileBanners.length
+    ? srcOf(mobileBanners.find((banner) => banner?.images_mobile?.[0])?.images_mobile?.[0])
+    : desktopUrl;
+  if (mobileUrl) {
+    preloads.push({ url: mobileUrl, media: MOBILE_MEDIA });
+  }
+
+  return preloads;
 };
+
+// next/image mặc định sinh srcset theo đúng danh sách này; preload phải dùng y hệt
+// thì trình duyệt mới tái sử dụng được, nếu lệch sẽ tải ảnh hai lần.
+const NEXT_DEVICE_SIZES = [640, 750, 828, 1080, 1200, 1920, 2048, 3840];
+const NEXT_IMAGE_QUALITY = 75;
+
+const optimizedSrcSet = (url: string) =>
+  NEXT_DEVICE_SIZES.map(
+    (w) =>
+      `/_next/image?url=${encodeURIComponent(url)}&w=${w}&q=${NEXT_IMAGE_QUALITY} ${w}w`,
+  ).join(', ');
 
 // Utility function to transform settings array to object
 const transformSettingsToObject = (settings: any[] = []) => {
@@ -148,8 +165,8 @@ export default function Home({
   // Memoized values to prevent unnecessary re-calculations
   const schema = useMemo(() => generateStoreSchema(), []);
 
-  const bannerImages = useMemo(
-    () => extractBannerImages(homePage?.banners),
+  const bannerPreloads = useMemo(
+    () => extractBannerPreloads(homePage?.banners),
     [homePage?.banners],
   );
 
@@ -165,13 +182,18 @@ export default function Home({
         />
 
         {/* Preload critical banner images */}
-        {bannerImages.map((imageUrl, index) => (
+        {bannerPreloads.map(({ url, media }) => (
           <link
-            key={`preload-banner-${index}`}
+            key={`preload-banner-${media}`}
             rel="preload"
             as="image"
-            href={imageUrl}
-            fetchPriority={index === 0 ? 'high' : 'low'}
+            // Không đặt `href`: khi đã có imageSrcSet thì trình duyệt tải THÊM
+            // cả href, thành ra hai lần tải cùng một banner ở hai kích thước.
+            // next/image khi tự preload cũng chỉ phát imagesrcset + imagesizes.
+            imageSrcSet={optimizedSrcSet(url)}
+            imageSizes="100vw"
+            media={media}
+            fetchPriority="high"
           />
         ))}
       </Head>

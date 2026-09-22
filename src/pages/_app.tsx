@@ -11,17 +11,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { OrderProvider } from '@/contexts/orderContext';
 import Head from 'next/head';
-import { Nunito_Sans } from 'next/font/google';
 import useSettings from '@/hooks/useSettings';
 import { SearchProvider } from '@/contexts/searchContext';
 import ScrollToTop from '@/components/atoms/ScrollToTop';
 import CodeInjection from '@/components/molecules/CodeInjection';
 import { getCodeInjectionData } from '@/utils/codeInjection';
 import { CodeInjectionDto } from '@/dtos/codeInjection.dto';
-
-const nunitoSans = Nunito_Sans({
-  subsets: ['latin'],
-});
 
 interface MyAppProps extends AppProps {
   codeInjectionHeader: CodeInjectionDto[];
@@ -48,7 +43,7 @@ function MyApp({ Component, pageProps, codeInjectionHeader, codeInjectionFooter 
         <OrderProvider>
           <SearchProvider>
             <ScrollToTop />
-            <Component className={nunitoSans.className} {..._pageProps} />
+            <Component {..._pageProps} />
             <ToastContainer />
             <CodeInjection type="footer" data={codeInjectionFooter} />
           </SearchProvider>

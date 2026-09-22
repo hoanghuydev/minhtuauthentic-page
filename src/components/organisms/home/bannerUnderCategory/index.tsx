@@ -23,9 +23,7 @@ export default function BannerUnderCategory({
   return (
     <>
       {isDesktop && <BannerUnderCategoryDesktop contents={contents} />}
-      {isMobile && (
-        <BannerUnderCategoryMobile key={Math.random()} contents={contents} />
-      )}
+      {isMobile && <BannerUnderCategoryMobile contents={contents} />}
     </>
   );
 }

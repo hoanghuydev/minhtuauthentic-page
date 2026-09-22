@@ -26,6 +26,11 @@ export const Banners = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Không `priority`/`loading="eager"`: cả hai đều khiến React/next-image phát
+  // <link rel="preload"> không kèm `media`, nên mobile tải luôn banner desktop và
+  // ngược lại. Để lazy thì cây bị `display:none` theo breakpoint không tải ảnh,
+  // còn ảnh LCP đã được pages/index.tsx preload sẵn kèm media đúng breakpoint.
+
   // Render desktop banners with NivoSlider
   const renderDesktopBanners = () => (
     <div
@@ -64,11 +69,11 @@ export const Banners = ({
                     'object-contain w-full h-full',
                     classNameImage,
                   )}
-                  loading="eager"
-                  priority={index === 0}
-                  unoptimized={true}
+                  unoptimized={false}
                   sizes="100vw"
-                  quality={100}
+                  // Next 16 mặc định chỉ cho phép qualities: [75]; giá trị khác
+                  // làm /_next/image trả 400 và banner biến mất.
+                  quality={75}
                 />
               </Link>
             </NivoSlide>
@@ -130,11 +135,9 @@ export const Banners = ({
                       image={imageDetail.image}
                       alt={imageDetail.image?.alt || 'minhtuauthentic'}
                       className="object-cover w-full h-full"
-                      loading="eager"
-                      priority={index === 0}
-                      unoptimized={true}
+                      unoptimized={false}
                       sizes="100vw"
-                      quality={80}
+                      quality={75}
                     />
                   </div>
                 </Link>

@@ -55,7 +55,10 @@ const HomeBannerBrand = ({ images, className }: Props) => {
                 image={image}
                 alt={banner.title || 'Banner thương hiệu'}
                 className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
-                unoptimized={true}
+                unoptimized={false}
+                // nửa trái của grid 2 cột trên lg, container tối đa 1240px
+                sizes="(max-width: 1023px) 100vw, (max-width: 1240px) 50vw, 610px"
+                quality={75}
               />
             </div>
           );

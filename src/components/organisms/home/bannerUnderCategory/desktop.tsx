@@ -53,6 +53,10 @@ export default function BannerUnderCategoryDesktop({
                 <ImageWithRatio
                   image={image.image}
                   href={generateSlugToHref(content?.properties?.slug)}
+                  unoptimized={false}
+                  // 2 slide/hàng từ 768px, container tối đa 1240px => ~610px
+                  sizes="(max-width: 767px) 100vw, (max-width: 1240px) 50vw, 610px"
+                  quality={75}
                 />
               </div>
             </SwiperSlide>

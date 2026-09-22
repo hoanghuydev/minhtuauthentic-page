@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { twMerge } from 'tailwind-merge';
-import { isMobile } from 'react-device-detect';
 
 const BlockUnderSlideItem = ({
   content,
@@ -39,7 +38,10 @@ const BlockUnderSlideItem = ({
             alt={imageDetail?.alt || content?.title || ''}
             priority={priority}
             loading={priority ? 'eager' : 'lazy'}
-            unoptimized={!isMobile}
+            unoptimized={false}
+            // 4 item/màn trên mobile, lưới 10 cột trong container 1240px trên desktop
+            sizes="(max-width: 1023px) 25vw, 124px"
+            quality={75}
           />
         </Link>
       </div>

@@ -33,8 +33,8 @@ export default async function getDefaultSeverSide(): Promise<{
     .catch((error) => {
       return null;
     });
-  const resHome: { data: any } = await fetch(
-    process.env.BE_URL + '/api/pages/home',
+  const resMarquee: { data: any[] } = await fetch(
+    process.env.BE_URL + '/api/pages/static-contents/header-marquee',
   )
     .then((res) => res.json())
     .catch((error) => {
@@ -44,7 +44,7 @@ export default async function getDefaultSeverSide(): Promise<{
     menu: resMenu?.data || undefined,
     footerContent: resFooter?.data || undefined,
     settings: resSetting?.data as SettingsDto[],
-    headerMarquee: resHome?.data?.headerMarquee || [],
+    headerMarquee: resMarquee?.data || [],
   };
 }
 

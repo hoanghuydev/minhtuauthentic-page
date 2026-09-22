@@ -37,6 +37,9 @@ export default function BannerUnderCategoryMobile({
                 <ImageWithRatio
                   image={image.image}
                   href={generateSlugToHref(content?.properties?.slug)}
+                  unoptimized={false}
+                  sizes="100vw"
+                  quality={75}
                 />
               </div>
             </SwiperSlide>

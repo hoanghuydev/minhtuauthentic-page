@@ -9,12 +9,20 @@ type Props = {
   containerClassName?: string;
   imageClassName?: string;
   href?: string;
+  // Các prop tối ưu được chuyển thẳng xuống ImageWithFallback. Để trống thì giữ
+  // nguyên hành vi mặc định của ImageWithFallback (unoptimized = true).
+  unoptimized?: boolean;
+  sizes?: string;
+  quality?: number;
 };
 export default function ImageWithRatio({
   image,
   containerClassName,
   imageClassName,
   href,
+  unoptimized,
+  sizes,
+  quality,
 }: Props) {
   const refContainer = useRef<HTMLDivElement | null>(null);
   const ratio = (image?.width || 0) / (image?.height || 1);
@@ -45,6 +53,9 @@ export default function ImageWithRatio({
           'w-full !h-auto object-contain max-h-full',
           imageClassName,
         )}
+        unoptimized={unoptimized}
+        sizes={sizes}
+        quality={quality}
       />
     );
   };
