@@ -89,6 +89,10 @@ export function useNivoSlider({
   const rafRef = useRef<number | null>(null);
   const isPausedRef = useRef(false);
   const isVisibleRef = useRef(true);
+  // Tách riêng khỏi `isVisibleRef`: cái kia theo dõi tab, cái này theo dõi việc
+  // bản thân slider có được vẽ hay không. Gộp chung một ref thì mỗi lần quay
+  // lại tab sẽ set true và slider đang bị display:none lại chạy tiếp.
+  const isRenderedRef = useRef(true);
 
   // State
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -240,6 +244,37 @@ export function useNivoSlider({
     }
   }, [pauseOnHover]);
 
+  // Cây desktop và cây mobile cùng nằm trong DOM, CSS ẩn một cái theo breakpoint.
+  // Cây bị ẩn vẫn tự chuyển slide, mỗi lần chuyển lại nạp một ảnh mới: đo được
+  // 484KB/20s trên desktop và 87KB/20s trên mobile cho thứ không ai nhìn thấy,
+  // và nó rỉ mãi chừng nào tab còn mở.
+  //
+  // `rootMargin` cực lớn để observer chỉ trả lời đúng một câu hỏi: element này
+  // CÓ ĐƯỢC VẼ không. Phần tử `display:none` không có hộp nên không bao giờ
+  // intersect; còn phần tử chỉ nằm ngoài màn hình thì vẫn tính là intersect,
+  // nên slider người dùng nhìn thấy không bị đụng tới.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[entries.length - 1];
+        if (!entry) return;
+        if (entry.isIntersecting && !isRenderedRef.current) {
+          // Vừa được hiện lại (đổi breakpoint): tính lại mốc thời gian để nó
+          // không chuyển slide ngay lập tức.
+          lastTimeRef.current = Date.now();
+        }
+        isRenderedRef.current = entry.isIntersecting;
+      },
+      { rootMargin: '100000px', threshold: 0 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   // Handle visibility change (tab switch)
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -267,6 +302,7 @@ export function useNivoSlider({
 
       if (
         isVisibleRef.current &&
+        isRenderedRef.current &&
         !isPausedRef.current &&
         !isAnimating &&
         elapsed >= pauseTime
