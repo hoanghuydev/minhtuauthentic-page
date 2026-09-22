@@ -7,6 +7,11 @@ import { useState } from 'react';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { twMerge } from 'tailwind-merge';
 import { NivoSlider, NivoSlide } from '@/components/atoms/slider';
+import {
+  BANNER_SIZES_DESKTOP,
+  BANNER_SIZES_FULL,
+  BANNER_SIZES_MOBILE,
+} from '@/config/bannerSizes';
 import type { EffectType } from '@/components/atoms/slider';
 
 export const Banners = ({
@@ -70,7 +75,8 @@ export const Banners = ({
                     classNameImage,
                   )}
                   unoptimized={false}
-                  sizes="100vw"
+                  // Phải khớp `imageSizes` của thẻ preload trong pages/index.tsx.
+                  sizes={isFull ? BANNER_SIZES_FULL : BANNER_SIZES_DESKTOP}
                   // Next 16 mặc định chỉ cho phép qualities: [75]; giá trị khác
                   // làm /_next/image trả 400 và banner biến mất.
                   quality={75}
@@ -136,7 +142,7 @@ export const Banners = ({
                       alt={imageDetail.image?.alt || 'minhtuauthentic'}
                       className="object-cover w-full h-full"
                       unoptimized={false}
-                      sizes="100vw"
+                      sizes={BANNER_SIZES_MOBILE}
                       quality={75}
                     />
                   </div>

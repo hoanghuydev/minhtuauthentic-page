@@ -10,6 +10,11 @@ import HomeFlashSale from '@/components/organisms/home/homeFlashSale';
 import Layout from '@/components/templates/Layout';
 import HomeContent from '@/components/organisms/home/homeContent';
 import HomeBanner from '@/components/organisms/home/homeBanner';
+import {
+  BANNER_SIZES_DESKTOP,
+  BANNER_SIZES_FULL,
+  BANNER_SIZES_MOBILE,
+} from '@/config/bannerSizes';
 import HomeSupport from '@/components/organisms/home/homeSupport';
 
 import Head from 'next/head';
@@ -165,6 +170,12 @@ export default function Home({
   // Memoized values to prevent unnecessary re-calculations
   const schema = useMemo(() => generateStoreSchema(), []);
 
+  // Cùng một điều kiện mà HomeBanner dùng để chọn nhánh full-width.
+  const desktopBannerSizes = settingsHome[SETTING_KEY.BANNER_SECTION.KEY]
+    ?.isBannerFull
+    ? BANNER_SIZES_FULL
+    : BANNER_SIZES_DESKTOP;
+
   const bannerPreloads = useMemo(
     () => extractBannerPreloads(homePage?.banners),
     [homePage?.banners],
@@ -191,7 +202,12 @@ export default function Home({
             // cả href, thành ra hai lần tải cùng một banner ở hai kích thước.
             // next/image khi tự preload cũng chỉ phát imagesrcset + imagesizes.
             imageSrcSet={optimizedSrcSet(url)}
-            imageSizes="100vw"
+            // Phải bằng ĐÚNG `sizes` của <img> tương ứng trong banners.tsx,
+            // nếu không trình duyệt tải một biến thể cho preload và một biến
+            // thể khác cho <img>.
+            imageSizes={
+              media === DESKTOP_MEDIA ? desktopBannerSizes : BANNER_SIZES_MOBILE
+            }
             media={media}
             fetchPriority="high"
           />
