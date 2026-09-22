@@ -41,7 +41,7 @@ export default function ProductOverview({
         'p-3 grid grid-cols-1 lg:grid-cols-2 rounded-[10px] shadow-custom mt-3 bg-white gap-3 relative'
       }
     >
-      <ProductImageDetailProvider>
+      <ProductImageDetailProvider product={product}>
         <ProductDetailImage
           containerClassName={'h-max lg:sticky top-0 bg-white'}
           product={product}

@@ -2,24 +2,13 @@ import { StaticContentsDto } from '@/dtos/StaticContents.dto';
 import useSwiperSpeed from '@/hooks/useSwiperSpeed';
 import SectionSwiper from '@/components/organisms/sectionSwiper';
 import { PlusIcon } from '@/components/icons/plus';
-import dynamic from 'next/dynamic';
-import { ImageDto } from '@/dtos/Image.dto';
 import { useState } from 'react';
 import { VariantDto } from '@/dtos/Variant.dto';
 import { useIsMobile } from '@/hooks/useDevice';
 import { SwiperClass } from 'swiper/react';
 import Link from 'next/link';
-import ProductCardImage from '@/components/molecules/product/image/productCardImage';
-import { ProductDto } from '@/dtos/Product.dto';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import VariantCard from '../../product/varitantCard';
-
-const ImageWithRatio = dynamic(
-  () => import('@/components/atoms/images/imageWithRatio'),
-  {
-    ssr: false,
-  },
-);
 
 type Props = {
   content: StaticContentsDto;
@@ -39,6 +28,24 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
     }
     swiper.slideTo(newOffset);
   };
+  const titleImage = content?.images?.[0]?.image;
+  const title = content?.title || 'Danh mục nổi bật';
+  const heading = titleImage ? (
+    <ImageWithFallback
+      image={titleImage}
+      alt={title}
+      className={
+        'h-[36px] lg:h-[45px] w-auto max-w-[200px] lg:max-w-[300px] object-contain object-left'
+      }
+    />
+  ) : (
+    <h2
+      className="text-2xl font-bold uppercase tracking-wide"
+      style={{ color: content?.properties?.textColor || '#000000' }}
+    >
+      {title}
+    </h2>
+  );
   return (
     content && (
       <div
@@ -51,26 +58,17 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
           <div className="flex items-center justify-between mb-8">
             {content?.slugs?.slug ? (
               <Link
+                className={'min-w-0 hover:opacity-80 transition-opacity'}
                 href={`${process.env.NEXT_PUBLIC_APP_URL}/${content.slugs.slug}`}
               >
-                <h2
-                  className="text-2xl font-bold uppercase tracking-wide hover:opacity-80 transition-opacity"
-                  style={{ color: content?.properties?.textColor || '#000000' }}
-                >
-                  {content?.title || 'Danh mục nổi bật'}
-                </h2>
+                {heading}
               </Link>
             ) : (
-              <h2
-                className="text-2xl font-bold uppercase tracking-wide"
-                style={{ color: content?.properties?.textColor || '#000000' }}
-              >
-                {content?.title || 'Danh mục nổi bật'}
-              </h2>
+              heading
             )}
             <button
               onClick={seeMore}
-              className="flex items-center bg-gray-100 p-2 rounded-xl text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+              className="shrink-0 ml-3 flex items-center bg-gray-100 p-2 rounded-xl text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
             >
               <PlusIcon className="w-4 h-4 mr-1" />
               Xem thêm

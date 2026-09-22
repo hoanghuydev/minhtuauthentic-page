@@ -1,20 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
+import IconListOl from '@/components/icons/list-ol';
+import IconCheveronRight from '@/components/icons/cheveron-right';
 
-type TocItem = {
+type TocNode = {
   id: string;
   text: string;
   level: number;
-  number: string;
-  /** Vị trí trong danh sách heading, dùng để tìm lại khi id bị mất. */
-  index: number;
+  position: number;
+  children: TocNode[];
 };
 
-const DEFAULT_VISIBLE_ITEMS = 5;
+type Props = {
+  contentId?: string;
+  /** Change this to make the TOC rescan when the content is replaced. */
+  contentKey?: string | number;
+};
+
+const HEADINGS = 'h2, h3, h4';
+const SCROLL_GAP = 16;
+const SCROLL_MIN_MS = 350;
+const SCROLL_MAX_MS = 800;
+
+function easeInOutQuad(progress: number) {
+  return progress < 0.5
+    ? 2 * progress * progress
+    : 1 - (2 - 2 * progress) ** 2 / 2;
+}
 
 // Kept byte-for-byte compatible with the old jQuery plugin (public/js/toc.js)
 // so heading ids - and therefore any anchor already shared or indexed - stay
 // exactly the same after moving the TOC to React.
-const changeToSlug = (value = '') => {
+function changeToSlug(value = '') {
   return (
     '@' +
     value
@@ -35,163 +52,126 @@ const changeToSlug = (value = '') => {
       .replace(/\-\-\-\-\-/gi, '-')
       .replace(/\-\-\-\-/gi, '-')
       .replace(/\-\-\-/gi, '-')
-      .replace(/ /g, '')
+      .replace(/ /g, '')
       .replace(/\-\-/gi, '-') +
     '@'
   ).replace(/\@\-|\-\@|\@/gi, '');
-};
+}
 
-const buildUniqueId = (text: string, index: number) => {
-  // Heading rỗng hoặc chỉ toàn dấu câu cho ra slug rỗng (hay gặp với HTML
-  // dán từ nơi khác, vd <h2>&nbsp;</h2>). Rơi về id theo vị trí, nếu không
-  // sẽ có nhiều mục cùng id rỗng -> trùng key React.
-  const base = changeToSlug(text) || `toc-${index}`;
-  let suffix = '';
-  let counter = 1;
-  while (document.getElementById(base + suffix) !== null) {
-    suffix = '_' + counter++;
-  }
-  return base + suffix;
-};
+function collectHeadings(content: HTMLElement): TocNode[] {
+  const taken = new Set<string>();
+  const root: TocNode[] = [];
+  const ancestors: TocNode[] = [];
 
-type Props = {
-  title?: string;
-  contentId?: string;
-  headings?: string;
-  /** Số mục hiển thị trước khi phải bấm "Xem tất cả". */
-  defaultVisibleItems?: number;
-  /** Đổi giá trị này để bắt TOC quét lại khi nội dung thay đổi. */
-  contentKey?: string | number;
-};
+  content
+    .querySelectorAll<HTMLElement>(HEADINGS)
+    .forEach((heading, position) => {
+      const text = heading.textContent?.trim();
+      if (!text) return;
+
+      // Overwrite any existing id and use the plugin's '_N' collision suffix:
+      // both are needed for the ids to match what is already indexed.
+      const base = changeToSlug(text) || 'muc-luc';
+      let id = base;
+      for (let suffix = 1; taken.has(id); suffix++) {
+        id = `${base}_${suffix}`;
+      }
+      taken.add(id);
+      heading.id = id;
+
+      const level = Number(heading.tagName.slice(1));
+      const node: TocNode = { id, text, level, position, children: [] };
+      while (
+        ancestors.length &&
+        ancestors[ancestors.length - 1].level >= level
+      ) {
+        ancestors.pop();
+      }
+      (ancestors[ancestors.length - 1]?.children ?? root).push(node);
+      ancestors.push(node);
+    });
+
+  return root;
+}
 
 export default function Toc({
-  title = 'Nội dung bài viết',
   contentId = 'toc-content',
-  headings = 'h2,h3,h4',
-  defaultVisibleItems = DEFAULT_VISIBLE_ITEMS,
   contentKey,
 }: Props) {
-  const [items, setItems] = useState<TocItem[]>([]);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [nodes, setNodes] = useState<TocNode[]>([]);
+  const [collapsed, setCollapsed] = useState(false);
+  const animation = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const content = document.getElementById(contentId);
-    if (!content) {
-      setItems([]);
-      return;
-    }
+    if (content) setNodes(collectHeadings(content));
+  }, [contentId, contentKey]);
 
-    const levels = headings.split(',').map((item) => item.trim().toLowerCase());
-    const counters: number[] = [];
+  // Resolved by position rather than by id: the headings live inside a
+  // dangerouslySetInnerHTML block, so a re-render there can replace them.
+  const scrollToHeading = (position: number) => {
+    const content = document.getElementById(contentId);
+    const heading = content?.querySelectorAll<HTMLElement>(HEADINGS)[position];
+    if (!heading) return;
+    // The site header is sticky, so it would cover the heading at its natural offset.
+    const stickyHeader = document.getElementById('header');
+    const top =
+      heading.getBoundingClientRect().top +
+      window.scrollY -
+      (stickyHeader?.offsetHeight || 0) -
+      SCROLL_GAP;
 
-    const nextItems = Array.from(
-      content.querySelectorAll<HTMLElement>(headings),
-    ).map((node, index) => {
-      const level = Math.max(levels.indexOf(node.tagName.toLowerCase()), 0);
-      const text = (node.textContent || '').trim();
-      if (!node.id) {
-        node.id = buildUniqueId(text, index);
-      }
+    // Native `behavior: 'smooth'` jumps instantly here, so animate it by hand.
+    const from = window.scrollY;
+    const distance = top - from;
+    const duration = Math.min(
+      SCROLL_MAX_MS,
+      Math.max(SCROLL_MIN_MS, Math.abs(distance) / 3),
+    );
+    const startedAt = performance.now();
 
-      // Cắt bớt counter của các cấp sâu hơn để đánh số lại từ đầu, ví dụ
-      // 1 -> 1.1 -> 1.2 -> 2 -> 2.1
-      counters.length = level + 1;
-      for (let i = 0; i < level; i++) {
-        if (!counters[i]) counters[i] = 1;
-      }
-      counters[level] = (counters[level] || 0) + 1;
-
-      return {
-        id: node.id,
-        text,
-        level,
-        number: counters.slice(0, level + 1).join('.'),
-        index,
-      };
-    });
-
-    setItems(nextItems);
-    setIsExpanded(false);
-  }, [contentId, headings, contentKey]);
-
-  const scrollToHeading = (item: TocItem) => {
-    // React dựng lại nội dung mô tả bằng dangerouslySetInnerHTML, nên các
-    // node heading có thể bị thay mới sau khi ta gán id - lúc đó
-    // getElementById trả về null. Tìm lại theo vị trí rồi đóng dấu id lại.
-    let target = document.getElementById(item.id);
-    if (!target) {
-      const content = document.getElementById(contentId);
-      const nodes = content?.querySelectorAll<HTMLElement>(headings);
-      target = nodes?.[item.index] || null;
-      if (target && !target.id) {
-        target.id = item.id;
-      }
-    }
-    if (!target) return;
-
-    // Header dùng `sticky top-0` nên phải trừ chiều cao của nó, nếu không
-    // tiêu đề sẽ bị che mất.
-    const header = document.getElementById('header');
-    const offset = (header?.offsetHeight || 0) + 12;
-    const top = target.getBoundingClientRect().top + window.scrollY - offset;
-
-    window.scrollTo({ top: top < 0 ? 0 : top, behavior: 'smooth' });
+    if (animation.current) cancelAnimationFrame(animation.current);
+    const step = (now: number) => {
+      const progress = Math.min((now - startedAt) / duration, 1);
+      window.scrollTo(0, from + distance * easeInOutQuad(progress));
+      if (progress < 1) animation.current = requestAnimationFrame(step);
+    };
+    animation.current = requestAnimationFrame(step);
   };
 
-  if (items.length === 0) return null;
+  const renderList = (items: TocNode[], isRoot = false) => (
+    <ul className={isRoot ? 'toc-list' : undefined}>
+      {items.map((item) => (
+        <li key={item.id}>
+          <a onClick={() => scrollToHeading(item.position)}>{item.text}</a>
+          {item.children.length > 0 && renderList(item.children)}
+        </li>
+      ))}
+    </ul>
+  );
 
-  const hasMore = items.length > defaultVisibleItems;
-  const visibleItems =
-    hasMore && !isExpanded ? items.slice(0, defaultVisibleItems) : items;
+  if (!nodes.length) return null;
 
   return (
     <div className="meta-toc">
       <div className="box-readmore">
-        <h3 className="text-xl font-bold">{title}</h3>
-        <ul className="toc-list">
-          {visibleItems.map((item) => (
-            <li
-              key={item.id}
-              className="toc-item"
-              style={{ paddingLeft: item.level * 16 }}
-            >
-              <span className="toc-number">{item.number}.</span>
-              <a
-                href={`#${item.id}`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  scrollToHeading(item);
-                }}
-              >
-                {item.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        {hasMore && (
-          <button
-            type="button"
-            className="toc-toggle"
-            aria-expanded={isExpanded}
-            onClick={() => setIsExpanded((value) => !value)}
-          >
-            {isExpanded ? 'Thu gọn' : `Xem tất cả (${items.length} mục)`}
-            <svg
-              className={isExpanded ? 'toc-toggle-icon is-open' : 'toc-toggle-icon'}
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
+        <button
+          type="button"
+          aria-expanded={!collapsed}
+          onClick={() => setCollapsed((value) => !value)}
+          className="flex w-full items-center gap-2 bg-primary px-4 py-3 text-left text-white"
+        >
+          <IconListOl className="h-5 w-5 shrink-0" />
+          <span className="text-base font-bold uppercase">Mục lục</span>
+          <IconCheveronRight
+            className={twMerge(
+              'ml-auto h-4 w-4 shrink-0 transition-transform duration-200',
+              collapsed ? 'rotate-90' : '-rotate-90',
+            )}
+          />
+        </button>
+        {!collapsed && (
+          <nav className="px-4 py-3">{renderList(nodes, true)}</nav>
         )}
       </div>
     </div>

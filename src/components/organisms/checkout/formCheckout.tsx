@@ -16,6 +16,7 @@ import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import PlusOutlined from '@ant-design/icons/PlusOutlined';
 import { AddressesDto } from '@/dtos/Addresses.dto';
 import CheckoutAddress from '@/components/organisms/checkout/address';
+import useFreeShipping from '@/hooks/useFreeShipping';
 
 export default function FormCheckout({
   payments,
@@ -36,6 +37,7 @@ export default function FormCheckout({
   setFullAddress: any;
 }) {
   const orderCtx = useContext(OrderContext);
+  const isFreeShipping = useFreeShipping();
 
   useEffect(() => {
     if (!orderCtx?.cart) {
@@ -58,7 +60,9 @@ export default function FormCheckout({
       </h3>
       <div className={'flex flex-col'}>
         <Radio className={'border border-gray-200 p-3'} checked>
-          Miễn phí vận chuyển
+          {isFreeShipping
+            ? 'Miễn phí vận chuyển'
+            : 'Phí vận chuyển dao động theo khu vực'}
         </Radio>
       </div>
       <h3 className={'text-3xl font-[700] lg:font-bold my-6'}>

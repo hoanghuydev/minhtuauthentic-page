@@ -19,7 +19,8 @@ export default function ProductDescription({ product, settings }: Props) {
       ]}
       content={[
         product?.product_property?.content || '',
-        mapSetting.get(SETTING_KEY.PRODUCT_DETAIL_HOW_TO_BUY.KEY)?.content || '',
+        mapSetting.get(SETTING_KEY.PRODUCT_DETAIL_HOW_TO_BUY.KEY)?.content ||
+          '',
         mapSetting.get(SETTING_KEY.PRODUCT_DETAIL_GUARANTEE.KEY)?.content || '',
       ]}
       tocTabIndex={0}

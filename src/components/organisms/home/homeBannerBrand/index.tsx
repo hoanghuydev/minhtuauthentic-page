@@ -8,6 +8,7 @@ import Link from 'next/link';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { twMerge } from 'tailwind-merge';
+import useSwiperSpeed from '@/hooks/useSwiperSpeed';
 
 type Props = {
   images?: StaticContentsDto[];
@@ -15,6 +16,8 @@ type Props = {
 };
 
 const HomeBannerBrand = ({ images, className }: Props) => {
+  const swiperSpeed = useSwiperSpeed();
+
   if (!images || images.length === 0) {
     return null;
   }
@@ -28,6 +31,7 @@ const HomeBannerBrand = ({ images, className }: Props) => {
     >
       <Swiper
         className="rounded-[10px] h-full"
+        speed={swiperSpeed}
         spaceBetween={10}
         slidesPerView={1}
         modules={[Autoplay, Pagination]}
