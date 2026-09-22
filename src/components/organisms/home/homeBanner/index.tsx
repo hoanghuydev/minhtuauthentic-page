@@ -63,7 +63,18 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
           {/* Một <Banners> duy nhất: bản thân nó đã tự tách cây desktop
               (hidden lg:!block) và cây mobile (lg:!hidden). Trước đây khối này
               được render hai lần nên có tới 4 NivoSlider cùng mount. */}
-          <div className={'min-h-[140px] flex-grow overflow-hidden'}>
+          {/* Khung banner phải CỐ ĐỊNH tỉ lệ. Để chiều cao chạy theo nội dung
+              thì mỗi slide cao lệch nhau ~1px, và Chrome coi slide sau (lớn hơn
+              1013px² = đúng một hàng pixel) là ứng viên LCP mới — LCP nhảy từ
+              0.5s sang 4.7s đúng lúc slider tự chuyển slide. Ảnh desktop là
+              2030x830; khoá đúng tỉ lệ đó thì mọi slide vẽ cùng một hộp.
+              `self-start` là bắt buộc: trong flex row, `align-items: stretch`
+              mặc định kéo chiều cao theo nội dung và đè mất `aspect-ratio`. */}
+          <div
+            className={
+              'min-h-[140px] flex-grow overflow-hidden lg:self-start lg:aspect-[2030/830]'
+            }
+          >
             <Banners
               className={'w-full h-full rounded-3xl'}
               banners={banners || []}
