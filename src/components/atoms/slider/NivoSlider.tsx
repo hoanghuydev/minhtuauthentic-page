@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge';
 
 import type { NivoSliderProps } from './types';
 import { SliderContext } from './context';
-import { getImageSrc, isSliceEffect } from './utils';
+import { getImageSrc, isSliceEffect, toOptimizedSrc } from './utils';
 import { NivoSlide } from './NivoSlide';
 import { NavButton } from './NavButton';
 import { PaginationDot } from './PaginationDot';
@@ -80,7 +80,7 @@ const NivoSlider: React.FC<NivoSliderProps> & { Slide: typeof NivoSlide } = ({
     if (!isAnimating || totalSlides <= 1) return null;
 
     const currentSlide = slides[activeIndex];
-    const imageSrc = getImageSrc(currentSlide);
+    const imageSrc = toOptimizedSrc(getImageSrc(currentSlide));
 
     // Fallback for non-image slides
     if (!imageSrc) {

@@ -39,11 +39,11 @@ const ProductCardImage = ({
           // Bắt buộc 75: Next 16 mặc định chỉ cho phép `qualities: [75]`, mà
           // ImageWithFallback lùi về 70 khi không truyền ⇒ optimizer trả 400.
           quality={75}
-          // Đo thực tế bề rộng card trên 6 breakpoint: tối đa 89vw ở ≤1023px
-          // (card lớn trong lưới 1 cột) và tối đa 369px từ 1024px trở lên.
-          // Khai báo nhỉnh hơn mức đo được để trình duyệt không bao giờ chọn
-          // ảnh hẹp hơn khung hiển thị.
-          sizes="(max-width: 1023px) 90vw, 380px"
+          // Mọi lưới sản phẩm đều 2 cột trên mobile: grid-cols-2 lg:grid-cols-4
+          // (categoryFilter/ContentFilter:147, productDealSock:60) và
+          // slidePerViewMobile={2} ở các swiper. 90vw là bề rộng của cả hàng
+          // chứ không phải của một card, nên nó ép chọn w=750 cho một ô ~177px.
+          sizes="(max-width: 1023px) 50vw, 380px"
         />
       </Link>
     </div>

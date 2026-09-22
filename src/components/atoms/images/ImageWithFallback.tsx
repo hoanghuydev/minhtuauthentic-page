@@ -23,6 +23,17 @@ type Props = {
   onLoadingComplete?: () => void;
   style?: React.CSSProperties;
 };
+// Next 16 mặc định chỉ cho phép `qualities: [75]`. Giá trị khác làm
+// /_next/image trả 400 ⇒ onError thay ảnh bằng no-image.png. Ở dev không lộ ra
+// vì image-optimizer.js:603 đẩy thêm BLUR_QUALITY (70) vào danh sách cho phép
+// khi isDev, nên lỗi chỉ xuất hiện trên production.
+const DEFAULT_QUALITY = 75;
+
+// next/image từ chối SVG khi `dangerouslyAllowSVG` tắt (mặc định). Ảnh do admin
+// upload có thể là SVG, nên trả về thẳng file gốc thay vì để optimizer trả 400.
+const isSvg = (src: string | StaticImageData): boolean =>
+  typeof src === 'string' && src.split('?')[0].toLowerCase().endsWith('.svg');
+
 const ImageWithFallback = ({
   image,
   isFill,
@@ -64,14 +75,16 @@ const ImageWithFallback = ({
             alt={alt || image?.alt || product?.title || product?.name || ''}
             fill={true}
             className={twMerge(className, 'select-none')}
-            unoptimized={unoptimized == null ? true : unoptimized}
+            unoptimized={
+              isSvg(imgActiveSrc) || (unoptimized == null ? true : unoptimized)
+            }
             onError={() => {
               setImageActiveSrc(noImage);
             }}
             sizes={sizes}
             priority={priority}
             loading={loading}
-            quality={quality || 70}
+            quality={quality || DEFAULT_QUALITY}
             style={style}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7u2tBwAFdgImpqLKKAAAAABJRU5ErkJggg=="
             onLoad={() => onLoadingComplete && onLoadingComplete()}
@@ -90,10 +103,12 @@ const ImageWithFallback = ({
             alt={alt || image?.alt || product?.title || product?.name || ''}
             width={image?.width || 0}
             height={image?.height || 0}
-            unoptimized={unoptimized == null ? true : unoptimized}
+            unoptimized={
+              isSvg(imgActiveSrc) || (unoptimized == null ? true : unoptimized)
+            }
             priority={priority}
             className={twMerge(className, 'select-none')}
-            quality={quality || 70}
+            quality={quality || DEFAULT_QUALITY}
             onError={() => {
               setImageActiveSrc(noImage);
             }}

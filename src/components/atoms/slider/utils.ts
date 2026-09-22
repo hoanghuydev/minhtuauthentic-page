@@ -108,3 +108,28 @@ export const getImageSrc = (slide: React.ReactElement): string => {
 
   return findImage(slide) || '';
 };
+
+// next/image sinh srcset theo đúng danh sách này, và banners.tsx dùng
+// sizes="100vw" + quality={75}. Các lớp animation (Slice/Box/overlay) render
+// <img> thô nên nếu để nguyên `image.url` thì mỗi lần chuyển slide là một lần
+// tải lại ảnh GỐC — song song với bản đã tối ưu mà <img> của slide vừa tải.
+// Dựng lại đúng URL /_next/image mà trình duyệt đã có trong cache thì chi phí
+// chuyển slide về 0 byte.
+const NEXT_DEVICE_SIZES = [640, 750, 828, 1080, 1200, 1920, 2048, 3840];
+const NEXT_IMAGE_QUALITY = 75;
+
+export const toOptimizedSrc = (url: string): string => {
+  if (
+    !url ||
+    typeof window === 'undefined' ||
+    url.startsWith('/_next/image') ||
+    url.startsWith('data:')
+  ) {
+    return url;
+  }
+  const target = window.innerWidth * (window.devicePixelRatio || 1);
+  const width =
+    NEXT_DEVICE_SIZES.find((size) => size >= target) ||
+    NEXT_DEVICE_SIZES[NEXT_DEVICE_SIZES.length - 1];
+  return `/_next/image?url=${encodeURIComponent(url)}&w=${width}&q=${NEXT_IMAGE_QUALITY}`;
+};

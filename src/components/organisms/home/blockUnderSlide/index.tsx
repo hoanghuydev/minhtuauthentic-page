@@ -13,10 +13,16 @@ export default function BlockUnderSlide({ contents }: Props) {
         {contents.map((content, index) => {
           return (
             <div key={index} className={'flex flex-col gap-1'}>
+              {/* Không `priority`: lưới này `max-lg:hidden` nhưng next/image
+                  vẫn phát <link rel="preload"> KHÔNG kèm `media`, nên mobile
+                  tải 10 logo desktop (145KB) đúng lúc t=74ms, tranh băng thông
+                  với chính ảnh LCP. Cây mobile bên dưới vẫn giữ priority.
+                  Đã thử `loading="eager"` để giữ tốc độ cho desktop: đo trên
+                  HTML SSR thì số thẻ <link rel=preload as=image> tăng từ 2 lên
+                  12, tức eager vẫn kéo theo preload. Để lazy. */}
               <BlockUnderSlideItem
                 content={content}
                 classImage={'w-[100px] h-[100px] object-contain'}
-                priority={index < 10} // Priority for first 10 items (visible above fold)
               />
             </div>
           );

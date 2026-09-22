@@ -50,7 +50,7 @@ export default function ProductRelation({ products }: Props) {
                       className={
                         'w-[70px] h-[70px] min-w-[70px] object-contain'
                       }
-                      quality={80}
+                      quality={75}
                       sizes="70px"
                       unoptimized={false}
                     />

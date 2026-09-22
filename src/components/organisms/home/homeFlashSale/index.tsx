@@ -79,7 +79,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                       src={promotion?.images?.[0]?.image?.url || ''}
                       className={'object-cover w-full !h-auto'}
                       alt={'Khuyến mãi flash sale'}
-                      unoptimized
+                      sizes="100vw"
                       fill
                     />
                   </a>
@@ -88,7 +88,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                     src={promotion?.images?.[0]?.image?.url || ''}
                     className={'object-cover w-full !h-auto'}
                     alt={'Khuyến mãi flash sale'}
-                    unoptimized
+                    sizes="100vw"
                     fill
                   />
                 )}
@@ -109,7 +109,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                       src={promotion?.images_mobile?.[0]?.image?.url || ''}
                       className={'object-cover w-full !h-auto lg:!hidden'}
                       alt={'Khuyến mãi flash sale'}
-                      unoptimized
+                      sizes="100vw"
                       width={562}
                       height={180}
                     />
@@ -119,7 +119,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                     src={promotion?.images_mobile?.[0]?.image?.url || ''}
                     className={'object-cover w-full !h-auto lg:!hidden'}
                     alt={'Khuyến mãi flash sale'}
-                    unoptimized
+                    sizes="100vw"
                     width={562}
                     height={180}
                   />
@@ -142,7 +142,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                         src={promotion?.images?.[0]?.image?.url || ''}
                         className={'object-cover w-full !h-auto lg:!hidden'}
                         alt={'Khuyến mãi flash sale'}
-                        unoptimized
+                        sizes="100vw"
                         width={1219}
                         height={120}
                       />
@@ -152,7 +152,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                       src={promotion?.images?.[0]?.image?.url || ''}
                       className={'object-cover w-full !h-auto lg:!hidden'}
                       alt={'Khuyến mãi flash sale'}
-                      unoptimized
+                      sizes="100vw"
                       width={1219}
                       height={120}
                     />

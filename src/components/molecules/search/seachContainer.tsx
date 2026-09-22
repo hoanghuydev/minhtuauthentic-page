@@ -310,7 +310,7 @@ export default function SearchContainer({
                       className={'w-[70px] h-[70px]'}
                       sizes="100px"
                       unoptimized={false}
-                      quality={80}
+                      quality={75}
                     />
                     <p className={'text-center'}>{item?.title}</p>
                   </a>

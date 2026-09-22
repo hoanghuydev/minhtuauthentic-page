@@ -3,8 +3,7 @@ import { handleDataFetch } from '@/utils/api';
 import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import { ResponseFooterDto } from '@/dtos/responseFooter.dto';
 import { SettingsDto } from '@/dtos/Settings.dto';
-import CommonSettingDto from '@/dtos/CommonSetting.dto';
-import { SETTING_KEY } from '@/config/enum';
+import { parseCommonSettings } from '@/utils/commonSettings';
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,24 +27,9 @@ export default async function handler(
           ).then((res) => res.json()),
         ]);
 
-      const commonSettings: CommonSettingDto = new CommonSettingDto();
-      settingsResponse?.data?.map((setting: SettingsDto) => {
-        switch (setting.key) {
-          case SETTING_KEY.GENERAL.PRIMARY_COLOR.KEY:
-            commonSettings.primaryColor = setting.value?.backgroundColor;
-            break;
-          case SETTING_KEY.GENERAL.EVENT_BUTTON_TITLE.KEY:
-            commonSettings.eventButtonTitle = setting.value?.title;
-            break;
-          case SETTING_KEY.GENERAL.SWIPER_SPEED.KEY:
-            commonSettings.swiperSpeed = setting.value?.speed;
-            break;
-          case SETTING_KEY.GENERAL.FREE_SHIPPING.KEY:
-            commonSettings.freeShippingMinOrderPrice =
-              setting.value?.min_order_price;
-            break;
-        }
-      });
+      // Dùng chung với đường SSR trong utils/commonSettings.ts để hai bên không
+      // bao giờ lệch nhau.
+      const commonSettings = parseCommonSettings(settingsResponse?.data || []);
 
       res.setHeader(
         'Cache-Control',

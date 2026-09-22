@@ -5,7 +5,6 @@ import { VariantDto } from '@/dtos/Variant.dto';
 import { useContext, useState } from 'react';
 import OrderContext from '@/contexts/orderContext';
 import { ProductDto } from '@/dtos/Product.dto';
-import { Modal } from 'antd/es';
 import AppContext from '@/contexts/appContext';
 
 const ProductCardButtonGroup = ({

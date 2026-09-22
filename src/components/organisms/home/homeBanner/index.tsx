@@ -52,28 +52,22 @@ export default function HomeBanner({ banners, menu, setting }: Props) {
             'mt-[60px] lg:mt-[10px] lg:flex w-full gap-2 relative container mx-auto'
           }
         >
-          {/* Desktop Layout */}
-          <div className="hidden lg:!flex w-full gap-2 relative">
-            {menu && (
-              <div className="relative z-[15] flex-shrink-0">
-                <MenuWrapper menu={menu} className={'w-[220px]'} />
-              </div>
-            )}
-            <div className={'min-h-[140px] flex-grow overflow-hidden'}>
-              <Banners
-                className={'w-full h-full rounded-3xl'}
-                banners={banners || []}
-                classNameImage={'object-contain lg:object-cover w-full h-full'}
-              />
-            </div>
+          {/* Cột menu luôn chiếm chỗ 220px kể cả khi `menu` chưa về từ
+              /api/settings. Trước đây khối này chỉ render khi có `menu`, nên
+              banner rộng 1241px lúc SSR rồi co xuống 1013px sau hydrate ⇒ cao
+              507px xuống 414px ⇒ CLS 0.239 trên desktop. */}
+          <div className="hidden lg:block relative z-[15] flex-shrink-0 w-[220px]">
+            {menu && <MenuWrapper menu={menu} className={'w-[220px]'} />}
           </div>
 
-          {/* Mobile Layout */}
-          <div className="lg:hidden w-full">
+          {/* Một <Banners> duy nhất: bản thân nó đã tự tách cây desktop
+              (hidden lg:!block) và cây mobile (lg:!hidden). Trước đây khối này
+              được render hai lần nên có tới 4 NivoSlider cùng mount. */}
+          <div className={'min-h-[140px] flex-grow overflow-hidden'}>
             <Banners
-              className={'w-full'}
+              className={'w-full h-full rounded-3xl'}
               banners={banners || []}
-              classNameImage={'object-cover w-full h-full'}
+              classNameImage={'object-contain lg:object-cover w-full h-full'}
               isSquareBannerMobile={isSquareBannerMobile}
             />
           </div>

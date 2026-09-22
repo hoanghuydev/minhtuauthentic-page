@@ -37,6 +37,9 @@ export default function HomeFeaturedProductsCategory({ content }: Props) {
       className={
         'h-[36px] lg:h-[45px] w-auto max-w-[200px] lg:max-w-[300px] object-contain object-left'
       }
+      unoptimized={false}
+      sizes="(max-width: 1023px) 200px, 300px"
+      quality={75}
     />
   ) : (
     <h2

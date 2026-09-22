@@ -65,8 +65,10 @@ export default function HomeBrand({
           )}
           classNameItems={'relative w-full overflow-hidden'}
           spaceBetween={10}
-          loop={true}
-          auto={true}
+          // 115 thương hiệu, khối nằm cuối trang: autoplay + loop chạy vĩnh
+          // viễn ngoài màn hình, mỗi vòng là một lần layout lại.
+          loop={false}
+          auto={false}
           isGrid={true}
           isUseHeightWrapper={true}
           renderItem={(content: unknown) => {

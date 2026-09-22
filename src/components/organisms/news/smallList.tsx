@@ -26,6 +26,10 @@ export default function NewsSmallList({ news }: Props) {
                     'object-contain rounded-[10px] w-[100px] h-[100px]'
                   }
                   unoptimized={false}
+                  // Ô ảnh cố định 100px. Không khai `sizes` thì rơi về default
+                  // '(max-width:768px) 100vw' ⇒ 100vw × DPR 1.75 ⇒ chọn w=750.
+                  sizes="100px"
+                  quality={75}
                 />
               </Link>
             </div>
