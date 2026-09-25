@@ -1,4 +1,5 @@
 import { ResponseHomePageDto } from '@/dtos/responseHomePage.dto';
+import { getRawSettings } from '@/utils/commonSettings';
 import { SettingOptionDto } from '@/dtos/SettingOption.dto';
 import { PageSetting } from '@/config/type';
 import { SETTING_KEY } from '@/config/enum';
@@ -147,13 +148,26 @@ const fetchHomePageData = async () => {
 };
 
 export async function getStaticProps() {
-  const homePage = await fetchHomePageData();
+  // `getRawSettings()` dùng chung cache 60s với `getCommonSettings()` (đã được
+  // _app.getInitialProps gọi cho cùng endpoint) nên không phát sinh lần gọi BE
+  // thứ hai mỗi lượt ISR revalidate, và hai bên luôn thấy cùng một snapshot.
+  // CỐ Ý không dùng getDefaultSeverSide(): hàm đó kéo thêm `menu` 370 KB, mà
+  // nhét menu vào __NEXT_DATA__ đã bị bác (PERFORMANCE-ROADMAP.md mục 6).
+  const [homePage, settings] = await Promise.all([
+    fetchHomePageData(),
+    getRawSettings(),
+  ]);
   const settingsHome = transformSettingsToObject(homePage?.settings);
 
   return {
     props: {
       homePage,
       settingsHome,
+      // Không trả `settings` ở đây thì `useSettings()` khởi tạo `settings: []`
+      // (hooks/useSettings.tsx:13-19) thắng, nên HTML SSR vẽ logo dự phòng
+      // (atoms/logo.tsx:24) rồi đổi sang logo CMS sau hydrate — trình duyệt tải
+      // CẢ HAI logo, bản dự phòng 17,2 KB bị bỏ đi hoàn toàn.
+      settings,
     },
     revalidate: 40,
   };

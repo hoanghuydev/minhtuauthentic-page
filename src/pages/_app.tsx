@@ -34,8 +34,22 @@ function MyApp({
   codeInjectionFooter,
   ssrCommonSettings,
 }: MyAppProps) {
-  const settings = useSettings();
-  const _pageProps = { ...pageProps, ...settings };
+  const { isReady: isSettingsReady, ...settings } = useSettings();
+  // `settings` từ useSettings() spread SAU nên nó ghi đè mọi thứ cùng tên trong
+  // pageProps. Trước khi /api/settings về, mọi field của nó đều rỗng
+  // (hooks/useSettings.tsx:13-19) nên nó xoá sạch những gì server đã trả:
+  //   - `settings` -> logo vẽ bản dự phòng rồi đổi sau hydrate (tải hai logo)
+  //   - `menu`/`footerContent` -> các trang dùng withSettings (HOCs/withSetting.ts:16)
+  //     SSR ra menu rồi xoá trắng ở lần render client đầu, thêm lại sau khi fetch
+  //     xong: vừa hydration mismatch vừa đúng cái nhảy giật này định sửa.
+  // Áp ĐỒNG ĐỀU cho mọi field thay vì chỉ `settings`: giữ giá trị server cho tới
+  // khi client tải xong, sau đó client thắng nên thay đổi trong CMS vẫn cập nhật.
+  const _pageProps = isSettingsReady
+    ? { ...pageProps, ...settings }
+    : {
+        ...settings,
+        ...pageProps,
+      };
   // Ưu tiên giá trị đọc được trên server: nó có mặt ngay từ HTML đầu tiên nên
   // không tạo ra cú đổi giá trị sau hydrate.
   const primaryColor =
