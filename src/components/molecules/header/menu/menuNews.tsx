@@ -58,7 +58,11 @@ const MenuNews = ({ newsData }: Props) => {
                         key={index}
                         href={generateSlugToHref(item.slugs?.slug)}
                         dangerouslySetInnerHTML={{
-                          __html: getTitleNews(item.content || item.name || ''),
+                          // `titleText` do BE móc sẵn. Vẫn giữ nhánh cũ để FE
+                          // và BE deploy lệch thứ tự cũng không hỏng tiêu đề.
+                          __html:
+                            item.titleText ||
+                            getTitleNews(item.content || item.name || ''),
                         }}
                       ></Link>
                     </p>
