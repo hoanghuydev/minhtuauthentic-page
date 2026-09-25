@@ -75,6 +75,8 @@ export function useNivoSlider({
   slices = 15,
   boxCols = 8,
   boxRows = 4,
+  // Chỉ dùng cho lưới an toàn bên dưới. Giữ cùng default với NivoSlider.tsx:55.
+  animSpeed = 500,
   pauseTime = 3000,
   startSlide = 0,
   pauseOnHover = true,
@@ -330,6 +332,25 @@ export function useNivoSlider({
     setIsAnimating(false);
     lastTimeRef.current = Date.now();
   }, []);
+
+  // LƯỚI AN TOÀN. `isAnimating` chỉ được gỡ bởi `onAnimationComplete` của overlay.
+  // Nếu overlay không mount được — chunk lazy chưa về, effect lỗi, component bị
+  // unmount giữa hoạt ảnh — thì cờ treo mãi ở `true`, và `slideTo()` chặn ngay ở
+  // `if (isAnimating) return` ⇒ slider treo vĩnh viễn, không chuyển slide nữa.
+  // Đây chỉ là backstop: đường bình thường vẫn do `onAnimationComplete` gỡ trước.
+  // Mốc rộng tay vì Slice/Box có stagger (delayPerSlice 0.05 x số lát) cộng thêm
+  // animSpeed, nên tổng luôn nhỏ hơn animSpeed*2 + 1500.
+  useEffect(() => {
+    if (!isAnimating) return;
+    const timer = setTimeout(
+      () => {
+        setIsAnimating(false);
+        lastTimeRef.current = Date.now();
+      },
+      animSpeed * 2 + 1500,
+    );
+    return () => clearTimeout(timer);
+  }, [isAnimating, animSpeed]);
 
   // Precompute slice data with delays
   const sliceData = useMemo(() => {
