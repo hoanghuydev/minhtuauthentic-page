@@ -135,7 +135,11 @@ export default function SectionSwiperItem({
           breakpoints={{
             320: {
               slidesPerView: slidePerViewMobile || slidesPerView,
-              spaceBetween: spaceBetween || spaceBetweenMobile,
+              // `spaceBetweenMobile` phải thắng: ngược lại thì giá trị desktop
+              // đè lên khoảng cách mobile. Trước đây `sectionSwiper/index.tsx`
+              // che lỗi này bằng cách truyền `spaceBetween = spaceBetweenMobile`
+              // ở nhánh mobile của nó; bỏ nhánh đó thì lỗi lộ ra.
+              spaceBetween: spaceBetweenMobile ?? spaceBetween,
             },
             1024: {
               slidesPerView: slidesPerView,
