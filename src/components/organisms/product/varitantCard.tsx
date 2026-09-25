@@ -29,8 +29,13 @@ export default function VariantCard ({variant}: Props) {
                 }
                 className={'object-contain w-full h-full rounded-lg'}
                 // product={product}
+                // Ô thật 185px trên viewport 412 (homeFeaturedProductsCategory
+                // /index.tsx:60 `px-4`, :82 slidePerViewMobile=2, :84 gap 10)
+                // ⇒ (412-32-10)/2. Khai `100vw` là bề rộng cả hàng chứ không
+                // phải một ô, nên trình duyệt lấy w=750 cho ô 185px. Đây đúng
+                // lỗi đã sửa ở productCardImage.tsx:41-46 nhưng bỏ sót file này.
                 sizes={
-                  '(max-width: 500px) 100vw, (max-width: 768px) 60vw, (max-width: 1024px) 40vw, 30vw'
+                  '(max-width: 500px) 50vw, (max-width: 768px) 60vw, (max-width: 1024px) 40vw, 30vw'
                 }
                 unoptimized={false}
               />
