@@ -10,6 +10,12 @@ export class NewsDto extends BaseDto {
   title?: string;
   description?: string;
   content?: string;
+  /**
+   * Tiêu đề đã được BE móc sẵn từ <h1> của `content`
+   * (be: getMenu.usecase.ts). Payload menu không còn chở toàn văn `content`
+   * nữa — nó chiếm 117 KB trong 391 KB chỉ để lấy ra một dòng tiêu đề.
+   */
+  titleText?: string;
   is_feature?: boolean;
   images?: ImageDetailDto[];
   slugs?: SlugDto;

@@ -2,7 +2,6 @@ import { useContext, useEffect, useRef } from 'react';
 import OrderContext from '@/contexts/orderContext';
 import ImageWithFallback from '@/components/atoms/images/ImageWithFallback';
 import { OrderItemsDto } from '@/dtos/OrderItems.dto';
-import { InputNumber } from 'antd/es';
 import { Button } from 'antd/es';
 import { DeleteOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { formatMoney, generateSlugToHref } from '@/utils';

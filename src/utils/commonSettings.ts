@@ -5,7 +5,11 @@ import { SETTING_KEY } from '@/config/enum';
 const BE_URL = process.env.BE_URL || 'http://localhost:3002';
 const CACHE_TTL = 60 * 1000;
 
-let cache: { data: CommonSettingDto; expiresAt: number } | null = null;
+let cache: {
+  data: CommonSettingDto;
+  raw: SettingsDto[];
+  expiresAt: number;
+} | null = null;
 let inflight: Promise<CommonSettingDto> | null = null;
 
 /**
@@ -48,6 +52,19 @@ export function parseCommonSettings(
  * Endpoint này nhỏ (~3.6KB) nên SSR nó rẻ; cache 60s + gộp request đang bay để
  * không thêm một lượt gọi BE cho mỗi request trang.
  */
+/**
+ * Mảng settings thô của cùng endpoint mà `getCommonSettings()` đã gọi. Dùng
+ * chung cache 60s + gộp request đang bay, nên `getStaticProps` không phải gọi
+ * BE lần thứ hai cho cùng 3,6 KB — và hai bên không thể thấy hai snapshot khác
+ * nhau như khi fetch riêng.
+ */
+export async function getRawSettings(): Promise<SettingsDto[]> {
+  if (typeof window !== 'undefined') return [];
+  if (cache && cache.expiresAt > Date.now()) return cache.raw;
+  await getCommonSettings();
+  return cache?.raw || [];
+}
+
 export async function getCommonSettings(): Promise<CommonSettingDto> {
   if (typeof window !== 'undefined') {
     return new CommonSettingDto();
@@ -70,8 +87,9 @@ export async function getCommonSettings(): Promise<CommonSettingDto> {
       return res.json();
     })
     .then((result) => {
-      const data = parseCommonSettings(result?.data || []);
-      cache = { data, expiresAt: Date.now() + CACHE_TTL };
+      const raw = (result?.data || []) as SettingsDto[];
+      const data = parseCommonSettings(raw);
+      cache = { data, raw, expiresAt: Date.now() + CACHE_TTL };
       return data;
     })
     .catch((error) => {

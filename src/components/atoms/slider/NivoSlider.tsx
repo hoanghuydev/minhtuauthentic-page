@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { twMerge } from 'tailwind-merge';
 
 import type { NivoSliderProps } from './types';
@@ -11,12 +11,36 @@ import { NivoSlide } from './NivoSlide';
 import { NavButton } from './NavButton';
 import { PaginationDot } from './PaginationDot';
 import { useNivoSlider } from './useNivoSlider';
-import {
-  FadeOverlay,
-  SlideInOverlay,
-  SliceOverlay,
-  BoxOverlay,
-} from './overlays';
+// framer-motion là 147 KB raw / 46,6 KB nén và là chunk lớn thứ hai của trang
+// chủ, nhưng nó KHÔNG vẽ gì trong 3 giây đầu: `renderAnimationOverlay()` trả
+// null khi `!isAnimating`, và lần chuyển slide đầu xảy ra ở pauseTime=3000ms.
+// Nạp cả cụm overlay bằng `dynamic()` để nó ra khỏi chunk khởi tạo.
+// KHÔNG dùng `LazyMotion` + `m`: với `features={domAnimation}` import tĩnh thì
+// framer-motion vẫn nằm trong chunk khởi tạo, chỉ nhỏ đi — không đạt mục tiêu.
+// An toàn nhờ lưới ở useNivoSlider.ts: nếu chunk về muộn, timer vẫn gỡ
+// `isAnimating` nên slider không treo, chỉ mất hiệu ứng của lần chuyển đó.
+// Khai tường minh từng cái (không dùng helper generic) để giữ nguyên kiểu prop.
+// Cả 5 cùng trỏ vào './overlays' nên bundler gom vào MỘT chunk lazy duy nhất.
+const FadeOverlay = dynamic(
+  () => import('./overlays').then((m) => m.FadeOverlay),
+  { ssr: false },
+);
+const SlideInOverlay = dynamic(
+  () => import('./overlays').then((m) => m.SlideInOverlay),
+  { ssr: false },
+);
+const SliceOverlay = dynamic(
+  () => import('./overlays').then((m) => m.SliceOverlay),
+  { ssr: false },
+);
+const BoxOverlay = dynamic(
+  () => import('./overlays').then((m) => m.BoxOverlay),
+  { ssr: false },
+);
+const ChildrenFade = dynamic(
+  () => import('./overlays').then((m) => m.ChildrenFade),
+  { ssr: false },
+);
 
 /**
  * NivoSlider - A slider component with Nivo-style animations
@@ -67,6 +91,7 @@ const NivoSlider: React.FC<NivoSliderProps> & { Slide: typeof NivoSlide } = ({
     slices,
     boxCols,
     boxRows,
+    animSpeed,
     pauseTime,
     startSlide,
     pauseOnHover,
@@ -74,6 +99,37 @@ const NivoSlider: React.FC<NivoSliderProps> & { Slide: typeof NivoSlide } = ({
     autoplay,
     onSlideChange,
   });
+
+  // Chunk overlay chỉ được YÊU CẦU vào đúng lúc chuyển slide đầu (pauseTime,
+  // 3000ms). Trên mạng chậm — đúng profile Lighthouse mobile — banner sẽ đứng ở
+  // slide CŨ suốt cửa sổ lưới an toàn rồi cắt cảnh thô. Nạp trước lúc main thread
+  // rảnh: không đụng vào chunk khởi tạo mà vẫn kịp trước lần chuyển đầu.
+  useEffect(() => {
+    if (totalSlides <= 1) return;
+    let cancelled = false;
+    const prefetch = () => {
+      if (!cancelled) void import('./overlays');
+    };
+    const ric = (
+      window as unknown as {
+        requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+        cancelIdleCallback?: (id: number) => void;
+      }
+    ).requestIdleCallback;
+    if (ric) {
+      const id = ric(prefetch, { timeout: 2000 });
+      return () => {
+        cancelled = true;
+        (window as unknown as { cancelIdleCallback?: (i: number) => void })
+          .cancelIdleCallback?.(id);
+      };
+    }
+    const timer = setTimeout(prefetch, 1500);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [totalSlides]);
 
   // Render animation overlay based on current effect
   const renderAnimationOverlay = useCallback(() => {
@@ -85,15 +141,12 @@ const NivoSlider: React.FC<NivoSliderProps> & { Slide: typeof NivoSlide } = ({
     // Fallback for non-image slides
     if (!imageSrc) {
       return (
-        <motion.div
-          className="absolute inset-0 z-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: animSpeed / 1000, ease: 'easeOut' as const }}
-          onAnimationComplete={handleAnimationComplete}
+        <ChildrenFade
+          animSpeed={animSpeed}
+          onComplete={handleAnimationComplete}
         >
           {currentSlide}
-        </motion.div>
+        </ChildrenFade>
       );
     }
 

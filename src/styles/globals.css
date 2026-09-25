@@ -406,3 +406,27 @@ a:hover:has(*) {
   color: #0066cc;
   text-decoration: underline;
 }
+
+/* Xem homeContent/index.tsx. `contain-intrinsic-size: auto <fallback>`: từ khoá
+   `auto` cho trình duyệt NHỚ kích thước đã vẽ lần trước và dùng lại, nên không
+   có cú nhảy khi cuộn lần thứ hai; số dự phòng chỉ dùng trước lần vẽ đầu.
+   Thiếu `contain-intrinsic-size` là CLS nổ. */
+.home-block-deferred {
+  content-visibility: auto;
+  /* 700px lệch quá xa chiều cao thật (GroupCategory mobile ~900-1100px,
+     HomeNews mobile ~1200px). Từ khoá `auto` chỉ nhớ kích thước TRONG cùng một
+     lần sống của element, nên sau khi điều hướng client-side quay lại `/` thì
+     HomeContent mount mới và mọi khối lại dùng số dự phòng — tổng chiều cao
+     trang bị hụt và việc khôi phục vị trí cuộn khi bấm Back rơi sai chỗ.
+     1000px thu sai số từ ~35% xuống ~10%. Đo chiều cao thật trên thiết bị rồi
+     tách giá trị theo loại khối sẽ tốt hơn nữa. */
+  contain-intrinsic-size: auto 1000px;
+  /* `content-visibility: auto` kéo theo `contain: paint`, tức CẮT phần tràn ra
+     ngoài hộp. Mũi tên prev/next của swiper nằm ở left/right -10px (mobile) và
+     -16px (desktop) — xem sectionSwiper/item.tsx:93-96 — trong khi hộp khối chỉ
+     có `p-1`/`lg:p-3`, nên chúng tràn 6px (mobile) / 4px (desktop) và sẽ bị cắt.
+     Nới biên cắt ra 16px rồi bù lại bằng margin âm: vị trí hiển thị không đổi,
+     và `html,body { overflow-x: clip }` ở trên đã chặn trượt ngang. */
+  padding-inline: 16px;
+  margin-inline: -16px;
+}

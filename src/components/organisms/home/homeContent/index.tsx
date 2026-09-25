@@ -77,9 +77,19 @@ export default function HomeContent({ homePage, settingsHome }: Props) {
 
   return (
     <div className="home-content">
-      {listComponent.map((component, index) => (
-        <React.Fragment key={index}>{component}</React.Fragment>
-      ))}
+      {listComponent.map((component, index) =>
+        // Khối đầu nằm trên nếp gấp: luôn vẽ. Tám khối còn lại nằm dưới màn hình
+        // lúc tải, `content-visibility: auto` cho trình duyệt bỏ qua phần
+        // layout/paint của chúng cho tới khi gần vào tầm nhìn. Nội dung VẪN nằm
+        // trong DOM nên Googlebot và Ctrl+F vẫn thấy — khác hẳn việc hoãn dựng.
+        index === 0 ? (
+          <React.Fragment key={index}>{component}</React.Fragment>
+        ) : (
+          <div key={index} className="home-block-deferred">
+            {component}
+          </div>
+        ),
+      )}
     </div>
   );
 }

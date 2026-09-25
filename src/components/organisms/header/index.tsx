@@ -10,10 +10,10 @@ import { ResponseMenuDto } from '@/dtos/responseMenu.dto';
 import { Button, Dropdown } from 'antd/es';
 import useUser from '@/hooks/useUser';
 import { useRouter } from 'next/router';
-import CartPreview from '@/components/molecules/header/cartPreview';
-import { CloseCircleOutlined, BarsOutlined } from '@ant-design/icons';
+
+import { CloseCircleOutlined } from '@ant-design/icons';
 import OrderContext from '@/contexts/orderContext';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import IconWifi from '@/components/icons/wifi';
 import { SettingsDto } from '@/dtos/Settings.dto';
 import { SETTING_KEY } from '@/config/enum';
@@ -29,6 +29,35 @@ const InputSearchDesktop = dynamic(
     ssr: false,
   },
 );
+// CartPreview là ĐƯỜNG VÀO DUY NHẤT của antd Tooltip (qua priceOnCart ->
+// PriceMinus) và antd InputNumber (qua priceInput) trên đường trang chủ. Panel
+// giỏ hàng chỉ ẩn bằng CSS (`invisible opacity-0`) nên trước đây nó vẫn được
+// dựng và tính vào chunk khởi tạo dù không ai thấy. `ssr:false` + cổng mở-lần-đầu
+// bên dưới đẩy cả cụm rc-tooltip/rc-trigger/rc-input-number/rc-input ra khỏi
+// đường tải đầu.
+const CartPreview = dynamic(
+  () => import('@/components/molecules/header/cartPreview'),
+  {
+    ssr: false,
+    // Panel đã hiện (`visible opacity-100`) ngay khi bấm, nên không có fallback
+    // thì lần mở đầu là một hộp trống chỉ có tiêu đề và nút đóng. Ngoài ra
+    // listener click-ra-ngoài của CartPreview (cartPreview.tsx:28) chưa tồn tại
+    // trong cửa sổ đó, nên bấm ra ngoài không đóng được panel.
+    loading: () => (
+      <div className={'flex flex-col gap-3'}>
+        {[0, 1].map((key) => (
+          <div key={key} className={'flex gap-3 animate-pulse'}>
+            <div className={'w-[60px] h-[60px] rounded-[10px] bg-gray-100'} />
+            <div className={'flex flex-col gap-2 flex-1'}>
+              <div className={'h-3 w-3/4 rounded bg-gray-100'} />
+              <div className={'h-3 w-1/2 rounded bg-gray-100'} />
+            </div>
+          </div>
+        ))}
+      </div>
+    ),
+  },
+);
 const HeaderCart = dynamic(() => import('@/components/icons/header-cart'), {
   ssr: false,
 });
@@ -42,6 +71,12 @@ export const Header = ({ menu, settings, headerMarquee }: Props) => {
   const router = useRouter();
   const { user, logout } = useUser();
   const orderCtx = useContext(OrderContext);
+  // Chốt một chiều: chỉ mount CartPreview kể từ lần mở giỏ hàng ĐẦU TIÊN, và
+  // giữ mount sau đó để những lần mở sau không phải chờ tải chunk lại.
+  const [hasOpenedCart, setHasOpenedCart] = useState(false);
+  useEffect(() => {
+    if (orderCtx?.isOpenHeaderCart) setHasOpenedCart(true);
+  }, [orderCtx?.isOpenHeaderCart]);
   const isDesktop = useIsDesktop();
   const marqueeItems = Array.from(
     { length: 15 },
@@ -205,7 +240,7 @@ export const Header = ({ menu, settings, headerMarquee }: Props) => {
                   <CloseCircleOutlined />
                 </button>
               </div>
-              <CartPreview />
+              {hasOpenedCart && <CartPreview />}
             </div>
           </div>
 

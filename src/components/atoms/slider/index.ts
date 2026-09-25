@@ -5,16 +5,14 @@ export { NivoSlide } from './NivoSlide';
 // UI Components
 export { NavButton } from './NavButton';
 export { PaginationDot } from './PaginationDot';
-export { Slice } from './Slice';
-export { Box } from './Box';
 
-// Overlays
-export {
-  FadeOverlay,
-  SlideInOverlay,
-  SliceOverlay,
-  BoxOverlay,
-} from './overlays';
+// CỐ Ý KHÔNG re-export `Slice`, `Box` và nhóm overlay ở đây.
+// Chúng là chi tiết nội bộ của NivoSlider, và cả 6 file đó import framer-motion.
+// Barrel này được `molecules/header/banners.tsx:9` import TĨNH, nên mỗi export
+// ở đây kéo framer-motion (147 KB raw / 46,6 KB nén) vào chunk khởi tạo của
+// trang chủ — vô hiệu hoá `dynamic()` mà NivoSlider.tsx dùng để hoãn tải chúng.
+// Đã kiểm: không file nào ngoài barrel này import chúng từ đây.
+// Cần dùng trực tiếp thì import từ './Slice', './Box', './overlays'.
 
 // Hooks
 export { useNivoSlider } from './useNivoSlider';
