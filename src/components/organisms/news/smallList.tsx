@@ -40,7 +40,7 @@ export default function NewsSmallList({ news }: Props) {
                   key={key}
                   href={generateSlugToHref(item.slugs?.slug)}
                   dangerouslySetInnerHTML={{
-                    __html: getTitleNews(item.content || item.name || ''),
+                    __html: item.titleText || getTitleNews(item.content || item.name || ''),
                   }}
                 ></Link>
               </h3>

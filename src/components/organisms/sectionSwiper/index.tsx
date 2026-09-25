@@ -17,11 +17,12 @@ import { SwiperProps } from '@/components/organisms/sectionSwiper/item';
  *   theo bề rộng, và breakpoint của Swiper THẮNG phép chọn bằng JS. Ở 800px,
  *   JS chọn nhánh desktop nhưng Swiper thấy 800 < 1024 nên vẫn áp mốc 320 —
  *   tức số cột của mobile. Gộp lại giữ đúng hành vi đang chạy.
- * - Sai: cả hai hook đều trả `false` ở lần render client đầu (`MOBILE_BREAKPOINT`
- *   = 768), nên lần đầu không vẽ gì và phải chờ một nhịp ⇒ thêm một lượt dựng
- *   lại toàn bộ cây bên dưới.
- * - Và ở ĐÚNG 768px thì `isMobile` (<=768) lẫn `isDesktop` (>=768) cùng đúng,
- *   nên hai bộ trượt cùng dựng và chồng lên nhau.
+ * - Sai: ở ĐÚNG 768px thì `isMobile` (<=768) lẫn `isDesktop` (>=768) cùng đúng
+ *   (`MOBILE_BREAKPOINT` = 768), nên hai bộ trượt cùng dựng và chồng lên nhau —
+ *   hai instance Swiper, hai lần `onSwiper`, hai vòng autoplay.
+ * - Trên SSR cả hai hook trả `false` nên không cây nào vào HTML. (Trên client
+ *   thì react-responsive 10 khởi tạo `useState(mediaQuery.matches)` nên giá trị
+ *   đã đúng ngay lượt render đầu — không phải nguồn của lượt dựng lại.)
  */
 const SectionSwiper = (props: SwiperProps) => (
   <SectionSwiperItem

@@ -37,7 +37,7 @@ export default function NewsItem({ news }: Props) {
               className={'!text-[16px] h-[70px] line-clamp-3 news-title'}
               href={generateSlugToHref(news.slugs?.slug)}
               dangerouslySetInnerHTML={{
-                __html: getTitleNews(news.content || news.name || ''),
+                __html: news.titleText || getTitleNews(news.content || news.name || ''),
               }}
             ></Link>
           </h3>

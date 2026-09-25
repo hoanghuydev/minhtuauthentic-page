@@ -24,6 +24,8 @@ export default function useSettings(): PageSetting & { isReady: boolean } {
   // mảng rỗng". Suy từ `settings.length` thì hai ca đó lẫn nhau: khi BE lỗi
   // (SWR error) mảng đứng ở `[]` vĩnh viễn, và snapshot server bị ghim mãi —
   // một thay đổi trong CMS sẽ không bao giờ tới được trang.
-  // `error` cũng tính là "xong" để client không ghim snapshot server mãi.
-  return { ..._data, isReady: !!data || !!error };
+  // CỐ Ý không tính `error` là "xong": khi fetch lỗi, `_data` vẫn đứng ở giá trị
+  // khởi tạo, nên coi là xong sẽ để giá trị rỗng thắng dữ liệu server. Fetch lỗi
+  // thì giữ snapshot server là hành vi đúng — server có dữ liệu thật.
+  return { ..._data, isReady: !!data };
 }

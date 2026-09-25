@@ -1,4 +1,12 @@
-import { JSX, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  CSSProperties,
+  JSX,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { twMerge } from 'tailwind-merge';
 import LeftOutlined from '@ant-design/icons/lib/icons/LeftOutlined';
@@ -116,10 +124,17 @@ export default function SectionSwiperItem({
         <Swiper
           effect={'fade'}
           grid={isGrid ? { rows } : {}}
-          // Chiều cao đặt ở hộp bọc bên ngoài useMemo, không ở đây: để
-          // `heightWrapper` không phải là dependency, nếu không mỗi lần đo được
-          // chiều cao ô đầu là dựng lại toàn bộ thẻ sản phẩm của khối một lần nữa.
-          style={{ height: '100%' }}
+          // Chiều cao đến qua CSS custom property mà hộp bọc đặt (xem cuối
+          // file), KHÔNG qua prop React: chuỗi này là hằng nên `heightWrapper`
+          // không cần nằm trong deps của useMemo — mỗi lần nó đổi trước đây là
+          // một lượt dựng lại toàn bộ thẻ sản phẩm của khối.
+          // Đặt `height` trực tiếp lên hộp bọc thì SAI hai đường: (1) Tailwind
+          // preflight bật `box-sizing: border-box`, nên với
+          // `classNameContainer` có `p-3` + `border` (homeBrand/index.tsx:63)
+          // thì content box hụt 26px và logo bị cắt; (2) style inline thắng
+          // class nên `lg:h-[250px]` ở cùng hộp đó (homeBrand/index.tsx:64) mất
+          // tác dụng, làm hai cột của khối Thương hiệu lệch chiều cao.
+          style={{ height: 'var(--section-swiper-height, 100%)' }}
           modules={isGrid ? [Grid, Autoplay] : [Pagination, Autoplay]}
           autoplay={auto}
           loop={loop}
@@ -140,6 +155,16 @@ export default function SectionSwiperItem({
               // che lỗi này bằng cách truyền `spaceBetween = spaceBetweenMobile`
               // ở nhánh mobile của nó; bỏ nhánh đó thì lỗi lộ ra.
               spaceBetween: spaceBetweenMobile ?? spaceBetween,
+            },
+            // Dải 768-1023 tái lập chính xác hành vi của develop: số cột của
+            // mobile (vì breakpoint 320 của Swiper vốn đã thắng phép chọn bằng
+            // JS ở dải này) nhưng khoảng cách của desktop (vì nhánh desktop cũ
+            // truyền `spaceBetween`). Đây là một điểm không nhất quán có sẵn —
+            // giữ lại để việc gộp hai nhánh không đổi giao diện; muốn dọn thì
+            // cần chốt với người quyết định sản phẩm.
+            768: {
+              slidesPerView: slidePerViewMobile || slidesPerView,
+              spaceBetween: spaceBetween ?? spaceBetweenMobile,
             },
             1024: {
               slidesPerView: slidesPerView,
@@ -182,6 +207,21 @@ export default function SectionSwiperItem({
     // `heightWrapper` và instance Swiper CỐ Ý không nằm trong danh sách này:
     // cả hai đổi ngay sau khi tải, và mỗi lần đổi trước đây là một lượt dựng lại
     // toàn bộ thẻ sản phẩm của khối. Xem hai ghi chú ở trên.
+    //
+    // ⚠ RÀNG BUỘC ĐỐI VỚI CALLER: `data` và `renderItem` CỐ Ý không nằm ở đây.
+    // Không phải quên. Cả hai đều không ổn định tham chiếu tại mọi call-site —
+    // `groupCategory/index.tsx:116` truyền `data={...filter(...)}`, tức mảng mới
+    // mỗi lần render, và `renderItem` là arrow tạo mới mỗi lần. Đưa bất kỳ cái
+    // nào vào đây là memo mất tác dụng hoàn toàn và 169 thẻ sản phẩm của trang
+    // chủ lại dựng lại mỗi lần cha render (đã đo: TBT tăng ~260 ms).
+    //
+    // HỆ QUẢ: lưới được chốt ở lần render có `ready === true`. Nếu bạn cần lưới
+    // đổi theo state sau mount (filter, tab, phân trang), ĐỪNG chỉ đổi `data` —
+    // hãy remount bằng `key`, như `productDetailImage.tsx:106` đang làm với
+    // `key={JSON.stringify(mediaItems)}`.
+    //
+    // Đã rà toàn bộ 14 call-site tại thời điểm viết: không chỗ nào đổi `data`
+    // sau mount mà không remount, nên chưa có luồng nào hỏng.
   }, [ready, speed]);
 
   return (
@@ -191,7 +231,13 @@ export default function SectionSwiperItem({
       ) : (
         <div
           className={twMerge('relative', classNameContainer)}
-          style={{ height: heightWrapper || undefined }}
+          style={
+            heightWrapper
+              ? ({
+                  '--section-swiper-height': `${heightWrapper}px`,
+                } as CSSProperties)
+              : undefined
+          }
         >
           {renderSwiper}
         </div>

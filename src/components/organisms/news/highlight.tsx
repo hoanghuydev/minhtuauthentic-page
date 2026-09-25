@@ -38,7 +38,10 @@ export default function HighlightedNews({ content }: Props) {
             <h3
               className="lg:text-2xl font-semibold mb-2 line-clamp-2"
               dangerouslySetInnerHTML={{
-                __html: getTitleNews(content.featured[0]?.content || '') || '',
+                __html:
+                  content.featured[0]?.titleText ||
+                  getTitleNews(content.featured[0]?.content || '') ||
+                  '',
               }}
             />
             <NewsClock item={content.featured[0]} className={'text-white text-md'} />
@@ -63,7 +66,8 @@ export default function HighlightedNews({ content }: Props) {
                 <h3
                   className="lg:text-xl font-semibold mb-2 line-clamp-2"
                   dangerouslySetInnerHTML={{
-                    __html: getTitleNews(post.content || '') || '',
+                    __html:
+                      post.titleText || getTitleNews(post.content || '') || '',
                   }}
                 />
                 <NewsClock item={post} className={'text-white text-md'} />
