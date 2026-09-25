@@ -7,7 +7,6 @@ import {
   useState,
   useTransition,
 } from 'react';
-import { Button, Input, List, Skeleton } from 'antd/es';
 import { twMerge } from 'tailwind-merge';
 import { KEYCODE, SEARCH_KEYWORD } from '@/config/enum';
 import { SearchData } from '@/config/type';
