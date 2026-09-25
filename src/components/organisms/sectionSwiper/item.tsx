@@ -1,4 +1,4 @@
-import { JSX, ReactNode, useEffect, useMemo, useState } from 'react';
+import { JSX, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { twMerge } from 'tailwind-merge';
 import LeftOutlined from '@ant-design/icons/lib/icons/LeftOutlined';
@@ -62,7 +62,11 @@ export default function SectionSwiperItem({
   speed,
 }: SwiperProps) {
   const rows = 2;
-  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
+  // Giữ qua ref, KHÔNG qua state. Trước đây `setSwiper` lúc Swiper khởi tạo làm
+  // `swiper` đổi ⇒ `renderSwiper` useMemo chạy lại ⇒ dựng lại toàn bộ thẻ sản
+  // phẩm của khối, chỉ để nối lại hai nút mũi tên. Handler đọc ref lúc bấm nên
+  // không cần re-render nào.
+  const swiperRef = useRef<SwiperClass | null>(null);
   const [heightWrapper, setHeightWrapper] = useState<number>(heightItem || 0);
   const [ready, setReady] = useState<boolean>(false);
   useEffect(() => {
@@ -76,11 +80,12 @@ export default function SectionSwiperItem({
     return (
       <div
         onClick={() => {
-          if (swiper) {
+          const instance = swiperRef.current;
+          if (instance) {
             if (variant === 'next') {
-              swiper.slideNext(speed);
+              instance.slideNext(speed);
             } else {
-              swiper.slidePrev(speed);
+              instance.slidePrev(speed);
             }
           }
         }}
@@ -111,7 +116,10 @@ export default function SectionSwiperItem({
         <Swiper
           effect={'fade'}
           grid={isGrid ? { rows } : {}}
-          style={{ height: heightWrapper || '100%' }}
+          // Chiều cao đặt ở hộp bọc bên ngoài useMemo, không ở đây: để
+          // `heightWrapper` không phải là dependency, nếu không mỗi lần đo được
+          // chiều cao ô đầu là dựng lại toàn bộ thẻ sản phẩm của khối một lần nữa.
+          style={{ height: '100%' }}
           modules={isGrid ? [Grid, Autoplay] : [Pagination, Autoplay]}
           autoplay={auto}
           loop={loop}
@@ -119,9 +127,9 @@ export default function SectionSwiperItem({
           cssMode={false}
           className={twMerge('mx-auto w-full')}
           wrapperClass={'mx-auto'}
-          onSwiper={(swiper) => {
-            setSwiper(swiper);
-            onSwiper && onSwiper(swiper);
+          onSwiper={(instance) => {
+            swiperRef.current = instance;
+            onSwiper && onSwiper(instance);
           }}
           centeredSlides={isCenter}
           breakpoints={{
@@ -134,8 +142,10 @@ export default function SectionSwiperItem({
               spaceBetween: spaceBetween,
             },
           }}
-          onSlideChange={() => {
-            onSlideChange && onSlideChange(swiper?.activeIndex || 0);
+          onSlideChange={(instance) => {
+            // Dùng instance mà Swiper truyền vào, không đọc state ngoài: state
+            // cũ luôn trễ một nhịp nên `activeIndex` trước đây báo sai.
+            onSlideChange && onSlideChange(instance?.activeIndex || 0);
           }}
         >
           {data &&
@@ -165,14 +175,20 @@ export default function SectionSwiperItem({
         )}
       </>
     );
-  }, [heightWrapper, ready, swiper, speed]);
+    // `heightWrapper` và instance Swiper CỐ Ý không nằm trong danh sách này:
+    // cả hai đổi ngay sau khi tải, và mỗi lần đổi trước đây là một lượt dựng lại
+    // toàn bộ thẻ sản phẩm của khối. Xem hai ghi chú ở trên.
+  }, [ready, speed]);
 
   return (
     <>
       {!ready ? (
         <></>
       ) : (
-        <div className={twMerge('relative', classNameContainer)}>
+        <div
+          className={twMerge('relative', classNameContainer)}
+          style={{ height: heightWrapper || undefined }}
+        >
           {renderSwiper}
         </div>
       )}
