@@ -169,7 +169,19 @@ export async function getStaticProps() {
       // CẢ HAI logo, bản dự phòng 17,2 KB bị bỏ đi hoàn toàn.
       settings,
     },
-    revalidate: 40,
+    // 40s là quá gắt cho một trang chủ do CMS điều khiển: đo thật thấy cache đi
+    // HIT-HIT-HIT-STALE trong 4 lượt liên tiếp, tức tới ~90 lần dựng lại mỗi giờ.
+    // Mỗi lần dựng lại là một lượt fetch dữ liệu home + render 700+ thẻ +
+    // serialize 220KB __NEXT_DATA__, chạy trên CHÍNH process Node đang phục vụ
+    // /_next/image — nơi mỗi cache miss tốn 182-416ms encode bằng sharp (đã đo).
+    // Nói cách khác, dựng lại trang quá thường xuyên làm chậm việc trả ảnh, và
+    // ảnh mới là thứ chi phối LCP/SI.
+    // `stale-while-revalidate` đã bật nên người dùng KHÔNG BAO GIỜ phải chờ
+    // dựng lại — họ nhận bản cũ ngay lập tức. Cái giá duy nhất là độ tươi nội
+    // dung, và thứ nhạy cảm thời gian nhất trên trang là flash sale thì đã tự
+    // ẩn ở client khi hết hạn (homeFlashSale/index.tsx:34 so endDate với
+    // `new Date()` lúc render), không phụ thuộc mốc này.
+    revalidate: 300,
   };
 }
 
