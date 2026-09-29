@@ -23,7 +23,7 @@ export default function HomeSupport({ contents, setting, fullWidth }: Props) {
       style={{ backgroundColor: setting?.backgroundColor || '#fff' }}
     >
       <SectionSwiper
-        classNameContainer={'mb-[0.25rem] lg:mb-3 py-4 border-t border-b'}
+        classNameContainer={'mb-[0.25rem] lg:mb-3 py-2 border-t border-b'}
         classNameLeft={'d-none'}
         classNameRight={'d-none'}
         classNameItems={'flex items-center justify-center'}
