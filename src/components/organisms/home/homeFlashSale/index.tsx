@@ -20,6 +20,23 @@ type Props = {
   setting?: SettingOptionDto;
 };
 
+// `block w-full` KHÔNG phải cho đẹp — bỏ đi là banner co lại còn ~2/3 và dạt sang
+// mép phải trên điện thoại. Thẻ <a> này là flex item của khối `flex justify-end`
+// bên dưới và không có bề rộng, nên nó shrink-to-fit theo KÍCH THƯỚC NỘI TẠI của
+// <img> bên trong (class `w-full` của Tailwind thắng thuộc tính width="562", mà
+// phần trăm thì tham chiếu ngược lại chính thẻ <a> đang auto ⇒ vòng tròn ⇒ trình
+// duyệt quay về dùng kích thước nội tại).
+// Từ khi ảnh có `srcset` dạng `w` + `sizes` (commit 260554c), kích thước nội tại
+// bị density-correct: naturalWidth = pixelThật x sizes / descriptor. Ảnh nguồn chỉ
+// rộng 1124px và Next KHÔNG phóng to, nên các biến thể w=1200/1920/2048/3840 đều
+// trả về đúng 1124px trong khi descriptor vẫn khai 1920w. Máy DPR 3 màn >= ~401px
+// chọn descriptor 1920w ⇒ naturalWidth = 1124 x 430 / 1920 = 252px trên container
+// 398px = 63%. Máy DPR 2 chọn descriptor đúng sự thật nên không lộ lỗi — đây là lý
+// do nó "lúc bị lúc không" tuỳ máy.
+// Cho <a> một bề rộng xác định là đủ: phần trăm của <img> hết vòng tròn, không còn
+// đường nào rơi về kích thước nội tại nữa.
+const MOBILE_LINK_CLASS = 'lg:!hidden block w-full';
+
 export default function HomeFlashSale({ promotion, setting }: Props) {
   const endDate: Date = new Date(promotion?.end_date || '');
   const [isClient, setIsClient] = useState(false);
@@ -103,7 +120,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                 promotion?.slugs?.slug ? (
                   <a
                     href={`${process.env.NEXT_PUBLIC_APP_URL}/${promotion.slugs.slug}`}
-                    className="lg:!hidden"
+                    className={MOBILE_LINK_CLASS}
                   >
                     <Image
                       src={promotion?.images_mobile?.[0]?.image?.url || ''}
@@ -136,7 +153,7 @@ export default function HomeFlashSale({ promotion, setting }: Props) {
                   promotion?.slugs?.slug ? (
                     <a
                       href={`${process.env.NEXT_PUBLIC_APP_URL}/${promotion.slugs.slug}`}
-                      className="lg:!hidden"
+                      className={MOBILE_LINK_CLASS}
                     >
                       <Image
                         src={promotion?.images?.[0]?.image?.url || ''}

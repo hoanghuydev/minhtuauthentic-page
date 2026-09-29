@@ -112,7 +112,10 @@ const NivoSlider: React.FC<NivoSliderProps> & { Slide: typeof NivoSlide } = ({
     };
     const ric = (
       window as unknown as {
-        requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+        requestIdleCallback?: (
+          cb: () => void,
+          o?: { timeout: number },
+        ) => number;
         cancelIdleCallback?: (id: number) => void;
       }
     ).requestIdleCallback;
@@ -120,8 +123,9 @@ const NivoSlider: React.FC<NivoSliderProps> & { Slide: typeof NivoSlide } = ({
       const id = ric(prefetch, { timeout: 2000 });
       return () => {
         cancelled = true;
-        (window as unknown as { cancelIdleCallback?: (i: number) => void })
-          .cancelIdleCallback?.(id);
+        (
+          window as unknown as { cancelIdleCallback?: (i: number) => void }
+        ).cancelIdleCallback?.(id);
       };
     }
     const timer = setTimeout(prefetch, 1500);
@@ -130,6 +134,83 @@ const NivoSlider: React.FC<NivoSliderProps> & { Slide: typeof NivoSlide } = ({
       clearTimeout(timer);
     };
   }, [totalSlides]);
+
+  // Hai lớp nền trong lúc chuyển cảnh, thay vì một.
+  //
+  // Trước đây chỉ có `slides[isAnimating ? previousIndex : activeIndex]`, tức
+  // MỘT slide duy nhất nằm trong DOM tại mỗi thời điểm. Khi hoạt ảnh kết thúc,
+  // React gỡ lớp overlay VÀ đổi slide nền trong CÙNG một commit — mà slide mới
+  // là một <img> vừa được mount, chưa chắc đã tải + decode xong. Hộp banner
+  // không có background nên cái lộ ra là nền trắng của trang.
+  // Đo trên production: crossfade mobile dài 400ms, còn ảnh slide kế tiếp mất
+  // 1292ms (43,8 KB, biến thể /_next/image nguội) ⇒ trống ~890ms.
+  //
+  // Cách sửa: slide ĐÍCH được mount ngay từ đầu hoạt ảnh và nằm ở luồng thường,
+  // slide CŨ phủ lên trên bằng `absolute inset-0` (phần tử positioned luôn vẽ
+  // trên nội dung static cùng cấp, không cần z-index). Hết hoạt ảnh chỉ việc gỡ
+  // lớp cũ ⇒ thứ lộ ra là một ảnh đã được vẽ suốt `animSpeed` vừa rồi.
+  // KHÔNG tốn thêm byte: đúng cái ảnh mà overlay vốn đã tải.
+  const slideLayers = useMemo(() => {
+    const layers = [{ index: activeIndex, isOutgoing: false }];
+    if (isAnimating && previousIndex !== activeIndex) {
+      layers.push({ index: previousIndex, isOutgoing: true });
+    }
+    return layers;
+  }, [activeIndex, previousIndex, isAnimating]);
+
+  // Nạp trước ảnh của slide kế tiếp.
+  // Không có nó, ảnh chỉ bắt đầu tải khi hoạt ảnh BẮT ĐẦU, tức nó có đúng
+  // `animSpeed` (400ms ở mobile) để về kịp — xem số đo ở khối trên.
+  // Tổng số byte không đổi: slide đó kiểu gì cũng được tải sau `pauseTime` nữa.
+  useEffect(() => {
+    if (totalSlides <= 1) return;
+    const nextIndex =
+      activeIndex + 1 < totalSlides ? activeIndex + 1 : loop ? 0 : -1;
+    if (nextIndex < 0 || nextIndex === activeIndex) return;
+
+    let cancelled = false;
+    const prefetch = () => {
+      if (cancelled) return;
+      // Cây banner bị `display:none` theo breakpoint không có hộp. Bỏ qua nó,
+      // nếu không là tái lập đúng phần byte mà 0b29ece đã cắt (mobile tải ảnh
+      // của cây desktop và ngược lại).
+      const el = containerRef.current;
+      if (!el || el.getBoundingClientRect().width === 0) return;
+      const src = toOptimizedSrc(getImageSrc(slides[nextIndex]));
+      if (!src) return;
+      const img = new Image();
+      // Ảnh LCP đã được preload với fetchPriority=high ở pages/index.tsx. Lần
+      // nạp trước đầu tiên xảy ra khi trang còn đang tải, nên phải khai báo ưu
+      // tiên thấp để nó không giành băng thông với chính ảnh LCP.
+      img.setAttribute('fetchpriority', 'low');
+      img.decoding = 'async';
+      img.src = src;
+    };
+
+    const ric = (
+      window as unknown as {
+        requestIdleCallback?: (
+          cb: () => void,
+          o?: { timeout: number },
+        ) => number;
+        cancelIdleCallback?: (id: number) => void;
+      }
+    ).requestIdleCallback;
+    if (ric) {
+      const id = ric(prefetch, { timeout: 2000 });
+      return () => {
+        cancelled = true;
+        (
+          window as unknown as { cancelIdleCallback?: (i: number) => void }
+        ).cancelIdleCallback?.(id);
+      };
+    }
+    const timer = setTimeout(prefetch, 1500);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [activeIndex, totalSlides, loop, slides, containerRef]);
 
   // Render animation overlay based on current effect
   const renderAnimationOverlay = useCallback(() => {
@@ -284,7 +365,20 @@ const NivoSlider: React.FC<NivoSliderProps> & { Slide: typeof NivoSlide } = ({
         >
           {/* Background/Current slide */}
           <div ref={slideRef} className="relative w-full h-full">
-            {slides[isAnimating ? previousIndex : activeIndex]}
+            {slideLayers.map(({ index, isOutgoing }) => (
+              <div
+                // KEY LÀ CHỈ SỐ SLIDE, KHÔNG phải vị trí trong mảng. Đây là toàn
+                // bộ lý do khối này tồn tại: React khớp con theo key nên node của
+                // một slide ĐƯỢC GIỮ NGUYÊN khi nó đổi vai (đang hiện -> đang đi
+                // ra) và khi hoạt ảnh kết thúc. Không có nó, <img> bị unmount rồi
+                // mount lại ở đúng khoảnh khắc chuyển cảnh và hộp banner trống
+                // một nhịp ⇒ lộ nền trắng ("nháy trắng").
+                key={index}
+                className={isOutgoing ? 'absolute inset-0' : 'w-full h-full'}
+              >
+                {slides[index]}
+              </div>
+            ))}
           </div>
 
           {/* Animation overlay */}

@@ -1,7 +1,6 @@
 import { ProductDto } from '@/dtos/Product.dto';
 import { twMerge } from 'tailwind-merge';
 import ProductPrice from '@/components/molecules/product/price';
-import { Star } from '@/components/icons/star';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { ProductConfigurationsDto } from '@/dtos/productConfigurations.dto';
 import { VariantDto } from '@/dtos/Variant.dto';
@@ -11,7 +10,6 @@ import PromotionDescription from '@/components/molecules/product/promotionDescri
 import Link from 'next/link';
 import { generateSlugToHref, SexName } from '@/utils';
 import StartRating from '@/components/atoms/product/startRating';
-import { Rate } from 'antd/es';
 import { SettingsDto } from '@/dtos/Settings.dto';
 import router, { useRouter } from 'next/router';
 import ProductDetailContext from '@/contexts/productDetailContext';
@@ -180,7 +178,15 @@ const ProductProperty = ({
         </div>
         <div className={'flex gap-2'}>
           <span>Đánh giá: </span>
-          <Rate rootClassName={'rate-custom'} disabled defaultValue={5} />
+          {/* CỐ Ý không dùng <Rate> của antd ở đây. antd v5 là CSS-in-JS: style
+              được chèn lúc chạy ở client, mà phần trích xuất cho SSR
+              (`extractStyle`) đang bị comment ở _document.tsx. Hậu quả: HTML
+              server trả về có <ul class="ant-rate"><li>… nhưng KHÔNG có một dòng
+              CSS nào của antd, nên 5 sao xếp DỌC và to bất thường cho tới khi
+              hydrate xong (~0,4s), ở cả PC lẫn mobile.
+              StartRating là 5 <svg> inline + class Tailwind, nằm trong CSS
+              render-blocking nên đúng ngay từ frame đầu — và nhẹ hơn. */}
+          <StartRating />
         </div>
       </div>
       <hr className={'mt-3'} />
