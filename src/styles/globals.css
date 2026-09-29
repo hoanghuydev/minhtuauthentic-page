@@ -187,12 +187,6 @@ body {
     @apply text-[16px] !important;
   }
 }
-.rate-custom {
-  .ant-rate-star {
-    @apply me-0 !important;
-  }
-}
-
 .bk-btn {
   @apply w-full;
 }
