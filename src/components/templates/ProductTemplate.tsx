@@ -36,7 +36,8 @@ const ProductTemplate = ({
           settingsHome={data?.settingsHome || []}
         />
       )}
-      <CustomScript isHaveFudiin={true} />
+      {/* <CustomScript isHaveFudiin={true} /> */}
+      <CustomScript />
     </ProductDetailProvider>
   );
 };

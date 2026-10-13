@@ -5,6 +5,7 @@ import Layout from '@/components/templates/Layout';
 import Header from '@/components/organisms/header';
 import Footer from '@/components/organisms/footer';
 import getDefaultSeverSide from '@/utils/getDefaultServerSide';
+import { PAYMENT } from '@/config/enum';
 
 export const getServerSideProps = async (context: any) => {
   const headers = context.req?.headers;
@@ -22,7 +23,10 @@ export const getServerSideProps = async (context: any) => {
   return {
     props: {
       ...resDefault,
-      payments: paymentsResponse?.data || [],
+      // Fudiin is temporarily hidden from checkout
+      payments: ((paymentsResponse?.data || []) as PaymentsDto[]).filter(
+        (payment) => payment.name?.toLowerCase() !== PAYMENT.FUDIIN,
+      ),
       ip: (headers?.['x-forwarded-for'] as string) || '',
     },
   };

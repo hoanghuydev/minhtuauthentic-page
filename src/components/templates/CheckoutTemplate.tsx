@@ -14,14 +14,14 @@ import * as yup from 'yup';
 import CartDto from '@/dtos/Cart.dto';
 import { toast } from 'react-toastify';
 import { createVNPayUrl } from '@/utils/vnpay';
-import ResponseSendTransactionDto from '@/dtos/Fudiin/responseSendTransaction.dto';
+// import ResponseSendTransactionDto from '@/dtos/Fudiin/responseSendTransaction.dto';
 import { useContext, useState } from 'react';
 import OrderContext from '@/contexts/orderContext';
 import { useRouter } from 'next/router';
-import SendTransactionFudiinDto from '@/dtos/Fudiin/sendTransaction.dto';
-import ItemFudiinDto from '@/dtos/Fudiin/item.dto';
-import CustomerFudiinDto from '@/dtos/Fudiin/customer.dto';
-import ShippingFudiinDto from '@/dtos/Fudiin/shipping.dto';
+// import SendTransactionFudiinDto from '@/dtos/Fudiin/sendTransaction.dto';
+// import ItemFudiinDto from '@/dtos/Fudiin/item.dto';
+// import CustomerFudiinDto from '@/dtos/Fudiin/customer.dto';
+// import ShippingFudiinDto from '@/dtos/Fudiin/shipping.dto';
 import { AddressesDto } from '@/dtos/Addresses.dto';
 
 const schema = yup
@@ -133,77 +133,77 @@ export default function CheckoutTemplate({
             if (window) {
               window.location.href = urlVnPay || '';
             }
-          } else if (paymentType(res?.data?.payment_id) === PAYMENT.FUDIIN) {
-            const orderExtensionItem = orderCtx?.cart?.items?.map((item) => {
-              return new ItemFudiinDto({
-                productId: item?.variant_id?.toString(),
-                productName: item?.variant_name,
-                category: 'Perfume',
-                currency: 'VND',
-                quantity: 1,
-                price: item?.price || 0,
-                totalAmount: item?.price || 0,
-              });
-            });
-            fetch('/api/fudiin/send', {
-              method: 'POST',
-              body: JSON.stringify(
-                new SendTransactionFudiinDto({
-                  merchantId: process.env.NEXT_PUBLIC_FUNDIN_MERCHANT_ID,
-                  referenceId: res?.data?.id,
-                  amount: {
-                    currency: 'VND',
-                    value: res?.data?.total_price,
-                  },
-                  storeId: process.env.NEXT_PUBLIC_FUNDIN_STORE_ID || '',
-                  requestType: 'installment',
-                  paymentMethod: 'WEB',
-                  description:
-                    'Thanh toan don hang cua user Fudiin ' +
-                    res?.data?.user_id +
-                    ' voi gia tri ' +
-                    res?.data?.total_price,
-                  successRedirectUrl:
-                    process.env.NEXT_PUBLIC_APP_URL +
-                    '/gio-hang/thanh-cong/?orderId=' +
-                    res?.data?.id,
-                  unSuccessRedirectUrl: '/',
-                  customer: new CustomerFudiinDto({
-                    phoneNumber: data?.phone,
-                    email: data?.email,
-                    firstName: data?.name.split(' ')[0],
-                    lastName: data?.name.split(' ')[1],
-                  }),
-                  shipping: new ShippingFudiinDto({
-                    city: fullAddress?.city?.full_name || '',
-                    district: fullAddress?.district?.full_name || '',
-                    ward: fullAddress?.ward?.full_name || '',
-                    street: data?.address,
-                    houseNumber: data?.phone,
-                    country: 'VN',
-                  }),
-                  items: orderExtensionItem,
-                }),
-              ),
-            })
-              .then((rs) => rs.json())
-              .then(async (item: ResponseSendTransactionDto) => {
-                if (item?.referenceId) {
-                  await fetch('/api/orders/update', {
-                    method: 'PUT',
-                    body: JSON.stringify({
-                      id: res?.data?.id,
-                      order_external_id: item?.referenceId,
-                    }),
-                  });
-                }
-                if (item?.paymentUrl) {
-                  window.location.href = item.paymentUrl;
-                } else {
-                  toast.error('Đã có lỗi xảy ra');
-                  setLoading(false);
-                }
-              });
+//           } else if (paymentType(res?.data?.payment_id) === PAYMENT.FUDIIN) {
+//             const orderExtensionItem = orderCtx?.cart?.items?.map((item) => {
+//               return new ItemFudiinDto({
+//                 productId: item?.variant_id?.toString(),
+//                 productName: item?.variant_name,
+//                 category: 'Perfume',
+//                 currency: 'VND',
+//                 quantity: 1,
+//                 price: item?.price || 0,
+//                 totalAmount: item?.price || 0,
+//               });
+//             });
+//             fetch('/api/fudiin/send', {
+//               method: 'POST',
+//               body: JSON.stringify(
+//                 new SendTransactionFudiinDto({
+//                   merchantId: process.env.NEXT_PUBLIC_FUNDIN_MERCHANT_ID,
+//                   referenceId: res?.data?.id,
+//                   amount: {
+//                     currency: 'VND',
+//                     value: res?.data?.total_price,
+//                   },
+//                   storeId: process.env.NEXT_PUBLIC_FUNDIN_STORE_ID || '',
+//                   requestType: 'installment',
+//                   paymentMethod: 'WEB',
+//                   description:
+//                     'Thanh toan don hang cua user Fudiin ' +
+//                     res?.data?.user_id +
+//                     ' voi gia tri ' +
+//                     res?.data?.total_price,
+//                   successRedirectUrl:
+//                     process.env.NEXT_PUBLIC_APP_URL +
+//                     '/gio-hang/thanh-cong/?orderId=' +
+//                     res?.data?.id,
+//                   unSuccessRedirectUrl: '/',
+//                   customer: new CustomerFudiinDto({
+//                     phoneNumber: data?.phone,
+//                     email: data?.email,
+//                     firstName: data?.name.split(' ')[0],
+//                     lastName: data?.name.split(' ')[1],
+//                   }),
+//                   shipping: new ShippingFudiinDto({
+//                     city: fullAddress?.city?.full_name || '',
+//                     district: fullAddress?.district?.full_name || '',
+//                     ward: fullAddress?.ward?.full_name || '',
+//                     street: data?.address,
+//                     houseNumber: data?.phone,
+//                     country: 'VN',
+//                   }),
+//                   items: orderExtensionItem,
+//                 }),
+//               ),
+//             })
+//               .then((rs) => rs.json())
+//               .then(async (item: ResponseSendTransactionDto) => {
+//                 if (item?.referenceId) {
+//                   await fetch('/api/orders/update', {
+//                     method: 'PUT',
+//                     body: JSON.stringify({
+//                       id: res?.data?.id,
+//                       order_external_id: item?.referenceId,
+//                     }),
+//                   });
+//                 }
+//                 if (item?.paymentUrl) {
+//                   window.location.href = item.paymentUrl;
+//                 } else {
+//                   toast.error('Đã có lỗi xảy ra');
+//                   setLoading(false);
+//                 }
+//               });
           } else {
             toast.success('Đặt hàng thành công');
             orderCtx?.clearCart && orderCtx?.clearCart();
